@@ -11,7 +11,7 @@ const a = board.get('e2');
 console.log(a);
 
 // this should yield/stream a single game at a time
-export async function* gameChunks(path: string) {
+export async function* gameChunks(path: string): AsyncGenerator<string[]> {
   const fileStream = createReadStream(path);
   const reader = createInterface({
     input: fileStream,
