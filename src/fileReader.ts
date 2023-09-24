@@ -46,14 +46,11 @@ export async function* gameChunks(path: string): AsyncGenerator<string[]> {
 }
 
 // Demo the generator
-gameChunks('data/lichess_db_standard_rated_2013-01.pgn')
-  .next()
-  .then((x) => {
-    console.log(x);
-  });
+const gen = gameChunks('data/lichess_db_standard_rated_2013-01.pgn');
 
-gameChunks('data/lichess_db_standard_rated_2013-01.pgn')
-  .next()
-  .then((x) => {
-    console.log(x);
-  });
+gen.next().then((x) => {
+  console.log(x);
+});
+gen.next().then((x) => {
+  console.log(x);
+});
