@@ -5,7 +5,12 @@
   "dependencies": {
     "chess.js": "^1.0.0-beta.6"
   },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/node": "18.11.18"
+  },
   "scripts": {
-    "start": "export TSC_COMPILE_ON_ERROR=true && react-scripts start"
+    "build": "tsc --build",
+    "start": "tsc --build && node dist/src/index.js"
   }
 }
