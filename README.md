@@ -1,15 +1,16 @@
 # Questions
 
 ### Priority List
+
 - number of times bongcloud is played ♙
 - K/D ratio which piece takes another piece the most
-    - thesis: beginners get forked by knights and lose a lot of high level pieces
-    - do it by piece value OR number of pieces taken (checkmate = 1, scenarios where two pieces mate at same time is assist)
-    - how many pieces does a Queen take before it gets taken down
-    - overall KD ratio
-    - Revenge kills (i.e. take back a piece immediately after it was taken)
+  - thesis: beginners get forked by knights and lose a lot of high level pieces
+  - do it by piece value OR number of pieces taken (checkmate = 1, scenarios where two pieces mate at same time is assist)
+  - how many pieces does a Queen take before it gets taken down
+  - overall KD ratio
+  - Revenge kills (i.e. take back a piece immediately after it was taken)
 - average distance each piece has traveled
-    - furthest distance a piece has traveled in a game
+  - furthest distance a piece has traveled in a game
 - average number of moves each game for a particular piece type
 - How many turns pieces have been moved
 - Which piece delivers checkmate most/least often
@@ -17,6 +18,7 @@
 - How often do games end with 3 fold repetition? Stalemate? Insufficient material? Loss on time? Lack of pawn advancement?
 
 ### Secondary priorities
+
 - what time people rage quit at different ELOs
 - most queens to appear in a game
 - how often a piece is promoted to different pieces
@@ -38,3 +40,11 @@ I'm thinking we get it working without elo segmentation, if it's fast enough we 
 ## Stats
 
 - How many games have no castling?
+
+### Edge Cases
+
+- After a piece is promoted, it is treated as that piece. It is not considered a kill
+
+# Notes
+
+- No standard deviation
