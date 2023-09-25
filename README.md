@@ -1,8 +1,6 @@
 # Questions
 
 ### Priority List
-
-- number of times bongcloud is played ♙
 - K/D ratio which piece takes another piece the most
   - thesis: beginners get forked by knights and lose a lot of high level pieces
   - do it by piece value OR number of pieces taken (checkmate = 1, scenarios where two pieces mate at same time is assist)
@@ -16,6 +14,7 @@
 - Which piece delivers checkmate most/least often
 - Checkmate assists (and maybe hockey assists)
 - How often do games end with 3 fold repetition? Stalemate? Insufficient material? Loss on time? Lack of pawn advancement?
+- number of times various openings (bongcloud 😁) is played ♙
 
 ### Secondary priorities
 
