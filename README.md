@@ -17,7 +17,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 - When a knight "hops" its path is chosen based on if the current move is even or odd, i.e. two squares first if even, one if odd (This is done to ensure consistency in metrics across runs)
 
 
-### Questions to answer
+# Questions to answer
 - K/D ratio which piece takes another piece the most
   - thesis: beginners get forked by knights and lose a lot of high level pieces
   - do it by piece value OR number of pieces taken (checkmate = 1, scenarios where two pieces mate at same time is assist)
@@ -35,7 +35,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 - Most pieces hopped over by a knight
 - Average pieces hopped by a knight
 
-### Extra Credit
+# Extra Credit
 - what time people rage quit at different ELOs
 - most queens to appear in a game
 - how often a piece is promoted to different pieces
