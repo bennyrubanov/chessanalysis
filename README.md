@@ -4,7 +4,18 @@ Welcome! Myself (@EllAchE) and @bennyrubanov are chess amateurs who also have in
 
 # Methodology
 
-Data is sourced from the public [Lichess games database](https://database.lichess.org/). We have also taken advantage of some of the helpful methods written by the [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) community to save ourselves a little time. 
+### Data
+Data is sourced from the public [Lichess games database](https://database.lichess.org/).
+
+### Credits
+We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little time.
+
+### Edge Cases
+- After a piece is promoted, it is treated as that piece.
+- If two pieces simulatenously checkmate a king each is credited with 0.5 kills/mates
+- A checkmate is considered a "death" for the king
+- When a knight "hops" its path is chosen based on if the current move is even or odd, i.e. two squares first if even, one if odd (This is done to ensure consistency in metrics across runs)
+
 
 ### Questions to answer
 - K/D ratio which piece takes another piece the most
@@ -21,6 +32,8 @@ Data is sourced from the public [Lichess games database](https://database.liches
 - Checkmate assists (and maybe hockey assists)
 - How often do games end with 3 fold repetition? Stalemate? Insufficient material? Loss on time? Lack of pawn advancement?
 - number of times various openings (bongcloud 😁) is played ♙
+- Most pieces hopped over by a knight
+- Average pieces hopped by a knight
 
 ### Extra Credit
 - what time people rage quit at different ELOs
@@ -37,11 +50,3 @@ Data is sourced from the public [Lichess games database](https://database.liches
 - How many games have no castling?
 
 I'm thinking we get it working without elo segmentation, if it's fast enough we can just repeat the analysis with elo filters
-
-### Edge Cases
-
-- After a piece is promoted, it is treated as that piece. It is not considered a kill
-
-# Notes
-
-- No standard deviation
