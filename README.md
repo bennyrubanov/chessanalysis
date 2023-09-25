@@ -1,6 +1,6 @@
 # Overview
 
-Welcome! Myself (@EllAchE) and @bennyrubanov are chess amateurs who also have interests in statistics, programming and entertainment. All of those things are coming together in this repo where we find and visualize some of the more entertaining (though perhaps less useful) chess statistics no one has bothered to calculate before! This project 
+Welcome! Myself (@EllAchE) and @bennyrubanov are chess amateurs who also have interests in statistics, programming and entertainment. All of those things are coming together in this repo where we find and visualize some of the more entertaining (though perhaps less useful) chess statistics no one has bothered to calculate before! This project is open source, we encourage your contribution and suggestions!
 
 # Methodology
 
