@@ -27,3 +27,21 @@ function getMoveDistance(start: string, end: string) {}
 
 // take a board and move and see if a capture occurred
 function checkForCapture(board: Chess, move: string) {}
+
+// start from back of history
+function getMateAndAssists() {}
+
+// This one could get complex if lib doesn't work https://github.com/jhlywa/chess.js/blob/master/README.md#isgameover
+function determineEndType() {}
+
+// I think this data may not exist in lichess
+function timeQuit() {}
+
+function miscChecksFromMove() {
+  // en passant
+  // castling
+  // promotion
+  // check
+}
+
+function
