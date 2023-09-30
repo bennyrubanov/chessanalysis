@@ -1,13 +1,13 @@
 // import { Chess } from 'chess.js';
-import { Chess } from '../cjsmin/src/chess';
+
+import { type Chess } from '../cjsmin/src/chess';
 
 function getMoves() {}
 
 // TODO: if needed we can overwrite the history code to store only what we need https://github.com/jhlywa/chess.js/blob/master/README.md#history-options-
-export function getGameHistory(moves: string) {
-  const board = new Chess();
+export function getGameHistory(board: Chess, moves: string) {
   board.loadPgn(moves);
-  return board.history();
+  return board.history({ verbose: true });
 }
 
 // Should return an object for the metrics we want to track, not sure how best to structure so an exercise for the reader

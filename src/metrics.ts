@@ -12,11 +12,8 @@ interface GameHistory {
   flags: string; // idk what this is
 }
 
-
-
 // Need to decide how we assign the openings to a game (and get a db of openings)
 function checkOpening() {}
-
 
 // take a start and end board position and return the distance moveds
 function getMoveDistance(start: string, end: string) {}
