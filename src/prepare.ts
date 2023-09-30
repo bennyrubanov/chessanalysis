@@ -1,4 +1,5 @@
-import { Chess } from 'chess.js';
+// import { Chess } from 'chess.js';
+import { Chess } from '../cjsmin/src/chess';
 
 function getMoves() {}
 
@@ -6,7 +7,7 @@ function getMoves() {}
 export function getGameHistory(moves: string) {
   const board = new Chess();
   board.loadPgn(moves);
-  return board.history({ verbose: true });
+  return board.history();
 }
 
 // Should return an object for the metrics we want to track, not sure how best to structure so an exercise for the reader

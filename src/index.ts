@@ -25,3 +25,10 @@ async function main() {
 }
 
 main().then(() => {});
+
+// import { Chess } from 'chess.js';
+
+// const b = new Chess();
+// b.reset();
+// console.log(b._board);
+// require('fs').writeFileSync('test.json', JSON.stringify(b._board, null, 2));
