@@ -1,5 +1,8 @@
 cjsmin
+<<<<<<< Updated upstream
 chess.js-minimal
+=======
+>>>>>>> Stashed changes
 *.pgn
 node_modules
 .DS_Store
