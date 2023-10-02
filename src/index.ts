@@ -5,8 +5,8 @@ import { getGameHistory, initializeMetricMaps } from './prepare';
 async function main() {
   const year = 2013;
   const month = '01';
-  // const path = `data/lichess_db_standard_rated_${year}-${month}.pgn`;
-  const path = `data/short.pgn`;
+  const path = `data/lichess_db_standard_rated_${year}-${month}.pgn`;
+  // const path = `data/short.pgn`;
   const metrics = initializeMetricMaps();
   const games = gameChunks(path);
   const board = new Chess();
@@ -28,8 +28,29 @@ async function main() {
     histories.push(history);
   }
 
+  // const tmp = JSON.parse(require('fs').readFileSync('histories.json'));
+  // console.log(tmp);
+  // const tmp2: any[] = tmp.map((game: any) => {
+  //   return game.map((x: any) => {
+  //     return {
+  //       color: x.color,
+  //       captured: x.captured,
+  //       from: x.from,
+  //       to: x.to,
+  //       flags: x.flags,
+  //       piece: x.piece,
+  //       promotion: x.promotion,
+  //     };
+  //   });
+  // });
+
+  // require('fs').writeFileSync(
+  //   'historiesShort.json',
+  //   JSON.stringify(tmp2, null, 2)
+  // );
+
   if (
-    require('fs').readFileSync('histories.json') ==
+    require('fs').readFileSync('historiesShort.json') ==
     JSON.stringify(histories, null, 2)
   ) {
     console.log('histories match');
