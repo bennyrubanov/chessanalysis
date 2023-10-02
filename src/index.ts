@@ -5,8 +5,8 @@ import { getGameHistory, initializeMetricMaps } from './prepare';
 async function main() {
   const year = 2013;
   const month = '01';
-  const path = `data/lichess_db_standard_rated_${year}-${month}.pgn`;
-  // const path = `data/short.pgn`;
+  // const path = `data/lichess_db_standard_rated_${year}-${month}.pgn`;
+  const path = `data/short.pgn`;
   const metrics = initializeMetricMaps();
   const games = gameChunks(path);
   const board = new Chess();
@@ -16,10 +16,12 @@ async function main() {
   for await (const game of games) {
     count++;
     console.log(count);
-    const history = getGameHistory(board, game.moves);
+    const history: any = getGameHistory(board, game.moves);
     for (const move of history) {
       if (move.captured) {
+        //@ts-ignore
         metrics[move.to].deaths[move.captured]++;
+        //@ts-ignore
         metrics[move.from].kills[move.captured]++;
       }
     }
@@ -33,6 +35,10 @@ async function main() {
     console.log('histories match');
   } else {
     console.log('histories do not match');
+    require('fs').writeFileSync(
+      'badhistory.json',
+      JSON.stringify(histories, null, 2)
+    );
   }
 }
 
