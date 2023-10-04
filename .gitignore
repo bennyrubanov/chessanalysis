@@ -1,6 +1,6 @@
-cjsmin
-chess.js-minimal
 *.pgn
 node_modules
 .DS_Store
 dist
+*.git
+.gi
