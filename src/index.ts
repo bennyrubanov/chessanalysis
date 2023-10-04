@@ -5,8 +5,8 @@ import { getGameHistory, initializeMetricMaps } from './prepare';
 export async function main() {
   const year = 2013;
   const month = '01';
-  // const path = `data/lichess_db_standard_rated_${year}-${month}.pgn`;
-  const path = `data/short.pgn`;
+  const path = `data/lichess_db_standard_rated_${year}-${month}.pgn`;
+  // const path = `data/short.pgn`;
   const metrics = initializeMetricMaps();
   const games = gameChunks(path);
   const board = new Chess();
@@ -14,6 +14,7 @@ export async function main() {
   let count = 0;
   let histories = [];
   for await (const game of games) {
+    console.log(count);
     count++;
     // console.log(count);
     const history = getGameHistory(board, game.moves);
@@ -69,3 +70,7 @@ export async function main() {
 // b.reset();
 // console.log(b._board);
 // require('fs').writeFileSync('test.json', JSON.stringify(b._board, null, 2));
+
+if (require.main === module) {
+  main().then((res) => {});
+}
