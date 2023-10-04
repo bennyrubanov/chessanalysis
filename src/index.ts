@@ -26,27 +26,6 @@ export async function main() {
     histories.push(history);
   }
 
-  // const tmp = JSON.parse(require('fs').readFileSync('histories.json'));
-  // console.log(tmp);
-  // const tmp2: any[] = tmp.map((game: any) => {
-  //   return game.map((x: any) => {
-  //     return {
-  //       color: x.color,
-  //       captured: x.captured,
-  //       from: x.from,
-  //       to: x.to,
-  //       flags: x.flags,
-  //       piece: x.piece,
-  //       promotion: x.promotion,
-  //     };
-  //   });
-  // });
-
-  // require('fs').writeFileSync(
-  //   'historiesShort.json',
-  //   JSON.stringify(tmp2, null, 2)
-  // );
-
   const histShort = require('fs')
     .readFileSync('historiesShort.json')
     .toString();
