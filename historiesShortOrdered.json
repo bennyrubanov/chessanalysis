@@ -58,19 +58,19 @@
     },
     {
       "color": "w",
+      "captured": "n",
       "from": "c1",
       "to": "h6",
       "flags": "c",
-      "piece": "b",
-      "captured": "n"
+      "piece": "b"
     },
     {
       "color": "b",
+      "captured": "b",
       "from": "g7",
       "to": "h6",
       "flags": "c",
-      "piece": "p",
-      "captured": "b"
+      "piece": "p"
     },
     {
       "color": "w",
@@ -130,19 +130,19 @@
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "g4",
       "to": "h5",
       "flags": "c",
-      "piece": "b",
-      "captured": "p"
+      "piece": "b"
     },
     {
       "color": "b",
+      "captured": "n",
       "from": "g5",
       "to": "h4",
       "flags": "c",
-      "piece": "q",
-      "captured": "n"
+      "piece": "q"
     },
     {
       "color": "w",
@@ -160,11 +160,11 @@
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "f3",
       "to": "f7",
       "flags": "c",
-      "piece": "q",
-      "captured": "p"
+      "piece": "q"
     },
     {
       "color": "b",
@@ -240,19 +240,19 @@
     },
     {
       "color": "w",
+      "captured": "b",
       "from": "h4",
       "to": "g6",
       "flags": "c",
-      "piece": "n",
-      "captured": "b"
+      "piece": "n"
     },
     {
       "color": "b",
+      "captured": "n",
       "from": "h7",
       "to": "g6",
       "flags": "c",
-      "piece": "p",
-      "captured": "n"
+      "piece": "p"
     },
     {
       "color": "w",
@@ -291,27 +291,27 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "d5",
       "to": "e4",
       "flags": "c",
-      "piece": "p",
-      "captured": "p"
+      "piece": "p"
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "d2",
       "to": "e4",
       "flags": "c",
-      "piece": "n",
-      "captured": "p"
+      "piece": "n"
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "h8",
       "to": "h2",
       "flags": "c",
-      "piece": "r",
-      "captured": "p"
+      "piece": "r"
     },
     {
       "color": "w",
@@ -322,19 +322,19 @@
     },
     {
       "color": "b",
+      "captured": "r",
       "from": "h2",
       "to": "h1",
       "flags": "c",
-      "piece": "r",
-      "captured": "r"
+      "piece": "r"
     },
     {
       "color": "w",
+      "captured": "r",
       "from": "d1",
       "to": "h1",
       "flags": "c",
-      "piece": "q",
-      "captured": "r"
+      "piece": "q"
     },
     {
       "color": "b",
@@ -366,11 +366,11 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "c6",
       "to": "d4",
       "flags": "c",
-      "piece": "n",
-      "captured": "p"
+      "piece": "n"
     },
     {
       "color": "w",
@@ -388,11 +388,11 @@
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "h7",
       "to": "g7",
       "flags": "c",
-      "piece": "q",
-      "captured": "p"
+      "piece": "q"
     },
     {
       "color": "b",
@@ -403,11 +403,11 @@
     },
     {
       "color": "w",
+      "captured": "n",
       "from": "g5",
       "to": "f6",
       "flags": "c",
-      "piece": "b",
-      "captured": "n"
+      "piece": "b"
     },
     {
       "color": "b",
@@ -418,27 +418,27 @@
     },
     {
       "color": "w",
+      "captured": "q",
       "from": "g7",
       "to": "h8",
       "flags": "c",
-      "piece": "q",
-      "captured": "q"
+      "piece": "q"
     },
     {
       "color": "b",
+      "captured": "q",
       "from": "a8",
       "to": "h8",
       "flags": "c",
-      "piece": "r",
-      "captured": "q"
+      "piece": "r"
     },
     {
       "color": "w",
+      "captured": "r",
       "from": "f6",
       "to": "h8",
       "flags": "c",
-      "piece": "b",
-      "captured": "r"
+      "piece": "b"
     }
   ],
   [
@@ -507,19 +507,19 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "c5",
       "to": "f2",
       "flags": "c",
-      "piece": "b",
-      "captured": "p"
+      "piece": "b"
     },
     {
       "color": "w",
+      "captured": "b",
       "from": "e1",
       "to": "f2",
       "flags": "c",
-      "piece": "k",
-      "captured": "b"
+      "piece": "k"
     },
     {
       "color": "b",
@@ -572,11 +572,11 @@
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "c3",
       "to": "d5",
       "flags": "c",
-      "piece": "n",
-      "captured": "p"
+      "piece": "n"
     },
     {
       "color": "b",
@@ -587,11 +587,11 @@
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "d5",
       "to": "c7",
       "flags": "c",
-      "piece": "n",
-      "captured": "p"
+      "piece": "n"
     }
   ],
   [
@@ -632,19 +632,19 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "d5",
       "to": "e4",
       "flags": "c",
-      "piece": "p",
-      "captured": "p"
+      "piece": "p"
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "c3",
       "to": "e4",
       "flags": "c",
-      "piece": "n",
-      "captured": "p"
+      "piece": "n"
     },
     {
       "color": "b",
@@ -669,19 +669,19 @@
     },
     {
       "color": "w",
+      "captured": "n",
       "from": "e4",
       "to": "f6",
       "flags": "c",
-      "piece": "n",
-      "captured": "n"
+      "piece": "n"
     },
     {
       "color": "b",
+      "captured": "n",
       "from": "d7",
       "to": "f6",
       "flags": "c",
-      "piece": "n",
-      "captured": "n"
+      "piece": "n"
     },
     {
       "color": "w",
@@ -748,19 +748,19 @@
     },
     {
       "color": "b",
+      "captured": "b",
       "from": "h5",
       "to": "f4",
       "flags": "c",
-      "piece": "n",
-      "captured": "b"
+      "piece": "n"
     },
     {
       "color": "w",
+      "captured": "n",
       "from": "e2",
       "to": "f4",
       "flags": "c",
-      "piece": "n",
-      "captured": "n"
+      "piece": "n"
     },
     {
       "color": "b",
@@ -771,27 +771,27 @@
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "c4",
       "to": "e6",
       "flags": "c",
-      "piece": "b",
-      "captured": "p"
+      "piece": "b"
     },
     {
       "color": "b",
+      "captured": "b",
       "from": "f7",
       "to": "e6",
       "flags": "c",
-      "piece": "p",
-      "captured": "b"
+      "piece": "p"
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "f4",
       "to": "e6",
       "flags": "c",
-      "piece": "n",
-      "captured": "p"
+      "piece": "n"
     },
     {
       "color": "b",
@@ -823,19 +823,19 @@
     },
     {
       "color": "b",
+      "captured": "q",
       "from": "e5",
       "to": "e3",
       "flags": "c",
-      "piece": "q",
-      "captured": "q"
+      "piece": "q"
     },
     {
       "color": "w",
+      "captured": "q",
       "from": "f2",
       "to": "e3",
       "flags": "c",
-      "piece": "p",
-      "captured": "q"
+      "piece": "p"
     },
     {
       "color": "b",
@@ -860,19 +860,19 @@
     },
     {
       "color": "w",
+      "captured": "b",
       "from": "f4",
       "to": "g6",
       "flags": "c",
-      "piece": "n",
-      "captured": "b"
+      "piece": "n"
     },
     {
       "color": "b",
+      "captured": "n",
       "from": "h7",
       "to": "g6",
       "flags": "c",
-      "piece": "p",
-      "captured": "n"
+      "piece": "p"
     },
     {
       "color": "w",
@@ -925,19 +925,19 @@
     },
     {
       "color": "b",
+      "captured": "r",
       "from": "f8",
       "to": "f1",
       "flags": "c",
-      "piece": "r",
-      "captured": "r"
+      "piece": "r"
     },
     {
       "color": "w",
+      "captured": "r",
       "from": "a1",
       "to": "f1",
       "flags": "c",
-      "piece": "r",
-      "captured": "r"
+      "piece": "r"
     },
     {
       "color": "b",
@@ -948,19 +948,19 @@
     },
     {
       "color": "w",
+      "captured": "r",
       "from": "f1",
       "to": "f8",
       "flags": "c",
-      "piece": "r",
-      "captured": "r"
+      "piece": "r"
     },
     {
       "color": "b",
+      "captured": "r",
       "from": "e7",
       "to": "f8",
       "flags": "c",
-      "piece": "k",
-      "captured": "r"
+      "piece": "k"
     },
     {
       "color": "w",
@@ -1055,27 +1055,27 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "c1",
       "to": "b2",
       "flags": "c",
-      "piece": "b",
-      "captured": "p"
+      "piece": "b"
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "g6",
       "to": "g5",
       "flags": "c",
-      "piece": "k",
-      "captured": "p"
+      "piece": "k"
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "b2",
       "to": "c3",
       "flags": "c",
-      "piece": "b",
-      "captured": "p"
+      "piece": "b"
     },
     {
       "color": "w",
@@ -1086,11 +1086,11 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "c3",
       "to": "d4",
       "flags": "c",
-      "piece": "b",
-      "captured": "p"
+      "piece": "b"
     },
     {
       "color": "w",
@@ -1101,11 +1101,11 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "d4",
       "to": "e5",
       "flags": "c",
-      "piece": "b",
-      "captured": "p"
+      "piece": "b"
     },
     {
       "color": "w",
@@ -1228,11 +1228,11 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "b5",
       "to": "a4",
       "flags": "c",
-      "piece": "p",
-      "captured": "p"
+      "piece": "p"
     },
     {
       "color": "w",
@@ -1264,11 +1264,11 @@
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "a3",
       "to": "a4",
       "flags": "c",
-      "piece": "k",
-      "captured": "p"
+      "piece": "k"
     },
     {
       "color": "b",
@@ -1309,19 +1309,19 @@
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "e4",
       "to": "d5",
       "flags": "c",
-      "piece": "p",
-      "captured": "p"
+      "piece": "p"
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "e6",
       "to": "d5",
       "flags": "c",
-      "piece": "p",
-      "captured": "p"
+      "piece": "p"
     },
     {
       "color": "w",
@@ -1381,19 +1381,19 @@
     },
     {
       "color": "w",
+      "captured": "n",
       "from": "g5",
       "to": "f6",
       "flags": "c",
-      "piece": "b",
-      "captured": "n"
+      "piece": "b"
     },
     {
       "color": "b",
+      "captured": "b",
       "from": "e7",
       "to": "f6",
       "flags": "c",
-      "piece": "b",
-      "captured": "b"
+      "piece": "b"
     },
     {
       "color": "w",
@@ -1432,19 +1432,19 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "d5",
       "to": "c4",
       "flags": "c",
-      "piece": "p",
-      "captured": "p"
+      "piece": "p"
     },
     {
       "color": "w",
+      "captured": "p",
       "from": "b3",
       "to": "c4",
       "flags": "c",
-      "piece": "b",
-      "captured": "p"
+      "piece": "b"
     },
     {
       "color": "b",
@@ -1476,19 +1476,19 @@
     },
     {
       "color": "b",
+      "captured": "b",
       "from": "b6",
       "to": "c4",
       "flags": "c",
-      "piece": "n",
-      "captured": "b"
+      "piece": "n"
     },
     {
       "color": "w",
+      "captured": "n",
       "from": "b3",
       "to": "c4",
       "flags": "c",
-      "piece": "p",
-      "captured": "n"
+      "piece": "p"
     },
     {
       "color": "b",
@@ -1520,11 +1520,11 @@
     },
     {
       "color": "b",
+      "captured": "n",
       "from": "f6",
       "to": "c3",
       "flags": "c",
-      "piece": "b",
-      "captured": "n"
+      "piece": "b"
     },
     {
       "color": "w",
@@ -1535,27 +1535,27 @@
     },
     {
       "color": "b",
+      "captured": "r",
       "from": "c3",
       "to": "e5",
       "flags": "c",
-      "piece": "b",
-      "captured": "r"
+      "piece": "b"
     },
     {
       "color": "w",
+      "captured": "b",
       "from": "f3",
       "to": "e5",
       "flags": "c",
-      "piece": "n",
-      "captured": "b"
+      "piece": "n"
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "c6",
       "to": "d5",
       "flags": "c",
-      "piece": "p",
-      "captured": "p"
+      "piece": "p"
     },
     {
       "color": "w",
@@ -1580,27 +1580,27 @@
     },
     {
       "color": "b",
+      "captured": "p",
       "from": "d5",
       "to": "c4",
       "flags": "c",
-      "piece": "p",
-      "captured": "p"
+      "piece": "p"
     },
     {
       "color": "w",
+      "captured": "r",
       "from": "d1",
       "to": "d8",
       "flags": "c",
-      "piece": "r",
-      "captured": "r"
+      "piece": "r"
     },
     {
       "color": "b",
+      "captured": "r",
       "from": "f8",
       "to": "d8",
       "flags": "c",
-      "piece": "r",
-      "captured": "r"
+      "piece": "r"
     },
     {
       "color": "w",
@@ -1611,11 +1611,11 @@
     },
     {
       "color": "b",
+      "captured": "q",
       "from": "a5",
       "to": "c3",
       "flags": "c",
-      "piece": "q",
-      "captured": "q"
+      "piece": "q"
     },
     {
       "color": "w",
@@ -1654,11 +1654,11 @@
     },
     {
       "color": "b",
+      "captured": "n",
       "from": "e1",
       "to": "e5",
       "flags": "c",
-      "piece": "q",
-      "captured": "n"
+      "piece": "q"
     },
     {
       "color": "w",

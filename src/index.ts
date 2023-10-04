@@ -19,9 +19,7 @@ export async function main() {
     const history = getGameHistory(board, game.moves);
     for (const move of history) {
       if (move.captured) {
-        //@ts-ignore
         metrics[move.to].deaths[move.captured]++;
-        //@ts-ignore
         metrics[move.from].kills[move.captured]++;
       }
     }
@@ -49,20 +47,20 @@ export async function main() {
   //   JSON.stringify(tmp2, null, 2)
   // );
 
-  if (
-    require('fs').readFileSync('historiesShort.json') ==
-    JSON.stringify(histories, null, 2)
-  ) {
+  const histShort = require('fs')
+    .readFileSync('historiesShort.json')
+    .toString();
+  if (histShort == JSON.stringify(histories, null, 2)) {
     console.log('histories match');
-    return true;
   } else {
     console.log('histories do not match');
     require('fs').writeFileSync(
       'badhistory.json',
       JSON.stringify(histories, null, 2)
     );
-    return false;
   }
+
+  return { histShort, historiesString: JSON.stringify(histories, null, 2) };
 }
 
 // import { Chess } from 'chess.js';
