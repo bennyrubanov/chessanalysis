@@ -57,4 +57,4 @@ I'm thinking we get it working without elo segmentation, if it's fast enough we 
 
 # Dataset
 
-There are 121332 games in the dataset
+There are 121332 games in the test dataset
