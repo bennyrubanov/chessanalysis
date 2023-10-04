@@ -8,6 +8,7 @@ interface GameHistory {
   // san: string; // Move notation type
   // lan: string; // Move notation type (long)
   flags: string; // idk what this is
+  originalString: string; // the move string
 }
 
 // Need to decide how we assign the openings to a game (and get a db of openings)
@@ -25,13 +26,14 @@ export function getMoveDistance(start: string, end: string): number {
 // This is trivial because of move history.
 // function checkForCapture(board: Chess, move: string) {}
 
-// start from back of history
-// function getMateAssists(history: GameHistory[]) {
-//   const finalMate = history[history.length - 1].to === '#';
-//   if (history[history.length - 2] === '#') {
-//     return history[history.length - 1].color;
-//   }
-// }
+// start from back of history. For this to be accurate we need to know which piece checks the king at this index
+function getMateAssists(history: GameHistory[]) {
+  const wasMate = history[history.length - 1].originalString.includes('#');
+  if (wasMate) {
+    const matingPiece 
+    return history[history.length - 2].color;
+  }
+}
 
 // This one could get complex if lib doesn't work https://github.com/jhlywa/chess.js/blob/master/README.md#isgameover
 function determineEndType() {}

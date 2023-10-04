@@ -927,6 +927,62 @@ export class Chess {
     return false;
   }
 
+  _attackFromSquares(color: Color, square: number): number[] {
+    const attackingSquares = [];
+    for (let i = Ox88.a8; i <= Ox88.h1; i++) {
+      // did we run off the end of the board
+      if (i & 0x88) {
+        i += 7;
+        continue;
+      }
+
+      // if empty square or wrong color
+      if (this._board[i] === undefined || this._board[i].color !== color) {
+        continue;
+      }
+
+      const piece = this._board[i];
+      const difference = i - square;
+
+      // skip - to/from square are the same
+      if (difference === 0) {
+        continue;
+      }
+
+      const index = difference + 119;
+
+      if (ATTACKS[index] & PIECE_MASKS[piece.type]) {
+        if (piece.type === PAWN) {
+          if (difference > 0) {
+            if (piece.color === WHITE) attackingSquares.push(i);
+          } else {
+            if (piece.color === BLACK) attackingSquares.push(i);
+          }
+          continue;
+        }
+
+        // if the piece is a knight or a king
+        if (piece.type === 'n' || piece.type === 'k') attackingSquares.push(i);
+
+        const offset = RAYS[index];
+        let j = i + offset;
+
+        let blocked = false;
+        while (j !== square) {
+          if (this._board[j] != null) {
+            blocked = true;
+            break;
+          }
+          j += offset;
+        }
+
+        if (!blocked) attackingSquares.push(i);
+      }
+    }
+
+    return attackingSquares;
+  }
+
   private _isKingAttacked(color: Color) {
     const square = this._kings[color];
     return square === -1 ? false : this._attacked(swapColor(color), square);
