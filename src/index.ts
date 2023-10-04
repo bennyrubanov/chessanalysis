@@ -2,11 +2,11 @@ import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 import { getGameHistory, initializeMetricMaps } from './prepare';
 
-async function main() {
+export async function main() {
   const year = 2013;
   const month = '01';
-  const path = `data/lichess_db_standard_rated_${year}-${month}.pgn`;
-  // const path = `data/short.pgn`;
+  // const path = `data/lichess_db_standard_rated_${year}-${month}.pgn`;
+  const path = `data/short.pgn`;
   const metrics = initializeMetricMaps();
   const games = gameChunks(path);
   const board = new Chess();
@@ -15,8 +15,8 @@ async function main() {
   let histories = [];
   for await (const game of games) {
     count++;
-    console.log(count);
-    const history: any = getGameHistory(board, game.moves);
+    // console.log(count);
+    const history = getGameHistory(board, game.moves);
     for (const move of history) {
       if (move.captured) {
         //@ts-ignore
@@ -54,16 +54,16 @@ async function main() {
     JSON.stringify(histories, null, 2)
   ) {
     console.log('histories match');
+    return true;
   } else {
     console.log('histories do not match');
     require('fs').writeFileSync(
       'badhistory.json',
       JSON.stringify(histories, null, 2)
     );
+    return false;
   }
 }
-
-main().then(() => {});
 
 // import { Chess } from 'chess.js';
 

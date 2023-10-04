@@ -7,10 +7,12 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "@types/node": "18.11.18"
+    "@types/node": "18.11.18",
+    "@types/jest": "^29.5.5"
   },
   "scripts": {
     "build": "tsc --build",
-    "start": "tsc --build && node dist/src/index.js"
+    "start": "tsc --build && node dist/src/index.js",
+    "test": "tsc --build && jest ./dist"
   }
 }
