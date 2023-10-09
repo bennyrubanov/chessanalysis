@@ -27,6 +27,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
   - how many pieces does a Queen take before it gets taken down
   - overall KD ratio
   - Revenge kills (i.e. take back a piece immediately after it was taken)
+- best kill streaks
 - average distance each piece has traveled
   - furthest distance a piece has traveled in a game
 - average number of moves each game for a particular piece type
