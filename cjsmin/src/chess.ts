@@ -39,6 +39,40 @@ export type Color = 'w' | 'b';
 // export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 
+export type UnambiguousPieceSymbols =
+  | 'ra'
+  | 'nb'
+  | 'bc'
+  | 'q'
+  | 'k'
+  | 'bf'
+  | 'ng'
+  | 'rh'
+  | 'pa'
+  | 'pb'
+  | 'pc'
+  | 'pd'
+  | 'pe'
+  | 'pf'
+  | 'pg'
+  | 'ph'
+  | 'RA'
+  | 'NB'
+  | 'BC'
+  | 'Q'
+  | 'K'
+  | 'BF'
+  | 'NG'
+  | 'RH'
+  | 'PA'
+  | 'PB'
+  | 'PC'
+  | 'PD'
+  | 'PE'
+  | 'PF'
+  | 'PG'
+  | 'PH';
+
 // prettier-ignore
 export type Square =
     'a8' | 'b8' | 'c8' | 'd8' | 'e8' | 'f8' | 'g8' | 'h8' |

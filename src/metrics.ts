@@ -1,4 +1,4 @@
-import { Chess } from '../cjsmin/src/chess';
+import { Chess, Square, UnambiguousPieceSymbols } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 
 interface GameHistory {
@@ -56,14 +56,6 @@ function initializeMetricMaps() {
   };
 }
 
-interface DistanceMap {
-  [key: string]: {
-    initialPosition: string;
-    currentPosition: string;
-    distanceMoved: number;
-  };
-}
-
 // take a start and end board position and return the distances moved
 export async function getMoveDistance(filePath: string) {
   for await (const game of gameChunks(filePath)) {
@@ -74,168 +66,46 @@ export async function getMoveDistance(filePath: string) {
     // Initialize variables to keep track of the maximum distance and the piece
     let maxDistance = -1;
     let maxDistancePiece;
-    const distanceMap: DistanceMap = {
-      wRa: {
-        initialPosition: 'a1',
-        currentPosition: 'a1',
-        distanceMoved: 0,
-      },
-      wNb: {
-        initialPosition: 'b1',
-        currentPosition: 'b1',
-        distanceMoved: 0,
-      },
-      wBc: {
-        initialPosition: 'c1',
-        currentPosition: 'c1',
-        distanceMoved: 0,
-      },
-      wQd: {
-        initialPosition: 'd1',
-        currentPosition: 'd1',
-        distanceMoved: 0,
-      },
-      wKe: {
-        initialPosition: 'e1',
-        currentPosition: 'e1',
-        distanceMoved: 0,
-      },
-      wBf: {
-        initialPosition: 'f1',
-        currentPosition: 'f1',
-        distanceMoved: 0,
-      },
-      wNg: {
-        initialPosition: 'g1',
-        currentPosition: 'g1',
-        distanceMoved: 0,
-      },
-      wRh: {
-        initialPosition: 'h1',
-        currentPosition: 'h1',
-        distanceMoved: 0,
-      },
-      wPa: {
-        initialPosition: 'a2',
-        currentPosition: 'a2',
-        distanceMoved: 0,
-      },
-      wPb: {
-        initialPosition: 'b2',
-        currentPosition: 'b2',
-        distanceMoved: 0,
-      },
-      wPc: {
-        initialPosition: 'c2',
-        currentPosition: 'c2',
-        distanceMoved: 0,
-      },
-      wPd: {
-        initialPosition: 'd2',
-        currentPosition: 'd2',
-        distanceMoved: 0,
-      },
-      wPe: {
-        initialPosition: 'e2',
-        currentPosition: 'e2',
-        distanceMoved: 0,
-      },
-      wPf: {
-        initialPosition: 'f2',
-        currentPosition: 'f2',
-        distanceMoved: 0,
-      },
-      wPg: {
-        initialPosition: 'g2',
-        currentPosition: 'g2',
-        distanceMoved: 0,
-      },
-      wPh: {
-        initialPosition: 'h2',
-        currentPosition: 'h2',
-        distanceMoved: 0,
-      },
-      bRa: {
-        initialPosition: 'a8',
-        currentPosition: 'a8',
-        distanceMoved: 0,
-      },
-      bNb: {
-        initialPosition: 'b8',
-        currentPosition: 'b8',
-        distanceMoved: 0,
-      },
-      bBc: {
-        initialPosition: 'c8',
-        currentPosition: 'c8',
-        distanceMoved: 0,
-      },
-      bQd: {
-        initialPosition: 'd8',
-        currentPosition: 'd8',
-        distanceMoved: 0,
-      },
-      bKe: {
-        initialPosition: 'e8',
-        currentPosition: 'e8',
-        distanceMoved: 0,
-      },
-      bBf: {
-        initialPosition: 'f8',
-        currentPosition: 'f8',
-        distanceMoved: 0,
-      },
-      bNg: {
-        initialPosition: 'g8',
-        currentPosition: 'g8',
-        distanceMoved: 0,
-      },
-      bRh: {
-        initialPosition: 'h8',
-        currentPosition: 'h8',
-        distanceMoved: 0,
-      },
-      bPa: {
-        initialPosition: 'a7',
-        currentPosition: 'a7',
-        distanceMoved: 0,
-      },
-      bPb: {
-        initialPosition: 'b7',
-        currentPosition: 'b7',
-        distanceMoved: 0,
-      },
-      bPc: {
-        initialPosition: 'c7',
-        currentPosition: 'c7',
-        distanceMoved: 0,
-      },
-      bPd: {
-        initialPosition: 'd7',
-        currentPosition: 'd7',
-        distanceMoved: 0,
-      },
-      bPe: {
-        initialPosition: 'e7',
-        currentPosition: 'e7',
-        distanceMoved: 0,
-      },
-      bPf: {
-        initialPosition: 'f7',
-        currentPosition: 'f7',
-        distanceMoved: 0,
-      },
-      bPg: {
-        initialPosition: 'g7',
-        currentPosition: 'g7',
-        distanceMoved: 0,
-      },
-      bPh: {
-        initialPosition: 'h7',
-        currentPosition: 'h7',
-        distanceMoved: 0,
-      },
-    };
+
+    const pieceSquares = new Map<Square, UnambiguousPieceSymbols>();
+    pieceSquares.set('a1', 'ra');
+    pieceSquares.set('b1', 'nb');
+    pieceSquares.set('c1', 'bc');
+    pieceSquares.set('d1', 'q');
+    pieceSquares.set('e1', 'k');
+    pieceSquares.set('f1', 'bf');
+    pieceSquares.set('g1', 'ng');
+    pieceSquares.set('h1', 'rh');
+    pieceSquares.set('a2', 'pa');
+    pieceSquares.set('b2', 'pb');
+    pieceSquares.set('c2', 'pc');
+    pieceSquares.set('d2', 'pd');
+    pieceSquares.set('e2', 'pe');
+    pieceSquares.set('f2', 'pf');
+    pieceSquares.set('g2', 'pg');
+    pieceSquares.set('h2', 'ph');
+    pieceSquares.set('a8', 'RA');
+    pieceSquares.set('b8', 'NB');
+    pieceSquares.set('c8', 'BC');
+    pieceSquares.set('d8', 'Q');
+    pieceSquares.set('e8', 'K');
+    pieceSquares.set('f8', 'BF');
+    pieceSquares.set('g8', 'NG');
+    pieceSquares.set('h8', 'RH');
+    pieceSquares.set('a7', 'PA');
+    pieceSquares.set('b7', 'PB');
+    pieceSquares.set('c7', 'PC');
+    pieceSquares.set('d7', 'PD');
+    pieceSquares.set('e7', 'PE');
+    pieceSquares.set('f7', 'PF');
+    pieceSquares.set('g7', 'PG');
+    pieceSquares.set('h7', 'PH');
+
+    // create an object to track distance value for each piece
+    const distanceMap: { [key: string]: number } = {};
+    for (const piece of pieceSquares.values()) {
+      distanceMap[piece] = 0;
+    }
 
     // TODO: we'll need to update the labels we use in cjsmin to be unique to do things this way
     for (const { from, to, piece } of moveHistory) {
@@ -243,12 +113,14 @@ export async function getMoveDistance(filePath: string) {
       const rankDist = Math.abs(Number(from[1]) - Number(to[1]));
       const distance = Math.max(fileDist, rankDist);
 
-      distanceMap[piece].currentPosition = to;
-      distanceMap[piece].distanceMoved += distance;
+      // we'll update the keys of this map as we track piece movements. To avoid additional operations I will only update and not delete,
+      // unless we have a need to only have the current position in the future this will work for distance calcs
+      pieceSquares.set(to, pieceSquares.get(from));
+      distanceMap[piece] += distance;
 
       // Update statistics for the piece and track which piece moved the furthest
-      if (distanceMap[piece].distanceMoved > maxDistance) {
-        maxDistance = distanceMap[piece].distanceMoved;
+      if (distanceMap[piece] > maxDistance) {
+        maxDistance = distanceMap[piece];
         maxDistancePiece = piece;
       }
     }
