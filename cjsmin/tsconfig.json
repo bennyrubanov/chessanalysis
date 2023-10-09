@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "removeComments": false,
+    "sourceMap": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "target": "ESNext"
+  },
+  "include": ["src/**/*"]
+}
