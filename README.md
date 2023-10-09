@@ -41,6 +41,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
   - furthest distance a piece has traveled in a game
 - average number of moves each game for a particular piece type
 - How many turns pieces have been moved
+- The game with the most moves played (or furthest collective distance moved)
 - Which piece delivers checkmate most/least often
 - Checkmate assists (and maybe hockey assists)
 - How often do games end with 3 fold repetition? Stalemate? Insufficient material? Loss on time? Lack of pawn advancement?
