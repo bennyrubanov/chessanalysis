@@ -1,17 +1,22 @@
-import { Chess, Square, UnambiguousPieceSymbols } from '../cjsmin/src/chess';
+import {
+  Chess,
+  Color,
+  PieceSymbol,
+  Square,
+  UnambiguousPieceSymbols,
+} from '../cjsmin/src/chess';
 import { FileReaderGame } from './types';
 
-interface GameHistory {
-  before: string; // FEN notation of the board before the move
-  after: string; // FEN notation of the board after the move
-  color: string;
-  piece: string;
-  from: string;
-  to: string;
-  san: string; // Move notation type
-  lan: string; // Move notation type (long)
-  flags: string; // idk what this is
-}
+type GameHistoryMove = {
+  originalString: string;
+  color: Color;
+  from: Square;
+  to: Square;
+  piece: PieceSymbol;
+  captured?: PieceSymbol;
+  promotion?: PieceSymbol;
+  flags: string;
+};
 
 // Should return an object for the metrics we want to track, not sure how best to structure so an exercise for the reader
 function initializeMetricMaps() {
@@ -144,13 +149,25 @@ function checkForCapture(board: Chess, move: string) {}
 // the edge case here is when pieces "share" a mate, or check. This can be at most 2 due to discovery checks
 // the board configuration will also have to be as it was in the instance of checkmate, or the previous mate.
 // So this is going to need to hook into the loadPGN, probably.
-// function getMateAssists(history: GameHistory[], chess: Chess) {
-//   const wasMate = history[history.length - 1].originalString.includes('#');
-//   if (wasMate) {
-//     const matingPieceSquares = chess._attackFromSquare();
-//     return history[history.length - 2].color;
-//   }
-// }
+export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
+  let assistingPiece;
+  let matingPiece;
+
+  // check for mate
+  if (gameHistory[gameHistory.length - 1].originalString.includes('#')) {
+    matingPiece = gameHistory[gameHistory.length - 1].piece; // this doesn't disambiguate to the starting square of the piece; we'd want a chess.js rewrite to do that.
+
+    // If mate see if also assist
+    if (gameHistory[gameHistory.length - 2].originalString.includes('+')) {
+      assistingPiece = gameHistory[gameHistory.length - 2].piece;
+    }
+  }
+
+  return {
+    matingPiece,
+    assistingPiece,
+  };
+}
 
 // This one could get complex if lib doesn't work https://github.com/jhlywa/chess.js/blob/master/README.md#isgameover
 function determineEndType() {}

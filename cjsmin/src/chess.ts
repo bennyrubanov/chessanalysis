@@ -92,7 +92,7 @@ export type Piece = {
   type: PieceSymbol;
 };
 
-type InternalMove = {
+export type InternalMove = {
   color: Color;
   from: number;
   to: number;
