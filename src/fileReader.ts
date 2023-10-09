@@ -1,10 +1,11 @@
 import { createReadStream } from 'fs';
 import { createInterface } from 'readline';
+import { FileReaderGame } from './types';
 
 // this should yield/stream a single game at a time
 export async function* gameChunks(
   path: string
-): AsyncGenerator<{ metadata: string[]; moves: string }> {
+): AsyncGenerator<FileReaderGame> {
   const fileStream = createReadStream(path);
   const reader = createInterface({
     input: fileStream,
