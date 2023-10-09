@@ -1,5 +1,5 @@
 import { Chess, Square, UnambiguousPieceSymbols } from '../cjsmin/src/chess';
-import { gameChunks } from './fileReader';
+import { FileReaderGame } from './types';
 
 interface GameHistory {
   before: string; // FEN notation of the board before the move
@@ -57,84 +57,87 @@ function initializeMetricMaps() {
 }
 
 // take a start and end board position and return the distances moved
-export async function getMoveDistance(filePath: string) {
-  for await (const game of gameChunks(filePath)) {
-    const chess = new Chess(); // Create a new instance of the Chess class
-    chess.loadPgn(game.moves);
-    const moveHistory = chess.history();
+export async function getMoveDistanceSingleGame(game: FileReaderGame) {
+  const basePieceSquares = new Map<Square, UnambiguousPieceSymbols>();
+  basePieceSquares.set('a1', 'ra');
+  basePieceSquares.set('b1', 'nb');
+  basePieceSquares.set('c1', 'bc');
+  basePieceSquares.set('d1', 'q');
+  basePieceSquares.set('e1', 'k');
+  basePieceSquares.set('f1', 'bf');
+  basePieceSquares.set('g1', 'ng');
+  basePieceSquares.set('h1', 'rh');
+  basePieceSquares.set('a2', 'pa');
+  basePieceSquares.set('b2', 'pb');
+  basePieceSquares.set('c2', 'pc');
+  basePieceSquares.set('d2', 'pd');
+  basePieceSquares.set('e2', 'pe');
+  basePieceSquares.set('f2', 'pf');
+  basePieceSquares.set('g2', 'pg');
+  basePieceSquares.set('h2', 'ph');
+  basePieceSquares.set('a8', 'RA');
+  basePieceSquares.set('b8', 'NB');
+  basePieceSquares.set('c8', 'BC');
+  basePieceSquares.set('d8', 'Q');
+  basePieceSquares.set('e8', 'K');
+  basePieceSquares.set('f8', 'BF');
+  basePieceSquares.set('g8', 'NG');
+  basePieceSquares.set('h8', 'RH');
+  basePieceSquares.set('a7', 'PA');
+  basePieceSquares.set('b7', 'PB');
+  basePieceSquares.set('c7', 'PC');
+  basePieceSquares.set('d7', 'PD');
+  basePieceSquares.set('e7', 'PE');
+  basePieceSquares.set('f7', 'PF');
+  basePieceSquares.set('g7', 'PG');
+  basePieceSquares.set('h7', 'PH');
 
-    // Initialize variables to keep track of the maximum distance and the piece
-    let maxDistance = -1;
-    let maxDistancePiece;
+  const chess = new Chess(); // Create a new instance of the Chess class
+  chess.loadPgn(game.moves);
+  const moveHistory = chess.history();
 
-    const pieceSquares = new Map<Square, UnambiguousPieceSymbols>();
-    pieceSquares.set('a1', 'ra');
-    pieceSquares.set('b1', 'nb');
-    pieceSquares.set('c1', 'bc');
-    pieceSquares.set('d1', 'q');
-    pieceSquares.set('e1', 'k');
-    pieceSquares.set('f1', 'bf');
-    pieceSquares.set('g1', 'ng');
-    pieceSquares.set('h1', 'rh');
-    pieceSquares.set('a2', 'pa');
-    pieceSquares.set('b2', 'pb');
-    pieceSquares.set('c2', 'pc');
-    pieceSquares.set('d2', 'pd');
-    pieceSquares.set('e2', 'pe');
-    pieceSquares.set('f2', 'pf');
-    pieceSquares.set('g2', 'pg');
-    pieceSquares.set('h2', 'ph');
-    pieceSquares.set('a8', 'RA');
-    pieceSquares.set('b8', 'NB');
-    pieceSquares.set('c8', 'BC');
-    pieceSquares.set('d8', 'Q');
-    pieceSquares.set('e8', 'K');
-    pieceSquares.set('f8', 'BF');
-    pieceSquares.set('g8', 'NG');
-    pieceSquares.set('h8', 'RH');
-    pieceSquares.set('a7', 'PA');
-    pieceSquares.set('b7', 'PB');
-    pieceSquares.set('c7', 'PC');
-    pieceSquares.set('d7', 'PD');
-    pieceSquares.set('e7', 'PE');
-    pieceSquares.set('f7', 'PF');
-    pieceSquares.set('g7', 'PG');
-    pieceSquares.set('h7', 'PH');
+  // duplicate the base map
+  const pieceSquares = new Map<Square, UnambiguousPieceSymbols>(
+    basePieceSquares
+  );
 
-    // create an object to track distance value for each piece
-    const distanceMap: { [key: string]: number } = {};
-    for (const piece of pieceSquares.values()) {
-      distanceMap[piece] = 0;
-    }
-
-    // TODO: we'll need to update the labels we use in cjsmin to be unique to do things this way
-    for (const { from, to, piece } of moveHistory) {
-      const fileDist = Math.abs(from.charCodeAt(0) - to.charCodeAt(0));
-      const rankDist = Math.abs(Number(from[1]) - Number(to[1]));
-      const distance = Math.max(fileDist, rankDist);
-
-      // we'll update the keys of this map as we track piece movements. To avoid additional operations I will only update and not delete,
-      // unless we have a need to only have the current position in the future this will work for distance calcs
-      pieceSquares.set(to, pieceSquares.get(from));
-      distanceMap[piece] += distance;
-
-      // Update statistics for the piece and track which piece moved the furthest
-      if (distanceMap[piece] > maxDistance) {
-        maxDistance = distanceMap[piece];
-        maxDistancePiece = piece;
-      }
-    }
-
-    // At this point, maxDistancePiece should contain the name of the piece with the maximum distance moved
-    console.log(`Piece with the maximum distance moved: ${maxDistancePiece}`);
-    console.log(`Distance moved: ${maxDistance}`);
-
-    return {
-      maxDistancePiece,
-      maxDistance,
-    };
+  // create an object to track distance value for each piece
+  const distanceMap: { [key: string]: number } = {};
+  for (const piece of pieceSquares.values()) {
+    distanceMap[piece] = 0;
   }
+
+  // Initialize variables to keep track of the maximum distance and the piece
+  let maxDistance = -1;
+  let maxDistancePiece: UnambiguousPieceSymbols;
+
+  // TODO: we'll need to update the labels we use in cjsmin to be unique to do things this way
+  for (const { from, to } of moveHistory) {
+    const fileDist = Math.abs(from.charCodeAt(0) - to.charCodeAt(0));
+    const rankDist = Math.abs(Number(from[1]) - Number(to[1]));
+    const distance = Math.max(fileDist, rankDist);
+    const movedPiece = pieceSquares.get(from);
+
+    // we'll update the map as pieces move. To avoid additional operations we only update (no delete). Can change this if we use this elsewhere
+    pieceSquares.set(to, movedPiece);
+    distanceMap[movedPiece] += distance;
+
+    if (distanceMap[movedPiece] > maxDistance) {
+      maxDistance = distanceMap[movedPiece];
+      maxDistancePiece = movedPiece;
+    }
+  }
+
+  // At this point, maxDistancePiece should contain the name of the piece with the maximum distance moved
+  console.log(`Piece with the maximum distance moved: ${maxDistancePiece}`);
+  console.log(`Distance moved: ${maxDistance}`);
+
+  return {
+    maxDistancePiece,
+    maxDistance,
+  };
 }
+
 // Need to decide how we assign the openings to a game (and get a db of openings)
 function checkOpening() {}
 
