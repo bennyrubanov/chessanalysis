@@ -1,4 +1,4 @@
-import { Chess } from '../cjsmin/src/chess';
+import { Chess, Move } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 import { getGameHistory, initializeMetricMaps } from './prepare';
 
@@ -25,7 +25,7 @@ export async function main(path: string) {
       console.log(count);
     }
 
-    const history = getGameHistory(board, game.moves);
+    const history: Move[] = getGameHistory(board, game.moves);
     for (const move of history) {
       if (move.captured) {
         metrics[move.to].deaths[move.captured]++;

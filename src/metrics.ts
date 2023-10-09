@@ -1,16 +1,3 @@
-interface GameHistory {
-  // before: string; // FEN notation of the board before the move
-  // after: string; // FEN notation of the board after the move
-  color: string;
-  piece: string;
-  from: string;
-  to: string;
-  // san: string; // Move notation type
-  // lan: string; // Move notation type (long)
-  flags: string; // idk what this is
-  originalString: string; // the move string
-}
-
 // Need to decide how we assign the openings to a game (and get a db of openings)
 function checkOpening() {}
 
