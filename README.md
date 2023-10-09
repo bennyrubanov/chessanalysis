@@ -42,6 +42,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 # Extra Credit
 
 - what time people rage quit at different ELOs
+- Which piece is a "defender" for when checkmate within king capture range is possible
 - most queens to appear in a game
 - how often a piece is promoted to different pieces
 - which openings at different levels
