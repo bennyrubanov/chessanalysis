@@ -1325,7 +1325,7 @@ export class Chess {
     });
   }
 
-  private _makeMove(move: InternalMove) {
+  private _makeMove(move: InternalMove, originalString?: string) {
     const us = this._turn;
     const them = swapColor(us);
     this._push(move, originalString);
