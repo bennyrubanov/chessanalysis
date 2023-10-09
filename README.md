@@ -14,10 +14,19 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 
 ### Edge Cases
 
-- After a piece is promoted, it is treated as that piece.
+- After a piece is promoted:
+  - It is treated as the new piece
+  - It is treated as the original piece (i.e. if the pawn that started the game on a2 is promoted to a Queen, it is still treated as the pawn on a2 for the purposes of calculating distance functions, etc 
 - If two pieces simulatenously checkmate a king each is credited with 0.5 kills/mates
 - A checkmate is considered a "death" for the king
 - When a knight "hops" its path is chosen based on if the current move is even or odd, i.e. two squares first if even, one if odd (This is done to ensure consistency in metrics across runs)
+- For calculating distances, here are separate ways to interpret move distances:
+  - Bishops
+    - Diagonal moves count as 1
+    - Diagonal moves count as 2 (1 horizontal, 1 vertical)
+  - Knights
+    - knight move counts as 3: 2 horizontal/vertical + 1 hor/vert
+    - knight move counts as 2: one diagonal and one horizontal
 
 # Questions to answer
 
@@ -32,6 +41,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
   - furthest distance a piece has traveled in a game
 - average number of moves each game for a particular piece type
 - How many turns pieces have been moved
+- The game with the most moves played (or furthest collective distance moved)
 - Which piece delivers checkmate most/least often
 - Checkmate assists (and maybe hockey assists)
 - How often do games end with 3 fold repetition? Stalemate? Insufficient material? Loss on time? Lack of pawn advancement?

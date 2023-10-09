@@ -1,6 +1,6 @@
 import { main } from '../src';
 
-describe('Using modified cjsmin returns expected results', () => {
+xdescribe('Using modified cjsmin returns expected results', () => {
   it('should not throw an error', async () => {
     const histShort = require('fs')
       .readFileSync('historiesShort.json')

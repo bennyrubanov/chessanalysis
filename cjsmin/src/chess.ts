@@ -36,7 +36,42 @@ export const QUEEN = 'q';
 export const KING = 'k';
 
 export type Color = 'w' | 'b';
+// export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
+
+export type UnambiguousPieceSymbols =
+  | 'ra'
+  | 'nb'
+  | 'bc'
+  | 'q'
+  | 'k'
+  | 'bf'
+  | 'ng'
+  | 'rh'
+  | 'pa'
+  | 'pb'
+  | 'pc'
+  | 'pd'
+  | 'pe'
+  | 'pf'
+  | 'pg'
+  | 'ph'
+  | 'RA'
+  | 'NB'
+  | 'BC'
+  | 'Q'
+  | 'K'
+  | 'BF'
+  | 'NG'
+  | 'RH'
+  | 'PA'
+  | 'PB'
+  | 'PC'
+  | 'PD'
+  | 'PE'
+  | 'PF'
+  | 'PG'
+  | 'PH';
 
 // prettier-ignore
 export type Square =
@@ -57,7 +92,7 @@ export type Piece = {
   type: PieceSymbol;
 };
 
-type InternalMove = {
+export type InternalMove = {
   color: Color;
   from: number;
   to: number;
@@ -1291,7 +1326,6 @@ export class Chess {
   }
 
   private _makeMove(move: InternalMove, originalString?: string) {
-    // console.log('calling make move');
     const us = this._turn;
     const them = swapColor(us);
     this._push(move, originalString);
@@ -1444,10 +1478,7 @@ export class Chess {
 
   loadPgn(
     pgnMoveLine: string,
-    {
-      strict = false,
-      newlineChar = '\r?\n',
-    }: { strict?: boolean; newlineChar?: string } = {}
+    { strict = false }: { strict?: boolean; newlineChar?: string } = {}
   ) {
     // Put the board in the starting position
     this.reset();
