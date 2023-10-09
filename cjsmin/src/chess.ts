@@ -110,6 +110,7 @@ interface History {
   epSquare: number;
   halfMoves: number;
   moveNumber: number;
+  originalString?: string;
 }
 
 export type Move = {
@@ -961,6 +962,62 @@ export class Chess {
     return false;
   }
 
+  _attackFromSquares(color: Color, square: number): number[] {
+    const attackingSquares = [];
+    for (let i = Ox88.a8; i <= Ox88.h1; i++) {
+      // did we run off the end of the board
+      if (i & 0x88) {
+        i += 7;
+        continue;
+      }
+
+      // if empty square or wrong color
+      if (this._board[i] === undefined || this._board[i].color !== color) {
+        continue;
+      }
+
+      const piece = this._board[i];
+      const difference = i - square;
+
+      // skip - to/from square are the same
+      if (difference === 0) {
+        continue;
+      }
+
+      const index = difference + 119;
+
+      if (ATTACKS[index] & PIECE_MASKS[piece.type]) {
+        if (piece.type === PAWN) {
+          if (difference > 0) {
+            if (piece.color === WHITE) attackingSquares.push(i);
+          } else {
+            if (piece.color === BLACK) attackingSquares.push(i);
+          }
+          continue;
+        }
+
+        // if the piece is a knight or a king
+        if (piece.type === 'n' || piece.type === 'k') attackingSquares.push(i);
+
+        const offset = RAYS[index];
+        let j = i + offset;
+
+        let blocked = false;
+        while (j !== square) {
+          if (this._board[j] != null) {
+            blocked = true;
+            break;
+          }
+          j += offset;
+        }
+
+        if (!blocked) attackingSquares.push(i);
+      }
+    }
+
+    return attackingSquares;
+  }
+
   private _isKingAttacked(color: Color) {
     const square = this._kings[color];
     return square === -1 ? false : this._attacked(swapColor(color), square);
@@ -1255,7 +1312,7 @@ export class Chess {
     return legalMoves;
   }
 
-  _push(move: InternalMove) {
+  _push(move: InternalMove, originalString?: string) {
     this._history.push({
       move,
       kings: { b: this._kings.b, w: this._kings.w },
@@ -1264,13 +1321,14 @@ export class Chess {
       epSquare: this._epSquare,
       halfMoves: this._halfMoves,
       moveNumber: this._moveNumber,
+      originalString,
     });
   }
 
   private _makeMove(move: InternalMove) {
     const us = this._turn;
     const them = swapColor(us);
-    this._push(move);
+    this._push(move, originalString);
 
     this._board[move.to] = this._board[move.from];
     delete this._board[move.from];
@@ -1444,23 +1502,18 @@ export class Chess {
     // delete empty entries
     moves = moves.filter((move) => move !== '');
 
-    let result = '';
-
     for (let halfMove = 0; halfMove < moves.length; halfMove++) {
       const move = this._moveFromSan(moves[halfMove], strict);
 
       // invalid move
       if (move == null) {
         // was the move an end of game marker
-        if (TERMINATION_MARKERS.indexOf(moves[halfMove]) > -1) {
-          result = moves[halfMove];
-        } else {
+        if (!(TERMINATION_MARKERS.indexOf(moves[halfMove]) > -1)) {
           throw new Error(`Invalid move in PGN: ${moves[halfMove]}`);
         }
       } else {
         // reset the end of game marker if making a valid move
-        result = '';
-        this._makeMove(move);
+        this._makeMove(move, moves[halfMove]);
       }
     }
   }
@@ -1705,6 +1758,8 @@ export class Chess {
   }
 
   history() {
-    return this._history.map((h) => this._makePretty(h.move));
+    return this._history.map((h) => {
+      return { ...this._makePretty(h.move), originalString: h.originalString };
+    });
   }
 }
