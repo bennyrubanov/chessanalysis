@@ -152,20 +152,30 @@ function checkForCapture(board: Chess, move: string) {}
 export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
   let assistingPiece;
   let matingPiece;
+  let hockeyAssist;
 
   // check for mate
   if (gameHistory[gameHistory.length - 1].originalString.includes('#')) {
     matingPiece = gameHistory[gameHistory.length - 1].piece; // this doesn't disambiguate to the starting square of the piece; we'd want a chess.js rewrite to do that.
 
     // If mate see if also assist
-    if (gameHistory[gameHistory.length - 2].originalString.includes('+')) {
-      assistingPiece = gameHistory[gameHistory.length - 2].piece;
+    if (gameHistory[gameHistory.length - 3].originalString.includes('+')) {
+      assistingPiece = gameHistory[gameHistory.length - 3].piece;
+
+      // If assist check for hockey assist
+      if (gameHistory[gameHistory.length - 5].originalString.includes('+')) {
+        hockeyAssist = gameHistory[gameHistory.length - 5].piece;
+      }
     }
   }
+
+  // This is where we DO need to disambiguate, the same piece type but a different piece could provide the assist.
+  // Pausing further work till we've fixed that
 
   return {
     matingPiece,
     assistingPiece,
+    hockeyAssist,
   };
 }
 
