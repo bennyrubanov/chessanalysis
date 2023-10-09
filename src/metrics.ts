@@ -128,10 +128,6 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
     }
   }
 
-  // At this point, maxDistancePiece should contain the name of the piece with the maximum distance moved
-  console.log(`Piece with the maximum distance moved: ${maxDistancePiece}`);
-  console.log(`Distance moved: ${maxDistance}`);
-
   return {
     maxDistancePiece,
     maxDistance,
