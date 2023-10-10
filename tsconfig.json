@@ -1,20 +1,14 @@
 {
-  "include": ["src", "cjsmin", "tests"],
+  "include": ["src"],
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "incremental": true,
-    "lib": ["esnext"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noImplicitReturns": true,
-    // "noUnusedLocals": true,
     "outDir": "dist",
-    "skipLibCheck": true,
-    "sourceMap": true,
-    // "strict": true,
-    "target": "esnext"
+    "baseUrl": ".",
+    "composite": true,
+    "target": "es2016",   
+    "module": "commonjs",   
+    "esModuleInterop": true,    
+    "forceConsistentCasingInFileNames": true,    
+    "strict": true,    
+    "skipLibCheck": true 
   }
 }
