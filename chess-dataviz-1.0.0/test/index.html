@@ -1,0 +1,127 @@
+<html>
+<head>
+<link href="/dist/ChessDataViz.css" rel="stylesheet">
+<style>
+	body {
+		background-color: lightgray;
+		font-family: Roboto, sans-serif;
+	}
+</style>
+</head>
+<body>
+
+<h1>Eval and Time Graph</h1>
+<div id="eval-and-time-graph" class="cdv-eval-time wrap"></div>
+
+<h1>Heatmap</h1>
+<div id="heatmap" class="cdv-heatmap"></div>
+<button class="piece-selector">wall</button>
+<button class="piece-selector">wk</button>
+<button class="piece-selector">wq</button>
+<button class="piece-selector">wr</button>
+<button class="piece-selector">wb</button>
+<button class="piece-selector">wn</button>
+<button class="piece-selector">wp</button>
+<br>
+<button class="piece-selector">ball</button>
+<button class="piece-selector">bk</button>
+<button class="piece-selector">bq</button>
+<button class="piece-selector">br</button>
+<button class="piece-selector">bb</button>
+<button class="piece-selector">bn</button>
+<button class="piece-selector">bp</button>
+<br>
+<select id="kek">
+	<option value="squareUtilization">squtil</option>
+	<option value="moveSquares">moveSquares</option>
+	<option value="captureSquares">captureSquares</option>
+	<option value="checkSquares">checkSquares</option>
+</select>
+
+<h1>Openings</h1>
+<div id="openings" class="cdv-openings"></div>
+
+<h1>Move Paths</h1>
+<div id="movepaths" class="cdv-move-paths"></div>
+<button class="piece-path-selector">Nb1</button>
+<button class="piece-path-selector">Bc1</button>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="/dist/ChessDataViz.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
+<script>
+	d3.json('/data/london-chess-classic-2015.json', function (error, data) {
+		window.evalAndTime = new ChessDataViz.EvalAndTime('#eval-and-time-graph', ChessDataViz.util.parseGameNotation(data[4].notation));
+	});
+
+	d3.json('/data/tt_heatmaps.json', function (error, data) {
+	// d3.json('/data/new_statistics1.json', function (error, data) {
+		// var tip = d3.tip()
+		// 	.attr('class', 'd3-tip')
+		// 	.style('color', 'red')
+		// 	.offset([0, 0])
+		// 	.html(function(d) {
+		// 		return d;
+		// 	})
+		// ;
+
+		window.heatmap = new ChessDataViz.HeatMap('#heatmap', {
+			width: 500,
+			colorScale: false
+		}, data.heatmaps.squareUtilization);
+
+		// heatmap.dispatch.on('mouseenter', tip.show);
+		// heatmap.dispatch.on('mouseleave', tip.hide);
+		// heatmap.dataContainer.call(tip);
+
+		$('.piece-selector').on('click', function () {
+			var text = $(this).text();
+			var color = text[0];
+			var piece = text[1];
+
+			if( text === 'wall' ) {
+				color = 'w';
+				piece = 'all';
+			}
+
+			if( text === 'ball' ) {
+				color = 'b';
+				piece = 'all';
+			}
+
+			heatmap.options({
+				accessor: {
+					piece: piece,
+					color: color
+				}
+			});
+		});
+	});
+
+	d3.json('/data/tt_openings.json', function (error, data) {
+		window.openings = new ChessDataViz.Openings('#openings', {
+			arcThreshold: 0.001,
+			textThreshold: 0.1,
+			colors: d3.scale.ordinal().range(['red', 'lightblue', 'gray', 'black'])
+		}, data.openings);
+
+	});
+
+	d3.json('/data/tt_moves.json', function (error, data) {
+		window.movePaths = new ChessDataViz.MovePaths('#movepaths', {
+			binSize: 500
+		}, data.moves);
+
+
+		$('.piece-path-selector').on('click', function () {
+			var text = $(this).text();
+
+			movePaths.options({
+				accessor: text
+			});
+		});
+	});
+</script>
+</body>
+</html>
