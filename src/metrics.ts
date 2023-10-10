@@ -61,6 +61,7 @@ function initializeMetricMaps() {
   };
 }
 
+// adds a commit
 // take a start and end board position and return the distances moved
 export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   const basePieceSquares = new Map<Square, UnambiguousPieceSymbols>();
