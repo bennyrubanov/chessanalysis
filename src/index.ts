@@ -1,6 +1,6 @@
-import { Chess, Move } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { getGameHistory, initializeMetricMaps } from './prepare';
+import { getMoveDistanceSingleGame } from './metrics';
+import { getAverageDistance } from './metrics';
 
 // const year = 2013;
 // const month = '01';
@@ -13,28 +13,58 @@ import { getGameHistory, initializeMetricMaps } from './prepare';
  * @returns
  */
 export async function main(path: string) {
-  const metrics = initializeMetricMaps();
   const games = gameChunks(path);
-  const board = new Chess();
+  let maxDistance = 0;
+  let pieceThatMovedTheFurthest = null;
+  let totalDistanceMap: { [key: string]: number } = {};
+  let lastGame;
 
-  let count = 0;
+  let gameCount = 0;
   for await (const game of games) {
     // progress tracker
-    count++;
-    if (count % 200 == 0) {
-      console.log(count);
+    gameCount++;
+    if (gameCount % 100 == 0) {
+      console.log('number of games analyzed: ', gameCount);
     }
 
-    const history: Move[] = getGameHistory(board, game.moves);
-    for (const move of history) {
-      if (move.captured) {
-        metrics[move.to].deaths[move.captured]++;
-        metrics[move.from].kills[move.captured]++;
-      }
+    const { maxDistancePiece, maxDistance: distance, distanceMap } = await getMoveDistanceSingleGame(game);
+
+    if (distance > maxDistance) {
+      maxDistance = distance;
+      pieceThatMovedTheFurthest = maxDistancePiece;
     }
+
+    for (const piece of Object.keys(distanceMap)) {
+      if (!totalDistanceMap[piece]) {
+        totalDistanceMap[piece] = 0;
+      }
+      totalDistanceMap[piece] += distanceMap[piece];
+    }
+
+    lastGame = game;
+
   }
+  
+  const { pieceWithHighestAverageDistance, maxAverageDistance } = getAverageDistance(totalDistanceMap, gameCount);
+
+  console.log('Last game analyzed: ', lastGame);
+
+  return {
+    pieceThatMovedTheFurthest,
+    maxDistance,
+    pieceWithHighestAverageDistance,
+    maxAverageDistance,
+    gameCount
+  };
+
 }
 
 if (require.main === module) {
-  main(`data/short.pgn`).then((res) => {});
+  main(`data/10.10.23_test_set`).then(({ pieceThatMovedTheFurthest, maxDistance, pieceWithHighestAverageDistance, maxAverageDistance, gameCount }) => {
+    console.log(`Piece that moved the furthest: ${pieceThatMovedTheFurthest}`);
+    console.log(`Max distance: ${maxDistance}`);
+    console.log(`Piece with highest average distance for the set of games analyzed (calculated by distance piece has moved divided by the number of games analyzed): ${pieceWithHighestAverageDistance}`);
+    console.log(`That piece's average distance moved per game: ${maxAverageDistance}`);
+    console.log(`Number of games analyzed: ${gameCount}`);
+  });
 }
