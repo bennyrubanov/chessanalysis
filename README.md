@@ -10,7 +10,8 @@ Data is sourced from the public [Lichess games database](https://database.liches
 
 ### Credits
 
-We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little time.
+We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little time. We also rewrote portions of it to save ourselves some time since we plan(ned) to ingest the entirety of the the lichess open database.
+We have also borrowed some of the visualization tools in [chess-dataviz](https://ebemunk.com/chess-dataviz/)!
 
 ### Edge Cases
 
