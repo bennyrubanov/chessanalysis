@@ -16,7 +16,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 
 - After a piece is promoted:
   - It is treated as the new piece
-  - It is treated as the original piece (i.e. if the pawn that started the game on a2 is promoted to a Queen, it is still treated as the pawn on a2 for the purposes of calculating distance functions, etc 
+  - It is treated as the original piece (i.e. if the pawn that started the game on a2 is promoted to a Queen, it is still treated as the pawn on a2 for the purposes of calculating distance functions, etc)
 - If two pieces simulatenously checkmate a king each is credited with 0.5 kills/mates
 - A checkmate is considered a "death" for the king
 - When a knight "hops" its path is chosen based on if the current move is even or odd, i.e. two squares first if even, one if odd (This is done to ensure consistency in metrics across runs)

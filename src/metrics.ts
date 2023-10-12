@@ -136,7 +136,21 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   return {
     maxDistancePiece,
     maxDistance,
+    distanceMap
   };
+}
+
+export function getAverageDistance(distanceMap: { [key: string]: number }, gameCount: number ) {
+  let maxAverageDistance = 0;
+  let pieceWithHighestAverageDistance = null;
+  for (const piece of Object.keys(distanceMap)) {
+    const averageDistance = distanceMap[piece] / gameCount;
+    if (averageDistance > maxAverageDistance) {
+      maxAverageDistance = averageDistance;
+      pieceWithHighestAverageDistance = piece;
+    }
+  }
+  return { pieceWithHighestAverageDistance, maxAverageDistance };
 }
 
 // Need to decide how we assign the openings to a game (and get a db of openings)
