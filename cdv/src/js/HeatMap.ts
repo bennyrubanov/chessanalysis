@@ -3,6 +3,8 @@ import _ from 'lodash';
 import * as util from './util';
 
 export class HeatMap {
+  dispatch: any;
+  dataContainer: any;
   constructor(selector, options, data) {
     //container setup
     this.container = d3.select(selector);

@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { HeatMap } from '../../cdv/src/js/index';
 
 /**
  * Take an array of numbers and return a chess board visual colored based on the value
@@ -20,7 +21,7 @@ export function boardHeatmap(scores: number[][], options: any) {
         data.heatmaps.checkSquares
       );
 
-      var tip = d3
+      var tip = (d3 as any)
         .tip()
         .attr('class', 'd3-tip')
         .offset([25, -6])

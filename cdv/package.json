@@ -2,6 +2,7 @@
   "name": "chess-dataviz",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
     "test": "eslint .",
     "build": "tsc --build"

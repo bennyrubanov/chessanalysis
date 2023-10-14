@@ -1,12 +1,12 @@
 {
-  "name": "chess.js",
+  "name": "cjsmin",
   "version": "1.0.0-beta.6",
   "license": "BSD-2-Clause",
   "main": "dist/cjs/chess.js",
   "module": "dist/esm/chess.js",
   "types": "dist/types/chess.d.ts",
   "homepage": "https://github.com/jhlywa/chess.js",
-  "author": "Jeff Hlywa <jhlywa@gmail.com>",
+  "author": "",
   "scripts": {
     "test": "jest",
     "lint": "eslint src/ --ext .ts",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jhlywa/chess.js"
+    "url": ""
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

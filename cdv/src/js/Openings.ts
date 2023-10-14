@@ -168,7 +168,7 @@ export class Openings {
 
     sanText.exit().remove();
 
-    function fillColor(d: any, i: any) {
+    function fillColor(d: any, i: any): any {
       if (i === 0) return;
 
       let rootParent = getParents(d)[0];
