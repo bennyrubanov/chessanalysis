@@ -21,7 +21,7 @@
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THEf
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -89,7 +89,12 @@ export const DEFAULT_POSITION =
 export type Piece = {
   color: Color;
   type: PieceType; // keeping in for backwards compatibility, could be removed
-  unambiguousSymbol?: UnambiguousPieceSymbol;
+  unambiguousSymbol: UnambiguousPieceSymbol;
+};
+
+type Capture = {
+  type: PieceType;
+  unambiguousSymbol: UnambiguousPieceSymbol;
 };
 
 export type InternalMove = {
@@ -97,7 +102,7 @@ export type InternalMove = {
   from: number;
   to: number;
   piece: PieceType;
-  captured?: PieceType;
+  capture?: Capture;
   promotion?: PieceType;
   flags: number;
 };
@@ -118,7 +123,7 @@ export type Move = {
   from: Square;
   to: Square;
   piece: PieceType;
-  captured?: PieceType;
+  captured?: Capture;
   promotion?: PieceType;
   flags: string;
   // san: string;
@@ -510,7 +515,7 @@ function addMove(
   from: number,
   to: number,
   piece: PieceType,
-  captured: PieceType | undefined = undefined,
+  captured: Capture | undefined = undefined,
   flags: number = BITS.NORMAL
 ) {
   const r = rank(to);
@@ -523,7 +528,7 @@ function addMove(
         from,
         to,
         piece,
-        captured,
+        capture: captured,
         promotion,
         flags: flags | BITS.PROMOTION,
       });
@@ -534,7 +539,7 @@ function addMove(
       from,
       to,
       piece,
-      captured,
+      capture: captured,
       flags,
     });
   }
@@ -562,7 +567,136 @@ function strippedSan(move: string) {
 }
 
 export class Chess {
-  _board = new Array<Piece>(128);
+  _board = [
+    { type: 'r', color: 'b', unambiguousSymbol: 'ra' },
+    { type: 'n', color: 'b', unambiguousSymbol: 'nb' },
+    { type: 'b', color: 'b', unambiguousSymbol: 'bc' },
+    { type: 'q', color: 'b', unambiguousSymbol: 'q' },
+    { type: 'k', color: 'b', unambiguousSymbol: 'k' },
+    { type: 'b', color: 'b', unambiguousSymbol: 'bf' },
+    { type: 'n', color: 'b', unambiguousSymbol: 'ng' },
+    { type: 'r', color: 'b', unambiguousSymbol: 'rh' },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    { type: 'p', color: 'b', unambiguousSymbol: 'pa' },
+    { type: 'p', color: 'b', unambiguousSymbol: 'pb' },
+    { type: 'p', color: 'b', unambiguousSymbol: 'pc' },
+    { type: 'p', color: 'b', unambiguousSymbol: 'pd' },
+    { type: 'p', color: 'b', unambiguousSymbol: 'pe' },
+    { type: 'p', color: 'b', unambiguousSymbol: 'pf' },
+    { type: 'p', color: 'b', unambiguousSymbol: 'pg' },
+    { type: 'p', color: 'b', unambiguousSymbol: 'pg' },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    { type: 'p', color: 'w', unambiguousSymbol: 'PA' },
+    { type: 'p', color: 'w', unambiguousSymbol: 'PB' },
+    { type: 'p', color: 'w', unambiguousSymbol: 'PC' },
+    { type: 'p', color: 'w', unambiguousSymbol: 'PD' },
+    { type: 'p', color: 'w', unambiguousSymbol: 'PE' },
+    { type: 'p', color: 'w', unambiguousSymbol: 'PF' },
+    { type: 'p', color: 'w', unambiguousSymbol: 'PG' },
+    { type: 'p', color: 'w', unambiguousSymbol: 'PG' },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    { type: 'r', color: 'w', unambiguousSymbol: 'RA' },
+    { type: 'n', color: 'w', unambiguousSymbol: 'NB' },
+    { type: 'b', color: 'w', unambiguousSymbol: 'BC' },
+    { type: 'q', color: 'w', unambiguousSymbol: 'Q' },
+    { type: 'k', color: 'w', unambiguousSymbol: 'K' },
+    { type: 'b', color: 'w', unambiguousSymbol: 'BF' },
+    { type: 'n', color: 'w', unambiguousSymbol: 'NG' },
+    { type: 'r', color: 'w', unambiguousSymbol: 'RH' },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ] as Array<Piece>; // casting because typing without valid assumption is a PITA
   private _turn: Color = WHITE;
   private _header: Record<string, string> = {};
   private _kings: Record<Color, number> = { w: EMPTY, b: EMPTY };
@@ -572,269 +706,143 @@ export class Chess {
   private _history: History[] = [];
   private _castling: Record<Color, number> = { w: 0, b: 0 };
 
-  constructor(fen = DEFAULT_POSITION) {
-    this.load(fen);
-  }
-
-  clear(keepHeaders = false) {
-    this._board = new Array<Piece>(128);
-    this._kings = { w: EMPTY, b: EMPTY };
-    this._turn = WHITE;
-    this._castling = { w: 0, b: 0 };
-    this._epSquare = EMPTY;
-    this._halfMoves = 0;
-    this._moveNumber = 1;
-    this._history = [];
-    this._header = keepHeaders ? this._header : {};
-    this._updateSetup(this.fen());
-  }
-
-  load(fen: string, keepHeaders = false) {
-    let tokens = fen.split(/\s+/);
-
-    // append commonly omitted fen tokens
-    if (tokens.length >= 2 && tokens.length < 6) {
-      const adjustments = ['-', '-', '0', '1'];
-      fen = tokens.concat(adjustments.slice(-(6 - tokens.length))).join(' ');
-    }
-
-    tokens = fen.split(/\s+/);
-
-    const { ok, error } = validateFen(fen);
-    if (!ok) {
-      throw new Error(error);
-    }
-
-    const position = tokens[0];
-    let square = 0;
-
-    this.clear(keepHeaders);
-
-    for (let i = 0; i < position.length; i++) {
-      const piece = position.charAt(i);
-
-      if (piece === '/') {
-        square += 8;
-      } else if (isDigit(piece)) {
-        square += parseInt(piece, 10);
-      } else {
-        const color = piece < 'a' ? WHITE : BLACK;
-        this._put(
-          { type: piece.toLowerCase() as PieceType, color },
-          algebraic(square)
-        );
-        square++;
-      }
-    }
-
-    this._turn = tokens[1] as Color;
-
-    if (tokens[2].indexOf('K') > -1) {
-      this._castling.w |= BITS.KSIDE_CASTLE;
-    }
-    if (tokens[2].indexOf('Q') > -1) {
-      this._castling.w |= BITS.QSIDE_CASTLE;
-    }
-    if (tokens[2].indexOf('k') > -1) {
-      this._castling.b |= BITS.KSIDE_CASTLE;
-    }
-    if (tokens[2].indexOf('q') > -1) {
-      this._castling.b |= BITS.QSIDE_CASTLE;
-    }
-
-    this._epSquare = tokens[3] === '-' ? EMPTY : Ox88[tokens[3] as Square];
-    this._halfMoves = parseInt(tokens[4], 10);
-    this._moveNumber = parseInt(tokens[5], 10);
-
-    this._updateSetup(this.fen());
-  }
-
-  fen() {
-    let empty = 0;
-    let fen = '';
-
-    for (let i = Ox88.a8; i <= Ox88.h1; i++) {
-      if (this._board[i]) {
-        if (empty > 0) {
-          fen += empty;
-          empty = 0;
-        }
-        const { color, type: piece } = this._board[i];
-
-        fen += color === WHITE ? piece.toUpperCase() : piece.toLowerCase();
-      } else {
-        empty++;
-      }
-
-      if ((i + 1) & 0x88) {
-        if (empty > 0) {
-          fen += empty;
-        }
-
-        if (i !== Ox88.h1) {
-          fen += '/';
-        }
-
-        empty = 0;
-        i += 8;
-      }
-    }
-
-    let castling = '';
-    if (this._castling[WHITE] & BITS.KSIDE_CASTLE) {
-      castling += 'K';
-    }
-    if (this._castling[WHITE] & BITS.QSIDE_CASTLE) {
-      castling += 'Q';
-    }
-    if (this._castling[BLACK] & BITS.KSIDE_CASTLE) {
-      castling += 'k';
-    }
-    if (this._castling[BLACK] & BITS.QSIDE_CASTLE) {
-      castling += 'q';
-    }
-
-    // do we have an empty castling flag?
-    castling = castling || '-';
-
-    let epSquare = '-';
-    /*
-     * only print the ep square if en passant is a valid move (pawn is present
-     * and ep capture is not pinned)
-     */
-    if (this._epSquare !== EMPTY) {
-      const bigPawnSquare = this._epSquare + (this._turn === WHITE ? 16 : -16);
-      const squares = [bigPawnSquare + 1, bigPawnSquare - 1];
-
-      for (const square of squares) {
-        // is the square off the board?
-        if (square & 0x88) {
-          continue;
-        }
-
-        const color = this._turn;
-
-        // is there a pawn that can capture the epSquare?
-        if (
-          this._board[square]?.color === color &&
-          this._board[square]?.type === PAWN
-        ) {
-          // if the pawn makes an ep capture, does it leave it's king in check?
-          this._makeMove({
-            color,
-            from: square,
-            to: this._epSquare,
-            piece: PAWN,
-            captured: PAWN,
-            flags: BITS.EP_CAPTURE,
-          });
-          const isLegal = !this._isKingAttacked(color);
-          this._undoMove();
-
-          // if ep is legal, break and set the ep square in the FEN output
-          if (isLegal) {
-            epSquare = algebraic(this._epSquare);
-            break;
-          }
-        }
-      }
-    }
-
-    return [
-      fen,
-      this._turn,
-      castling,
-      epSquare,
-      this._halfMoves,
-      this._moveNumber,
-    ].join(' ');
-  }
-
-  /*
-   * Called when the initial board setup is changed with put() or remove().
-   * modifies the SetUp and FEN properties of the header object. If the FEN
-   * is equal to the default position, the SetUp and FEN are deleted the setup
-   * is only updated if history.length is zero, ie moves haven't been made.
-   */
-  private _updateSetup(fen: string) {
-    if (this._history.length > 0) return;
-
-    if (fen !== DEFAULT_POSITION) {
-      this._header['SetUp'] = '1';
-      this._header['FEN'] = fen;
-    } else {
-      delete this._header['SetUp'];
-      delete this._header['FEN'];
-    }
-  }
+  constructor() {}
 
   reset() {
-    this.load(DEFAULT_POSITION);
+    this._board = [
+      { type: 'r', color: 'b', unambiguousSymbol: 'ra' },
+      { type: 'n', color: 'b', unambiguousSymbol: 'nb' },
+      { type: 'b', color: 'b', unambiguousSymbol: 'bc' },
+      { type: 'q', color: 'b', unambiguousSymbol: 'q' },
+      { type: 'k', color: 'b', unambiguousSymbol: 'k' },
+      { type: 'b', color: 'b', unambiguousSymbol: 'bf' },
+      { type: 'n', color: 'b', unambiguousSymbol: 'ng' },
+      { type: 'r', color: 'b', unambiguousSymbol: 'rh' },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      { type: 'p', color: 'b', unambiguousSymbol: 'pa' },
+      { type: 'p', color: 'b', unambiguousSymbol: 'pb' },
+      { type: 'p', color: 'b', unambiguousSymbol: 'pc' },
+      { type: 'p', color: 'b', unambiguousSymbol: 'pd' },
+      { type: 'p', color: 'b', unambiguousSymbol: 'pe' },
+      { type: 'p', color: 'b', unambiguousSymbol: 'pf' },
+      { type: 'p', color: 'b', unambiguousSymbol: 'pg' },
+      { type: 'p', color: 'b', unambiguousSymbol: 'pg' },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      { type: 'p', color: 'w', unambiguousSymbol: 'PA' },
+      { type: 'p', color: 'w', unambiguousSymbol: 'PB' },
+      { type: 'p', color: 'w', unambiguousSymbol: 'PC' },
+      { type: 'p', color: 'w', unambiguousSymbol: 'PD' },
+      { type: 'p', color: 'w', unambiguousSymbol: 'PE' },
+      { type: 'p', color: 'w', unambiguousSymbol: 'PF' },
+      { type: 'p', color: 'w', unambiguousSymbol: 'PG' },
+      { type: 'p', color: 'w', unambiguousSymbol: 'PG' },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      { type: 'r', color: 'w', unambiguousSymbol: 'RA' },
+      { type: 'n', color: 'w', unambiguousSymbol: 'NB' },
+      { type: 'b', color: 'w', unambiguousSymbol: 'BC' },
+      { type: 'q', color: 'w', unambiguousSymbol: 'Q' },
+      { type: 'k', color: 'w', unambiguousSymbol: 'K' },
+      { type: 'b', color: 'w', unambiguousSymbol: 'BF' },
+      { type: 'n', color: 'w', unambiguousSymbol: 'NG' },
+      { type: 'r', color: 'w', unambiguousSymbol: 'RH' },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    ] as Array<Piece>;
   }
 
   get(square: Square) {
     return this._board[Ox88[square]] || false;
-  }
-
-  put({ type, color }: { type: PieceType; color: Color }, square: Square) {
-    if (this._put({ type, color }, square)) {
-      this._updateCastlingRights();
-      this._updateEnPassantSquare();
-      this._updateSetup(this.fen());
-      return true;
-    }
-    return false;
-  }
-
-  private _put(
-    { type, color }: { type: PieceType; color: Color },
-    square: Square
-  ) {
-    // check for piece
-    if (SYMBOLS.indexOf(type.toLowerCase()) === -1) {
-      return false;
-    }
-
-    // check for valid square
-    if (!(square in Ox88)) {
-      return false;
-    }
-
-    const sq = Ox88[square];
-
-    // don't let the user place more than one king
-    if (
-      type == KING &&
-      !(this._kings[color] == EMPTY || this._kings[color] == sq)
-    ) {
-      return false;
-    }
-
-    this._board[sq] = { type: type as PieceType, color: color as Color };
-
-    if (type === KING) {
-      this._kings[color] = sq;
-    }
-
-    this._updateCastlingRights();
-    this._updateEnPassantSquare();
-    this._updateSetup(this.fen());
-
-    return true;
-  }
-
-  remove(square: Square) {
-    const piece = this.get(square);
-    delete this._board[Ox88[square]];
-    if (piece && piece.type === KING) {
-      this._kings[piece.color] = EMPTY;
-    }
-
-    this._updateCastlingRights();
-    this._updateEnPassantSquare();
-    this._updateSetup(this.fen());
-
-    return piece;
   }
 
   _updateCastlingRights() {
@@ -1188,11 +1196,25 @@ export class Chess {
               from,
               to,
               PAWN,
-              this._board[to].type,
+              {
+                type: this._board[to].type,
+                unambiguousSymbol: this._board[to].unambiguousSymbol,
+              },
               BITS.CAPTURE
             );
           } else if (to === this._epSquare) {
-            addMove(moves, us, from, to, PAWN, PAWN, BITS.EP_CAPTURE);
+            addMove(
+              moves,
+              us,
+              from,
+              to,
+              PAWN,
+              {
+                type: PAWN,
+                unambiguousSymbol: this._board[to].unambiguousSymbol,
+              },
+              BITS.EP_CAPTURE
+            );
           }
         }
       } else {
@@ -1218,7 +1240,10 @@ export class Chess {
                 from,
                 to,
                 type,
-                this._board[to].type,
+                {
+                  type: this._board[to].type,
+                  unambiguousSymbol: this._board[to].unambiguousSymbol,
+                },
                 BITS.CAPTURE
               );
               break;
@@ -1344,7 +1369,11 @@ export class Chess {
 
     // if pawn promotion, replace with new piece
     if (move.promotion) {
-      this._board[move.to] = { type: move.promotion, color: us };
+      this._board[move.to] = {
+        type: move.promotion,
+        color: us,
+        unambiguousSymbol: this._board[move.to].unambiguousSymbol,
+      };
     }
 
     // if we moved the king
@@ -1439,11 +1468,13 @@ export class Chess {
     const us = this._turn;
     const them = swapColor(us);
 
+    // const unambiguousSymbol = this._board[move.to].unambiguousSymbol;
     this._board[move.from] = this._board[move.to];
     this._board[move.from].type = move.piece; // to undo any promotions
     delete this._board[move.to];
 
-    if (move.captured) {
+    // EP is the only case where a captured piece is not replaced
+    if (move.capture) {
       if (move.flags & BITS.EP_CAPTURE) {
         // en passant capture
         let index: number;
@@ -1452,10 +1483,21 @@ export class Chess {
         } else {
           index = move.to + 16;
         }
-        this._board[index] = { type: PAWN, color: them };
+        throw new Error('TODO: Implement en passant capture');
+        this._board[index] = {
+          type: PAWN,
+          color: them,
+          // a pawn that is taken en passant must be on its original rank, so we can assume the unambiguous symbol
+          unambiguousSymbol: 'pa', // TODO: This is a temporary change
+        };
       } else {
         // regular capture
-        this._board[move.to] = { type: move.captured, color: them };
+        this._board[move.to] = {
+          type: move.capture.type,
+          color: them,
+          // for any other capture we need to find the board history on the turn before the move was made...
+          unambiguousSymbol: move.capture.unambiguousSymbol, // TODO: This is a temporary change
+        };
       }
     }
 
@@ -1557,7 +1599,7 @@ export class Chess {
       }
     }
 
-    this._makeMove(move);
+    this._makeMove(move); // preserve the board state before the move
     if (this.isCheck()) {
       if (this.isCheckmate()) {
         output += '#';
@@ -1703,7 +1745,15 @@ export class Chess {
 
   // pretty = external move object
   private _makePretty(uglyMove: InternalMove): Move {
-    const { color, piece, from, to, flags, captured, promotion } = uglyMove;
+    const {
+      color,
+      piece,
+      from,
+      to,
+      flags,
+      capture: capturedPiece,
+      promotion,
+    } = uglyMove;
 
     let prettyFlags = '';
 
@@ -1726,12 +1776,11 @@ export class Chess {
       piece,
     };
 
-    if (captured) {
-      move.captured = captured;
+    if (capturedPiece) {
+      move.captured = capturedPiece;
     }
     if (promotion) {
       move.promotion = promotion;
-      // move.lan += promotion;
     }
 
     return {
