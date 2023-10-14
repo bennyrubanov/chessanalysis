@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.0",
+    "@types/d3": "^7.4.1",
     "@types/jest": "^29.5.5",
     "@types/node": "18.11.18",
     "jest": "^29.7.0",
@@ -16,6 +17,7 @@
   "scripts": {
     "build": "tsc --build",
     "start": "tsc --build && node dist/src/index.js",
-    "test": "tsc --build && jest ./dist"
+    "test": "tsc --build && jest ./dist",
+    "scratch": "tsc --build && node dist/src/scratch.js"
   }
 }
