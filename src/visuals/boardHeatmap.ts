@@ -1,11 +1,11 @@
 import * as d3 from 'd3';
-import { HeatMap } from '../../cdv/src/js/index';
+import { HeatMap } from '../../cdv/src/js/index.js';
 
 /**
  * Take an array of numbers and return a chess board visual colored based on the value
  */
-export function boardHeatmap(scores: number[][], options: any) {
-  d3.json(
+export async function boardHeatmap(scores: number[][], options: any) {
+  return await d3.json(
     'https://ebemunk.com/chess-dataviz/data/wrc.json',
     function (err, data) {
       var heatmapExample2 = new HeatMap(
@@ -62,3 +62,7 @@ export function boardHeatmap(scores: number[][], options: any) {
     }
   );
 }
+
+boardHeatmap([], null).then((a) => {
+  console.log(a);
+});

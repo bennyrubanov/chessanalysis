@@ -1,6 +1,6 @@
 //@ts-nocheck
 import _ from 'lodash';
-import * as util from './util';
+import * as util from './util.js';
 
 export class HeatMap {
   dispatch: any;
