@@ -36,10 +36,9 @@ export const QUEEN = 'q';
 export const KING = 'k';
 
 export type Color = 'w' | 'b';
-// export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
-export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
+export type PieceType = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 
-export type UnambiguousPieceSymbols =
+export type UnambiguousPieceSymbol =
   | 'ra'
   | 'nb'
   | 'bc'
@@ -89,16 +88,17 @@ export const DEFAULT_POSITION =
 
 export type Piece = {
   color: Color;
-  type: PieceSymbol;
+  type: PieceType; // keeping in for backwards compatibility, could be removed
+  unambiguousSymbol?: UnambiguousPieceSymbol;
 };
 
 export type InternalMove = {
   color: Color;
   from: number;
   to: number;
-  piece: PieceSymbol;
-  captured?: PieceSymbol;
-  promotion?: PieceSymbol;
+  piece: PieceType;
+  captured?: PieceType;
+  promotion?: PieceType;
   flags: number;
 };
 
@@ -117,9 +117,9 @@ export type Move = {
   color: Color;
   from: Square;
   to: Square;
-  piece: PieceSymbol;
-  captured?: PieceSymbol;
-  promotion?: PieceSymbol;
+  piece: PieceType;
+  captured?: PieceType;
+  promotion?: PieceType;
   flags: string;
   // san: string;
   // lan: string;
@@ -268,7 +268,7 @@ const PIECE_MASKS = { p: 0x1, n: 0x2, b: 0x4, r: 0x8, q: 0x10, k: 0x20 };
 
 const SYMBOLS = 'pnbrqkPNBRQK';
 
-const PROMOTIONS: PieceSymbol[] = [KNIGHT, BISHOP, ROOK, QUEEN];
+const PROMOTIONS: PieceType[] = [KNIGHT, BISHOP, ROOK, QUEEN];
 
 const RANK_1 = 7;
 const RANK_2 = 6;
@@ -509,8 +509,8 @@ function addMove(
   color: Color,
   from: number,
   to: number,
-  piece: PieceSymbol,
-  captured: PieceSymbol | undefined = undefined,
+  piece: PieceType,
+  captured: PieceType | undefined = undefined,
   flags: number = BITS.NORMAL
 ) {
   const r = rank(to);
@@ -553,7 +553,7 @@ function inferPieceType(san: string) {
   if (pieceType === 'o') {
     return KING;
   }
-  return pieceType as PieceSymbol;
+  return pieceType as PieceType;
 }
 
 // parses all of the decorators out of a SAN string
@@ -562,7 +562,7 @@ function strippedSan(move: string) {
 }
 
 export class Chess {
-  private _board = new Array<Piece>(128);
+  _board = new Array<Piece>(128);
   private _turn: Color = WHITE;
   private _header: Record<string, string> = {};
   private _kings: Record<Color, number> = { w: EMPTY, b: EMPTY };
@@ -620,7 +620,7 @@ export class Chess {
       } else {
         const color = piece < 'a' ? WHITE : BLACK;
         this._put(
-          { type: piece.toLowerCase() as PieceSymbol, color },
+          { type: piece.toLowerCase() as PieceType, color },
           algebraic(square)
         );
         square++;
@@ -776,7 +776,7 @@ export class Chess {
     return this._board[Ox88[square]] || false;
   }
 
-  put({ type, color }: { type: PieceSymbol; color: Color }, square: Square) {
+  put({ type, color }: { type: PieceType; color: Color }, square: Square) {
     if (this._put({ type, color }, square)) {
       this._updateCastlingRights();
       this._updateEnPassantSquare();
@@ -787,7 +787,7 @@ export class Chess {
   }
 
   private _put(
-    { type, color }: { type: PieceSymbol; color: Color },
+    { type, color }: { type: PieceType; color: Color },
     square: Square
   ) {
     // check for piece
@@ -810,7 +810,7 @@ export class Chess {
       return false;
     }
 
-    this._board[sq] = { type: type as PieceSymbol, color: color as Color };
+    this._board[sq] = { type: type as PieceType, color: color as Color };
 
     if (type === KING) {
       this._kings[color] = sq;
@@ -1051,7 +1051,7 @@ export class Chess {
      * k.b. vs k.n. with mate in 1:
      * 8/8/8/8/1n6/8/B7/K1k5 b - - 2 1
      */
-    const pieces: Record<PieceSymbol, number> = {
+    const pieces: Record<PieceType, number> = {
       b: 0,
       n: 0,
       r: 0,
@@ -1122,7 +1122,7 @@ export class Chess {
     square = undefined,
   }: {
     legal?: boolean;
-    piece?: PieceSymbol;
+    piece?: PieceType;
     square?: Square;
   } = {}) {
     const forSquare = square ? (square.toLowerCase() as Square) : undefined;
@@ -1656,7 +1656,7 @@ export class Chess {
     pieceType = inferPieceType(cleanMove);
     moves = this._moves({
       legal: true,
-      piece: piece ? (piece as PieceSymbol) : pieceType,
+      piece: piece ? (piece as PieceType) : pieceType,
     });
 
     if (!to) {

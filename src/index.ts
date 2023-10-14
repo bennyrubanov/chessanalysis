@@ -1,6 +1,8 @@
 import { gameChunks } from './fileReader';
-import { getMoveDistanceSingleGame } from './metrics';
-import { getAverageDistance } from './metrics';
+import {
+  getAverageDistance,
+  getMoveDistanceSingleGame,
+} from './metrics/metrics';
 
 // const year = 2013;
 // const month = '01';
@@ -27,7 +29,11 @@ export async function main(path: string) {
       console.log('number of games analyzed: ', gameCount);
     }
 
-    const { maxDistancePiece, maxDistance: distance, distanceMap } = await getMoveDistanceSingleGame(game);
+    const {
+      maxDistancePiece,
+      maxDistance: distance,
+      distanceMap,
+    } = await getMoveDistanceSingleGame(game);
 
     if (distance > maxDistance) {
       maxDistance = distance;
@@ -42,10 +48,10 @@ export async function main(path: string) {
     }
 
     lastGame = game;
-
   }
-  
-  const { pieceWithHighestAverageDistance, maxAverageDistance } = getAverageDistance(totalDistanceMap, gameCount);
+
+  const { pieceWithHighestAverageDistance, maxAverageDistance } =
+    getAverageDistance(totalDistanceMap, gameCount);
 
   console.log('Last game analyzed: ', lastGame);
 
@@ -54,17 +60,30 @@ export async function main(path: string) {
     maxDistance,
     pieceWithHighestAverageDistance,
     maxAverageDistance,
-    gameCount
+    gameCount,
   };
-
 }
 
 if (require.main === module) {
-  main(`data/10.10.23_test_set`).then(({ pieceThatMovedTheFurthest, maxDistance, pieceWithHighestAverageDistance, maxAverageDistance, gameCount }) => {
-    console.log(`Piece that moved the furthest: ${pieceThatMovedTheFurthest}`);
-    console.log(`Max distance: ${maxDistance}`);
-    console.log(`Piece with highest average distance for the set of games analyzed (calculated by distance piece has moved divided by the number of games analyzed): ${pieceWithHighestAverageDistance}`);
-    console.log(`That piece's average distance moved per game: ${maxAverageDistance}`);
-    console.log(`Number of games analyzed: ${gameCount}`);
-  });
+  main(`data/10.10.23_test_set`).then(
+    ({
+      pieceThatMovedTheFurthest,
+      maxDistance,
+      pieceWithHighestAverageDistance,
+      maxAverageDistance,
+      gameCount,
+    }) => {
+      console.log(
+        `Piece that moved the furthest: ${pieceThatMovedTheFurthest}`
+      );
+      console.log(`Max distance: ${maxDistance}`);
+      console.log(
+        `Piece with highest average distance for the set of games analyzed (calculated by distance piece has moved divided by the number of games analyzed): ${pieceWithHighestAverageDistance}`
+      );
+      console.log(
+        `That piece's average distance moved per game: ${maxAverageDistance}`
+      );
+      console.log(`Number of games analyzed: ${gameCount}`);
+    }
+  );
 }

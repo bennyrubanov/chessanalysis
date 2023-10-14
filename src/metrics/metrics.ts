@@ -1,20 +1,20 @@
 import {
   Chess,
   Color,
-  PieceSymbol,
+  PieceType,
   Square,
-  UnambiguousPieceSymbols,
-} from '../cjsmin/src/chess';
-import { FileReaderGame } from './types';
+  UnambiguousPieceSymbol,
+} from '../../cjsmin/src/chess';
+import { FileReaderGame } from '../types';
 
 type GameHistoryMove = {
   originalString: string;
   color: Color;
   from: Square;
   to: Square;
-  piece: PieceSymbol;
-  captured?: PieceSymbol;
-  promotion?: PieceSymbol;
+  piece: PieceType;
+  captured?: PieceType;
+  promotion?: PieceType;
   flags: string;
 };
 
@@ -63,7 +63,7 @@ function initializeMetricMaps() {
 
 // take a start and end board position and return the distances moved
 export async function getMoveDistanceSingleGame(game: FileReaderGame) {
-  const basePieceSquares = new Map<Square, UnambiguousPieceSymbols>();
+  const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
   basePieceSquares.set('a1', 'ra');
   basePieceSquares.set('b1', 'nb');
   basePieceSquares.set('c1', 'bc');
@@ -102,7 +102,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   const moveHistory = chess.history();
 
   // duplicate the base map
-  const pieceSquares = new Map<Square, UnambiguousPieceSymbols>(
+  const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
     basePieceSquares
   );
 
@@ -114,7 +114,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
   // Initialize variables to keep track of the maximum distance and the piece
   let maxDistance = -1;
-  let maxDistancePiece: UnambiguousPieceSymbols;
+  let maxDistancePiece: UnambiguousPieceSymbol;
 
   // TODO: we'll need to update the labels we use in cjsmin to be unique to do things this way
   for (const { from, to } of moveHistory) {
@@ -136,11 +136,14 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   return {
     maxDistancePiece,
     maxDistance,
-    distanceMap
+    distanceMap,
   };
 }
 
-export function getAverageDistance(distanceMap: { [key: string]: number }, gameCount: number ) {
+export function getAverageDistance(
+  distanceMap: { [key: string]: number },
+  gameCount: number
+) {
   let maxAverageDistance = 0;
   let pieceWithHighestAverageDistance = null;
   for (const piece of Object.keys(distanceMap)) {
@@ -173,12 +176,21 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
     matingPiece = gameHistory[gameHistory.length - 1].piece; // this doesn't disambiguate to the starting square of the piece; we'd want a chess.js rewrite to do that.
 
     // If mate see if also assist
-    if (gameHistory[gameHistory.length - 3].originalString.includes('+')) {
-      assistingPiece = gameHistory[gameHistory.length - 3].piece;
+    const assistCandidate = gameHistory[gameHistory.length - 3].piece;
+    if (
+      gameHistory[gameHistory.length - 3].originalString.includes('+') &&
+      matingPiece !== assistCandidate
+    ) {
+      assistingPiece = assistCandidate;
 
       // If assist check for hockey assist
-      if (gameHistory[gameHistory.length - 5].originalString.includes('+')) {
-        hockeyAssist = gameHistory[gameHistory.length - 5].piece;
+      const hockeyCandidate = gameHistory[gameHistory.length - 5].piece;
+      if (
+        gameHistory[gameHistory.length - 5].originalString.includes('+') &&
+        assistingPiece !== hockeyCandidate &&
+        matingPiece !== hockeyCandidate
+      ) {
+        hockeyAssist = hockeyCandidate;
       }
     }
   }
