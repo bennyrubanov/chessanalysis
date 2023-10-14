@@ -1,11 +1,14 @@
-import debug from 'debug';
-import _ from 'lodash';
+import * as d3 from 'd3';
+import * as _ from 'lodash';
 import * as util from './util';
 
-let log = debug('cdv:MovePaths');
-
 export class MovePaths {
-  constructor(selector, options, data) {
+  container: any;
+  private _options: any;
+  dataContainer: any;
+  private _data: any;
+
+  constructor(selector: any, options: any, data: any) {
     //container setup
     this.container = d3.select(selector);
 
@@ -15,13 +18,13 @@ export class MovePaths {
       margin: 20,
       accessor: 'Nb1',
       binSize: 1,
-      pointRandomizer: d3.random.normal(3, 1),
-      bezierRandomizer: d3.random.normal(12, 4),
+      pointRandomizer: (d3 as any).random.normal(3, 1),
+      bezierRandomizer: (d3 as any).random.normal(12, 4),
       bezierScaleFactor: 2,
     };
 
     options = options || {};
-    this._options = _.merge({}, defaultOptions, options);
+    this._options = { ...defaultOptions, ...options };
 
     this._options.boardWidth = this._options.width - this._options.margin * 2;
     this._options.squareWidth = Math.floor(this._options.boardWidth / 8);
@@ -53,25 +56,29 @@ export class MovePaths {
     }
   }
 
-  data(data) {
+  data(data: any) {
     this._data = data;
 
     this.update();
   }
 
-  options(options) {
+  options(options: any) {
     let omit = ['width', 'margin', 'boardWidth', 'squareWidth'];
+    const omittedOptions = { ...options };
+    omit.forEach((o) => {
+      delete omittedOptions[o];
+    });
 
-    _.merge(this._options, _.omit(options, omit));
+    this._options = { ...this._options, ...omittedOptions };
 
     this.update();
   }
 
   update() {
     let self = this;
-    let data = [];
+    let data: any[] = [];
 
-    _.pairs(this._data[this._options.accessor]).forEach((d) => {
+    _.toPairs(this._data[this._options.accessor]).forEach((d: any) => {
       let bin = Math.ceil(d[1] / this._options.binSize);
 
       for (let i = 0; i < bin; i++) {
@@ -87,7 +94,7 @@ export class MovePaths {
       .enter()
       .append('path')
       .attr('class', 'move-path')
-      .attr('d', (d) => {
+      .attr('d', (d: any) => {
         //start and end points
         let [s, e] = getSquareCoords(d);
 
@@ -144,7 +151,7 @@ export class MovePaths {
       });
 
     //get coordinates of squares from keys such as "e2-e4"
-    function getSquareCoords(d) {
+    function getSquareCoords(d: any) {
       let squares = [];
 
       for (let i = 0; i < 2; i++) {

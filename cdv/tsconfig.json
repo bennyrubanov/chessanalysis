@@ -4,6 +4,7 @@
     "moduleResolution": "node",
     "removeComments": false,
     "sourceMap": true,
+    "outDir": "dist",
     "strict": true,
     "skipLibCheck": true,
     "target": "ESNext"

@@ -1,10 +1,23 @@
-import debug from 'debug';
+//@ts-nocheck
+import d3 from 'd3';
 import _ from 'lodash';
 
-let log = debug('cdv:EvalAndTime');
-
 export class EvalAndTime {
-  constructor(selector, options, data) {
+  container: any;
+  private _options: any;
+  dispatch: any;
+  private _xScale: any;
+  private _yEvalScale: any;
+  private _yTimeScale: any;
+  private _xAxis: any;
+  private _yEvalAxis: any;
+  private _yTimeAxis: any;
+  private _data: any;
+  private _width: any;
+  private _height: any;
+  private _scale: any;
+
+  constructor(selector: any, options: any, data: any) {
     let self = this;
 
     //container
@@ -40,30 +53,35 @@ export class EvalAndTime {
     this.dispatch = d3.dispatch('mouseenter', 'mousemove', 'mouseleave');
 
     //scales
-    this._xScale = d3.scale.ordinal().rangeBands([0, this._width], 0.1, 0);
+    this._xScale = (d3 as any).scale
+      .ordinal()
+      .rangeBands([0, this._width], 0.1, 0);
 
-    this._yEvalScale = d3.scale
+    this._yEvalScale = (d3 as any).scale
       .linear()
       .range([this._height, 0])
       .domain([-5, 5])
       .clamp(true);
 
-    this._yTimeScale = d3.scale.linear().range([this._height, 0]);
+    this._yTimeScale = (d3 as any).scale.linear().range([this._height, 0]);
 
     //axes
-    this._xAxis = d3.svg
+    this._xAxis = (d3 as any).svg
       .axis()
       .scale(this._xScale)
       .orient('top')
-      .tickFormat((d) => d + 1);
+      .tickFormat((d: any) => d + 1);
 
-    this._yEvalAxis = d3.svg.axis().scale(this._yEvalScale).orient('left');
+    this._yEvalAxis = (d3.svg as any)
+      .axis()
+      .scale(this._yEvalScale)
+      .orient('left');
 
-    this._yTimeAxis = d3.svg
+    this._yTimeAxis = (d3.svg as any)
       .axis()
       .scale(this._yTimeScale)
       .orient('right')
-      .tickFormat((d) => Math.abs(d));
+      .tickFormat((d: any) => Math.abs(d));
 
     //clear element
     this.container.selectAll('*').remove();
@@ -153,9 +171,9 @@ export class EvalAndTime {
       .enter()
       .append('line')
       .attr('x1', 0)
-      .attr('y1', (d) => this._yEvalScale(d))
+      .attr('y1', (d: any) => this._yEvalScale(d))
       .attr('x2', this._width)
-      .attr('y2', (d) => this._yEvalScale(d))
+      .attr('y2', (d: any) => this._yEvalScale(d))
       .attr('class', 'eval-guide-line');
 
     evalGuides
@@ -163,11 +181,11 @@ export class EvalAndTime {
       .data(evalGuideTexts)
       .enter()
       .append('text')
-      .attr('transform', (d) => {
+      .attr('transform', (d: any) => {
         let offset = d.dy ? d.dy : 0;
         return 'translate(5,' + (this._yEvalScale(d.y) + offset) + ')';
       })
-      .text((d) => d.text)
+      .text((d: any) => d.text)
       .attr('class', 'eval-guide-text');
 
     //bars group
@@ -207,7 +225,7 @@ export class EvalAndTime {
       .attr('y1', 0)
       .attr('x2', 0)
       .attr('y2', 0)
-      .attr('class', (d) => `guide ${d}-guide`);
+      .attr('class', (d: any) => `guide ${d}-guide`);
 
     //invisible rect to absorb mouse move events
     interactiveLayer
@@ -219,14 +237,14 @@ export class EvalAndTime {
       .on('mouseenter', () => {
         this.dispatch.mouseenter();
       })
-      .on('mousemove', function () {
+      .on('mousemove', () => {
         /*eslint no-empty: 0*/
 
         //disregard if options.interactive is off
         if (!self._options.interactive) return;
 
         //calculate which point index the mouse is on
-        let mouseX = d3.mouse(this)[0];
+        let mouseX = (d3 as any).mouse(this)[0];
         let leftEdges = self._xScale.range();
         let width = self._xScale.rangeBand();
         let j;
@@ -292,13 +310,13 @@ export class EvalAndTime {
     }
   }
 
-  data(data) {
+  data(data: any) {
     this._data = data;
 
     this.update();
   }
 
-  options(options) {
+  options(options: any) {
     let omit = ['width', 'margin', 'boardWidth', 'squareWidth'];
 
     _.merge(this._options, _.omit(options, omit));
@@ -323,10 +341,10 @@ export class EvalAndTime {
     );
 
     //line generator
-    let line = d3.svg
+    let line = (d3 as any).svg
       .line()
-      .x((d, i) => this._xScale(i) + this._xScale.rangeBand() / 2)
-      .y((d) => this._yEvalScale(d.score));
+      .x((d: any, i: any) => this._xScale(i) + this._xScale.rangeBand() / 2)
+      .y((d: any) => this._yEvalScale(d.score));
     //area generator
     let area = d3.svg.area().x(line.x()).y1(line.y()).y0(this._yEvalScale(0));
     //axes
@@ -402,8 +420,8 @@ export class EvalAndTime {
       .data(['white', 'black'])
       .enter()
       .append('path')
-      .attr('class', (d) => `area ${d}`)
-      .attr('clip-path', (d) => `url(#clip-${d})`)
+      .attr('class', (d: any) => `area ${d}`)
+      .attr('clip-path', (d: any) => `url(#clip-${d})`)
       .datum(this._data)
       .attr('d', area);
 

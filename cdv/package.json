@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "eslint ."
+    "test": "eslint .",
+    "build": "tsc --build"
   },
   "author": "ebemunk <ebemunk@gmail.com>",
   "license": "MIT",
