@@ -1,13 +1,5 @@
-import {
-  Chess,
-  Color,
-  PieceSymbol,
-  Square,
-  UnambiguousPieceSymbols,
-} from '../cjsmin/src/chess';
-import '../cjsmin/src/chess';
-import { FileReaderGame } from './types';
-import { GameHistoryMove } from './types';
+import { Chess, Square, UnambiguousPieceSymbol } from '../../cjsmin/src/chess';
+import { FileReaderGame, GameHistoryMove } from '../types';
 
 // Should return an object for the metrics we want to track, not sure how best to structure so an exercise for the reader
 function initializeMetricMaps() {
@@ -57,21 +49,24 @@ export function countGamesInDataset(datasetPath: string): number {
   const fs = require('fs');
   const path = require('path');
 
-  let data = fs.readFileSync(path.join(__dirname, '../data/10.10.23_test_set'), 'utf8');
-  let games = data.split("\n[Event");
+  let data = fs.readFileSync(
+    path.join(__dirname, '../data/10.10.23_test_set'),
+    'utf8'
+  );
+  let games = data.split('\n[Event');
   // If the first game doesn't start with a newline, add 1 back to the count
-  if (data.startsWith("[Event")) {
-      console.log(`Number of games: ${games.length}`);
-      return games.length;
+  if (data.startsWith('[Event')) {
+    console.log(`Number of games: ${games.length}`);
+    return games.length;
   } else {
-      console.log(`Number of games: ${games.length - 1}`); // Subtract 1 because the first split item will be an empty string
-      return games.length - 1;
+    console.log(`Number of games: ${games.length - 1}`); // Subtract 1 because the first split item will be an empty string
+    return games.length - 1;
   }
 }
 
 // take a start and end board position and return the distances moved
 export async function getMoveDistanceSingleGame(game: FileReaderGame) {
-  const basePieceSquares = new Map<Square, UnambiguousPieceSymbols>();
+  const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
   basePieceSquares.set('a1', 'ra');
   basePieceSquares.set('b1', 'nb');
   basePieceSquares.set('c1', 'bc');
@@ -110,7 +105,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   const moveHistory = chess.history();
 
   // duplicate the base map
-  const pieceSquares = new Map<Square, UnambiguousPieceSymbols>(
+  const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
     basePieceSquares
   );
 
@@ -122,7 +117,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
   // Initialize variables to keep track of the maximum distance and the piece
   let maxDistance = -1;
-  let maxDistancePiece: UnambiguousPieceSymbols;
+  let maxDistancePiece: UnambiguousPieceSymbol;
 
   // TODO: we'll need to update the labels we use in cjsmin to be unique to do things this way
   for (const { from, to } of moveHistory) {
@@ -148,7 +143,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   return {
     maxDistancePiece,
     maxDistance,
-    distanceMap
+    distanceMap,
   };
 }
 
@@ -169,13 +164,20 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
       console.log('number of games analyzed: ', gameCount);
     }
 
-    const { maxDistancePiece, maxDistance: distance, distanceMap } = await getMoveDistanceSingleGame(game);
+    const {
+      maxDistancePiece,
+      maxDistance: distance,
+      distanceMap,
+    } = await getMoveDistanceSingleGame(game);
 
     if (distance > maxDistance) {
       maxDistance = distance;
       pieceThatMovedTheFurthest = maxDistancePiece;
       gameWithFurthestPiece = game;
-      let site = game.metadata.find(item => item.startsWith('[Site "'))?.replace('[Site "', '').replace('"]', '');
+      let site = game.metadata
+        .find((item) => item.startsWith('[Site "'))
+        ?.replace('[Site "', '')
+        .replace('"]', '');
       siteWithFurthestPiece = site;
     }
 
@@ -197,12 +199,15 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
     gameCount,
     siteWithFurthestPiece,
     totalDistanceMap,
-    lastGame
+    lastGame,
   };
 }
 
 // calculates piece with highest average distance and that piece's average distance covered per game in a set of games
-export function getAverageDistance(distanceMap: { [key: string]: number }, gameCount: number ) {
+export function getAverageDistance(
+  distanceMap: { [key: string]: number },
+  gameCount: number
+) {
   let maxAverageDistance = 0;
   let pieceWithHighestAverageDistance = null;
   for (const piece of Object.keys(distanceMap)) {
@@ -224,7 +229,7 @@ export async function getkillDeathRatios(games: FileReaderGame[]) {
 
   // look at each game and find the piece with the largest kill/death ratio
   for (const game of games) {
-    const basePieceSquares = new Map<Square, UnambiguousPieceSymbols>();
+    const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
     basePieceSquares.set('a1', 'ra');
     basePieceSquares.set('b1', 'nb');
     basePieceSquares.set('c1', 'bc');
@@ -257,18 +262,20 @@ export async function getkillDeathRatios(games: FileReaderGame[]) {
     basePieceSquares.set('f7', 'PF');
     basePieceSquares.set('g7', 'PG');
     basePieceSquares.set('h7', 'PH');
-  
+
     const chess = new Chess(); // Create a new instance of the Chess class
     chess.loadPgn(game.moves);
     const moveHistory = chess.history();
-  
+
     // duplicate the base map
-    const pieceSquares = new Map<Square, UnambiguousPieceSymbols>(
+    const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
       basePieceSquares
     );
 
     // create an object to track kills, deaths, and assists of each piece
-    const killDeathMap: { [key: string]: { kills: number, deaths: number, assists: number } } = {};
+    const killDeathMap: {
+      [key: string]: { kills: number; deaths: number; assists: number };
+    } = {};
     for (const piece of pieceSquares.values()) {
       killDeathMap[piece] = { kills: 0, deaths: 0, assists: 0 };
     }
@@ -281,10 +288,10 @@ export async function getkillDeathRatios(games: FileReaderGame[]) {
         }
         kills[move.piece]++;
 
-        if (!deaths[move.captured]) {
-          deaths[move.captured] = 0;
+        if (!deaths[move.captured.type]) {
+          deaths[move.captured.type] = 0;
         }
-        deaths[move.captured]++;
+        deaths[move.captured.type]++;
       }
 
       // Check if the game is in checkmate after the move
@@ -307,7 +314,6 @@ export async function getkillDeathRatios(games: FileReaderGame[]) {
   return killDeathRatios;
 }
 
-
 // Need to decide how we assign the openings to a game (and get a db of openings)
 function checkOpening() {}
 
@@ -328,12 +334,21 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
     matingPiece = gameHistory[gameHistory.length - 1].piece; // this doesn't disambiguate to the starting square of the piece; we'd want a chess.js rewrite to do that.
 
     // If mate see if also assist
-    if (gameHistory[gameHistory.length - 3].originalString.includes('+')) {
-      assistingPiece = gameHistory[gameHistory.length - 3].piece;
+    const assistCandidate = gameHistory[gameHistory.length - 3].piece;
+    if (
+      gameHistory[gameHistory.length - 3].originalString.includes('+') &&
+      matingPiece !== assistCandidate
+    ) {
+      assistingPiece = assistCandidate;
 
       // If assist check for hockey assist
-      if (gameHistory[gameHistory.length - 5].originalString.includes('+')) {
-        hockeyAssist = gameHistory[gameHistory.length - 5].piece;
+      const hockeyCandidate = gameHistory[gameHistory.length - 5].piece;
+      if (
+        gameHistory[gameHistory.length - 5].originalString.includes('+') &&
+        assistingPiece !== hockeyCandidate &&
+        matingPiece !== hockeyCandidate
+      ) {
+        hockeyAssist = hockeyCandidate;
       }
     }
   }
