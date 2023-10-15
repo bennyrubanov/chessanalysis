@@ -1,4 +1,7 @@
-import { getMateAndAssists, getMoveDistanceSingleGame } from '../src/metrics';
+import {
+  getMateAndAssists,
+  getMoveDistanceSingleGame,
+} from '../src/metrics/metrics';
 
 describe('getMateAndAssists', () => {
   it('should return empty objects if there is no mate or assist', () => {
@@ -172,7 +175,7 @@ describe('getMateAndAssists', () => {
   });
 
   // TODO: gen with copilot so teh game may not be valid
-  it('should return the mating piece and hockey assist if there is a mate and a hockey assist', () => {
+  it('should return just mating piece if the checks are all from the same piece', () => {
     const gameHistory: any[] = [
       {
         originalString: 'e4',
@@ -240,7 +243,7 @@ describe('getMateAndAssists', () => {
         flags: 'n',
       },
       {
-        originalString: 'Qxg8',
+        originalString: 'Qg8#', // can capture and mate happen in same? How is it represented?
         color: 'w',
         from: 'f8',
         to: 'g8',
@@ -255,7 +258,7 @@ describe('getMateAndAssists', () => {
     expect(result).toEqual({
       matingPiece: 'Q',
       assistingPiece: undefined,
-      hockeyAssist: 'R',
+      hockeyAssist: undefined,
     });
   });
 });
