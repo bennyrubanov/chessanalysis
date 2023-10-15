@@ -2,8 +2,10 @@
   "name": "chess-dataviz",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
-    "test": "eslint ."
+    "test": "eslint .",
+    "build": "tsc --build"
   },
   "author": "ebemunk <ebemunk@gmail.com>",
   "license": "MIT",

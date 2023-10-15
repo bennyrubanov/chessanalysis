@@ -1,5 +1,5 @@
 {
-  "include": ["src", "cjsmin", "tests"],
+  "include": ["src", "cjsmin", "cdv", "tests"],
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
@@ -7,7 +7,6 @@
     "experimentalDecorators": true,
     "incremental": true,
     "lib": ["esnext"],
-    "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitReturns": true,
     // "noUnusedLocals": true,
