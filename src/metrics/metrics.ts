@@ -311,7 +311,12 @@ export async function getkillDeathRatios(games: FileReaderGame[]) {
     killDeathRatios[piece] = kills[piece] / deaths[piece];
   }
 
-  return killDeathRatios;
+  return {
+    killDeathRatios,
+    kills,
+    deaths,
+    assists
+  };
 }
 
 // Need to decide how we assign the openings to a game (and get a db of openings)
@@ -377,5 +382,5 @@ function miscChecksFromMove() {
 }
 
 // function isFork(move, moveIndex, chess: Chess) {
-//   if
+//   if 
 // }
