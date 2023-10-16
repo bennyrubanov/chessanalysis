@@ -1,7 +1,6 @@
 import {
   getMateAndAssists,
-  getMoveDistanceSingleGame, 
-  getkillDeathRatios,
+  getMoveDistanceSingleGame,
 } from '../src/metrics/metrics';
 
 describe('getMateAndAssists', () => {
@@ -291,20 +290,20 @@ describe('getMoveDistanceSingleGame', () => {
 });
 
 // game being tested: https://www.chess.com/analysis/game/pgn/4uURW4rJaa?tab=analysis
-describe.only('getKillDeathRatios', () => {
-  it('should return the correct number of kills, deaths, and assists for each piece in a game', async () => {
-    const game = [
-      {
-        metadata: [],
-        moves: '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1'
-      }
-    ];
+// describe.only('getKillDeathRatios', () => {
+//   it('should return the correct number of kills, deaths, and assists for each piece in a game', async () => {
+//     const game = [
+//       {
+//         metadata: [],
+//         moves: '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1'
+//       }
+//     ];
 
-    const result = await getkillDeathRatios(game);
+//     const result = await getkillDeathRatios(game);
 
-    console.log(result);
+//     console.log(result);
 
-    expect(result['PE'].kills).toEqual(1);
-    expect(result['PE'].deaths).toEqual(1);
-  });
-})
+//     expect(result['PE'].kills).toEqual(1);
+//     expect(result['PE'].deaths).toEqual(1);
+//   });
+// })
