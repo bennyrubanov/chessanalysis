@@ -1,6 +1,7 @@
 {
   "include": ["src", "cjsmin", "cdv", "tests"],
   "compilerOptions": {
+    "module": "commonjs",
     "declaration": true,
     "declarationMap": true,
     "downlevelIteration": true,
