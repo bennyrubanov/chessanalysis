@@ -1,5 +1,5 @@
 import { Chess, Square, UnambiguousPieceSymbol } from '../../cjsmin/src/chess';
-import { FileReaderGame, GameHistoryMove } from '../types';
+import { FileReaderGame, GameHistoryMove, Capture } from '../types';
 
 // Should return an object for the metrics we want to track, not sure how best to structure so an exercise for the reader
 function initializeMetricMaps() {
@@ -117,8 +117,8 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
   // Initialize variables to keep track of the maximum distance and the piece
   let maxDistance = -1;
-  let maxDistancePiece: UnambiguousPieceSymbol;
-
+  let maxDistancePiece: UnambiguousPieceSymbol | null = null;
+  
   // TODO: we'll need to update the labels we use in cjsmin to be unique to do things this way
   for (const { from, to } of moveHistory) {
     // Calculate the file (column) distance by subtracting ASCII values
@@ -128,15 +128,19 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
     // The distance moved is the maximum of fileDist and rankDist
     const distance = Math.max(fileDist, rankDist);
     // Get the piece that moved from the pieceSquares map
-    const movedPiece = pieceSquares.get(from);
 
     // we'll update the map as pieces move. To avoid additional operations we only update (no delete). Can change this if we use this elsewhere
-    pieceSquares.set(to, movedPiece);
-    distanceMap[movedPiece] += distance;
+    // note from Benny addressing the comment above 10.10.23: need to update to delete, because right now, if *from* is not a key in the pieceSquares map, movedPiece will be undefined. This could happen if a piece moves from a square that is not initially populated in the pieceSquares map, or if a piece is moved from a square that has ALREADY BEEN MOVED FROM (since we're not deleting keys from the map after a piece moves (i.e. the "from" square is being used as a key in the map). Adding in code to delete the keys:
+    const movedPiece = pieceSquares.get(from);
+    if (movedPiece) {
+      pieceSquares.delete(from); // delete the key from the map
+      pieceSquares.set(to, movedPiece);
+      distanceMap[movedPiece] += distance;
 
-    if (distanceMap[movedPiece] > maxDistance) {
-      maxDistance = distanceMap[movedPiece];
-      maxDistancePiece = movedPiece;
+      if (distanceMap[movedPiece] > maxDistance) {
+        maxDistance = distanceMap[movedPiece];
+        maxDistancePiece = movedPiece;
+      }
     }
   }
 
@@ -150,10 +154,10 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 //returns the piece that moved the furthest, the game it moved the furthest in, the distance it moved, and the number of games analyzed in the set
 export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   let maxDistance = 0;
-  let pieceThatMovedTheFurthest = null;
+  let pieceThatMovedTheFurthest: UnambiguousPieceSymbol | null = null;
   let totalDistanceMap: { [key: string]: number } = {};
-  let gameWithFurthestPiece = null;
-  let siteWithFurthestPiece = null;
+  let gameWithFurthestPiece: FileReaderGame | null = null;
+  let siteWithFurthestPiece: string | null = null;
   let lastGame;
 
   let gameCount = 0;
@@ -178,7 +182,13 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
         .find((item) => item.startsWith('[Site "'))
         ?.replace('[Site "', '')
         .replace('"]', '');
-      siteWithFurthestPiece = site;
+      
+      // AFAIK this shouldn't happen
+      if (!site) {
+        console.log('Site is a falsy value (i.e. null, undefined, false, 0, NaN, or an empty string');
+      }
+
+      siteWithFurthestPiece = site || null;
     }
 
     for (const piece of Object.keys(distanceMap)) {
@@ -209,7 +219,7 @@ export function getAverageDistance(
   gameCount: number
 ) {
   let maxAverageDistance = 0;
-  let pieceWithHighestAverageDistance = null;
+  let pieceWithHighestAverageDistance: string | null = null;
   for (const piece of Object.keys(distanceMap)) {
     const averageDistance = distanceMap[piece] / gameCount;
     if (averageDistance > maxAverageDistance) {
