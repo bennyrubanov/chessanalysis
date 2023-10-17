@@ -45,6 +45,7 @@ function initializeMetricMaps() {
   };
 }
 
+// DONE
 // calculates how many games in the dataset
 export function countGamesInDataset(datasetPath: string): number {
   const fs = require('fs');
@@ -65,41 +66,42 @@ export function countGamesInDataset(datasetPath: string): number {
   }
 }
 
+// DONE 
 // take a start and end board position and return the distances moved
 export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
-  basePieceSquares.set('a1', 'ra');
-  basePieceSquares.set('b1', 'nb');
-  basePieceSquares.set('c1', 'bc');
-  basePieceSquares.set('d1', 'q');
-  basePieceSquares.set('e1', 'k');
-  basePieceSquares.set('f1', 'bf');
-  basePieceSquares.set('g1', 'ng');
-  basePieceSquares.set('h1', 'rh');
-  basePieceSquares.set('a2', 'pa');
-  basePieceSquares.set('b2', 'pb');
-  basePieceSquares.set('c2', 'pc');
-  basePieceSquares.set('d2', 'pd');
-  basePieceSquares.set('e2', 'pe');
-  basePieceSquares.set('f2', 'pf');
-  basePieceSquares.set('g2', 'pg');
-  basePieceSquares.set('h2', 'ph');
-  basePieceSquares.set('a8', 'RA');
-  basePieceSquares.set('b8', 'NB');
-  basePieceSquares.set('c8', 'BC');
-  basePieceSquares.set('d8', 'Q');
-  basePieceSquares.set('e8', 'K');
-  basePieceSquares.set('f8', 'BF');
-  basePieceSquares.set('g8', 'NG');
-  basePieceSquares.set('h8', 'RH');
-  basePieceSquares.set('a7', 'PA');
-  basePieceSquares.set('b7', 'PB');
-  basePieceSquares.set('c7', 'PC');
-  basePieceSquares.set('d7', 'PD');
-  basePieceSquares.set('e7', 'PE');
-  basePieceSquares.set('f7', 'PF');
-  basePieceSquares.set('g7', 'PG');
-  basePieceSquares.set('h7', 'PH');
+  basePieceSquares.set('a1', 'RA');
+  basePieceSquares.set('b1', 'NB');
+  basePieceSquares.set('c1', 'BC');
+  basePieceSquares.set('d1', 'Q');
+  basePieceSquares.set('e1', 'K');
+  basePieceSquares.set('f1', 'BF');
+  basePieceSquares.set('g1', 'NG');
+  basePieceSquares.set('h1', 'RH');
+  basePieceSquares.set('a2', 'PA');
+  basePieceSquares.set('b2', 'PB');
+  basePieceSquares.set('c2', 'PC');
+  basePieceSquares.set('d2', 'PD');
+  basePieceSquares.set('e2', 'PE');
+  basePieceSquares.set('f2', 'PF');
+  basePieceSquares.set('g2', 'PG');
+  basePieceSquares.set('h2', 'PH');
+  basePieceSquares.set('a8', 'ra');
+  basePieceSquares.set('b8', 'nb');
+  basePieceSquares.set('c8', 'bc');
+  basePieceSquares.set('d8', 'q');
+  basePieceSquares.set('e8', 'k');
+  basePieceSquares.set('f8', 'bf');
+  basePieceSquares.set('g8', 'ng');
+  basePieceSquares.set('h8', 'rh');
+  basePieceSquares.set('a7', 'pa');
+  basePieceSquares.set('b7', 'pb');
+  basePieceSquares.set('c7', 'pc');
+  basePieceSquares.set('d7', 'pd');
+  basePieceSquares.set('e7', 'pe');
+  basePieceSquares.set('f7', 'pf');
+  basePieceSquares.set('g7', 'pg');
+  basePieceSquares.set('h7', 'ph');
 
   const chess = new Chess(); // Create a new instance of the Chess class
   chess.loadPgn(game.moves);
@@ -148,7 +150,8 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   };
 }
 
-//returns the piece that moved the furthest, the game it moved the furthest in, the distance it moved, and the number of games analyzed in the set
+//DONE 
+// returns the piece that moved the furthest, the game it moved the furthest in, the distance it moved, and the number of games analyzed in the set
 export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   let maxDistance = 0;
   let pieceThatMovedTheFurthest = null;
@@ -204,6 +207,7 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   };
 }
 
+// DONE
 // calculates piece with highest average distance and that piece's average distance covered per game in a set of games
 export function getAverageDistance(
   distanceMap: { [key: string]: number },
@@ -221,48 +225,53 @@ export function getAverageDistance(
   return { pieceWithHighestAverageDistance, maxAverageDistance };
 }
 
+// IN PROGRESS
 // calculates piece with highest K/D ratio and also contains assists by that piece
-export async function getkillDeathRatios(games: FileReaderGame[]) {
-  const killDeathRatios = {};
-  const kills = {};
-  const deaths = {};
-  const assists = {};
+export async function getKillDeathRatios(games: FileReaderGame[]) {
+  // create an object to track kills, deaths, and assists of each piece
+  // The killsDeathsAssistsMap is an object where each key is a piece and the value is another object with kills, deaths, and assists properties.
+  const killsDeathsAssistsMap: {
+    [key: string]: { kills: number; deaths: number; assists: number };
+  } = {};
+  
+  // const killDeathRatios = {}
 
   // look at each game and find the piece with the largest kill/death ratio
   for (const game of games) {
     const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
-    basePieceSquares.set('a1', 'ra');
-    basePieceSquares.set('b1', 'nb');
-    basePieceSquares.set('c1', 'bc');
-    basePieceSquares.set('d1', 'q');
-    basePieceSquares.set('e1', 'k');
-    basePieceSquares.set('f1', 'bf');
-    basePieceSquares.set('g1', 'ng');
-    basePieceSquares.set('h1', 'rh');
-    basePieceSquares.set('a2', 'pa');
-    basePieceSquares.set('b2', 'pb');
-    basePieceSquares.set('c2', 'pc');
-    basePieceSquares.set('d2', 'pd');
-    basePieceSquares.set('e2', 'pe');
-    basePieceSquares.set('f2', 'pf');
-    basePieceSquares.set('g2', 'pg');
-    basePieceSquares.set('h2', 'ph');
-    basePieceSquares.set('a8', 'RA');
-    basePieceSquares.set('b8', 'NB');
-    basePieceSquares.set('c8', 'BC');
-    basePieceSquares.set('d8', 'Q');
-    basePieceSquares.set('e8', 'K');
-    basePieceSquares.set('f8', 'BF');
-    basePieceSquares.set('g8', 'NG');
-    basePieceSquares.set('h8', 'RH');
-    basePieceSquares.set('a7', 'PA');
-    basePieceSquares.set('b7', 'PB');
-    basePieceSquares.set('c7', 'PC');
-    basePieceSquares.set('d7', 'PD');
-    basePieceSquares.set('e7', 'PE');
-    basePieceSquares.set('f7', 'PF');
-    basePieceSquares.set('g7', 'PG');
-    basePieceSquares.set('h7', 'PH');
+    basePieceSquares.set('a1', 'RA');
+    basePieceSquares.set('b1', 'NB');
+    basePieceSquares.set('c1', 'BC');
+    basePieceSquares.set('d1', 'Q');
+    basePieceSquares.set('e1', 'K');
+    basePieceSquares.set('f1', 'BF');
+    basePieceSquares.set('g1', 'NG');
+    basePieceSquares.set('h1', 'RH');
+    basePieceSquares.set('a2', 'PA');
+    basePieceSquares.set('b2', 'PB');
+    basePieceSquares.set('c2', 'PC');
+    basePieceSquares.set('d2', 'PD');
+    basePieceSquares.set('e2', 'PE');
+    basePieceSquares.set('f2', 'PF');
+    basePieceSquares.set('g2', 'PG');
+    basePieceSquares.set('h2', 'PH');
+    basePieceSquares.set('a8', 'ra');
+    basePieceSquares.set('b8', 'nb');
+    basePieceSquares.set('c8', 'bc');
+    basePieceSquares.set('d8', 'q');
+    basePieceSquares.set('e8', 'k');
+    basePieceSquares.set('f8', 'bf');
+    basePieceSquares.set('g8', 'ng');
+    basePieceSquares.set('h8', 'rh');
+    basePieceSquares.set('a7', 'pa');
+    basePieceSquares.set('b7', 'pb');
+    basePieceSquares.set('c7', 'pc');
+    basePieceSquares.set('d7', 'pd');
+    basePieceSquares.set('e7', 'pe');
+    basePieceSquares.set('f7', 'pf');
+    basePieceSquares.set('g7', 'pg');
+    basePieceSquares.set('h7', 'ph');
+
 
     const chess = new Chess(); // Create a new instance of the Chess class
     chess.loadPgn(game.moves);
@@ -273,50 +282,77 @@ export async function getkillDeathRatios(games: FileReaderGame[]) {
       basePieceSquares
     );
 
-    // create an object to track kills, deaths, and assists of each piece
-    const killDeathMap: {
-      [key: string]: { kills: number; deaths: number; assists: number };
-    } = {};
+
     for (const piece of pieceSquares.values()) {
-      killDeathMap[piece] = { kills: 0, deaths: 0, assists: 0 };
+      killsDeathsAssistsMap[piece] = { kills: 0, deaths: 0, assists: 0 };
     }
 
-    //
     for (const move of moveHistory) {
-      if (move.captured) {
-        if (!kills[move.piece]) {
-          kills[move.piece] = 0;
-        }
-        kills[move.piece]++;
+      const movedPiece = pieceSquares.get(move.from);
+    
+      // Check if movedPiece is not undefined
+      if (movedPiece) {
+        // update the kill & death counts of movedPiece
+        if (move.captured) {
+          
+          killsDeathsAssistsMap[movedPiece].kills++;
+    
+          const capturedPiece = pieceSquares.get(move.to); // Get the unambiguous piece symbol
 
-        if (!deaths[move.capture.type]) {
-          deaths[move.capture.type] = 0;
+          if (capturedPiece) {
+            killsDeathsAssistsMap[capturedPiece].deaths++;
+          }
         }
-        deaths[move.capture.type]++;
+    
+        // Check if the game is in checkmate after the move. 
+        // Need to figure out getMateAndAssists disambiguation before this functions correctly
+        if (chess.isCheckmate()) {
+          const gameHistory = chess.history({ verbose: true }); // Get the game history
+          const { matingPiece } = getMateAndAssists(gameHistory); // Get the mating piece
+          console.log(`The piece ${matingPiece} delivered checkmate`)
+        
+          if (matingPiece) {
+            if (!kills[movedPiece]) {
+              kills[movedPiece] = 0;
+            }
+            kills[movedPiece]++;
+          }
+        }
+
+        // Update the pieceSquares map
+        pieceSquares.set(move.to, movedPiece);
+        pieceSquares.delete(move.from); // Remove the piece from its old square
+        
+        // Logs
+        console.log(`Move: ${move.originalString}, Captured: ${move.captured}`);        // logs only elements of the killsDeathsAssistsMap that are nonzero for kills, deaths, or assists
+        console.log(
+          'killsDeathsAssistsMap:',
+          Object.fromEntries(
+            Object.entries(killsDeathsAssistsMap).filter(
+              ([key, { kills, deaths, assists }]) => kills !== 0 || deaths !== 0 || assists !== 0
+            )
+          )
+        );
+
+      } 
+      else {
+        console.log('No piece found for square:', move.from);
       }
 
-      // Check if the game is in checkmate after the move
-      if (chess.isCheckmate()) {
-        if (!kills[move.piece]) {
-          kills[move.piece] = 0;
-        }
-        kills[move.piece]++;
-      }
     }
-  }
 
-  for (const piece of Object.keys(kills)) {
-    if (!deaths[piece]) {
-      deaths[piece] = 0;
     }
-    killDeathRatios[piece] = kills[piece] / deaths[piece];
-  }
+
+  // for (const piece of Object.keys(kills)) {
+  //   if (!deaths[piece]) {
+  //     deaths[piece] = 0;
+  //   }
+  //   killDeathRatios[piece] = kills[piece] / deaths[piece];
+  // }
 
   return {
-    killDeathRatios,
-    kills,
-    deaths,
-    assists,
+    // killDeathRatios,
+    killsDeathsAssistsMap,
   };
 }
 
@@ -326,6 +362,7 @@ function checkOpening() {}
 // take a board and move and see if a capture occurred
 function checkForCapture(board: Chess, move: string) {}
 
+// IN PROGRESS - called on in getKillDeathRatios, need to finish before the other finishes too
 // start from back of history. For this to be accurate we need to know which piece checks the king at this index
 // the edge case here is when pieces "share" a mate, or check. This can be at most 2 due to discovery checks
 // the board configuration will also have to be as it was in the instance of checkmate, or the previous mate.
