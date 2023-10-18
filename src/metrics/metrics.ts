@@ -234,7 +234,7 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
     [key: string]: { kills: number; deaths: number; assists: number };
   } = {};
   
-  // const killDeathRatios = {}
+  const killDeathRatios = {}
 
   // look at each game and find the piece with the largest kill/death ratio
   for (const game of games) {
@@ -308,14 +308,11 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
         // Need to figure out getMateAndAssists disambiguation before this functions correctly
         if (chess.isCheckmate()) {
           const gameHistory = chess.history({ verbose: true }); // Get the game history
-          const { matingPiece } = getMateAndAssists(gameHistory); // Get the mating piece
-          console.log(`The piece ${matingPiece} delivered checkmate`)
+          const { unambigMatingPiece } = getMateAndAssists(gameHistory); // Get the mating piece
+          console.log(`${unambigMatingPiece} was the piece that delivered checkmate`)
         
-          if (matingPiece) {
-            if (!kills[movedPiece]) {
-              kills[movedPiece] = 0;
-            }
-            kills[movedPiece]++;
+          if (unambigMatingPiece) {
+            killsDeathsAssistsMap[unambigMatingPiece].kills++;
           }
         }
 
@@ -343,16 +340,31 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
 
     }
 
-  // for (const piece of Object.keys(kills)) {
-  //   if (!deaths[piece]) {
-  //     deaths[piece] = 0;
-  //   }
-  //   killDeathRatios[piece] = kills[piece] / deaths[piece];
-  // }
+  // calculate the kill death ratios of each piece
+  for (const piece of Object.keys(killsDeathsAssistsMap)) {
+    const kills = killsDeathsAssistsMap[piece].kills;
+    const deaths = killsDeathsAssistsMap[piece].deaths || 0;
+    if (deaths !== 0) {
+      killDeathRatios[piece] = kills / deaths;
+    }
+  }
+
+  // find the piece with the highest kill death ratio
+  let maxKillDeathRatio = 0;
+  let pieceWithHighestKillDeathRatio = null;
+
+  for (const piece of Object.keys(killDeathRatios)) {
+    const ratio = killDeathRatios[piece];
+    if (ratio > maxKillDeathRatio) {
+      maxKillDeathRatio = ratio;
+      pieceWithHighestKillDeathRatio = piece;
+    }
+  }
 
   return {
-    // killDeathRatios,
+    killDeathRatios,
     killsDeathsAssistsMap,
+    pieceWithHighestKillDeathRatio,
   };
 }
 
@@ -371,7 +383,12 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
   let assistingPiece;
   let matingPiece;
   let hockeyAssist;
+  let unambigAssistingPiece;
+  let unambigMatingPiece;
+  let unambigHockeyAssist;
+  let lastPieceMoved;
 
+  // ambiguous pieces
   // check for mate
   if (gameHistory[gameHistory.length - 1].originalString.includes('#')) {
     matingPiece = gameHistory[gameHistory.length - 1].piece; // this doesn't disambiguate to the starting square of the piece; we'd want a chess.js rewrite to do that.
@@ -396,14 +413,106 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
     }
   }
 
+  // unambiguous pieces
   // This is where we DO need to disambiguate, the same piece type but a different piece could provide the assist.
-  // Pausing further work till we've fixed that
+  const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
+  basePieceSquares.set('a1', 'RA');
+  basePieceSquares.set('b1', 'NB');
+  basePieceSquares.set('c1', 'BC');
+  basePieceSquares.set('d1', 'Q');
+  basePieceSquares.set('e1', 'K');
+  basePieceSquares.set('f1', 'BF');
+  basePieceSquares.set('g1', 'NG');
+  basePieceSquares.set('h1', 'RH');
+  basePieceSquares.set('a2', 'PA');
+  basePieceSquares.set('b2', 'PB');
+  basePieceSquares.set('c2', 'PC');
+  basePieceSquares.set('d2', 'PD');
+  basePieceSquares.set('e2', 'PE');
+  basePieceSquares.set('f2', 'PF');
+  basePieceSquares.set('g2', 'PG');
+  basePieceSquares.set('h2', 'PH');
+  basePieceSquares.set('a8', 'ra');
+  basePieceSquares.set('b8', 'nb');
+  basePieceSquares.set('c8', 'bc');
+  basePieceSquares.set('d8', 'q');
+  basePieceSquares.set('e8', 'k');
+  basePieceSquares.set('f8', 'bf');
+  basePieceSquares.set('g8', 'ng');
+  basePieceSquares.set('h8', 'rh');
+  basePieceSquares.set('a7', 'pa');
+  basePieceSquares.set('b7', 'pb');
+  basePieceSquares.set('c7', 'pc');
+  basePieceSquares.set('d7', 'pd');
+  basePieceSquares.set('e7', 'pe');
+  basePieceSquares.set('f7', 'pf');
+  basePieceSquares.set('g7', 'pg');
+  basePieceSquares.set('h7', 'ph');
+
+  const moveHistory = gameHistory;
+
+  // duplicate the base map
+  const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
+    basePieceSquares
+  );
+
+  // update the pieceSquares map after each move
+  for (const move of moveHistory) {
+    const movedPiece = pieceSquares.get(move.from);
+    if (movedPiece) {
+      pieceSquares.set(move.to, movedPiece);
+      pieceSquares.delete(move.from);
+    }
+  }
+
+  if (moveHistory[moveHistory.length - 1].originalString.includes('#')) {
+    const matingSquare = moveHistory[moveHistory.length - 1].to;
+    matingPiece = pieceSquares.get(matingSquare);
+
+    // If mate see if also assist
+    const assistCandidateSquare = moveHistory[moveHistory.length - 3].to;
+    let assistCandidate = pieceSquares.get(assistCandidateSquare);
+    if (
+      moveHistory[moveHistory.length - 3].originalString.includes('+') &&
+      matingPiece !== assistCandidate
+    ) {
+      assistingPiece = assistCandidate;
+
+      // If assist check for hockey assist
+      const hockeyCandidateSquare = moveHistory[moveHistory.length - 5].to;
+      let hockeyCandidate = pieceSquares.get(hockeyCandidateSquare);
+      if (
+        moveHistory[moveHistory.length - 5].originalString.includes('+') &&
+        assistingPiece !== hockeyCandidate &&
+        matingPiece !== hockeyCandidate
+      ) {
+        hockeyAssist = hockeyCandidate;
+      }
+    }
+  } else {
+    // Handle non-checkmate endings here
+    // Identify the last piece that moved:
+    const lastMove = moveHistory[moveHistory.length - 1];
+    lastPieceMoved = pieceSquares.get(lastMove.to);
+    console.log('The game did not end in a checkmate. The last piece that moved was:', lastPieceMoved);
+  }
 
   return {
     matingPiece,
     assistingPiece,
     hockeyAssist,
+    unambigAssistingPiece,
+    unambigMatingPiece,
+    unambigHockeyAssist,
+    lastPieceMoved
   };
+}
+
+// convert FileReaderGame object to GameHistoryObject
+export function pgnToGameHistory(pgn: string): GameHistoryMove[] {
+  const chess = new Chess();
+  chess.loadPgn(pgn);
+  return chess.history({ verbose: true });
 }
 
 // This one could get complex if lib doesn't work https://github.com/jhlywa/chess.js/blob/master/README.md#isgameover

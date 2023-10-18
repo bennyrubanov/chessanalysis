@@ -2,6 +2,7 @@ import {
   getMateAndAssists,
   getMoveDistanceSingleGame,
   getKillDeathRatios,
+  pgnToGameHistory,
 } from '../src/metrics/metrics';
 
 describe('getMateAndAssists', () => {
@@ -175,7 +176,7 @@ describe('getMateAndAssists', () => {
     });
   });
 
-  // TODO: gen with copilot so teh game may not be valid
+  // TODO: gen with copilot so the game may not be valid
   it('should return just mating piece if the checks are all from the same piece', () => {
     const gameHistory: any[] = [
       {
@@ -291,7 +292,7 @@ describe('getMoveDistanceSingleGame', () => {
 });
 
 // game being tested: https://www.chess.com/analysis/game/pgn/4uURW4rJaa?tab=analysis
-describe.only('getKillDeathRatios', () => {
+describe('getKillDeathRatios', () => {
   it('should return the correct number of kills, deaths, and assists for each piece in a game', async () => {
     const game = [
       {
@@ -307,4 +308,45 @@ describe.only('getKillDeathRatios', () => {
     expect(result.killsDeathsAssistsMap['pe'].kills).toEqual(1);
     expect(result.killsDeathsAssistsMap['pe'].deaths).toEqual(1);
   });
+
+  it('should return the correct number of kills for a piece in a game, including counting checkmates as a "kill"', async () => {
+    const game = [
+      {
+        metadata: [],
+        moves: '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1'
+      }
+    ];
+
+    const result = await getKillDeathRatios(game);
+
+    console.log('result', result);
+
+    expect(result.killsDeathsAssistsMap['ng'].kills).toEqual(2);
+  });
 })
+
+describe.only('getMateAndAssists', () => {
+  it('should return the correct mating piece', () => {
+    const game = [
+      {
+        metadata: [],
+        moves: '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1'
+      }
+    ];
+
+    const gameHistory = pgnToGameHistory(game[0].moves); // access the first element of the game array
+
+    const result = getMateAndAssists(gameHistory);
+
+    expect(result.matingPiece).toEqual('ng');
+    // expect(result).toEqual({
+    //   matingPiece: 'ng',
+    //   assistingPiece: 'q',
+    //   hockeyAssist: undefined,
+    //   unambigAssistingPiece: undefined,
+    //   unambigMatingPiece: undefined,
+    //   unambigHockeyAssist: undefined,
+    //   lastPieceMoved: undefined
+    // });
+  });
+});

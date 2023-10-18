@@ -1244,7 +1244,7 @@ export class Chess {
               PAWN,
               {
                 type: PAWN,
-                unambiguousSymbol: this._board[to].unambiguousSymbol,
+                unambiguousSymbol: this._board[from].unambiguousSymbol,
               },
               BITS.EP_CAPTURE
             );
