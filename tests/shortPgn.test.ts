@@ -1,16 +1,22 @@
-import { main } from '../src';
+import { getHistoriesFromFilePath } from '../src/gameHistory';
 
-xdescribe('Using modified cjsmin returns expected results', () => {
+describe('Using modified cjsmin returns expected results', () => {
   it('should not throw an error', async () => {
-    const histShort = require('fs')
-      .readFileSync('historiesShort.json')
-      .toString()
-      .trim();
+    const histShort = JSON.parse(
+      require('fs').readFileSync('historiesShort.json').toString().trim()
+    );
 
-    const histories = await main(`data/short.pgn`);
-    const historiesString = JSON.stringify(histories, null, 2);
+    const historiesGenerator = getHistoriesFromFilePath(`data/short.pgn`);
+    const histories = [];
+    for await (const history of historiesGenerator) {
+      histories.push(history);
+    }
+    console.log(histories[0]);
+    console.log(histShort[0]);
+    console.log(histories[0][0]);
+    console.log(histShort[0][0]);
 
-    expect(histShort.trim()).toEqual(historiesString.trim());
+    expect(histShort[0]).toEqual(histories[0]);
   });
 
   //   it('should throw an error if input is not provided', async () => {
