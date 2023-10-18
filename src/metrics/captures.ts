@@ -2,19 +2,43 @@
  * Track where captures occur on the board, what piece was captured, by what piece and where the capturing piece was
  */
 
-import { GameHistoryMove } from '../types';
+import { BOARD_SQUARES, GameHistoryMove } from '../../cjsmin/src/chess';
 
+function initializeCaptureHistory() {
+  const captureHistory = {};
+
+  for (const square of BOARD_SQUARES) {
+    // The map value corresponds to the number of times this piece TOOK on the square, not was captured
+    const squareTakeHistory: Record<string, number> = { ...squareHistory };
+
+    // This map is for the number of times a piece was captured on a square
+    const squareCaptureHistory: Record<string, number> = { ...squareHistory };
+    captureHistory[square] = {};
+  }
+
+  return captureHistory;
+}
+
+// currently we are only doing this by piece type (and color). We could add disambiguation
 function trackCaptures(game: GameHistoryMove[]) {
-  const captures = [];
+  // The map value corresponds to the number of times this piece TOOK on the square, not was captured
+  const squareHistory: Record<string, number> = {
+    p: 0,
+    k: 0,
+    q: 0,
+    r: 0,
+    b: 0,
+    n: 0,
+    P: 0,
+    K: 0,
+    Q: 0,
+    R: 0,
+    B: 0,
+    N: 0,
+  };
+
   for (const move of game) {
-    if (move.captured) {
-      captures.push({
-        captured: move.captured, // this isn't the disambiguated piece symbol yet...
-        capturedBy: move.piece,
-        captureSquare: move.to,
-        originSquare: move.from,
-      });
+    if (move.capture) {
     }
   }
-  return captures;
 }
