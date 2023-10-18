@@ -1514,22 +1514,11 @@ export class Chess {
         } else {
           index = move.to + 16;
         }
-        // determine captured pawn based on square of captured piece
-        const square = algebraic(move.to);
-        let unambiguousSymbol = '';
-        if (square.charAt(1) === '2') {
-          unambiguousSymbol += 'P';
-        } else if (square[1] === '7') {
-          unambiguousSymbol += 'p';
-        } else {
-          throw new Error('Invalid en passant capture');
-        }
-        unambiguousSymbol += square.charAt(0);
 
         this._board[index] = {
           type: PAWN,
           color: them,
-          unambiguousSymbol: unambiguousSymbol as UnambiguousPieceSymbol,
+          unambiguousSymbol: move.capture.unambiguousSymbol,
         };
       } else {
         // regular capture
@@ -1537,7 +1526,7 @@ export class Chess {
           type: move.capture.type,
           color: them,
           // TODO: Implement unambiguousSymbol
-          unambiguousSymbol: move.capture!.unambiguousSymbol,
+          unambiguousSymbol: move.capture.unambiguousSymbol,
         };
       }
     }
