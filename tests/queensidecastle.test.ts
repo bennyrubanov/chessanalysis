@@ -7,10 +7,8 @@ xdescribe('Queenside castling is detected', () => {
     // '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4'
   );
   const history = chess.history();
-  console.log(history);
-  require('fs').writeFileSync('history.json', JSON.stringify(history, null, 2));
 
   it('should detect queenside castling', () => {
-    expect(history).toContain('O-O-O');
+    expect(history.filter((m) => m.originalString === 'O-O-O')).toHaveLength(1);
   });
 });

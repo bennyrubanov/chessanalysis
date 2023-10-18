@@ -84,6 +84,41 @@ export type Square =
     'a2' | 'b2' | 'c2' | 'd2' | 'e2' | 'f2' | 'g2' | 'h2' |
     'a1' | 'b1' | 'c1' | 'd1' | 'e1' | 'f1' | 'g1' | 'h1'
 
+const SQUARE_TO_STARTING_POSITION_MAP = {
+  a1: 'RA',
+  b1: 'NB',
+  c1: 'BC',
+  d1: 'Q',
+  e1: 'K',
+  f1: 'BF',
+  g1: 'NG',
+  h1: 'RH',
+  a2: 'PA',
+  b2: 'PB',
+  c2: 'PC',
+  d2: 'PD',
+  e2: 'PE',
+  f2: 'PF',
+  g2: 'PG',
+  h2: 'PH',
+  a7: 'pa',
+  b7: 'pb',
+  c7: 'pc',
+  d7: 'pd',
+  e7: 'pe',
+  f7: 'pf',
+  g7: 'pg',
+  h7: 'ph',
+  a8: 'ra',
+  b8: 'nb',
+  c8: 'bc',
+  d8: 'q',
+  e8: 'k',
+  f8: 'bf',
+  g8: 'ng',
+  h8: 'rh',
+};
+
 export const DEFAULT_POSITION =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -103,7 +138,6 @@ export type InternalMove = {
   from: number;
   to: number;
   piece: PieceType;
-  captured?: PieceType;
   capture?: Capture;
   promotion?: PieceType;
   flags: number;
@@ -125,7 +159,6 @@ export type Move = {
   from: Square;
   to: Square;
   piece: PieceType;
-  captured?: PieceType;
   capture?: Capture;
   promotion?: PieceType;
   flags: string;
@@ -518,7 +551,7 @@ function addMove(
   from: number,
   to: number,
   piece: PieceType,
-  captured: PieceType | undefined = undefined,
+  capture: Capture | undefined = undefined,
   flags: number = BITS.NORMAL
 ) {
   const r = rank(to);
@@ -531,7 +564,7 @@ function addMove(
         from,
         to,
         piece,
-        captured,
+        capture,
         promotion,
         flags: flags | BITS.PROMOTION,
       });
@@ -542,7 +575,7 @@ function addMove(
       from,
       to,
       piece,
-      captured,
+      capture,
       flags,
     });
   }
@@ -571,17 +604,17 @@ function strippedSan(move: string) {
 
 export class Chess {
   _board = new Array<Piece>(128);
-  private _turn: Color = WHITE;
-  private _header: Record<string, string> = {};
-  private _kings: Record<Color, number> = { w: EMPTY, b: EMPTY };
-  private _epSquare = -1;
-  private _halfMoves = 0;
-  private _moveNumber = 0;
-  private _history: History[] = [];
-  private _castling: Record<Color, number> = { w: 0, b: 0 };
+  _turn: Color = WHITE;
+  _header: Record<string, string> = {};
+  _kings: Record<Color, number> = { w: EMPTY, b: EMPTY };
+  _epSquare = -1;
+  _halfMoves = 0;
+  _moveNumber = 0;
+  _history: History[] = [];
+  _castling: Record<Color, number> = { w: 0, b: 0 };
 
-  constructor(fen = DEFAULT_POSITION) {
-    this.load(fen);
+  constructor() {
+    this.load(DEFAULT_POSITION);
   }
 
   clear(keepHeaders = false) {
@@ -733,7 +766,10 @@ export class Chess {
             from: square,
             to: this._epSquare,
             piece: PAWN,
-            captured: PAWN,
+            capture: {
+              type: PAWN,
+              unambiguousSymbol: this._board[square]?.unambiguousSymbol,
+            },
             flags: BITS.EP_CAPTURE,
           });
           const isLegal = !this._isKingAttacked(color);
@@ -776,18 +812,21 @@ export class Chess {
     }
   }
 
-  reset() {
-    this.load(DEFAULT_POSITION);
-  }
-
   get(square: Square) {
     return this._board[Ox88[square]] || false;
   }
+
+  unambiguousMap() {}
 
   private _put(
     { type, color }: { type: PieceType; color: Color },
     square: Square
   ) {
+    //@ts-ignore this breaks for non init
+    const unambiguousSymbol = SQUARE_TO_STARTING_POSITION_MAP[
+      square
+    ] as UnambiguousPieceSymbol;
+
     // check for piece
     if (SYMBOLS.indexOf(type.toLowerCase()) === -1) {
       return false;
@@ -811,7 +850,7 @@ export class Chess {
     this._board[sq] = {
       type: type as PieceType,
       color: color as Color,
-      unambiguousSymbol: 'pa',
+      unambiguousSymbol,
     };
 
     if (type === KING) {
@@ -1190,11 +1229,25 @@ export class Chess {
               from,
               to,
               PAWN,
-              this._board[to].type,
+              {
+                type: this._board[to].type,
+                unambiguousSymbol: this._board[to].unambiguousSymbol,
+              },
               BITS.CAPTURE
             );
           } else if (to === this._epSquare) {
-            addMove(moves, us, from, to, PAWN, PAWN, BITS.EP_CAPTURE);
+            addMove(
+              moves,
+              us,
+              from,
+              to,
+              PAWN,
+              {
+                type: PAWN,
+                unambiguousSymbol: this._board[to].unambiguousSymbol,
+              },
+              BITS.EP_CAPTURE
+            );
           }
         }
       } else {
@@ -1220,7 +1273,10 @@ export class Chess {
                 from,
                 to,
                 type,
-                this._board[to].type,
+                {
+                  type: this._board[to].type,
+                  unambiguousSymbol: this._board[to].unambiguousSymbol,
+                },
                 BITS.CAPTURE
               );
               break;
@@ -1449,7 +1505,7 @@ export class Chess {
     this._board[move.from].type = move.piece; // to undo any promotions
     delete this._board[move.to];
 
-    if (move.captured) {
+    if (move.capture) {
       if (move.flags & BITS.EP_CAPTURE) {
         // en passant capture
         let index: number;
@@ -1458,19 +1514,19 @@ export class Chess {
         } else {
           index = move.to + 16;
         }
-        throw new Error('TODO: Implement en passant capture');
+
         this._board[index] = {
           type: PAWN,
           color: them,
-          unambiguousSymbol: 'pa',
+          unambiguousSymbol: move.capture.unambiguousSymbol,
         };
       } else {
         // regular capture
         this._board[move.to] = {
-          type: move.captured,
+          type: move.capture.type,
           color: them,
           // TODO: Implement unambiguousSymbol
-          unambiguousSymbol: 'pa',
+          unambiguousSymbol: move.capture.unambiguousSymbol,
         };
       }
     }
@@ -1492,12 +1548,33 @@ export class Chess {
     return move;
   }
 
+  // TODO: use this instead of current setup
+  initialize() {
+    this._board = new Array<Piece>(128);
+    this._kings = { w: EMPTY, b: EMPTY };
+    this._turn = WHITE;
+    this._castling = { w: 96, b: 96 };
+    this._epSquare = EMPTY;
+    this._halfMoves = 0;
+    this._moveNumber = 1;
+    this._history = [];
+    this._turn = 'w' as Color;
+
+    this._castling.w |= BITS.KSIDE_CASTLE;
+    this._castling.w |= BITS.QSIDE_CASTLE;
+    this._castling.b |= BITS.KSIDE_CASTLE;
+    this._castling.b |= BITS.QSIDE_CASTLE;
+
+    this._epSquare = EMPTY;
+    this._halfMoves = 0;
+    this._moveNumber = 1;
+  }
+
   loadPgn(
     pgnMoveLine: string,
     { strict = false }: { strict?: boolean; newlineChar?: string } = {}
   ) {
-    // Put the board in the starting position
-    this.reset();
+    this.load(DEFAULT_POSITION);
 
     // We don't mind destructive deletion of the comments
     let ms = pgnMoveLine.replace(new RegExp(`({[^}]*})+?`, 'g'), '');
@@ -1719,7 +1796,7 @@ export class Chess {
 
   // pretty = external move object
   private _makePretty(uglyMove: InternalMove): Move {
-    const { color, piece, from, to, flags, captured, promotion } = uglyMove;
+    const { color, piece, from, to, flags, capture, promotion } = uglyMove;
 
     let prettyFlags = '';
 
@@ -1742,8 +1819,8 @@ export class Chess {
       piece,
     };
 
-    if (captured) {
-      move.captured = captured;
+    if (capture) {
+      move.capture = capture;
     }
     if (promotion) {
       move.promotion = promotion;
@@ -1752,7 +1829,7 @@ export class Chess {
 
     return {
       color: move.color,
-      captured: move.captured,
+      capture: move.capture,
       from: move.from,
       to: move.to,
       flags: move.flags,
