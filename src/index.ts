@@ -50,9 +50,7 @@ export async function main(path: string) {
   console.log(`Number of games analyzed: ${gameCount}`);
   console.log("\n");
   console.log(`Piece with the highest kill death ratio: ${pieceWithHighestKillDeathRatio}`);
-  console.log(
-    `Kill Death Ratios for each unambiguous piece: ${killDeathRatios}`
-  );
+  console.log("Kill Death Ratios for each unambiguous piece: " + JSON.stringify(killDeathRatios, null, 2));
 
   return {
     pieceThatMovedTheFurthest,

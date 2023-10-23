@@ -276,6 +276,8 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
     const chess = new Chess(); // Create a new instance of the Chess class
     chess.loadPgn(game.moves);
     const moveHistory = chess.history();
+    const moveStrings = moveHistory.map(move => move.originalString);
+    console.log(`moveStrings: ${moveStrings}`);
 
     // duplicate the base map
     const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
@@ -284,35 +286,29 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
 
 
     for (const piece of pieceSquares.values()) {
-      killsDeathsAssistsMap[piece] = { kills: 0, deaths: 0, assists: 0 };
+      // Only initialize if the piece doesn't exist in the map yet
+      if (!killsDeathsAssistsMap[piece]) {
+        killsDeathsAssistsMap[piece] = { kills: 0, deaths: 0, assists: 0 };
+      }
     }
 
     for (const move of moveHistory) {
+      //console.log('move:', move);
+
       const movedPiece = pieceSquares.get(move.from);
     
       // Check if movedPiece is not undefined
       if (movedPiece) {
         // update the kill & death counts of movedPiece
-        if (move.captured) {
+        if (move.capture) {
           
           killsDeathsAssistsMap[movedPiece].kills++;
     
           const capturedPiece = pieceSquares.get(move.to); // Get the unambiguous piece symbol
+          //console.log(`captured piece: ${capturedPiece}`)
 
           if (capturedPiece) {
             killsDeathsAssistsMap[capturedPiece].deaths++;
-          }
-        }
-    
-        // Check if the game is in checkmate after the move. 
-        // Need to figure out getMateAndAssists disambiguation before this functions correctly
-        if (chess.isCheckmate()) {
-          const gameHistory = chess.history({ verbose: true }); // Get the game history
-          const { unambigMatingPiece } = getMateAndAssists(gameHistory); // Get the mating piece
-          console.log(`${unambigMatingPiece} was the piece that delivered checkmate`)
-        
-          if (unambigMatingPiece) {
-            killsDeathsAssistsMap[unambigMatingPiece].kills++;
           }
         }
 
@@ -321,24 +317,39 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
         pieceSquares.delete(move.from); // Remove the piece from its old square
         
         // Logs
-        console.log(`Move: ${move.originalString}, Captured: ${move.captured}`);        // logs only elements of the killsDeathsAssistsMap that are nonzero for kills, deaths, or assists
-        console.log(
-          'killsDeathsAssistsMap:',
-          Object.fromEntries(
-            Object.entries(killsDeathsAssistsMap).filter(
-              ([key, { kills, deaths, assists }]) => kills !== 0 || deaths !== 0 || assists !== 0
-            )
-          )
-        );
+        //console.log(`Move: ${move.originalString}, Captured: ${move.capture?.unambiguousSymbol}`);      
+        // the line below logs only elements of the killsDeathsAssistsMap that are nonzero for kills, deaths, or assists
+        // console.log(
+        //   'killsDeathsAssistsMap:',
+        //   Object.fromEntries(
+        //     Object.entries(killsDeathsAssistsMap).filter(
+        //       ([key, { kills, deaths, assists }]) => kills !== 0 || deaths !== 0 || assists !== 0
+        //     )
+        //   )
+        // );
 
       } 
       else {
         console.log('No piece found for square:', move.from);
       }
 
-    }
 
     }
+
+    // Check if the game is in checkmate after the last move. 
+    // Need to figure out getMateAndAssists disambiguation before this functions correctly
+    if (chess.isCheckmate()) {
+      const gameHistory = chess.history({ verbose: true }); // Get the game history
+      const { unambigMatingPiece } = getMateAndAssists(gameHistory); // Get the mating piece
+      console.log(`${unambigMatingPiece} was the unambiguous piece that delivered checkmate`)
+    
+      if (unambigMatingPiece) {
+        killsDeathsAssistsMap[unambigMatingPiece].kills++;
+      }
+    }
+
+
+  }
 
   // calculate the kill death ratios of each piece
   for (const piece of Object.keys(killsDeathsAssistsMap)) {
@@ -348,6 +359,10 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
       killDeathRatios[piece] = kills / deaths;
     }
   }
+
+  // Log the killDeathRatios and killsDeathsAssistsMap
+  console.log('killDeathRatios:', killDeathRatios);
+  console.log('killsDeathsAssistsMap:', killsDeathsAssistsMap);
 
   // find the piece with the highest kill death ratio
   let maxKillDeathRatio = 0;
@@ -380,12 +395,12 @@ function checkForCapture(board: Chess, move: string) {}
 // the board configuration will also have to be as it was in the instance of checkmate, or the previous mate.
 // So this is going to need to hook into the loadPGN, probably.
 export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
-  let assistingPiece;
   let matingPiece;
+  let assistingPiece;
   let hockeyAssist;
-  let unambigAssistingPiece;
   let unambigMatingPiece;
-  let unambigHockeyAssist;
+  let unambigAssistingPiece;
+  let unambigHockeyAssistPiece;
   let lastPieceMoved;
 
   // ambiguous pieces
@@ -467,26 +482,26 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
 
   if (moveHistory[moveHistory.length - 1].originalString.includes('#')) {
     const matingSquare = moveHistory[moveHistory.length - 1].to;
-    matingPiece = pieceSquares.get(matingSquare);
+    unambigMatingPiece = pieceSquares.get(matingSquare);
 
     // If mate see if also assist
     const assistCandidateSquare = moveHistory[moveHistory.length - 3].to;
-    let assistCandidate = pieceSquares.get(assistCandidateSquare);
+    let unambigAssistCandidate = pieceSquares.get(assistCandidateSquare);
     if (
       moveHistory[moveHistory.length - 3].originalString.includes('+') &&
-      matingPiece !== assistCandidate
+      unambigMatingPiece !== unambigAssistCandidate
     ) {
-      assistingPiece = assistCandidate;
+      unambigAssistingPiece = unambigAssistCandidate;
 
       // If assist check for hockey assist
       const hockeyCandidateSquare = moveHistory[moveHistory.length - 5].to;
-      let hockeyCandidate = pieceSquares.get(hockeyCandidateSquare);
+      let unambigHockeyCandidate = pieceSquares.get(hockeyCandidateSquare);
       if (
         moveHistory[moveHistory.length - 5].originalString.includes('+') &&
-        assistingPiece !== hockeyCandidate &&
-        matingPiece !== hockeyCandidate
+        unambigAssistingPiece !== unambigHockeyCandidate &&
+        unambigMatingPiece !== unambigHockeyCandidate
       ) {
-        hockeyAssist = hockeyCandidate;
+        unambigHockeyAssistPiece = unambigHockeyCandidate;
       }
     }
   } else {
@@ -501,9 +516,9 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
     matingPiece,
     assistingPiece,
     hockeyAssist,
-    unambigAssistingPiece,
     unambigMatingPiece,
-    unambigHockeyAssist,
+    unambigAssistingPiece,
+    unambigHockeyAssistPiece,
     lastPieceMoved
   };
 }
