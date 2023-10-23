@@ -64,6 +64,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 - Heat map of which squares are "battleground", i.e. have the most captures
 - Heat map of where each piece gets its kills, vs. its deaths
 - How many games have no castling?
+- number of games with queen side vs king side castling
 
 I'm thinking we get it working without elo segmentation, if it's fast enough we can just repeat the analysis with elo filters
 
