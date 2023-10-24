@@ -43,3 +43,25 @@ export interface Moves {
   Ke8: string;
   h2: string;
 }
+
+export interface Heatmaps {
+  squareUtilization: SquareUtilization[];
+  moveSquares: SquareUtilization[];
+  captureSquares: SquareUtilization[];
+  checkSquares: SquareUtilization[];
+}
+
+interface SquareUtilization {
+  p: P;
+  n: P;
+  b: P;
+  r: P;
+  q: P;
+  k: P;
+  all: P;
+}
+
+interface P {
+  w: number;
+  b: number;
+}
