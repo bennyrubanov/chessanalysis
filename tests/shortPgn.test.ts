@@ -16,6 +16,8 @@ describe('Using modified cjsmin returns expected results', () => {
     console.log(histories[0][0]);
     console.log(histShort[0][0]);
 
+    require('fs').writeFileSync('histories.json', JSON.stringify(histories));
+
     expect(histShort[0]).toEqual(histories[0]);
   });
 
