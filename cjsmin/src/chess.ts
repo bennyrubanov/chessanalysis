@@ -138,6 +138,7 @@ export type InternalMove = {
   from: number;
   to: number;
   piece: PieceType;
+  unambiguousSymbol: UnambiguousPieceSymbol;
   capture?: Capture;
   promotion?: PieceType;
   flags: number;
@@ -162,6 +163,7 @@ export type Move = {
   capture?: Capture;
   promotion?: PieceType;
   flags: string;
+  umabiguousSymbol: UnambiguousPieceSymbol;
   // san: string;
   // lan: string;
   // before: string;
@@ -545,42 +547,6 @@ function getDisambiguator(move: InternalMove, moves: InternalMove[]) {
   return '';
 }
 
-function addMove(
-  moves: InternalMove[],
-  color: Color,
-  from: number,
-  to: number,
-  piece: PieceType,
-  capture: Capture | undefined = undefined,
-  flags: number = BITS.NORMAL
-) {
-  const r = rank(to);
-
-  if (piece === PAWN && (r === RANK_1 || r === RANK_8)) {
-    for (let i = 0; i < PROMOTIONS.length; i++) {
-      const promotion = PROMOTIONS[i];
-      moves.push({
-        color,
-        from,
-        to,
-        piece,
-        capture,
-        promotion,
-        flags: flags | BITS.PROMOTION,
-      });
-    }
-  } else {
-    moves.push({
-      color,
-      from,
-      to,
-      piece,
-      capture,
-      flags,
-    });
-  }
-}
-
 function inferPieceType(san: string) {
   let pieceType = san.charAt(0);
   if (pieceType >= 'a' && pieceType <= 'h') {
@@ -600,6 +566,45 @@ function inferPieceType(san: string) {
 // parses all of the decorators out of a SAN string
 function strippedSan(move: string) {
   return move.replace(/=/, '').replace(/[+#]?[?!]*$/, '');
+}
+
+function addMove(
+  moves: InternalMove[],
+  color: Color,
+  from: number,
+  to: number,
+  piece: PieceType,
+  unambiguousSymbol: UnambiguousPieceSymbol,
+  capture: Capture | undefined = undefined,
+  flags: number = BITS.NORMAL
+) {
+  const r = rank(to);
+
+  if (piece === PAWN && (r === RANK_1 || r === RANK_8)) {
+    for (let i = 0; i < PROMOTIONS.length; i++) {
+      const promotion = PROMOTIONS[i];
+      moves.push({
+        color,
+        from,
+        to,
+        piece,
+        capture,
+        promotion,
+        unambiguousSymbol,
+        flags: flags | BITS.PROMOTION,
+      });
+    }
+  } else {
+    moves.push({
+      color,
+      from,
+      to,
+      piece,
+      capture,
+      unambiguousSymbol,
+      flags,
+    });
+  }
 }
 
 export class Chess {
@@ -766,6 +771,7 @@ export class Chess {
             from: square,
             to: this._epSquare,
             piece: PAWN,
+            unambiguousSymbol: this._board[square]?.unambiguousSymbol,
             capture: {
               type: PAWN,
               unambiguousSymbol: this._board[square]?.unambiguousSymbol,
@@ -1208,12 +1214,28 @@ export class Chess {
         // single square, non-capturing
         to = from + PAWN_OFFSETS[us][0];
         if (!this._board[to]) {
-          addMove(moves, us, from, to, PAWN);
+          addMove(
+            moves,
+            us,
+            from,
+            to,
+            PAWN,
+            this._board[from].unambiguousSymbol
+          );
 
           // double square
           to = from + PAWN_OFFSETS[us][1];
           if (SECOND_RANK[us] === rank(from) && !this._board[to]) {
-            addMove(moves, us, from, to, PAWN, undefined, BITS.BIG_PAWN);
+            addMove(
+              moves,
+              us,
+              from,
+              to,
+              PAWN,
+              this._board[from].unambiguousSymbol,
+              undefined,
+              BITS.BIG_PAWN
+            );
           }
         }
 
@@ -1229,6 +1251,7 @@ export class Chess {
               from,
               to,
               PAWN,
+              this._board[from].unambiguousSymbol,
               {
                 type: this._board[to].type,
                 unambiguousSymbol: this._board[from].unambiguousSymbol,
@@ -1242,6 +1265,7 @@ export class Chess {
               from,
               to,
               PAWN,
+              this._board[from].unambiguousSymbol,
               {
                 type: PAWN,
                 unambiguousSymbol: this._board[from].unambiguousSymbol,
@@ -1262,7 +1286,14 @@ export class Chess {
             if (to & 0x88) break;
 
             if (!this._board[to]) {
-              addMove(moves, us, from, to, type);
+              addMove(
+                moves,
+                us,
+                from,
+                to,
+                type,
+                this._board[from].unambiguousSymbol
+              );
             } else {
               // own color, stop loop
               if (this._board[to].color === us) break;
@@ -1273,6 +1304,7 @@ export class Chess {
                 from,
                 to,
                 type,
+                this._board[from].unambiguousSymbol,
                 {
                   type: this._board[to].type,
                   unambiguousSymbol: this._board[to].unambiguousSymbol,
@@ -1315,6 +1347,7 @@ export class Chess {
               this._kings[us],
               castlingTo,
               KING,
+              this._board[this._kings[us]].unambiguousSymbol,
               undefined,
               BITS.KSIDE_CASTLE
             );
@@ -1340,6 +1373,7 @@ export class Chess {
               this._kings[us],
               castlingTo,
               KING,
+              this._board[this._kings[us]].unambiguousSymbol,
               undefined,
               BITS.QSIDE_CASTLE
             );
@@ -1817,6 +1851,7 @@ export class Chess {
       to: toAlgebraic,
       flags: prettyFlags,
       piece,
+      umabiguousSymbol: uglyMove.unambiguousSymbol,
     };
 
     if (capture) {
@@ -1827,14 +1862,20 @@ export class Chess {
       // move.lan += promotion;
     }
 
-    return {
+    const prettyMove: any = {
       color: move.color,
-      capture: move.capture,
       from: move.from,
       to: move.to,
       flags: move.flags,
       piece: move.piece,
+      unambiguousSymbol: uglyMove.unambiguousSymbol,
     };
+
+    if (move.capture) {
+      prettyMove['capture'] = move.capture;
+    }
+
+    return prettyMove;
   }
 
   turn() {
