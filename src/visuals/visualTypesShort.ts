@@ -52,16 +52,16 @@ export interface Heatmaps {
 }
 
 interface SquareUtilization {
-  p: P;
-  n: P;
-  b: P;
-  r: P;
-  q: P;
-  k: P;
-  all: P;
+  p: ColorUse;
+  n: ColorUse;
+  b: ColorUse;
+  r: ColorUse;
+  q: ColorUse;
+  k: ColorUse;
+  all: ColorUse;
 }
 
-interface P {
+interface ColorUse {
   w: number;
   b: number;
 }
