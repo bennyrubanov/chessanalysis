@@ -39,6 +39,20 @@ export type Color = 'w' | 'b';
 // export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 export type PieceType = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 
+export type PrettyMove = {
+  originalString: string | undefined;
+  color: Color;
+  fromIndex: number;
+  toIndex: number;
+  from: Square;
+  to: Square;
+  piece: PieceType;
+  capture?: Capture | undefined;
+  promotion?: PieceType | undefined;
+  flags: string;
+  unambiguousSymbol: UnambiguousPieceSymbol;
+};
+
 export type UnambiguousPieceSymbol =
   | 'ra'
   | 'nb'
@@ -1521,6 +1535,14 @@ export class Chess {
     this._turn = them;
   }
 
+  private _makeAndReturnMove(
+    move: InternalMove,
+    originalString?: string
+  ): InternalMove {
+    this._makeMove(move, originalString);
+    return move;
+  }
+
   private _undoMove() {
     const old = this._history.pop();
     if (old === undefined) {
@@ -1645,6 +1667,55 @@ export class Chess {
       } else {
         // reset the end of game marker if making a valid move
         this._makeMove(move, moves[halfMove]);
+      }
+    }
+  }
+
+  *historyGenerator(
+    pgnMoveLine: string,
+    { strict = false }: { strict?: boolean; newlineChar?: string } = {}
+  ): Generator<{ move: PrettyMove; board: Array<Piece> }, void, void> {
+    this.load(DEFAULT_POSITION);
+
+    // We don't mind destructive deletion of the comments
+    let ms = pgnMoveLine.replace(new RegExp(`({[^}]*})+?`, 'g'), '');
+
+    // delete move numbers
+    ms = ms.replace(/\d+\.(\.\.)?/g, '');
+
+    // delete ... indicating black to move
+    ms = ms.replace('...', '');
+
+    /* delete numeric annotation glyphs */
+    ms = ms.replace(/\$\d+/g, '');
+
+    // trim and get array of moves
+    // let moves = ms.trim().split(new RegExp(/\s+/));
+    let moves = ms.trim().split(' ');
+
+    // delete empty entries
+    moves = moves.filter((move) => move !== '');
+
+    for (let halfMove = 0; halfMove < moves.length; halfMove++) {
+      const move = this._moveFromSan(moves[halfMove], strict);
+
+      // invalid move
+      if (move == null) {
+        // was the move an end of game marker
+        if (!(TERMINATION_MARKERS.indexOf(moves[halfMove]) > -1)) {
+          throw new Error(`Invalid move in PGN: ${moves[halfMove]}`);
+        }
+      } else {
+        // reset the end of game marker if making a valid move
+        this._makeMove(move, moves[halfMove]);
+        const prettyMove = {
+          ...this._makePretty(move, moves[halfMove]),
+          originalString: moves[halfMove],
+        };
+        yield {
+          move: prettyMove,
+          board: this._board,
+        };
       }
     }
   }
@@ -1833,7 +1904,10 @@ export class Chess {
   }
 
   // pretty = external move object
-  private _makePretty(uglyMove: InternalMove): Move {
+  private _makePretty(
+    uglyMove: InternalMove,
+    originalString?: string
+  ): PrettyMove {
     const { color, piece, from, to, flags, capture, promotion } = uglyMove;
 
     let prettyFlags = '';
@@ -1866,13 +1940,16 @@ export class Chess {
       // move.lan += promotion;
     }
 
-    const prettyMove: any = {
+    const prettyMove: PrettyMove = {
       color: move.color,
+      fromIndex: uglyMove.from,
+      toIndex: uglyMove.to,
       from: move.from,
       to: move.to,
       flags: move.flags,
       piece: move.piece,
       unambiguousSymbol: uglyMove.unambiguousSymbol,
+      originalString,
     };
 
     if (move.capture) {
@@ -1897,7 +1974,10 @@ export class Chess {
 
   history() {
     return this._history.map((h) => {
-      return { ...this._makePretty(h.move), originalString: h.originalString };
+      return {
+        ...this._makePretty(h.move, h.originalString),
+        originalString: h.originalString,
+      };
     });
   }
 }
