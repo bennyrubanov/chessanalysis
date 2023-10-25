@@ -39,6 +39,20 @@ export type Color = 'w' | 'b';
 // export type PieceSymbol = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 export type PieceType = 'p' | 'n' | 'b' | 'r' | 'q' | 'k';
 
+export type PrettyMove = {
+  originalString: string | undefined;
+  color: Color;
+  fromIndex: number;
+  toIndex: number;
+  from: Square;
+  to: Square;
+  piece: PieceType;
+  capture?: Capture | undefined;
+  promotion?: PieceType | undefined;
+  flags: string;
+  unambiguousSymbol: UnambiguousPieceSymbol;
+};
+
 export type UnambiguousPieceSymbol =
   | 'ra'
   | 'nb'
@@ -1525,103 +1539,7 @@ export class Chess {
     move: InternalMove,
     originalString?: string
   ): InternalMove {
-    const us = this._turn;
-    const them = swapColor(us);
-    this._push(move, originalString);
-
-    this._board[move.to] = this._board[move.from];
-    delete this._board[move.from];
-
-    // if ep capture, remove the captured pawn
-    if (move.flags & BITS.EP_CAPTURE) {
-      if (this._turn === BLACK) {
-        delete this._board[move.to - 16];
-      } else {
-        delete this._board[move.to + 16];
-      }
-    }
-
-    // if pawn promotion, replace with new piece
-    if (move.promotion) {
-      this._board[move.to] = {
-        type: move.promotion,
-        color: us,
-        unambiguousSymbol: this._board[move.to].unambiguousSymbol,
-      };
-    }
-
-    // if we moved the king
-    if (this._board[move.to].type === KING) {
-      this._kings[us] = move.to;
-
-      // if we castled, move the rook next to the king
-      if (move.flags & BITS.KSIDE_CASTLE) {
-        const castlingTo = move.to - 1;
-        const castlingFrom = move.to + 1;
-        this._board[castlingTo] = this._board[castlingFrom];
-        delete this._board[castlingFrom];
-      } else if (move.flags & BITS.QSIDE_CASTLE) {
-        const castlingTo = move.to + 1;
-        const castlingFrom = move.to - 2;
-        this._board[castlingTo] = this._board[castlingFrom];
-        delete this._board[castlingFrom];
-      }
-
-      // turn off castling
-      this._castling[us] = 0;
-    }
-
-    // turn off castling if we move a rook
-    if (this._castling[us]) {
-      for (let i = 0, len = ROOKS[us].length; i < len; i++) {
-        if (
-          move.from === ROOKS[us][i].square &&
-          this._castling[us] & ROOKS[us][i].flag
-        ) {
-          this._castling[us] ^= ROOKS[us][i].flag;
-          break;
-        }
-      }
-    }
-
-    // turn off castling if we capture a rook
-    if (this._castling[them]) {
-      for (let i = 0, len = ROOKS[them].length; i < len; i++) {
-        if (
-          move.to === ROOKS[them][i].square &&
-          this._castling[them] & ROOKS[them][i].flag
-        ) {
-          this._castling[them] ^= ROOKS[them][i].flag;
-          break;
-        }
-      }
-    }
-
-    // if big pawn move, update the en passant square
-    if (move.flags & BITS.BIG_PAWN) {
-      if (us === BLACK) {
-        this._epSquare = move.to - 16;
-      } else {
-        this._epSquare = move.to + 16;
-      }
-    } else {
-      this._epSquare = EMPTY;
-    }
-
-    // reset the 50 move counter if a pawn is moved or a piece is captured
-    if (move.piece === PAWN) {
-      this._halfMoves = 0;
-    } else if (move.flags & (BITS.CAPTURE | BITS.EP_CAPTURE)) {
-      this._halfMoves = 0;
-    } else {
-      this._halfMoves++;
-    }
-
-    if (us === BLACK) {
-      this._moveNumber++;
-    }
-
-    this._turn = them;
+    this._makeMove(move, originalString);
     return move;
   }
 
@@ -1756,7 +1674,7 @@ export class Chess {
   *historyGenerator(
     pgnMoveLine: string,
     { strict = false }: { strict?: boolean; newlineChar?: string } = {}
-  ): Generator<{ move: InternalMove; board: Array<Piece> }, void, void> {
+  ): Generator<{ move: PrettyMove; board: Array<Piece> }, void, void> {
     this.load(DEFAULT_POSITION);
 
     // We don't mind destructive deletion of the comments
@@ -1789,8 +1707,12 @@ export class Chess {
         }
       } else {
         // reset the end of game marker if making a valid move
+        const prettyMove = {
+          ...this._makePretty(move, moves[halfMove]),
+          originalString: moves[halfMove],
+        };
         yield {
-          move: this._makeAndReturnMove(move, moves[halfMove]),
+          move: prettyMove,
           board: this._board,
         };
       }
@@ -1981,7 +1903,10 @@ export class Chess {
   }
 
   // pretty = external move object
-  private _makePretty(uglyMove: InternalMove): Move {
+  private _makePretty(
+    uglyMove: InternalMove,
+    originalString?: string
+  ): PrettyMove {
     const { color, piece, from, to, flags, capture, promotion } = uglyMove;
 
     let prettyFlags = '';
@@ -2014,13 +1939,16 @@ export class Chess {
       // move.lan += promotion;
     }
 
-    const prettyMove: any = {
+    const prettyMove: PrettyMove = {
       color: move.color,
+      fromIndex: uglyMove.from,
+      toIndex: uglyMove.to,
       from: move.from,
       to: move.to,
       flags: move.flags,
       piece: move.piece,
       unambiguousSymbol: uglyMove.unambiguousSymbol,
+      originalString,
     };
 
     if (move.capture) {
@@ -2045,7 +1973,10 @@ export class Chess {
 
   history() {
     return this._history.map((h) => {
-      return { ...this._makePretty(h.move), originalString: h.originalString };
+      return {
+        ...this._makePretty(h.move, h.originalString),
+        originalString: h.originalString,
+      };
     });
   }
 }
