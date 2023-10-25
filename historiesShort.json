@@ -2,6 +2,8 @@
   [
     {
       "color": "w",
+      "fromIndex": 100,
+      "toIndex": 68,
       "from": "e2",
       "to": "e4",
       "flags": "b",
@@ -11,6 +13,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 36,
       "from": "e7",
       "to": "e6",
       "flags": "n",
@@ -20,6 +24,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 99,
+      "toIndex": 67,
       "from": "d2",
       "to": "d4",
       "flags": "b",
@@ -29,6 +35,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 17,
+      "toIndex": 33,
       "from": "b7",
       "to": "b6",
       "flags": "n",
@@ -38,6 +46,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 96,
+      "toIndex": 80,
       "from": "a2",
       "to": "a3",
       "flags": "n",
@@ -47,6 +57,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 2,
+      "toIndex": 17,
       "from": "c8",
       "to": "b7",
       "flags": "n",
@@ -56,6 +68,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 113,
+      "toIndex": 82,
       "from": "b1",
       "to": "c3",
       "flags": "n",
@@ -65,6 +79,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 6,
+      "toIndex": 39,
       "from": "g8",
       "to": "h6",
       "flags": "n",
@@ -74,26 +90,32 @@
     },
     {
       "color": "w",
+      "fromIndex": 114,
+      "toIndex": 39,
       "from": "c1",
       "to": "h6",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "BC",
-      "capture": { "type": "n", "unambiguousSymbol": "ng" },
-      "originalString": "Bxh6"
+      "originalString": "Bxh6",
+      "capture": { "type": "n", "unambiguousSymbol": "ng" }
     },
     {
       "color": "b",
+      "fromIndex": 22,
+      "toIndex": 39,
       "from": "g7",
       "to": "h6",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pg",
-      "capture": { "type": "b", "unambiguousSymbol": "pg" },
-      "originalString": "gxh6"
+      "originalString": "gxh6",
+      "capture": { "type": "b", "unambiguousSymbol": "pg" }
     },
     {
       "color": "w",
+      "fromIndex": 117,
+      "toIndex": 100,
       "from": "f1",
       "to": "e2",
       "flags": "n",
@@ -103,6 +125,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 3,
+      "toIndex": 54,
       "from": "d8",
       "to": "g5",
       "flags": "n",
@@ -112,6 +136,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 100,
+      "toIndex": 70,
       "from": "e2",
       "to": "g4",
       "flags": "n",
@@ -121,6 +147,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 39,
+      "toIndex": 55,
       "from": "h6",
       "to": "h5",
       "flags": "n",
@@ -130,6 +158,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 118,
+      "toIndex": 85,
       "from": "g1",
       "to": "f3",
       "flags": "n",
@@ -139,6 +169,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 54,
+      "toIndex": 38,
       "from": "g5",
       "to": "g6",
       "flags": "n",
@@ -148,6 +180,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 85,
+      "toIndex": 71,
       "from": "f3",
       "to": "h4",
       "flags": "n",
@@ -157,6 +191,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 38,
+      "toIndex": 54,
       "from": "g6",
       "to": "g5",
       "flags": "n",
@@ -166,26 +202,32 @@
     },
     {
       "color": "w",
+      "fromIndex": 70,
+      "toIndex": 55,
       "from": "g4",
       "to": "h5",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "BF",
-      "capture": { "type": "p", "unambiguousSymbol": "pg" },
-      "originalString": "Bxh5"
+      "originalString": "Bxh5",
+      "capture": { "type": "p", "unambiguousSymbol": "pg" }
     },
     {
       "color": "b",
+      "fromIndex": 54,
+      "toIndex": 71,
       "from": "g5",
       "to": "h4",
       "flags": "c",
       "piece": "q",
       "unambiguousSymbol": "q",
-      "capture": { "type": "n", "unambiguousSymbol": "NG" },
-      "originalString": "Qxh4"
+      "originalString": "Qxh4",
+      "capture": { "type": "n", "unambiguousSymbol": "NG" }
     },
     {
       "color": "w",
+      "fromIndex": 115,
+      "toIndex": 85,
       "from": "d1",
       "to": "f3",
       "flags": "n",
@@ -195,6 +237,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 4,
+      "toIndex": 3,
       "from": "e8",
       "to": "d8",
       "flags": "n",
@@ -204,16 +248,20 @@
     },
     {
       "color": "w",
+      "fromIndex": 85,
+      "toIndex": 21,
       "from": "f3",
       "to": "f7",
       "flags": "c",
       "piece": "q",
       "unambiguousSymbol": "Q",
-      "capture": { "type": "p", "unambiguousSymbol": "pf" },
-      "originalString": "Qxf7"
+      "originalString": "Qxf7",
+      "capture": { "type": "p", "unambiguousSymbol": "pf" }
     },
     {
       "color": "b",
+      "fromIndex": 1,
+      "toIndex": 34,
       "from": "b8",
       "to": "c6",
       "flags": "n",
@@ -223,6 +271,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 21,
+      "toIndex": 4,
       "from": "f7",
       "to": "e8",
       "flags": "n",
@@ -234,6 +284,8 @@
   [
     {
       "color": "w",
+      "fromIndex": 99,
+      "toIndex": 67,
       "from": "d2",
       "to": "d4",
       "flags": "b",
@@ -243,6 +295,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 19,
+      "toIndex": 51,
       "from": "d7",
       "to": "d5",
       "flags": "b",
@@ -252,6 +306,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 118,
+      "toIndex": 85,
       "from": "g1",
       "to": "f3",
       "flags": "n",
@@ -261,6 +317,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 6,
+      "toIndex": 37,
       "from": "g8",
       "to": "f6",
       "flags": "n",
@@ -270,6 +328,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 100,
+      "toIndex": 84,
       "from": "e2",
       "to": "e3",
       "flags": "n",
@@ -279,6 +339,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 2,
+      "toIndex": 53,
       "from": "c8",
       "to": "f5",
       "flags": "n",
@@ -288,6 +350,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 85,
+      "toIndex": 71,
       "from": "f3",
       "to": "h4",
       "flags": "n",
@@ -297,6 +361,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 53,
+      "toIndex": 38,
       "from": "f5",
       "to": "g6",
       "flags": "n",
@@ -306,26 +372,32 @@
     },
     {
       "color": "w",
+      "fromIndex": 71,
+      "toIndex": 38,
       "from": "h4",
       "to": "g6",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NG",
-      "capture": { "type": "b", "unambiguousSymbol": "bc" },
-      "originalString": "Nxg6"
+      "originalString": "Nxg6",
+      "capture": { "type": "b", "unambiguousSymbol": "bc" }
     },
     {
       "color": "b",
+      "fromIndex": 23,
+      "toIndex": 38,
       "from": "h7",
       "to": "g6",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "ph",
-      "capture": { "type": "n", "unambiguousSymbol": "ph" },
-      "originalString": "hxg6"
+      "originalString": "hxg6",
+      "capture": { "type": "n", "unambiguousSymbol": "ph" }
     },
     {
       "color": "w",
+      "fromIndex": 113,
+      "toIndex": 99,
       "from": "b1",
       "to": "d2",
       "flags": "n",
@@ -335,6 +407,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 36,
       "from": "e7",
       "to": "e6",
       "flags": "n",
@@ -344,6 +418,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 117,
+      "toIndex": 83,
       "from": "f1",
       "to": "d3",
       "flags": "n",
@@ -353,6 +429,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 5,
+      "toIndex": 35,
       "from": "f8",
       "to": "d6",
       "flags": "n",
@@ -362,6 +440,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 84,
+      "toIndex": 68,
       "from": "e3",
       "to": "e4",
       "flags": "n",
@@ -371,36 +451,44 @@
     },
     {
       "color": "b",
+      "fromIndex": 51,
+      "toIndex": 68,
       "from": "d5",
       "to": "e4",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pd",
-      "capture": { "type": "p", "unambiguousSymbol": "pd" },
-      "originalString": "dxe4"
+      "originalString": "dxe4",
+      "capture": { "type": "p", "unambiguousSymbol": "pd" }
     },
     {
       "color": "w",
+      "fromIndex": 99,
+      "toIndex": 68,
       "from": "d2",
       "to": "e4",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NB",
-      "capture": { "type": "p", "unambiguousSymbol": "pd" },
-      "originalString": "Nxe4"
+      "originalString": "Nxe4",
+      "capture": { "type": "p", "unambiguousSymbol": "pd" }
     },
     {
       "color": "b",
+      "fromIndex": 7,
+      "toIndex": 103,
       "from": "h8",
       "to": "h2",
       "flags": "c",
       "piece": "r",
       "unambiguousSymbol": "rh",
-      "capture": { "type": "p", "unambiguousSymbol": "PH" },
-      "originalString": "Rxh2"
+      "originalString": "Rxh2",
+      "capture": { "type": "p", "unambiguousSymbol": "PH" }
     },
     {
       "color": "w",
+      "fromIndex": 116,
+      "toIndex": 100,
       "from": "e1",
       "to": "e2",
       "flags": "n",
@@ -410,26 +498,32 @@
     },
     {
       "color": "b",
+      "fromIndex": 103,
+      "toIndex": 119,
       "from": "h2",
       "to": "h1",
       "flags": "c",
       "piece": "r",
       "unambiguousSymbol": "rh",
-      "capture": { "type": "r", "unambiguousSymbol": "RH" },
-      "originalString": "Rxh1"
+      "originalString": "Rxh1",
+      "capture": { "type": "r", "unambiguousSymbol": "RH" }
     },
     {
       "color": "w",
+      "fromIndex": 115,
+      "toIndex": 119,
       "from": "d1",
       "to": "h1",
       "flags": "c",
       "piece": "q",
       "unambiguousSymbol": "Q",
-      "capture": { "type": "r", "unambiguousSymbol": "rh" },
-      "originalString": "Qxh1"
+      "originalString": "Qxh1",
+      "capture": { "type": "r", "unambiguousSymbol": "rh" }
     },
     {
       "color": "b",
+      "fromIndex": 1,
+      "toIndex": 34,
       "from": "b8",
       "to": "c6",
       "flags": "n",
@@ -439,6 +533,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 114,
+      "toIndex": 54,
       "from": "c1",
       "to": "g5",
       "flags": "n",
@@ -448,6 +544,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 4,
+      "toIndex": 20,
       "from": "e8",
       "to": "e7",
       "flags": "n",
@@ -457,6 +555,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 119,
+      "toIndex": 23,
       "from": "h1",
       "to": "h7",
       "flags": "n",
@@ -466,16 +566,20 @@
     },
     {
       "color": "b",
+      "fromIndex": 34,
+      "toIndex": 67,
       "from": "c6",
       "to": "d4",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "nb",
-      "capture": { "type": "p", "unambiguousSymbol": "PD" },
-      "originalString": "Nxd4+"
+      "originalString": "Nxd4+",
+      "capture": { "type": "p", "unambiguousSymbol": "PD" }
     },
     {
       "color": "w",
+      "fromIndex": 100,
+      "toIndex": 99,
       "from": "e2",
       "to": "d2",
       "flags": "n",
@@ -485,6 +589,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 3,
+      "toIndex": 4,
       "from": "d8",
       "to": "e8",
       "flags": "n",
@@ -494,16 +600,20 @@
     },
     {
       "color": "w",
+      "fromIndex": 23,
+      "toIndex": 22,
       "from": "h7",
       "to": "g7",
       "flags": "c",
       "piece": "q",
       "unambiguousSymbol": "Q",
-      "capture": { "type": "p", "unambiguousSymbol": "pg" },
-      "originalString": "Qxg7"
+      "originalString": "Qxg7",
+      "capture": { "type": "p", "unambiguousSymbol": "pg" }
     },
     {
       "color": "b",
+      "fromIndex": 4,
+      "toIndex": 7,
       "from": "e8",
       "to": "h8",
       "flags": "n",
@@ -513,16 +623,20 @@
     },
     {
       "color": "w",
+      "fromIndex": 54,
+      "toIndex": 37,
       "from": "g5",
       "to": "f6",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "BC",
-      "capture": { "type": "n", "unambiguousSymbol": "ng" },
-      "originalString": "Bxf6+"
+      "originalString": "Bxf6+",
+      "capture": { "type": "n", "unambiguousSymbol": "ng" }
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 19,
       "from": "e7",
       "to": "d7",
       "flags": "n",
@@ -532,38 +646,46 @@
     },
     {
       "color": "w",
+      "fromIndex": 22,
+      "toIndex": 7,
       "from": "g7",
       "to": "h8",
       "flags": "c",
       "piece": "q",
       "unambiguousSymbol": "Q",
-      "capture": { "type": "q", "unambiguousSymbol": "q" },
-      "originalString": "Qxh8"
+      "originalString": "Qxh8",
+      "capture": { "type": "q", "unambiguousSymbol": "q" }
     },
     {
       "color": "b",
+      "fromIndex": 0,
+      "toIndex": 7,
       "from": "a8",
       "to": "h8",
       "flags": "c",
       "piece": "r",
       "unambiguousSymbol": "ra",
-      "capture": { "type": "q", "unambiguousSymbol": "Q" },
-      "originalString": "Rxh8"
+      "originalString": "Rxh8",
+      "capture": { "type": "q", "unambiguousSymbol": "Q" }
     },
     {
       "color": "w",
+      "fromIndex": 37,
+      "toIndex": 7,
       "from": "f6",
       "to": "h8",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "BC",
-      "capture": { "type": "r", "unambiguousSymbol": "ra" },
-      "originalString": "Bxh8"
+      "originalString": "Bxh8",
+      "capture": { "type": "r", "unambiguousSymbol": "ra" }
     }
   ],
   [
     {
       "color": "w",
+      "fromIndex": 100,
+      "toIndex": 68,
       "from": "e2",
       "to": "e4",
       "flags": "b",
@@ -573,6 +695,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 52,
       "from": "e7",
       "to": "e5",
       "flags": "b",
@@ -582,6 +706,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 118,
+      "toIndex": 85,
       "from": "g1",
       "to": "f3",
       "flags": "n",
@@ -591,6 +717,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 1,
+      "toIndex": 34,
       "from": "b8",
       "to": "c6",
       "flags": "n",
@@ -600,6 +728,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 117,
+      "toIndex": 66,
       "from": "f1",
       "to": "c4",
       "flags": "n",
@@ -609,6 +739,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 6,
+      "toIndex": 37,
       "from": "g8",
       "to": "f6",
       "flags": "n",
@@ -618,6 +750,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 113,
+      "toIndex": 82,
       "from": "b1",
       "to": "c3",
       "flags": "n",
@@ -627,6 +761,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 5,
+      "toIndex": 50,
       "from": "f8",
       "to": "c5",
       "flags": "n",
@@ -636,6 +772,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 96,
+      "toIndex": 80,
       "from": "a2",
       "to": "a3",
       "flags": "n",
@@ -645,26 +783,32 @@
     },
     {
       "color": "b",
+      "fromIndex": 50,
+      "toIndex": 101,
       "from": "c5",
       "to": "f2",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "bf",
-      "capture": { "type": "p", "unambiguousSymbol": "PF" },
-      "originalString": "Bxf2+"
+      "originalString": "Bxf2+",
+      "capture": { "type": "p", "unambiguousSymbol": "PF" }
     },
     {
       "color": "w",
+      "fromIndex": 116,
+      "toIndex": 101,
       "from": "e1",
       "to": "f2",
       "flags": "c",
       "piece": "k",
       "unambiguousSymbol": "K",
-      "capture": { "type": "b", "unambiguousSymbol": "bf" },
-      "originalString": "Kxf2"
+      "originalString": "Kxf2",
+      "capture": { "type": "b", "unambiguousSymbol": "bf" }
     },
     {
       "color": "b",
+      "fromIndex": 34,
+      "toIndex": 67,
       "from": "c6",
       "to": "d4",
       "flags": "n",
@@ -674,6 +818,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 99,
+      "toIndex": 83,
       "from": "d2",
       "to": "d3",
       "flags": "n",
@@ -683,6 +829,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 37,
+      "toIndex": 70,
       "from": "f6",
       "to": "g4",
       "flags": "n",
@@ -692,6 +840,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 101,
+      "toIndex": 117,
       "from": "f2",
       "to": "f1",
       "flags": "n",
@@ -701,6 +851,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 3,
+      "toIndex": 37,
       "from": "d8",
       "to": "f6",
       "flags": "n",
@@ -710,6 +862,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 103,
+      "toIndex": 87,
       "from": "h2",
       "to": "h3",
       "flags": "n",
@@ -719,6 +873,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 19,
+      "toIndex": 51,
       "from": "d7",
       "to": "d5",
       "flags": "b",
@@ -728,16 +884,20 @@
     },
     {
       "color": "w",
+      "fromIndex": 82,
+      "toIndex": 51,
       "from": "c3",
       "to": "d5",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NB",
-      "capture": { "type": "p", "unambiguousSymbol": "pd" },
-      "originalString": "Nxd5"
+      "originalString": "Nxd5",
+      "capture": { "type": "p", "unambiguousSymbol": "pd" }
     },
     {
       "color": "b",
+      "fromIndex": 37,
+      "toIndex": 36,
       "from": "f6",
       "to": "e6",
       "flags": "n",
@@ -747,18 +907,22 @@
     },
     {
       "color": "w",
+      "fromIndex": 51,
+      "toIndex": 18,
       "from": "d5",
       "to": "c7",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NB",
-      "capture": { "type": "p", "unambiguousSymbol": "pc" },
-      "originalString": "Nxc7+"
+      "originalString": "Nxc7+",
+      "capture": { "type": "p", "unambiguousSymbol": "pc" }
     }
   ],
   [
     {
       "color": "w",
+      "fromIndex": 100,
+      "toIndex": 68,
       "from": "e2",
       "to": "e4",
       "flags": "b",
@@ -768,6 +932,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 18,
+      "toIndex": 34,
       "from": "c7",
       "to": "c6",
       "flags": "n",
@@ -777,6 +943,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 113,
+      "toIndex": 82,
       "from": "b1",
       "to": "c3",
       "flags": "n",
@@ -786,6 +954,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 19,
+      "toIndex": 51,
       "from": "d7",
       "to": "d5",
       "flags": "b",
@@ -795,6 +965,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 115,
+      "toIndex": 85,
       "from": "d1",
       "to": "f3",
       "flags": "n",
@@ -804,26 +976,32 @@
     },
     {
       "color": "b",
+      "fromIndex": 51,
+      "toIndex": 68,
       "from": "d5",
       "to": "e4",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pd",
-      "capture": { "type": "p", "unambiguousSymbol": "pd" },
-      "originalString": "dxe4"
+      "originalString": "dxe4",
+      "capture": { "type": "p", "unambiguousSymbol": "pd" }
     },
     {
       "color": "w",
+      "fromIndex": 82,
+      "toIndex": 68,
       "from": "c3",
       "to": "e4",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NB",
-      "capture": { "type": "p", "unambiguousSymbol": "pd" },
-      "originalString": "Nxe4"
+      "originalString": "Nxe4",
+      "capture": { "type": "p", "unambiguousSymbol": "pd" }
     },
     {
       "color": "b",
+      "fromIndex": 1,
+      "toIndex": 19,
       "from": "b8",
       "to": "d7",
       "flags": "n",
@@ -833,6 +1011,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 117,
+      "toIndex": 66,
       "from": "f1",
       "to": "c4",
       "flags": "n",
@@ -842,6 +1022,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 6,
+      "toIndex": 37,
       "from": "g8",
       "to": "f6",
       "flags": "n",
@@ -851,26 +1033,32 @@
     },
     {
       "color": "w",
+      "fromIndex": 68,
+      "toIndex": 37,
       "from": "e4",
       "to": "f6",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NB",
-      "capture": { "type": "n", "unambiguousSymbol": "ng" },
-      "originalString": "Nxf6+"
+      "originalString": "Nxf6+",
+      "capture": { "type": "n", "unambiguousSymbol": "ng" }
     },
     {
       "color": "b",
+      "fromIndex": 19,
+      "toIndex": 37,
       "from": "d7",
       "to": "f6",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "nb",
-      "capture": { "type": "n", "unambiguousSymbol": "pg" },
-      "originalString": "Nxf6"
+      "originalString": "Nxf6",
+      "capture": { "type": "n", "unambiguousSymbol": "pg" }
     },
     {
       "color": "w",
+      "fromIndex": 85,
+      "toIndex": 86,
       "from": "f3",
       "to": "g3",
       "flags": "n",
@@ -880,6 +1068,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 2,
+      "toIndex": 53,
       "from": "c8",
       "to": "f5",
       "flags": "n",
@@ -889,6 +1079,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 99,
+      "toIndex": 83,
       "from": "d2",
       "to": "d3",
       "flags": "n",
@@ -898,6 +1090,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 53,
+      "toIndex": 38,
       "from": "f5",
       "to": "g6",
       "flags": "n",
@@ -907,6 +1101,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 118,
+      "toIndex": 100,
       "from": "g1",
       "to": "e2",
       "flags": "n",
@@ -916,6 +1112,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 36,
       "from": "e7",
       "to": "e6",
       "flags": "n",
@@ -925,6 +1123,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 114,
+      "toIndex": 69,
       "from": "c1",
       "to": "f4",
       "flags": "n",
@@ -934,6 +1134,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 37,
+      "toIndex": 55,
       "from": "f6",
       "to": "h5",
       "flags": "n",
@@ -943,6 +1145,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 86,
+      "toIndex": 85,
       "from": "g3",
       "to": "f3",
       "flags": "n",
@@ -952,26 +1156,32 @@
     },
     {
       "color": "b",
+      "fromIndex": 55,
+      "toIndex": 69,
       "from": "h5",
       "to": "f4",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "nb",
-      "capture": { "type": "b", "unambiguousSymbol": "BC" },
-      "originalString": "Nxf4"
+      "originalString": "Nxf4",
+      "capture": { "type": "b", "unambiguousSymbol": "BC" }
     },
     {
       "color": "w",
+      "fromIndex": 100,
+      "toIndex": 69,
       "from": "e2",
       "to": "f4",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NG",
-      "capture": { "type": "n", "unambiguousSymbol": "nb" },
-      "originalString": "Nxf4"
+      "originalString": "Nxf4",
+      "capture": { "type": "n", "unambiguousSymbol": "nb" }
     },
     {
       "color": "b",
+      "fromIndex": 5,
+      "toIndex": 20,
       "from": "f8",
       "to": "e7",
       "flags": "n",
@@ -981,36 +1191,44 @@
     },
     {
       "color": "w",
+      "fromIndex": 66,
+      "toIndex": 36,
       "from": "c4",
       "to": "e6",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "BF",
-      "capture": { "type": "p", "unambiguousSymbol": "pe" },
-      "originalString": "Bxe6"
+      "originalString": "Bxe6",
+      "capture": { "type": "p", "unambiguousSymbol": "pe" }
     },
     {
       "color": "b",
+      "fromIndex": 21,
+      "toIndex": 36,
       "from": "f7",
       "to": "e6",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pf",
-      "capture": { "type": "b", "unambiguousSymbol": "pf" },
-      "originalString": "fxe6"
+      "originalString": "fxe6",
+      "capture": { "type": "b", "unambiguousSymbol": "pf" }
     },
     {
       "color": "w",
+      "fromIndex": 69,
+      "toIndex": 36,
       "from": "f4",
       "to": "e6",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NG",
-      "capture": { "type": "p", "unambiguousSymbol": "pf" },
-      "originalString": "Nxe6"
+      "originalString": "Nxe6",
+      "capture": { "type": "p", "unambiguousSymbol": "pf" }
     },
     {
       "color": "b",
+      "fromIndex": 3,
+      "toIndex": 48,
       "from": "d8",
       "to": "a5",
       "flags": "n",
@@ -1020,6 +1238,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 98,
+      "toIndex": 82,
       "from": "c2",
       "to": "c3",
       "flags": "n",
@@ -1029,6 +1249,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 48,
+      "toIndex": 52,
       "from": "a5",
       "to": "e5",
       "flags": "n",
@@ -1038,6 +1260,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 85,
+      "toIndex": 84,
       "from": "f3",
       "to": "e3",
       "flags": "n",
@@ -1047,26 +1271,32 @@
     },
     {
       "color": "b",
+      "fromIndex": 52,
+      "toIndex": 84,
       "from": "e5",
       "to": "e3",
       "flags": "c",
       "piece": "q",
       "unambiguousSymbol": "q",
-      "capture": { "type": "q", "unambiguousSymbol": "pb" },
-      "originalString": "Qxe3+"
+      "originalString": "Qxe3+",
+      "capture": { "type": "q", "unambiguousSymbol": "pb" }
     },
     {
       "color": "w",
+      "fromIndex": 101,
+      "toIndex": 84,
       "from": "f2",
       "to": "e3",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "PF",
-      "capture": { "type": "q", "unambiguousSymbol": "PF" },
-      "originalString": "fxe3"
+      "originalString": "fxe3",
+      "capture": { "type": "q", "unambiguousSymbol": "PF" }
     },
     {
       "color": "b",
+      "fromIndex": 4,
+      "toIndex": 19,
       "from": "e8",
       "to": "d7",
       "flags": "n",
@@ -1076,6 +1306,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 36,
+      "toIndex": 69,
       "from": "e6",
       "to": "f4",
       "flags": "n",
@@ -1085,6 +1317,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 35,
       "from": "e7",
       "to": "d6",
       "flags": "n",
@@ -1094,26 +1328,32 @@
     },
     {
       "color": "w",
+      "fromIndex": 69,
+      "toIndex": 38,
       "from": "f4",
       "to": "g6",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NG",
-      "capture": { "type": "b", "unambiguousSymbol": "bc" },
-      "originalString": "Nxg6"
+      "originalString": "Nxg6",
+      "capture": { "type": "b", "unambiguousSymbol": "bc" }
     },
     {
       "color": "b",
+      "fromIndex": 23,
+      "toIndex": 38,
       "from": "h7",
       "to": "g6",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "ph",
-      "capture": { "type": "n", "unambiguousSymbol": "ph" },
-      "originalString": "hxg6"
+      "originalString": "hxg6",
+      "capture": { "type": "n", "unambiguousSymbol": "ph" }
     },
     {
       "color": "w",
+      "fromIndex": 103,
+      "toIndex": 87,
       "from": "h2",
       "to": "h3",
       "flags": "n",
@@ -1123,6 +1363,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 35,
+      "toIndex": 86,
       "from": "d6",
       "to": "g3",
       "flags": "n",
@@ -1132,6 +1374,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 116,
+      "toIndex": 99,
       "from": "e1",
       "to": "d2",
       "flags": "n",
@@ -1141,6 +1385,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 0,
+      "toIndex": 5,
       "from": "a8",
       "to": "f8",
       "flags": "n",
@@ -1150,6 +1396,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 119,
+      "toIndex": 117,
       "from": "h1",
       "to": "f1",
       "flags": "n",
@@ -1159,6 +1407,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 19,
+      "toIndex": 20,
       "from": "d7",
       "to": "e7",
       "flags": "n",
@@ -1168,6 +1418,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 83,
+      "toIndex": 67,
       "from": "d3",
       "to": "d4",
       "flags": "n",
@@ -1177,26 +1429,32 @@
     },
     {
       "color": "b",
+      "fromIndex": 5,
+      "toIndex": 117,
       "from": "f8",
       "to": "f1",
       "flags": "c",
       "piece": "r",
       "unambiguousSymbol": "ra",
-      "capture": { "type": "r", "unambiguousSymbol": "RH" },
-      "originalString": "Rxf1"
+      "originalString": "Rxf1",
+      "capture": { "type": "r", "unambiguousSymbol": "RH" }
     },
     {
       "color": "w",
+      "fromIndex": 112,
+      "toIndex": 117,
       "from": "a1",
       "to": "f1",
       "flags": "c",
       "piece": "r",
       "unambiguousSymbol": "RA",
-      "capture": { "type": "r", "unambiguousSymbol": "ra" },
-      "originalString": "Rxf1"
+      "originalString": "Rxf1",
+      "capture": { "type": "r", "unambiguousSymbol": "ra" }
     },
     {
       "color": "b",
+      "fromIndex": 7,
+      "toIndex": 5,
       "from": "h8",
       "to": "f8",
       "flags": "n",
@@ -1206,26 +1464,32 @@
     },
     {
       "color": "w",
+      "fromIndex": 117,
+      "toIndex": 5,
       "from": "f1",
       "to": "f8",
       "flags": "c",
       "piece": "r",
       "unambiguousSymbol": "RA",
-      "capture": { "type": "r", "unambiguousSymbol": "rh" },
-      "originalString": "Rxf8"
+      "originalString": "Rxf8",
+      "capture": { "type": "r", "unambiguousSymbol": "rh" }
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 5,
       "from": "e7",
       "to": "f8",
       "flags": "c",
       "piece": "k",
       "unambiguousSymbol": "k",
-      "capture": { "type": "r", "unambiguousSymbol": "RA" },
-      "originalString": "Kxf8"
+      "originalString": "Kxf8",
+      "capture": { "type": "r", "unambiguousSymbol": "RA" }
     },
     {
       "color": "w",
+      "fromIndex": 84,
+      "toIndex": 68,
       "from": "e3",
       "to": "e4",
       "flags": "n",
@@ -1235,6 +1499,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 5,
+      "toIndex": 20,
       "from": "f8",
       "to": "e7",
       "flags": "n",
@@ -1244,6 +1510,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 99,
+      "toIndex": 84,
       "from": "d2",
       "to": "e3",
       "flags": "n",
@@ -1253,6 +1521,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 38,
+      "toIndex": 54,
       "from": "g6",
       "to": "g5",
       "flags": "n",
@@ -1262,6 +1532,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 84,
+      "toIndex": 85,
       "from": "e3",
       "to": "f3",
       "flags": "n",
@@ -1271,6 +1543,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 86,
+      "toIndex": 116,
       "from": "g3",
       "to": "e1",
       "flags": "n",
@@ -1280,6 +1554,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 85,
+      "toIndex": 70,
       "from": "f3",
       "to": "g4",
       "flags": "n",
@@ -1289,6 +1565,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 116,
+      "toIndex": 99,
       "from": "e1",
       "to": "d2",
       "flags": "n",
@@ -1298,6 +1576,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 70,
+      "toIndex": 53,
       "from": "g4",
       "to": "f5",
       "flags": "n",
@@ -1307,6 +1587,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 99,
+      "toIndex": 114,
       "from": "d2",
       "to": "c1",
       "flags": "n",
@@ -1316,6 +1598,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 53,
+      "toIndex": 38,
       "from": "f5",
       "to": "g6",
       "flags": "n",
@@ -1325,6 +1609,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 5,
       "from": "e7",
       "to": "f8",
       "flags": "n",
@@ -1334,6 +1620,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 68,
+      "toIndex": 52,
       "from": "e4",
       "to": "e5",
       "flags": "n",
@@ -1343,36 +1631,44 @@
     },
     {
       "color": "b",
+      "fromIndex": 114,
+      "toIndex": 97,
       "from": "c1",
       "to": "b2",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "bf",
-      "capture": { "type": "p", "unambiguousSymbol": "PB" },
-      "originalString": "Bxb2"
+      "originalString": "Bxb2",
+      "capture": { "type": "p", "unambiguousSymbol": "PB" }
     },
     {
       "color": "w",
+      "fromIndex": 38,
+      "toIndex": 54,
       "from": "g6",
       "to": "g5",
       "flags": "c",
       "piece": "k",
       "unambiguousSymbol": "K",
-      "capture": { "type": "p", "unambiguousSymbol": "ph" },
-      "originalString": "Kxg5"
+      "originalString": "Kxg5",
+      "capture": { "type": "p", "unambiguousSymbol": "ph" }
     },
     {
       "color": "b",
+      "fromIndex": 97,
+      "toIndex": 82,
       "from": "b2",
       "to": "c3",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "bf",
-      "capture": { "type": "p", "unambiguousSymbol": "PC" },
-      "originalString": "Bxc3"
+      "originalString": "Bxc3",
+      "capture": { "type": "p", "unambiguousSymbol": "PC" }
     },
     {
       "color": "w",
+      "fromIndex": 87,
+      "toIndex": 71,
       "from": "h3",
       "to": "h4",
       "flags": "n",
@@ -1382,16 +1678,20 @@
     },
     {
       "color": "b",
+      "fromIndex": 82,
+      "toIndex": 67,
       "from": "c3",
       "to": "d4",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "bf",
-      "capture": { "type": "p", "unambiguousSymbol": "PD" },
-      "originalString": "Bxd4"
+      "originalString": "Bxd4",
+      "capture": { "type": "p", "unambiguousSymbol": "PD" }
     },
     {
       "color": "w",
+      "fromIndex": 71,
+      "toIndex": 55,
       "from": "h4",
       "to": "h5",
       "flags": "n",
@@ -1401,16 +1701,20 @@
     },
     {
       "color": "b",
+      "fromIndex": 67,
+      "toIndex": 52,
       "from": "d4",
       "to": "e5",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "bf",
-      "capture": { "type": "p", "unambiguousSymbol": "PF" },
-      "originalString": "Bxe5"
+      "originalString": "Bxe5",
+      "capture": { "type": "p", "unambiguousSymbol": "PF" }
     },
     {
       "color": "w",
+      "fromIndex": 102,
+      "toIndex": 70,
       "from": "g2",
       "to": "g4",
       "flags": "b",
@@ -1420,6 +1724,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 52,
+      "toIndex": 97,
       "from": "e5",
       "to": "b2",
       "flags": "n",
@@ -1429,6 +1735,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 54,
+      "toIndex": 53,
       "from": "g5",
       "to": "f5",
       "flags": "n",
@@ -1438,6 +1746,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 5,
+      "toIndex": 21,
       "from": "f8",
       "to": "f7",
       "flags": "n",
@@ -1447,6 +1757,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 70,
+      "toIndex": 54,
       "from": "g4",
       "to": "g5",
       "flags": "n",
@@ -1456,6 +1768,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 97,
+      "toIndex": 114,
       "from": "b2",
       "to": "c1",
       "flags": "n",
@@ -1465,6 +1779,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 54,
+      "toIndex": 38,
       "from": "g5",
       "to": "g6",
       "flags": "n",
@@ -1474,6 +1790,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 21,
+      "toIndex": 20,
       "from": "f7",
       "to": "e7",
       "flags": "n",
@@ -1483,6 +1801,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 53,
+      "toIndex": 52,
       "from": "f5",
       "to": "e5",
       "flags": "n",
@@ -1492,6 +1812,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 17,
+      "toIndex": 49,
       "from": "b7",
       "to": "b5",
       "flags": "b",
@@ -1501,6 +1823,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 52,
+      "toIndex": 67,
       "from": "e5",
       "to": "d4",
       "flags": "n",
@@ -1510,6 +1834,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 35,
       "from": "e7",
       "to": "d6",
       "flags": "n",
@@ -1519,6 +1845,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 67,
+      "toIndex": 82,
       "from": "d4",
       "to": "c3",
       "flags": "n",
@@ -1528,6 +1856,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 34,
+      "toIndex": 50,
       "from": "c6",
       "to": "c5",
       "flags": "n",
@@ -1537,6 +1867,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 96,
+      "toIndex": 80,
       "from": "a2",
       "to": "a3",
       "flags": "n",
@@ -1546,6 +1878,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 114,
+      "toIndex": 54,
       "from": "c1",
       "to": "g5",
       "flags": "n",
@@ -1555,6 +1889,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 80,
+      "toIndex": 64,
       "from": "a3",
       "to": "a4",
       "flags": "n",
@@ -1564,16 +1900,20 @@
     },
     {
       "color": "b",
+      "fromIndex": 49,
+      "toIndex": 64,
       "from": "b5",
       "to": "a4",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pb",
-      "capture": { "type": "p", "unambiguousSymbol": "pb" },
-      "originalString": "bxa4"
+      "originalString": "bxa4",
+      "capture": { "type": "p", "unambiguousSymbol": "pb" }
     },
     {
       "color": "w",
+      "fromIndex": 82,
+      "toIndex": 97,
       "from": "c3",
       "to": "b2",
       "flags": "n",
@@ -1583,6 +1923,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 35,
+      "toIndex": 51,
       "from": "d6",
       "to": "d5",
       "flags": "n",
@@ -1592,6 +1934,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 97,
+      "toIndex": 80,
       "from": "b2",
       "to": "a3",
       "flags": "n",
@@ -1601,6 +1945,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 51,
+      "toIndex": 67,
       "from": "d5",
       "to": "d4",
       "flags": "n",
@@ -1610,16 +1956,20 @@
     },
     {
       "color": "w",
+      "fromIndex": 80,
+      "toIndex": 64,
       "from": "a3",
       "to": "a4",
       "flags": "c",
       "piece": "k",
       "unambiguousSymbol": "K",
-      "capture": { "type": "p", "unambiguousSymbol": "pb" },
-      "originalString": "Kxa4"
+      "originalString": "Kxa4",
+      "capture": { "type": "p", "unambiguousSymbol": "pb" }
     },
     {
       "color": "b",
+      "fromIndex": 50,
+      "toIndex": 66,
       "from": "c5",
       "to": "c4",
       "flags": "n",
@@ -1631,6 +1981,8 @@
   [
     {
       "color": "w",
+      "fromIndex": 100,
+      "toIndex": 68,
       "from": "e2",
       "to": "e4",
       "flags": "b",
@@ -1640,6 +1992,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 36,
       "from": "e7",
       "to": "e6",
       "flags": "n",
@@ -1649,6 +2003,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 117,
+      "toIndex": 66,
       "from": "f1",
       "to": "c4",
       "flags": "n",
@@ -1658,6 +2014,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 19,
+      "toIndex": 51,
       "from": "d7",
       "to": "d5",
       "flags": "b",
@@ -1667,26 +2025,32 @@
     },
     {
       "color": "w",
+      "fromIndex": 68,
+      "toIndex": 51,
       "from": "e4",
       "to": "d5",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "PE",
-      "capture": { "type": "p", "unambiguousSymbol": "PE" },
-      "originalString": "exd5"
+      "originalString": "exd5",
+      "capture": { "type": "p", "unambiguousSymbol": "PE" }
     },
     {
       "color": "b",
+      "fromIndex": 36,
+      "toIndex": 51,
       "from": "e6",
       "to": "d5",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pe",
-      "capture": { "type": "p", "unambiguousSymbol": "pe" },
-      "originalString": "exd5"
+      "originalString": "exd5",
+      "capture": { "type": "p", "unambiguousSymbol": "pe" }
     },
     {
       "color": "w",
+      "fromIndex": 66,
+      "toIndex": 81,
       "from": "c4",
       "to": "b3",
       "flags": "n",
@@ -1696,6 +2060,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 6,
+      "toIndex": 37,
       "from": "g8",
       "to": "f6",
       "flags": "n",
@@ -1705,6 +2071,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 99,
+      "toIndex": 67,
       "from": "d2",
       "to": "d4",
       "flags": "b",
@@ -1714,6 +2082,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 5,
+      "toIndex": 20,
       "from": "f8",
       "to": "e7",
       "flags": "n",
@@ -1723,6 +2093,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 118,
+      "toIndex": 85,
       "from": "g1",
       "to": "f3",
       "flags": "n",
@@ -1732,6 +2104,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 4,
+      "toIndex": 6,
       "from": "e8",
       "to": "g8",
       "flags": "k",
@@ -1741,6 +2115,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 114,
+      "toIndex": 54,
       "from": "c1",
       "to": "g5",
       "flags": "n",
@@ -1750,6 +2126,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 23,
+      "toIndex": 39,
       "from": "h7",
       "to": "h6",
       "flags": "n",
@@ -1759,26 +2137,32 @@
     },
     {
       "color": "w",
+      "fromIndex": 54,
+      "toIndex": 37,
       "from": "g5",
       "to": "f6",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "BC",
-      "capture": { "type": "n", "unambiguousSymbol": "ng" },
-      "originalString": "Bxf6"
+      "originalString": "Bxf6",
+      "capture": { "type": "n", "unambiguousSymbol": "ng" }
     },
     {
       "color": "b",
+      "fromIndex": 20,
+      "toIndex": 37,
       "from": "e7",
       "to": "f6",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "bf",
-      "capture": { "type": "b", "unambiguousSymbol": "BC" },
-      "originalString": "Bxf6"
+      "originalString": "Bxf6",
+      "capture": { "type": "b", "unambiguousSymbol": "BC" }
     },
     {
       "color": "w",
+      "fromIndex": 116,
+      "toIndex": 118,
       "from": "e1",
       "to": "g1",
       "flags": "k",
@@ -1788,6 +2172,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 18,
+      "toIndex": 34,
       "from": "c7",
       "to": "c6",
       "flags": "n",
@@ -1797,6 +2183,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 117,
+      "toIndex": 116,
       "from": "f1",
       "to": "e1",
       "flags": "n",
@@ -1806,6 +2194,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 2,
+      "toIndex": 53,
       "from": "c8",
       "to": "f5",
       "flags": "n",
@@ -1815,6 +2205,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 98,
+      "toIndex": 66,
       "from": "c2",
       "to": "c4",
       "flags": "b",
@@ -1824,26 +2216,32 @@
     },
     {
       "color": "b",
+      "fromIndex": 51,
+      "toIndex": 66,
       "from": "d5",
       "to": "c4",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pe",
-      "capture": { "type": "p", "unambiguousSymbol": "pe" },
-      "originalString": "dxc4"
+      "originalString": "dxc4",
+      "capture": { "type": "p", "unambiguousSymbol": "pe" }
     },
     {
       "color": "w",
+      "fromIndex": 81,
+      "toIndex": 66,
       "from": "b3",
       "to": "c4",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "BF",
-      "capture": { "type": "p", "unambiguousSymbol": "pe" },
-      "originalString": "Bxc4"
+      "originalString": "Bxc4",
+      "capture": { "type": "p", "unambiguousSymbol": "pe" }
     },
     {
       "color": "b",
+      "fromIndex": 1,
+      "toIndex": 19,
       "from": "b8",
       "to": "d7",
       "flags": "n",
@@ -1853,6 +2251,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 113,
+      "toIndex": 82,
       "from": "b1",
       "to": "c3",
       "flags": "n",
@@ -1862,6 +2262,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 19,
+      "toIndex": 33,
       "from": "d7",
       "to": "b6",
       "flags": "n",
@@ -1871,6 +2273,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 97,
+      "toIndex": 81,
       "from": "b2",
       "to": "b3",
       "flags": "n",
@@ -1880,26 +2284,32 @@
     },
     {
       "color": "b",
+      "fromIndex": 33,
+      "toIndex": 66,
       "from": "b6",
       "to": "c4",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "nb",
-      "capture": { "type": "b", "unambiguousSymbol": "BF" },
-      "originalString": "Nxc4"
+      "originalString": "Nxc4",
+      "capture": { "type": "b", "unambiguousSymbol": "BF" }
     },
     {
       "color": "w",
+      "fromIndex": 81,
+      "toIndex": 66,
       "from": "b3",
       "to": "c4",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "PB",
-      "capture": { "type": "n", "unambiguousSymbol": "PB" },
-      "originalString": "bxc4"
+      "originalString": "bxc4",
+      "capture": { "type": "n", "unambiguousSymbol": "PB" }
     },
     {
       "color": "b",
+      "fromIndex": 3,
+      "toIndex": 48,
       "from": "d8",
       "to": "a5",
       "flags": "n",
@@ -1909,6 +2319,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 112,
+      "toIndex": 114,
       "from": "a1",
       "to": "c1",
       "flags": "n",
@@ -1918,6 +2330,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 0,
+      "toIndex": 3,
       "from": "a8",
       "to": "d8",
       "flags": "n",
@@ -1927,6 +2341,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 67,
+      "toIndex": 51,
       "from": "d4",
       "to": "d5",
       "flags": "n",
@@ -1936,16 +2352,20 @@
     },
     {
       "color": "b",
+      "fromIndex": 37,
+      "toIndex": 82,
       "from": "f6",
       "to": "c3",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "bf",
-      "capture": { "type": "n", "unambiguousSymbol": "NB" },
-      "originalString": "Bxc3"
+      "originalString": "Bxc3",
+      "capture": { "type": "n", "unambiguousSymbol": "NB" }
     },
     {
       "color": "w",
+      "fromIndex": 116,
+      "toIndex": 52,
       "from": "e1",
       "to": "e5",
       "flags": "n",
@@ -1955,36 +2375,44 @@
     },
     {
       "color": "b",
+      "fromIndex": 82,
+      "toIndex": 52,
       "from": "c3",
       "to": "e5",
       "flags": "c",
       "piece": "b",
       "unambiguousSymbol": "bf",
-      "capture": { "type": "r", "unambiguousSymbol": "RH" },
-      "originalString": "Bxe5"
+      "originalString": "Bxe5",
+      "capture": { "type": "r", "unambiguousSymbol": "RH" }
     },
     {
       "color": "w",
+      "fromIndex": 85,
+      "toIndex": 52,
       "from": "f3",
       "to": "e5",
       "flags": "c",
       "piece": "n",
       "unambiguousSymbol": "NG",
-      "capture": { "type": "b", "unambiguousSymbol": "bf" },
-      "originalString": "Nxe5"
+      "originalString": "Nxe5",
+      "capture": { "type": "b", "unambiguousSymbol": "bf" }
     },
     {
       "color": "b",
+      "fromIndex": 34,
+      "toIndex": 51,
       "from": "c6",
       "to": "d5",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pc",
-      "capture": { "type": "p", "unambiguousSymbol": "pc" },
-      "originalString": "cxd5"
+      "originalString": "cxd5",
+      "capture": { "type": "p", "unambiguousSymbol": "pc" }
     },
     {
       "color": "w",
+      "fromIndex": 115,
+      "toIndex": 116,
       "from": "d1",
       "to": "e1",
       "flags": "n",
@@ -1994,6 +2422,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 53,
+      "toIndex": 36,
       "from": "f5",
       "to": "e6",
       "flags": "n",
@@ -2003,6 +2433,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 114,
+      "toIndex": 115,
       "from": "c1",
       "to": "d1",
       "flags": "n",
@@ -2012,36 +2444,44 @@
     },
     {
       "color": "b",
+      "fromIndex": 51,
+      "toIndex": 66,
       "from": "d5",
       "to": "c4",
       "flags": "c",
       "piece": "p",
       "unambiguousSymbol": "pc",
-      "capture": { "type": "p", "unambiguousSymbol": "pc" },
-      "originalString": "dxc4"
+      "originalString": "dxc4",
+      "capture": { "type": "p", "unambiguousSymbol": "pc" }
     },
     {
       "color": "w",
+      "fromIndex": 115,
+      "toIndex": 3,
       "from": "d1",
       "to": "d8",
       "flags": "c",
       "piece": "r",
       "unambiguousSymbol": "RA",
-      "capture": { "type": "r", "unambiguousSymbol": "ra" },
-      "originalString": "Rxd8?!"
+      "originalString": "Rxd8?!",
+      "capture": { "type": "r", "unambiguousSymbol": "ra" }
     },
     {
       "color": "b",
+      "fromIndex": 5,
+      "toIndex": 3,
       "from": "f8",
       "to": "d8",
       "flags": "c",
       "piece": "r",
       "unambiguousSymbol": "rh",
-      "capture": { "type": "r", "unambiguousSymbol": "RA" },
-      "originalString": "Rxd8?!"
+      "originalString": "Rxd8?!",
+      "capture": { "type": "r", "unambiguousSymbol": "RA" }
     },
     {
       "color": "w",
+      "fromIndex": 116,
+      "toIndex": 82,
       "from": "e1",
       "to": "c3",
       "flags": "n",
@@ -2051,16 +2491,20 @@
     },
     {
       "color": "b",
+      "fromIndex": 48,
+      "toIndex": 82,
       "from": "a5",
       "to": "c3",
       "flags": "c",
       "piece": "q",
       "unambiguousSymbol": "q",
-      "capture": { "type": "q", "unambiguousSymbol": "Q" },
-      "originalString": "Qxc3?!"
+      "originalString": "Qxc3?!",
+      "capture": { "type": "q", "unambiguousSymbol": "Q" }
     },
     {
       "color": "w",
+      "fromIndex": 102,
+      "toIndex": 86,
       "from": "g2",
       "to": "g3",
       "flags": "n",
@@ -2070,6 +2514,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 3,
+      "toIndex": 115,
       "from": "d8",
       "to": "d1",
       "flags": "n",
@@ -2079,6 +2525,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 118,
+      "toIndex": 102,
       "from": "g1",
       "to": "g2",
       "flags": "n",
@@ -2088,6 +2536,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 82,
+      "toIndex": 116,
       "from": "c3",
       "to": "e1",
       "flags": "n",
@@ -2097,6 +2547,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 102,
+      "toIndex": 85,
       "from": "g2",
       "to": "f3",
       "flags": "n",
@@ -2106,16 +2558,20 @@
     },
     {
       "color": "b",
+      "fromIndex": 116,
+      "toIndex": 52,
       "from": "e1",
       "to": "e5",
       "flags": "c",
       "piece": "q",
       "unambiguousSymbol": "PH",
-      "capture": { "type": "n", "unambiguousSymbol": "NG" },
-      "originalString": "Qxe5"
+      "originalString": "Qxe5",
+      "capture": { "type": "n", "unambiguousSymbol": "NG" }
     },
     {
       "color": "w",
+      "fromIndex": 85,
+      "toIndex": 102,
       "from": "f3",
       "to": "g2",
       "flags": "n",
@@ -2125,6 +2581,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 36,
+      "toIndex": 51,
       "from": "e6",
       "to": "d5",
       "flags": "n",
@@ -2134,6 +2592,8 @@
     },
     {
       "color": "w",
+      "fromIndex": 102,
+      "toIndex": 87,
       "from": "g2",
       "to": "h3",
       "flags": "n",
@@ -2143,6 +2603,8 @@
     },
     {
       "color": "b",
+      "fromIndex": 52,
+      "toIndex": 55,
       "from": "e5",
       "to": "h5",
       "flags": "n",
