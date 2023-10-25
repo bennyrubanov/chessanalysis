@@ -1521,6 +1521,110 @@ export class Chess {
     this._turn = them;
   }
 
+  private _makeAndReturnMove(
+    move: InternalMove,
+    originalString?: string
+  ): InternalMove {
+    const us = this._turn;
+    const them = swapColor(us);
+    this._push(move, originalString);
+
+    this._board[move.to] = this._board[move.from];
+    delete this._board[move.from];
+
+    // if ep capture, remove the captured pawn
+    if (move.flags & BITS.EP_CAPTURE) {
+      if (this._turn === BLACK) {
+        delete this._board[move.to - 16];
+      } else {
+        delete this._board[move.to + 16];
+      }
+    }
+
+    // if pawn promotion, replace with new piece
+    if (move.promotion) {
+      this._board[move.to] = {
+        type: move.promotion,
+        color: us,
+        unambiguousSymbol: this._board[move.to].unambiguousSymbol,
+      };
+    }
+
+    // if we moved the king
+    if (this._board[move.to].type === KING) {
+      this._kings[us] = move.to;
+
+      // if we castled, move the rook next to the king
+      if (move.flags & BITS.KSIDE_CASTLE) {
+        const castlingTo = move.to - 1;
+        const castlingFrom = move.to + 1;
+        this._board[castlingTo] = this._board[castlingFrom];
+        delete this._board[castlingFrom];
+      } else if (move.flags & BITS.QSIDE_CASTLE) {
+        const castlingTo = move.to + 1;
+        const castlingFrom = move.to - 2;
+        this._board[castlingTo] = this._board[castlingFrom];
+        delete this._board[castlingFrom];
+      }
+
+      // turn off castling
+      this._castling[us] = 0;
+    }
+
+    // turn off castling if we move a rook
+    if (this._castling[us]) {
+      for (let i = 0, len = ROOKS[us].length; i < len; i++) {
+        if (
+          move.from === ROOKS[us][i].square &&
+          this._castling[us] & ROOKS[us][i].flag
+        ) {
+          this._castling[us] ^= ROOKS[us][i].flag;
+          break;
+        }
+      }
+    }
+
+    // turn off castling if we capture a rook
+    if (this._castling[them]) {
+      for (let i = 0, len = ROOKS[them].length; i < len; i++) {
+        if (
+          move.to === ROOKS[them][i].square &&
+          this._castling[them] & ROOKS[them][i].flag
+        ) {
+          this._castling[them] ^= ROOKS[them][i].flag;
+          break;
+        }
+      }
+    }
+
+    // if big pawn move, update the en passant square
+    if (move.flags & BITS.BIG_PAWN) {
+      if (us === BLACK) {
+        this._epSquare = move.to - 16;
+      } else {
+        this._epSquare = move.to + 16;
+      }
+    } else {
+      this._epSquare = EMPTY;
+    }
+
+    // reset the 50 move counter if a pawn is moved or a piece is captured
+    if (move.piece === PAWN) {
+      this._halfMoves = 0;
+    } else if (move.flags & (BITS.CAPTURE | BITS.EP_CAPTURE)) {
+      this._halfMoves = 0;
+    } else {
+      this._halfMoves++;
+    }
+
+    if (us === BLACK) {
+      this._moveNumber++;
+    }
+
+    this._turn = them;
+    return move;
+  }
+
   private _undoMove() {
     const old = this._history.pop();
     if (old === undefined) {
@@ -1645,6 +1749,50 @@ export class Chess {
       } else {
         // reset the end of game marker if making a valid move
         this._makeMove(move, moves[halfMove]);
+      }
+    }
+  }
+
+  *historyGenerator(
+    pgnMoveLine: string,
+    { strict = false }: { strict?: boolean; newlineChar?: string } = {}
+  ): Generator<{ move: InternalMove; board: Array<Piece> }, void, void> {
+    this.load(DEFAULT_POSITION);
+
+    // We don't mind destructive deletion of the comments
+    let ms = pgnMoveLine.replace(new RegExp(`({[^}]*})+?`, 'g'), '');
+
+    // delete move numbers
+    ms = ms.replace(/\d+\.(\.\.)?/g, '');
+
+    // delete ... indicating black to move
+    ms = ms.replace('...', '');
+
+    /* delete numeric annotation glyphs */
+    ms = ms.replace(/\$\d+/g, '');
+
+    // trim and get array of moves
+    // let moves = ms.trim().split(new RegExp(/\s+/));
+    let moves = ms.trim().split(' ');
+
+    // delete empty entries
+    moves = moves.filter((move) => move !== '');
+
+    for (let halfMove = 0; halfMove < moves.length; halfMove++) {
+      const move = this._moveFromSan(moves[halfMove], strict);
+
+      // invalid move
+      if (move == null) {
+        // was the move an end of game marker
+        if (!(TERMINATION_MARKERS.indexOf(moves[halfMove]) > -1)) {
+          throw new Error(`Invalid move in PGN: ${moves[halfMove]}`);
+        }
+      } else {
+        // reset the end of game marker if making a valid move
+        yield {
+          move: this._makeAndReturnMove(move, moves[halfMove]),
+          board: this._board,
+        };
       }
     }
   }
