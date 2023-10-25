@@ -340,11 +340,15 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
     // Need to figure out getMateAndAssists disambiguation before this functions correctly
     if (chess.isCheckmate()) {
       const gameHistory = chess.history({ verbose: true }); // Get the game history
-      const { unambigMatingPiece } = getMateAndAssists(gameHistory); // Get the mating piece
+      const { unambigMatingPiece, unambigMatedPiece } = getMateAndAssists(gameHistory); // Get the mating piece
       console.log(`${unambigMatingPiece} was the unambiguous piece that delivered checkmate`)
     
       if (unambigMatingPiece) {
         killsDeathsAssistsMap[unambigMatingPiece].kills++;
+      }
+
+      if (unambigMatedPiece) {
+        killsDeathsAssistsMap[unambigMatedPiece].deaths++;
       }
     }
 
@@ -399,6 +403,7 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
   let assistingPiece;
   let hockeyAssist;
   let unambigMatingPiece;
+  let unambigMatedPiece;
   let unambigAssistingPiece;
   let unambigHockeyAssistPiece;
   let lastPieceMoved;
@@ -478,11 +483,33 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
       pieceSquares.set(move.to, movedPiece);
       pieceSquares.delete(move.from);
     }
+    //console.log(move.originalString)
+    //console.log(pieceSquares)
   }
+  //console.log("pieceSquares final state: ", pieceSquares)
+
 
   if (moveHistory[moveHistory.length - 1].originalString.includes('#')) {
     const matingSquare = moveHistory[moveHistory.length - 1].to;
-    unambigMatingPiece = pieceSquares.get(matingSquare);
+    const unambigMatingPiece = pieceSquares.get(matingSquare);
+    console.log("unambigMatingPiece: ", unambigMatingPiece)
+    let matedKingSquare;
+
+    // iterate over pieceSquares to identify the mated king's square
+    // probably better, more efficient ways to do this?
+    for (const [square, piece] of pieceSquares.entries()) {
+      if ((unambigMatingPiece.toLowerCase() === unambigMatingPiece && piece === 'K') || 
+          (unambigMatingPiece.toUpperCase() === unambigMatingPiece && piece === 'k')) {
+        matedKingSquare = square;
+        break;
+      }
+    }
+    const unambigMatedPiece = pieceSquares.get(matedKingSquare);
+
+    // console.log("unambigMatingPiece: ", unambigMatingPiece)
+    // console.log("matedKingSquare: ", matedKingSquare)
+    // console.log("unambigMatedPiece: ", unambigMatedPiece)
+
 
     // If mate see if also assist
     const assistCandidateSquare = moveHistory[moveHistory.length - 3].to;
@@ -517,6 +544,7 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
     assistingPiece,
     hockeyAssist,
     unambigMatingPiece,
+    unambigMatedPiece,
     unambigAssistingPiece,
     unambigHockeyAssistPiece,
     lastPieceMoved
