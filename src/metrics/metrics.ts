@@ -278,6 +278,8 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
     const moveHistory = chess.history();
     const moveStrings = moveHistory.map(move => move.originalString);
     console.log(`moveStrings: ${moveStrings}`);
+    const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
+    console.log(`lichess link to game played: ${siteLink}`);
 
     // duplicate the base map
     const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
@@ -331,6 +333,7 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
       } 
       else {
         console.log('No piece found for square:', move.from);
+        console.log("move: ", move)
       }
 
 
@@ -482,16 +485,22 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
     if (movedPiece) {
       pieceSquares.set(move.to, movedPiece);
       pieceSquares.delete(move.from);
+  
+      if (move.capture) {
+        pieceSquares.delete(move.to);
+        pieceSquares.set(move.to, movedPiece);
+      }
     }
     //console.log(move.originalString)
     //console.log(pieceSquares)
   }
+
   //console.log("pieceSquares final state: ", pieceSquares)
 
 
   if (moveHistory[moveHistory.length - 1].originalString.includes('#')) {
     const matingSquare = moveHistory[moveHistory.length - 1].to;
-    const unambigMatingPiece = pieceSquares.get(matingSquare);
+    unambigMatingPiece = pieceSquares.get(matingSquare);
     console.log("unambigMatingPiece: ", unambigMatingPiece)
     let matedKingSquare;
 
@@ -504,7 +513,7 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
         break;
       }
     }
-    const unambigMatedPiece = pieceSquares.get(matedKingSquare);
+    unambigMatedPiece = pieceSquares.get(matedKingSquare);
 
     // console.log("unambigMatingPiece: ", unambigMatingPiece)
     // console.log("matedKingSquare: ", matedKingSquare)
