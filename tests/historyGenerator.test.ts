@@ -13,7 +13,9 @@ describe('Chess', () => {
       const gen = chess.historyGenerator(moveString);
       const expectedMoves = moveString.split(' ').filter((_, i) => i % 3 !== 0);
       for (const { move, board } of gen) {
+        // validate that the piece that was moved is of the same type as the destination square
         expect(move.piece).toEqual(board[move.toIndex].type);
+        // validate that the original string in the move matches the expected string
         expect(move.originalString).toEqual(expectedMoves.shift());
       }
     });
