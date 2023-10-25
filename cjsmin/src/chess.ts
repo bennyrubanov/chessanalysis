@@ -549,6 +549,7 @@ function getDisambiguator(move: InternalMove, moves: InternalMove[]) {
 
 function inferPieceType(san: string) {
   let pieceType = san.charAt(0);
+  // If the first character is between 'a' and 'h', it's a pawn move
   if (pieceType >= 'a' && pieceType <= 'h') {
     const matches = san.match(/[a-h]\d.*[a-h]\d/);
     if (matches) {
@@ -557,14 +558,17 @@ function inferPieceType(san: string) {
     return PAWN;
   }
   pieceType = pieceType.toLowerCase();
+  // If the first character is 'o', it's a king move (castling)
   if (pieceType === 'o') {
     return KING;
   }
+  // Otherwise, return the piece type as is
   return pieceType as PieceType;
 }
 
-// parses all of the decorators out of a SAN string
+// Parses all of the decorators out of a SAN string
 function strippedSan(move: string) {
+  // Remove equals sign (pawn promotion) and trailing characters (check, checkmate, annotations)
   return move.replace(/=/, '').replace(/[+#]?[?!]*$/, '');
 }
 
