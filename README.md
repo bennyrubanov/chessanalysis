@@ -39,8 +39,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 - best kill streaks (i.e. one piece is the only one taking others for some time)
 - average distance each piece has traveled
   - furthest distance a piece has traveled in a game
-- average number of moves each game for a particular piece type
-- How many turns pieces have been moved
+- average number of moves by piece
 - The game with the furthest collective distance moved
 - Which piece delivers checkmate most/least often
 - Which piece has the most checkmate assists, and which piece has the most hockey assists
