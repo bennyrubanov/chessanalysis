@@ -1707,6 +1707,7 @@ export class Chess {
         }
       } else {
         // reset the end of game marker if making a valid move
+        this._makeMove(move, moves[halfMove]);
         const prettyMove = {
           ...this._makePretty(move, moves[halfMove]),
           originalString: moves[halfMove],
