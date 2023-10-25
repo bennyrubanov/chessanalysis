@@ -138,6 +138,7 @@ export type InternalMove = {
   from: number;
   to: number;
   piece: PieceType;
+  unambiguousSymbol: UnambiguousPieceSymbol;
   capture?: Capture;
   promotion?: PieceType;
   flags: number;
@@ -162,6 +163,7 @@ export type Move = {
   capture?: Capture;
   promotion?: PieceType;
   flags: string;
+  umabiguousSymbol: UnambiguousPieceSymbol;
   // san: string;
   // lan: string;
   // before: string;
@@ -545,12 +547,38 @@ function getDisambiguator(move: InternalMove, moves: InternalMove[]) {
   return '';
 }
 
+function inferPieceType(san: string) {
+  let pieceType = san.charAt(0);
+  // If the first character is between 'a' and 'h', it's a pawn move
+  if (pieceType >= 'a' && pieceType <= 'h') {
+    const matches = san.match(/[a-h]\d.*[a-h]\d/);
+    if (matches) {
+      return undefined;
+    }
+    return PAWN;
+  }
+  pieceType = pieceType.toLowerCase();
+  // If the first character is 'o', it's a king move (castling)
+  if (pieceType === 'o') {
+    return KING;
+  }
+  // Otherwise, return the piece type as is
+  return pieceType as PieceType;
+}
+
+// Parses all of the decorators out of a SAN string
+function strippedSan(move: string) {
+  // Remove equals sign (pawn promotion) and trailing characters (check, checkmate, annotations)
+  return move.replace(/=/, '').replace(/[+#]?[?!]*$/, '');
+}
+
 function addMove(
   moves: InternalMove[],
   color: Color,
   from: number,
   to: number,
   piece: PieceType,
+  unambiguousSymbol: UnambiguousPieceSymbol,
   capture: Capture | undefined = undefined,
   flags: number = BITS.NORMAL
 ) {
@@ -566,6 +594,7 @@ function addMove(
         piece,
         capture,
         promotion,
+        unambiguousSymbol,
         flags: flags | BITS.PROMOTION,
       });
     }
@@ -576,30 +605,10 @@ function addMove(
       to,
       piece,
       capture,
+      unambiguousSymbol,
       flags,
     });
   }
-}
-
-function inferPieceType(san: string) {
-  let pieceType = san.charAt(0);
-  if (pieceType >= 'a' && pieceType <= 'h') {
-    const matches = san.match(/[a-h]\d.*[a-h]\d/);
-    if (matches) {
-      return undefined;
-    }
-    return PAWN;
-  }
-  pieceType = pieceType.toLowerCase();
-  if (pieceType === 'o') {
-    return KING;
-  }
-  return pieceType as PieceType;
-}
-
-// parses all of the decorators out of a SAN string
-function strippedSan(move: string) {
-  return move.replace(/=/, '').replace(/[+#]?[?!]*$/, '');
 }
 
 export class Chess {
@@ -766,6 +775,7 @@ export class Chess {
             from: square,
             to: this._epSquare,
             piece: PAWN,
+            unambiguousSymbol: this._board[square]?.unambiguousSymbol,
             capture: {
               type: PAWN,
               unambiguousSymbol: this._board[square]?.unambiguousSymbol,
@@ -1208,12 +1218,28 @@ export class Chess {
         // single square, non-capturing
         to = from + PAWN_OFFSETS[us][0];
         if (!this._board[to]) {
-          addMove(moves, us, from, to, PAWN);
+          addMove(
+            moves,
+            us,
+            from,
+            to,
+            PAWN,
+            this._board[from].unambiguousSymbol
+          );
 
           // double square
           to = from + PAWN_OFFSETS[us][1];
           if (SECOND_RANK[us] === rank(from) && !this._board[to]) {
-            addMove(moves, us, from, to, PAWN, undefined, BITS.BIG_PAWN);
+            addMove(
+              moves,
+              us,
+              from,
+              to,
+              PAWN,
+              this._board[from].unambiguousSymbol,
+              undefined,
+              BITS.BIG_PAWN
+            );
           }
         }
 
@@ -1229,9 +1255,10 @@ export class Chess {
               from,
               to,
               PAWN,
+              this._board[from].unambiguousSymbol,
               {
                 type: this._board[to].type,
-                unambiguousSymbol: this._board[to].unambiguousSymbol,
+                unambiguousSymbol: this._board[from].unambiguousSymbol,
               },
               BITS.CAPTURE
             );
@@ -1242,6 +1269,7 @@ export class Chess {
               from,
               to,
               PAWN,
+              this._board[from].unambiguousSymbol,
               {
                 type: PAWN,
                 unambiguousSymbol: this._board[from].unambiguousSymbol,
@@ -1262,7 +1290,14 @@ export class Chess {
             if (to & 0x88) break;
 
             if (!this._board[to]) {
-              addMove(moves, us, from, to, type);
+              addMove(
+                moves,
+                us,
+                from,
+                to,
+                type,
+                this._board[from].unambiguousSymbol
+              );
             } else {
               // own color, stop loop
               if (this._board[to].color === us) break;
@@ -1273,6 +1308,7 @@ export class Chess {
                 from,
                 to,
                 type,
+                this._board[from].unambiguousSymbol,
                 {
                   type: this._board[to].type,
                   unambiguousSymbol: this._board[to].unambiguousSymbol,
@@ -1315,6 +1351,7 @@ export class Chess {
               this._kings[us],
               castlingTo,
               KING,
+              this._board[this._kings[us]].unambiguousSymbol,
               undefined,
               BITS.KSIDE_CASTLE
             );
@@ -1340,6 +1377,7 @@ export class Chess {
               this._kings[us],
               castlingTo,
               KING,
+              this._board[this._kings[us]].unambiguousSymbol,
               undefined,
               BITS.QSIDE_CASTLE
             );
@@ -1817,6 +1855,7 @@ export class Chess {
       to: toAlgebraic,
       flags: prettyFlags,
       piece,
+      umabiguousSymbol: uglyMove.unambiguousSymbol,
     };
 
     if (capture) {
@@ -1827,14 +1866,20 @@ export class Chess {
       // move.lan += promotion;
     }
 
-    return {
+    const prettyMove: any = {
       color: move.color,
-      capture: move.capture,
       from: move.from,
       to: move.to,
       flags: move.flags,
       piece: move.piece,
+      unambiguousSymbol: uglyMove.unambiguousSymbol,
     };
+
+    if (move.capture) {
+      prettyMove['capture'] = move.capture;
+    }
+
+    return prettyMove;
   }
 
   turn() {
