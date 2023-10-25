@@ -1,5 +1,5 @@
 //@ts-nocheck - TODO: remove this after fixing the typing with capture
-import { Chess, Square, UnambiguousPieceSymbol } from '../../cjsmin/src/chess';
+import { Chess, Square, UnambiguousPieceSymbol, PrettyMove } from '../../cjsmin/src/chess';
 import { FileReaderGame, GameHistoryMove } from '../types';
 
 // Should return an object for the metrics we want to track, not sure how best to structure so an exercise for the reader
@@ -236,87 +236,47 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
   
   const killDeathRatios = {}
 
+  let lastMove: PrettyMove | null = null;
+
   // look at each game and find the piece with the largest kill/death ratio
   for (const game of games) {
-    const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
-    basePieceSquares.set('a1', 'RA');
-    basePieceSquares.set('b1', 'NB');
-    basePieceSquares.set('c1', 'BC');
-    basePieceSquares.set('d1', 'Q');
-    basePieceSquares.set('e1', 'K');
-    basePieceSquares.set('f1', 'BF');
-    basePieceSquares.set('g1', 'NG');
-    basePieceSquares.set('h1', 'RH');
-    basePieceSquares.set('a2', 'PA');
-    basePieceSquares.set('b2', 'PB');
-    basePieceSquares.set('c2', 'PC');
-    basePieceSquares.set('d2', 'PD');
-    basePieceSquares.set('e2', 'PE');
-    basePieceSquares.set('f2', 'PF');
-    basePieceSquares.set('g2', 'PG');
-    basePieceSquares.set('h2', 'PH');
-    basePieceSquares.set('a8', 'ra');
-    basePieceSquares.set('b8', 'nb');
-    basePieceSquares.set('c8', 'bc');
-    basePieceSquares.set('d8', 'q');
-    basePieceSquares.set('e8', 'k');
-    basePieceSquares.set('f8', 'bf');
-    basePieceSquares.set('g8', 'ng');
-    basePieceSquares.set('h8', 'rh');
-    basePieceSquares.set('a7', 'pa');
-    basePieceSquares.set('b7', 'pb');
-    basePieceSquares.set('c7', 'pc');
-    basePieceSquares.set('d7', 'pd');
-    basePieceSquares.set('e7', 'pe');
-    basePieceSquares.set('f7', 'pf');
-    basePieceSquares.set('g7', 'pg');
-    basePieceSquares.set('h7', 'ph');
 
-
-    const chess = new Chess(); // Create a new instance of the Chess class
-    chess.loadPgn(game.moves);
-    const moveHistory = chess.history();
-    const moveStrings = moveHistory.map(move => move.originalString);
-    console.log(`moveStrings: ${moveStrings}`);
+    const chess = new Chess();
+    const moveGenerator = chess.historyGenerator(game.moves);
+    console.log(`game.moves: ${game.moves}`);
     const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
     console.log(`lichess link to game played: ${siteLink}`);
 
-    // duplicate the base map
-    const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
-      basePieceSquares
-    );
-
-
-    for (const piece of pieceSquares.values()) {
-      // Only initialize if the piece doesn't exist in the map yet
+    for (let moveInfo of moveGenerator) {
+      const { move, board } = moveInfo;
+      //console.log("move: ", move)
+      //console.log("board: ", board)
+      lastMove = move;
+      console.log(move.originalString)
+      let piece = lastMove.unambiguousSymbol;
       if (!killsDeathsAssistsMap[piece]) {
         killsDeathsAssistsMap[piece] = { kills: 0, deaths: 0, assists: 0 };
       }
-    }
 
-    for (const move of moveHistory) {
-      //console.log('move:', move);
-
-      const movedPiece = pieceSquares.get(move.from);
+      const movedPiece = lastMove.unambiguousSymbol;
     
       // Check if movedPiece is not undefined
       if (movedPiece) {
         // update the kill & death counts of movedPiece
-        if (move.capture) {
-          
+        if (lastMove.capture) {
           killsDeathsAssistsMap[movedPiece].kills++;
-    
-          const capturedPiece = pieceSquares.get(move.to); // Get the unambiguous piece symbol
-          //console.log(`captured piece: ${capturedPiece}`)
+
+          const capturedPiece = board[lastMove.toIndex]?.unambiguousSymbol; // Get the unambiguous piece symbol from the board state
+
+          console.log(`captured piece: ${capturedPiece}`)
 
           if (capturedPiece) {
+            if (!killsDeathsAssistsMap[capturedPiece]) {
+              killsDeathsAssistsMap[capturedPiece] = { kills: 0, deaths: 0, assists: 0 };
+            }
             killsDeathsAssistsMap[capturedPiece].deaths++;
           }
         }
-
-        // Update the pieceSquares map
-        pieceSquares.set(move.to, movedPiece);
-        pieceSquares.delete(move.from); // Remove the piece from its old square
         
         // Logs
         //console.log(`Move: ${move.originalString}, Captured: ${move.capture?.unambiguousSymbol}`);      
@@ -336,14 +296,17 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
         console.log("move: ", move)
       }
 
+    console.log("KDR map: ", killsDeathsAssistsMap)
 
     }
 
-    // Check if the game is in checkmate after the last move. 
-    // Need to figure out getMateAndAssists disambiguation before this functions correctly
+    // Check if the game is in checkmate after the last move
     if (chess.isCheckmate()) {
-      const gameHistory = chess.history({ verbose: true }); // Get the game history
-      const { unambigMatingPiece, unambigMatedPiece } = getMateAndAssists(gameHistory); // Get the mating piece
+      // chess.loadPgn(game.moves);
+      // console.log("chess: ", chess)
+      // const gameMoves = chess.moves();
+      console.log("game.moves: ", game.moves)
+      const { unambigMatingPiece, unambigMatedPiece } = getMateAndAssistsFromHistoryGenerator(game.moves);      
       console.log(`${unambigMatingPiece} was the unambiguous piece that delivered checkmate`)
     
       if (unambigMatingPiece) {
@@ -410,6 +373,7 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
   let unambigAssistingPiece;
   let unambigHockeyAssistPiece;
   let lastPieceMoved;
+  let lastMove: PrettyMove | null = null;
 
   // ambiguous pieces
   // check for mate
@@ -560,11 +524,105 @@ export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
   };
 }
 
-// convert FileReaderGame object to GameHistoryObject
+// attempting to implement historyGenerator
+export function getMateAndAssistsFromHistoryGenerator(pgnMoveLine: string) {
+  const chess = new Chess();
+  const moveGenerator = chess.historyGenerator(pgnMoveLine);
+
+  let matingPiece;
+  let assistingPiece;
+  let hockeyAssist;
+  let unambigMatingPiece;
+  let unambigMatedPiece;
+  let unambigAssistingPiece;
+  let unambigHockeyAssistPiece;
+  let lastPieceMoved;
+  let lastMove: PrettyMove | null = null;
+
+  // Keep track of the last few moves
+  let lastFewMoves: PrettyMove[] = [];
+
+  for (let moveInfo of moveGenerator) {
+    const { move, board } = moveInfo;
+    //console.log("move: ", move)
+    //console.log("board: ", board)
+    lastMove = move;
+
+    // Add the current move to the start of the array
+    lastFewMoves.unshift(move);
+
+    // If we have more than 5 moves in the array, remove the oldest one
+    if (lastFewMoves.length > 5) {
+      lastFewMoves.pop();
+    }
+
+  }
+  console.log("last move: ", lastMove)
+
+  if (lastMove) {
+    lastPieceMoved = lastMove.unambiguousSymbol;
+
+    if (lastMove.originalString.includes('#')) {
+      matingPiece = lastMove.piece;
+      unambigMatingPiece = lastMove.unambiguousSymbol;
+
+      // Determine the color of the mated king
+      const matedKingColor = lastMove.color === 'w' ? 'b' : 'w';
+      unambigMatedPiece = matedKingColor === 'w' ? 'K' : 'k';
+
+      // If mate see if also assist
+      if (lastFewMoves[2] && lastFewMoves[2].originalString.includes('+') && lastFewMoves[2].unambiguousSymbol !== unambigMatingPiece) {
+        assistingPiece = lastFewMoves[2].piece;
+        unambigAssistingPiece = lastFewMoves[2].unambiguousSymbol;
+
+        // If assist check for hockey assist
+        if (lastFewMoves[4] && lastFewMoves[4].originalString.includes('+') && lastFewMoves[4].unambiguousSymbol !== unambigAssistingPiece && lastFewMoves[4].unambiguousSymbol !== unambigMatingPiece) {
+          hockeyAssist = lastFewMoves[4].piece;
+          unambigHockeyAssistPiece = lastFewMoves[4].unambiguousSymbol;
+        }
+      }
+    } else {
+      // Handle non-checkmate endings here
+      console.log('The game did not end in a checkmate. The last piece that moved was:', lastPieceMoved);
+    }
+  }
+  console.log("mating piece: ", matingPiece);
+  console.log("assisting piece: ", assistingPiece);
+  console.log("hockey assisting piece: ", hockeyAssist);
+  console.log("unambig mating piece: ", unambigMatingPiece);
+  console.log("unambig mated piece: ", unambigMatedPiece);
+  console.log("unambig assisting piece: ", unambigAssistingPiece);
+  console.log("unambig hockey assisting piece: ", unambigHockeyAssistPiece);
+  console.log("last piece moved: ", lastPieceMoved);
+  
+  return {
+    matingPiece,
+    assistingPiece,
+    hockeyAssist,
+    unambigMatingPiece,
+    unambigMatedPiece,
+    unambigAssistingPiece,
+    unambigHockeyAssistPiece,
+    lastPieceMoved
+  };
+}
+
+// convert PGN string to GameHistoryObject
 export function pgnToGameHistory(pgn: string): GameHistoryMove[] {
   const chess = new Chess();
   chess.loadPgn(pgn);
   return chess.history({ verbose: true });
+}
+
+// convert gameHistory object to a PGN string
+export function gameHistoryToPgn(gameHistory: GameHistoryMove[]): string {
+  const chess = new Chess();
+
+  for (const move of gameHistory) {
+    chess.move(move);
+  }
+
+  return chess.pgn();
 }
 
 // This one could get complex if lib doesn't work https://github.com/jhlywa/chess.js/blob/master/README.md#isgameover
