@@ -26,7 +26,8 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
     - Diagonal moves count as 2 (1 horizontal, 1 vertical)
   - Knights
     - knight move counts as 3: 2 horizontal/vertical + 1 hor/vert
-    - knight move counts as 2: one diagonal and one horizontal
+    - knight move counts as 2: one diagonal and one hor/vert
+  - We are currently treating diagonal moves as 1, so bishop moves count as 1 and knight moves as 2
 
 # Questions to answer
 
