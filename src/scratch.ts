@@ -1,5 +1,4 @@
 import {
-    getMateAndAssists,
     getMoveDistanceSingleGame,
     getKillDeathRatios,
     pgnToGameHistory,

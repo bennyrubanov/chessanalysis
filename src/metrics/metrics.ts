@@ -69,77 +69,78 @@ export function countGamesInDataset(datasetPath: string): number {
 // DONE 
 // take a start and end board position and return the distances moved
 export async function getMoveDistanceSingleGame(game: FileReaderGame) {
-  const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
-  basePieceSquares.set('a1', 'RA');
-  basePieceSquares.set('b1', 'NB');
-  basePieceSquares.set('c1', 'BC');
-  basePieceSquares.set('d1', 'Q');
-  basePieceSquares.set('e1', 'K');
-  basePieceSquares.set('f1', 'BF');
-  basePieceSquares.set('g1', 'NG');
-  basePieceSquares.set('h1', 'RH');
-  basePieceSquares.set('a2', 'PA');
-  basePieceSquares.set('b2', 'PB');
-  basePieceSquares.set('c2', 'PC');
-  basePieceSquares.set('d2', 'PD');
-  basePieceSquares.set('e2', 'PE');
-  basePieceSquares.set('f2', 'PF');
-  basePieceSquares.set('g2', 'PG');
-  basePieceSquares.set('h2', 'PH');
-  basePieceSquares.set('a8', 'ra');
-  basePieceSquares.set('b8', 'nb');
-  basePieceSquares.set('c8', 'bc');
-  basePieceSquares.set('d8', 'q');
-  basePieceSquares.set('e8', 'k');
-  basePieceSquares.set('f8', 'bf');
-  basePieceSquares.set('g8', 'ng');
-  basePieceSquares.set('h8', 'rh');
-  basePieceSquares.set('a7', 'pa');
-  basePieceSquares.set('b7', 'pb');
-  basePieceSquares.set('c7', 'pc');
-  basePieceSquares.set('d7', 'pd');
-  basePieceSquares.set('e7', 'pe');
-  basePieceSquares.set('f7', 'pf');
-  basePieceSquares.set('g7', 'pg');
-  basePieceSquares.set('h7', 'ph');
-
-  const chess = new Chess(); // Create a new instance of the Chess class
-  chess.loadPgn(game.moves);
-  const moveHistory = chess.history();
-
-  // duplicate the base map
-  const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
-    basePieceSquares
-  );
+  const chess = new Chess();
+  const moveGenerator = chess.historyGenerator(game.moves);
 
   // create an object to track distance value for each piece
   const distanceMap: { [key: string]: number } = {};
-  for (const piece of pieceSquares.values()) {
-    distanceMap[piece] = 0;
-  }
+
+  let lastMove: PrettyMove | null = null;
 
   // Initialize variables to keep track of the maximum distance and the piece
   let maxDistance = -1;
   let maxDistancePiece: UnambiguousPieceSymbol;
 
-  // TODO: we'll need to update the labels we use in cjsmin to be unique to do things this way
-  for (const { from, to } of moveHistory) {
-    // Calculate the file (column) distance by subtracting ASCII values
-    const fileDist = Math.abs(from.charCodeAt(0) - to.charCodeAt(0));
-    // Calculate the rank (row) distance by subtracting numeric values
-    const rankDist = Math.abs(Number(from[1]) - Number(to[1]));
-    // The distance moved is the maximum of fileDist and rankDist
-    const distance = Math.max(fileDist, rankDist);
-    // Get the piece that moved from the pieceSquares map
-    const movedPiece = pieceSquares.get(from);
+  // evaluate each move, update the correct unambiguous piece's distance
+  for (let moveInfo of moveGenerator) {
+    const { move, board } = moveInfo;
 
-    // we'll update the map as pieces move. To avoid additional operations we only update (no delete). Can change this if we use this elsewhere
-    pieceSquares.set(to, movedPiece);
-    distanceMap[movedPiece] += distance;
+    lastMove = move;
+    let piece = lastMove.unambiguousSymbol;
 
-    if (distanceMap[movedPiece] > maxDistance) {
-      maxDistance = distanceMap[movedPiece];
-      maxDistancePiece = movedPiece;
+    if (!distanceMap[piece]) {
+      distanceMap[piece] = 0;
+    }
+
+    const fromMove = moveInfo.move.from
+    const toMove = moveInfo.move.to
+
+    let distance = 0;
+
+    // Check if the move is a castling move
+    if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
+      // move was done by black
+      if (moveInfo.move.color === 'b'){
+        // queenside castle
+        if (moveInfo.move.flags === 'q') {
+          distanceMap['k'] += 2
+          distanceMap['ra'] = (distanceMap['ra'] || 0) + 3
+        }
+        //kingside castle
+        else {
+          distanceMap['k'] += 2
+          distanceMap['rh'] = (distanceMap['rh'] || 0) + 2
+        }
+      }
+      // move was done by white
+      else {
+        // queenside castle
+        if (moveInfo.move.flags === 'q') {
+          distanceMap['K'] += 2
+          distanceMap['RA'] = (distanceMap['RA'] || 0) + 3
+        }
+        // kingside castle
+        else {
+          distanceMap['K'] += 2
+          distanceMap['RH'] = (distanceMap['RH'] || 0) + 2
+        }
+      }
+
+    } else {
+      // Calculate the file (column) distance by subtracting ASCII values
+      const fileDist = Math.abs(fromMove.charCodeAt(0) - toMove.charCodeAt(0));
+      // Calculate the rank (row) distance by subtracting numeric values
+      const rankDist = Math.abs(Number(fromMove[1]) - Number(toMove[1]));
+      // The distance moved is the maximum of fileDist and rankDist
+      distance = Math.max(fileDist, rankDist);
+
+      distanceMap[piece] += distance;
+
+    }
+
+    if (distanceMap[piece] > maxDistance) {
+      maxDistance = distanceMap[piece];
+      maxDistancePiece = piece;
     }
   }
 
@@ -150,7 +151,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   };
 }
 
-//DONE 
+// DONE 
 // returns the piece that moved the furthest, the game it moved the furthest in, the distance it moved, and the number of games analyzed in the set
 export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   let maxDistance = 0;
@@ -225,9 +226,10 @@ export function getAverageDistance(
   return { pieceWithHighestAverageDistance, maxAverageDistance };
 }
 
-// IN PROGRESS
+// DONE
 // calculates piece with highest K/D ratio and also contains assists by that piece
 export async function getKillDeathRatios(games: FileReaderGame[]) {
+
   // create an object to track kills, deaths, and assists of each piece
   // The killsDeathsAssistsMap is an object where each key is a piece and the value is another object with kills, deaths, and assists properties.
   const killsDeathsAssistsMap: {
@@ -243,17 +245,15 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
 
     const chess = new Chess();
     const moveGenerator = chess.historyGenerator(game.moves);
-    console.log(`game.moves: ${game.moves}`);
     const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
     console.log(`lichess link to game played: ${siteLink}`);
 
     for (let moveInfo of moveGenerator) {
       const { move, board } = moveInfo;
-      //console.log("move: ", move)
-      //console.log("board: ", board)
+
       lastMove = move;
-      console.log(move.originalString)
       let piece = lastMove.unambiguousSymbol;
+
       if (!killsDeathsAssistsMap[piece]) {
         killsDeathsAssistsMap[piece] = { kills: 0, deaths: 0, assists: 0 };
       }
@@ -268,8 +268,6 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
 
           const capturedPiece = board[lastMove.toIndex]?.unambiguousSymbol; // Get the unambiguous piece symbol from the board state
 
-          console.log(`captured piece: ${capturedPiece}`)
-
           if (capturedPiece) {
             if (!killsDeathsAssistsMap[capturedPiece]) {
               killsDeathsAssistsMap[capturedPiece] = { kills: 0, deaths: 0, assists: 0 };
@@ -277,18 +275,7 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
             killsDeathsAssistsMap[capturedPiece].deaths++;
           }
         }
-        
-        // Logs
-        //console.log(`Move: ${move.originalString}, Captured: ${move.capture?.unambiguousSymbol}`);      
-        // the line below logs only elements of the killsDeathsAssistsMap that are nonzero for kills, deaths, or assists
-        // console.log(
-        //   'killsDeathsAssistsMap:',
-        //   Object.fromEntries(
-        //     Object.entries(killsDeathsAssistsMap).filter(
-        //       ([key, { kills, deaths, assists }]) => kills !== 0 || deaths !== 0 || assists !== 0
-        //     )
-        //   )
-        // );
+
 
       } 
       else {
@@ -296,16 +283,12 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
         console.log("move: ", move)
       }
 
-    console.log("KDR map: ", killsDeathsAssistsMap)
 
     }
 
     // Check if the game is in checkmate after the last move
     if (chess.isCheckmate()) {
-      // chess.loadPgn(game.moves);
-      // console.log("chess: ", chess)
-      // const gameMoves = chess.moves();
-      console.log("game.moves: ", game.moves)
+
       const { unambigMatingPiece, unambigMatedPiece } = getMateAndAssistsFromHistoryGenerator(game.moves);      
       console.log(`${unambigMatingPiece} was the unambiguous piece that delivered checkmate`)
     
@@ -359,172 +342,8 @@ function checkOpening() {}
 // take a board and move and see if a capture occurred
 function checkForCapture(board: Chess, move: string) {}
 
-// IN PROGRESS - called on in getKillDeathRatios, need to finish before the other finishes too
-// start from back of history. For this to be accurate we need to know which piece checks the king at this index
-// the edge case here is when pieces "share" a mate, or check. This can be at most 2 due to discovery checks
-// the board configuration will also have to be as it was in the instance of checkmate, or the previous mate.
-// So this is going to need to hook into the loadPGN, probably.
-export function getMateAndAssists(gameHistory: GameHistoryMove[]) {
-  let matingPiece;
-  let assistingPiece;
-  let hockeyAssist;
-  let unambigMatingPiece;
-  let unambigMatedPiece;
-  let unambigAssistingPiece;
-  let unambigHockeyAssistPiece;
-  let lastPieceMoved;
-  let lastMove: PrettyMove | null = null;
-
-  // ambiguous pieces
-  // check for mate
-  if (gameHistory[gameHistory.length - 1].originalString.includes('#')) {
-    matingPiece = gameHistory[gameHistory.length - 1].piece; // this doesn't disambiguate to the starting square of the piece; we'd want a chess.js rewrite to do that.
-
-    // If mate see if also assist
-    const assistCandidate = gameHistory[gameHistory.length - 3].piece;
-    if (
-      gameHistory[gameHistory.length - 3].originalString.includes('+') &&
-      matingPiece !== assistCandidate
-    ) {
-      assistingPiece = assistCandidate;
-
-      // If assist check for hockey assist
-      const hockeyCandidate = gameHistory[gameHistory.length - 5].piece;
-      if (
-        gameHistory[gameHistory.length - 5].originalString.includes('+') &&
-        assistingPiece !== hockeyCandidate &&
-        matingPiece !== hockeyCandidate
-      ) {
-        hockeyAssist = hockeyCandidate;
-      }
-    }
-  }
-
-  // unambiguous pieces
-  // This is where we DO need to disambiguate, the same piece type but a different piece could provide the assist.
-  const basePieceSquares = new Map<Square, UnambiguousPieceSymbol>();
-  basePieceSquares.set('a1', 'RA');
-  basePieceSquares.set('b1', 'NB');
-  basePieceSquares.set('c1', 'BC');
-  basePieceSquares.set('d1', 'Q');
-  basePieceSquares.set('e1', 'K');
-  basePieceSquares.set('f1', 'BF');
-  basePieceSquares.set('g1', 'NG');
-  basePieceSquares.set('h1', 'RH');
-  basePieceSquares.set('a2', 'PA');
-  basePieceSquares.set('b2', 'PB');
-  basePieceSquares.set('c2', 'PC');
-  basePieceSquares.set('d2', 'PD');
-  basePieceSquares.set('e2', 'PE');
-  basePieceSquares.set('f2', 'PF');
-  basePieceSquares.set('g2', 'PG');
-  basePieceSquares.set('h2', 'PH');
-  basePieceSquares.set('a8', 'ra');
-  basePieceSquares.set('b8', 'nb');
-  basePieceSquares.set('c8', 'bc');
-  basePieceSquares.set('d8', 'q');
-  basePieceSquares.set('e8', 'k');
-  basePieceSquares.set('f8', 'bf');
-  basePieceSquares.set('g8', 'ng');
-  basePieceSquares.set('h8', 'rh');
-  basePieceSquares.set('a7', 'pa');
-  basePieceSquares.set('b7', 'pb');
-  basePieceSquares.set('c7', 'pc');
-  basePieceSquares.set('d7', 'pd');
-  basePieceSquares.set('e7', 'pe');
-  basePieceSquares.set('f7', 'pf');
-  basePieceSquares.set('g7', 'pg');
-  basePieceSquares.set('h7', 'ph');
-
-  const moveHistory = gameHistory;
-
-  // duplicate the base map
-  const pieceSquares = new Map<Square, UnambiguousPieceSymbol>(
-    basePieceSquares
-  );
-
-  // update the pieceSquares map after each move
-  for (const move of moveHistory) {
-    const movedPiece = pieceSquares.get(move.from);
-    if (movedPiece) {
-      pieceSquares.set(move.to, movedPiece);
-      pieceSquares.delete(move.from);
-  
-      if (move.capture) {
-        pieceSquares.delete(move.to);
-        pieceSquares.set(move.to, movedPiece);
-      }
-    }
-    //console.log(move.originalString)
-    //console.log(pieceSquares)
-  }
-
-  //console.log("pieceSquares final state: ", pieceSquares)
-
-
-  if (moveHistory[moveHistory.length - 1].originalString.includes('#')) {
-    const matingSquare = moveHistory[moveHistory.length - 1].to;
-    unambigMatingPiece = pieceSquares.get(matingSquare);
-    console.log("unambigMatingPiece: ", unambigMatingPiece)
-    let matedKingSquare;
-
-    // iterate over pieceSquares to identify the mated king's square
-    // probably better, more efficient ways to do this?
-    for (const [square, piece] of pieceSquares.entries()) {
-      if ((unambigMatingPiece.toLowerCase() === unambigMatingPiece && piece === 'K') || 
-          (unambigMatingPiece.toUpperCase() === unambigMatingPiece && piece === 'k')) {
-        matedKingSquare = square;
-        break;
-      }
-    }
-    unambigMatedPiece = pieceSquares.get(matedKingSquare);
-
-    // console.log("unambigMatingPiece: ", unambigMatingPiece)
-    // console.log("matedKingSquare: ", matedKingSquare)
-    // console.log("unambigMatedPiece: ", unambigMatedPiece)
-
-
-    // If mate see if also assist
-    const assistCandidateSquare = moveHistory[moveHistory.length - 3].to;
-    let unambigAssistCandidate = pieceSquares.get(assistCandidateSquare);
-    if (
-      moveHistory[moveHistory.length - 3].originalString.includes('+') &&
-      unambigMatingPiece !== unambigAssistCandidate
-    ) {
-      unambigAssistingPiece = unambigAssistCandidate;
-
-      // If assist check for hockey assist
-      const hockeyCandidateSquare = moveHistory[moveHistory.length - 5].to;
-      let unambigHockeyCandidate = pieceSquares.get(hockeyCandidateSquare);
-      if (
-        moveHistory[moveHistory.length - 5].originalString.includes('+') &&
-        unambigAssistingPiece !== unambigHockeyCandidate &&
-        unambigMatingPiece !== unambigHockeyCandidate
-      ) {
-        unambigHockeyAssistPiece = unambigHockeyCandidate;
-      }
-    }
-  } else {
-    // Handle non-checkmate endings here
-    // Identify the last piece that moved:
-    const lastMove = moveHistory[moveHistory.length - 1];
-    lastPieceMoved = pieceSquares.get(lastMove.to);
-    console.log('The game did not end in a checkmate. The last piece that moved was:', lastPieceMoved);
-  }
-
-  return {
-    matingPiece,
-    assistingPiece,
-    hockeyAssist,
-    unambigMatingPiece,
-    unambigMatedPiece,
-    unambigAssistingPiece,
-    unambigHockeyAssistPiece,
-    lastPieceMoved
-  };
-}
-
-// attempting to implement historyGenerator
+// DONE
+// One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery checks (currently we disregard this by just referring to whatever the PGN says. If the piece that moves causes checkmate, then it is the "mating piece")
 export function getMateAndAssistsFromHistoryGenerator(pgnMoveLine: string) {
   const chess = new Chess();
   const moveGenerator = chess.historyGenerator(pgnMoveLine);
@@ -544,8 +363,7 @@ export function getMateAndAssistsFromHistoryGenerator(pgnMoveLine: string) {
 
   for (let moveInfo of moveGenerator) {
     const { move, board } = moveInfo;
-    //console.log("move: ", move)
-    //console.log("board: ", board)
+
     lastMove = move;
 
     // Add the current move to the start of the array
