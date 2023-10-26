@@ -344,7 +344,7 @@ function checkForCapture(board: Chess, move: string) {}
 
 // DONE
 // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery checks (currently we disregard this by just referring to whatever the PGN says. If the piece that moves causes checkmate, then it is the "mating piece")
-export function getMateAndAssistsFromHistoryGenerator(pgnMoveLine: string) {
+export function getMateAndAssists(pgnMoveLine: string) {
   const chess = new Chess();
   const moveGenerator = chess.historyGenerator(pgnMoveLine);
 

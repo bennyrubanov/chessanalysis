@@ -3,6 +3,7 @@ import {
   getMoveDistanceSingleGame,
   getKillDeathRatios,
   pgnToGameHistory,
+  gameHistoryToPgn,
 } from '../src/metrics/metrics';
 
 describe('getMateAndAssists', () => {
@@ -42,7 +43,9 @@ describe('getMateAndAssists', () => {
       },
     ];
 
-    const result = getMateAndAssists(gameHistory);
+    const gameHistoryMoves = gameHistoryToPgn(gameHistory);
+
+    const result = getMateAndAssists(gameHistoryMoves);
 
     expect(result).toEqual({
       matingPiece: undefined,
@@ -96,7 +99,9 @@ describe('getMateAndAssists', () => {
       },
     ];
 
-    const result = getMateAndAssists(gameHistory);
+    const gameHistoryMoves = gameHistoryToPgn(gameHistory);
+
+    const result = getMateAndAssists(gameHistoryMoves);
 
     expect(result).toEqual({
       matingPiece: 'Q',
@@ -167,7 +172,9 @@ describe('getMateAndAssists', () => {
       },
     ];
 
-    const result = getMateAndAssists(gameHistory);
+    const gameHistoryMoves = gameHistoryToPgn(gameHistory);
+
+    const result = getMateAndAssists(gameHistoryMoves);
 
     expect(result).toEqual({
       matingPiece: 'Q',
@@ -255,8 +262,10 @@ describe('getMateAndAssists', () => {
       },
     ];
 
-    const result = getMateAndAssists(gameHistory);
+    const gameHistoryMoves = gameHistoryToPgn(gameHistory);
 
+    const result = getMateAndAssists(gameHistoryMoves);
+    
     expect(result).toEqual({
       matingPiece: 'Q',
       assistingPiece: undefined,
@@ -319,8 +328,6 @@ describe('getKillDeathRatios', () => {
 
     const result = await getKillDeathRatios(game);
 
-    console.log('result', result);
-
     expect(result.killsDeathsAssistsMap['ng'].kills).toEqual(2);
   });
 })
@@ -334,9 +341,7 @@ describe('getMateAndAssists', () => {
       }
     ];
 
-    const gameHistory = pgnToGameHistory(game[0].moves); // access the first element of the game array
-
-    const result = getMateAndAssists(gameHistory);
+    const result = getMateAndAssists(game[0].moves);
 
     expect(result.matingPiece).toEqual('ng');
     // expect(result).toEqual({
@@ -359,9 +364,7 @@ describe('getMateAndAssists', () => {
       }
     ];
 
-    const gameHistory = pgnToGameHistory(game[0].moves); // access the first element of the game array
-
-    const result = getMateAndAssists(gameHistory);
+    const result = getMateAndAssists(game[0].moves);
 
     expect(result.unambigMatingPiece).toEqual('PG');
   });

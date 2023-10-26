@@ -2,7 +2,7 @@ import {
     getMoveDistanceSingleGame,
     getKillDeathRatios,
     pgnToGameHistory,
-    getMateAndAssistsFromHistoryGenerator,
+    getMateAndAssists,
   } from '../src/metrics/metrics';
 
 // game being tested: https://lichess.org/jo73x9y8
@@ -14,4 +14,4 @@ const game = [
   ];
   let moves = game[0].moves
 
-  const result = getMateAndAssistsFromHistoryGenerator(moves);
+  const result = getMateAndAssists(moves);
