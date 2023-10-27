@@ -18,3 +18,7 @@ describe('gets black and white kill streaks', () => {
     expect(streaksObject['Q'].killStreaks).toEqual(0);
   });
 });
+
+describe('tracks kills, deaths and revenge kills by square', () => {
+  it('should return the correct kill streaks', () => {});
+});
