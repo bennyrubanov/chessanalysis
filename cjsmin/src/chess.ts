@@ -1297,8 +1297,12 @@ export class Chess {
               BITS.CAPTURE
             );
           } else if (to === this._epSquare) {
-            // need to find out where the pawn would be taken from
-            const caturedPawnSquare = us === BLACK ? to + 16 : to - 16;
+            // for the unambiguous symbol we can get the file and casing
+            const file = algebraic(to).charAt(0);
+            let uas = 'p' + file;
+            if (us === BLACK) {
+              uas = uas.toUpperCase();
+            }
 
             addMove(
               moves,
@@ -1309,8 +1313,7 @@ export class Chess {
               this._board[from].unambiguousSymbol,
               {
                 type: PAWN,
-                unambiguousSymbol:
-                  this._board[caturedPawnSquare].unambiguousSymbol,
+                unambiguousSymbol: uas as UnambiguousPieceSymbol,
               },
               BITS.EP_CAPTURE
             );
@@ -1721,6 +1724,7 @@ export class Chess {
     moves = moves.filter((move) => move !== '');
 
     for (let halfMove = 0; halfMove < moves.length; halfMove++) {
+      console.log(moves[halfMove]);
       const move = this._moveFromSan(moves[halfMove], strict);
 
       // invalid move

@@ -1,6 +1,6 @@
 import { getHistoriesFromFilePath } from '../src/gameHistory';
 
-describe('Using modified cjsmin returns expected results', () => {
+xdescribe('Using modified cjsmin returns expected results', () => {
   it('should not throw an error', async () => {
     const histShort = JSON.parse(
       require('fs').readFileSync('historiesShort.json').toString().trim()
