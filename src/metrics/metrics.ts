@@ -194,6 +194,7 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
     pieceThatMovedTheFurthest,
     maxDistance,
     gameCount,
+    gameWithFurthestPiece,
     siteWithFurthestPiece,
     totalDistanceMap,
     lastGame,
