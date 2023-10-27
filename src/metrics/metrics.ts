@@ -1,51 +1,10 @@
-//@ts-nocheck - TODO: remove this after fixing the typing with capture
-import { Chess, Square, UnambiguousPieceSymbol, PrettyMove } from '../../cjsmin/src/chess';
-import { FileReaderGame, GameHistoryMove } from '../types';
+import {
+  Chess,
+  PrettyMove,
+  UnambiguousPieceSymbol,
+} from '../../cjsmin/src/chess';
+import { FileReaderGame } from '../types';
 
-// Should return an object for the metrics we want to track, not sure how best to structure so an exercise for the reader
-function initializeMetricMaps() {
-  // kd ratio, distances moved,
-
-  const squareInfo = {
-    kills: {
-      pawn: 0,
-      knight: 0,
-      bishop: 0,
-      rook: 0,
-      queen: 0,
-      king: 0,
-    },
-    deaths: {
-      pawn: 0,
-      knight: 0,
-      bishop: 0,
-      rook: 0,
-      queen: 0,
-      king: 0,
-    },
-  };
-
-  const chessboard: any = [];
-  for (let i = 0; i < 8; i++) {
-    const row: any = [];
-    for (let j = 0; j < 8; j++) {
-      // Determine the color of the square based on the row and column
-      row.push({});
-    }
-    chessboard.push(row);
-  }
-
-  return {
-    pawn: {},
-    knight: {},
-    bishop: {},
-    rook: {},
-    queen: {},
-    king: {},
-  };
-}
-
-// DONE
 // calculates how many games in the dataset
 export function countGamesInDataset(datasetPath: string): number {
   const fs = require('fs');
@@ -66,7 +25,6 @@ export function countGamesInDataset(datasetPath: string): number {
   }
 }
 
-// DONE 
 // take a start and end board position and return the distances moved
 export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   const chess = new Chess();
@@ -74,8 +32,6 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
   // create an object to track distance value for each piece
   const distanceMap: { [key: string]: number } = {};
-
-  let lastMove: PrettyMove | null = null;
 
   // Initialize variables to keep track of the maximum distance and the piece
   let maxDistance = -1;
@@ -85,39 +41,35 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   for (let moveInfo of moveGenerator) {
     const { move, board } = moveInfo;
 
-    lastMove = move;
-    let piece = lastMove.unambiguousSymbol;
-
-    if (!distanceMap[piece]) {
-      distanceMap[piece] = 0;
+    if (!distanceMap[move.unambiguousSymbol]) {
+      distanceMap[move.unambiguousSymbol] = 0;
     }
 
-    const fromMove = moveInfo.move.from
-    const toMove = moveInfo.move.to
+    const fromMove = moveInfo.move.from;
+    const toMove = moveInfo.move.to;
 
     let distance = 0;
 
     // Check if the move is a castling move
     if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
-      let movingKing =  'k'
+      let movingKing = 'k';
       let movingRook, rookDistance;
 
       if (moveInfo.move.flags === 'k') {
-      rookDistance = 2
-      movingRook = 'ra'
+        rookDistance = 2;
+        movingRook = 'ra';
       } else {
-      rookDistance = 3
-      movingRook = 'rh'
+        rookDistance = 3;
+        movingRook = 'rh';
       }
 
       if (moveInfo.move.color === 'w') {
-      movingRook = movingRook.toUpperCase()
-      movingKing = movingKing.toUpperCase()
+        movingRook = movingRook.toUpperCase();
+        movingKing = movingKing.toUpperCase();
       }
-      
-      distanceMap[movingKing] += 2
-      distanceMap[movingRook] += rookDistance
 
+      distanceMap[movingKing] += 2;
+      distanceMap[movingRook] += rookDistance;
     } else {
       // Calculate the file (column) distance by subtracting ASCII values
       const fileDist = Math.abs(fromMove.charCodeAt(0) - toMove.charCodeAt(0));
@@ -126,13 +78,12 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
       // The distance moved is the maximum of fileDist and rankDist
       distance = Math.max(fileDist, rankDist);
 
-      distanceMap[piece] += distance;
-
+      distanceMap[move.unambiguousSymbol] += distance;
     }
 
-    if (distanceMap[piece] > maxDistance) {
-      maxDistance = distanceMap[piece];
-      maxDistancePiece = piece;
+    if (distanceMap[move.unambiguousSymbol] > maxDistance) {
+      maxDistance = distanceMap[move.unambiguousSymbol];
+      maxDistancePiece = move.unambiguousSymbol;
     }
   }
 
@@ -143,7 +94,6 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   };
 }
 
-// DONE 
 // returns the piece that moved the furthest, the game it moved the furthest in, the distance it moved, and the number of games analyzed in the set
 export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   let maxDistance = 0;
@@ -201,7 +151,6 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   };
 }
 
-// DONE
 // calculates piece with highest average distance and that piece's average distance covered per game in a set of games
 export function getAverageDistance(
   distanceMap: { [key: string]: number },
@@ -219,23 +168,18 @@ export function getAverageDistance(
   return { pieceWithHighestAverageDistance, maxAverageDistance };
 }
 
-// DONE
 // calculates piece with highest K/D ratio and also contains assists by that piece
 export async function getKillDeathRatios(games: FileReaderGame[]) {
-
   // create an object to track kills, deaths, and assists of each piece
   // The killsDeathsAssistsMap is an object where each key is a piece and the value is another object with kills, deaths, and assists properties.
   const killsDeathsAssistsMap: {
     [key: string]: { kills: number; deaths: number; assists: number };
   } = {};
-  
-  const killDeathRatios = {}
 
-  let lastMove: PrettyMove | null = null;
+  const killDeathRatios = {};
 
   // look at each game and find the piece with the largest kill/death ratio
   for (const game of games) {
-
     const chess = new Chess();
     const moveGenerator = chess.historyGenerator(game.moves);
     const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
@@ -244,47 +188,48 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
     for (let moveInfo of moveGenerator) {
       const { move, board } = moveInfo;
 
-      lastMove = move;
-      let piece = lastMove.unambiguousSymbol;
+      let piece = move.unambiguousSymbol;
 
       if (!killsDeathsAssistsMap[piece]) {
         killsDeathsAssistsMap[piece] = { kills: 0, deaths: 0, assists: 0 };
       }
 
-      const movedPiece = lastMove.unambiguousSymbol;
-    
+      const movedPiece = move.unambiguousSymbol;
+
       // Check if movedPiece is not undefined
       if (movedPiece) {
         // update the kill & death counts of movedPiece
-        if (lastMove.capture) {
+        if (move.capture) {
           killsDeathsAssistsMap[movedPiece].kills++;
 
-          const capturedPiece = board[lastMove.toIndex]?.unambiguousSymbol; // Get the unambiguous piece symbol from the board state
+          const capturedPiece = board[move.toIndex]?.unambiguousSymbol; // Get the unambiguous piece symbol from the board state
 
           if (capturedPiece) {
             if (!killsDeathsAssistsMap[capturedPiece]) {
-              killsDeathsAssistsMap[capturedPiece] = { kills: 0, deaths: 0, assists: 0 };
+              killsDeathsAssistsMap[capturedPiece] = {
+                kills: 0,
+                deaths: 0,
+                assists: 0,
+              };
             }
             killsDeathsAssistsMap[capturedPiece].deaths++;
           }
         }
-
-
-      } 
-      else {
+      } else {
         console.log('No piece found for square:', move.from);
-        console.log("move: ", move)
+        console.log('move: ', move);
       }
-
-
     }
 
     // Check if the game is in checkmate after the last move
     if (chess.isCheckmate()) {
+      const { unambigMatingPiece, unambigMatedPiece } = getMateAndAssists(
+        game.moves
+      );
+      console.log(
+        `${unambigMatingPiece} was the unambiguous piece that delivered checkmate`
+      );
 
-      const { unambigMatingPiece, unambigMatedPiece } = getMateAndAssistsFromHistoryGenerator(game.moves);      
-      console.log(`${unambigMatingPiece} was the unambiguous piece that delivered checkmate`)
-    
       if (unambigMatingPiece) {
         killsDeathsAssistsMap[unambigMatingPiece].kills++;
       }
@@ -293,8 +238,6 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
         killsDeathsAssistsMap[unambigMatedPiece].deaths++;
       }
     }
-
-
   }
 
   // calculate the kill death ratios of each piece
@@ -329,35 +272,25 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
   };
 }
 
-// Need to decide how we assign the openings to a game (and get a db of openings)
-function checkOpening() {}
-
-// take a board and move and see if a capture occurred
-function checkForCapture(board: Chess, move: string) {}
-
-// DONE
 // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery checks (currently we disregard this by just referring to whatever the PGN says. If the piece that moves causes checkmate, then it is the "mating piece")
 export function getMateAndAssists(pgnMoveLine: string) {
   const chess = new Chess();
   const moveGenerator = chess.historyGenerator(pgnMoveLine);
 
-  let matingPiece;
-  let assistingPiece;
-  let hockeyAssist;
-  let unambigMatingPiece;
-  let unambigMatedPiece;
-  let unambigAssistingPiece;
-  let unambigHockeyAssistPiece;
-  let lastPieceMoved;
-  let lastMove: PrettyMove | null = null;
+  let matingPiece,
+    assistingPiece,
+    hockeyAssist,
+    unambigMatingPiece,
+    unambigMatedPiece,
+    unambigAssistingPiece,
+    unambigHockeyAssistPiece,
+    lastPieceMoved;
 
   // Keep track of the last few moves
   let lastFewMoves: PrettyMove[] = [];
 
   for (let moveInfo of moveGenerator) {
     const { move, board } = moveInfo;
-
-    lastMove = move;
 
     // Add the current move to the start of the array
     lastFewMoves.unshift(move);
@@ -367,45 +300,45 @@ export function getMateAndAssists(pgnMoveLine: string) {
       lastFewMoves.pop();
     }
 
-  }
-  console.log("last move: ", lastMove)
-
-  if (lastMove) {
-    lastPieceMoved = lastMove.unambiguousSymbol;
-
-    if (lastMove.originalString.includes('#')) {
-      matingPiece = lastMove.piece;
-      unambigMatingPiece = lastMove.unambiguousSymbol;
+    if (move?.originalString.includes('#')) {
+      matingPiece = move.piece;
+      unambigMatingPiece = move.unambiguousSymbol;
 
       // Determine the color of the mated king
-      const matedKingColor = lastMove.color === 'w' ? 'b' : 'w';
+      const matedKingColor = move.color === 'w' ? 'b' : 'w';
       unambigMatedPiece = matedKingColor === 'w' ? 'K' : 'k';
 
       // If mate see if also assist
-      if (lastFewMoves[2] && lastFewMoves[2].originalString.includes('+') && lastFewMoves[2].unambiguousSymbol !== unambigMatingPiece) {
+      if (
+        lastFewMoves[2] &&
+        lastFewMoves[2].originalString.includes('+') &&
+        lastFewMoves[2].unambiguousSymbol !== unambigMatingPiece
+      ) {
         assistingPiece = lastFewMoves[2].piece;
         unambigAssistingPiece = lastFewMoves[2].unambiguousSymbol;
 
         // If assist check for hockey assist
-        if (lastFewMoves[4] && lastFewMoves[4].originalString.includes('+') && lastFewMoves[4].unambiguousSymbol !== unambigAssistingPiece && lastFewMoves[4].unambiguousSymbol !== unambigMatingPiece) {
+        if (
+          lastFewMoves[4] &&
+          lastFewMoves[4].originalString.includes('+') &&
+          lastFewMoves[4].unambiguousSymbol !== unambigAssistingPiece &&
+          lastFewMoves[4].unambiguousSymbol !== unambigMatingPiece
+        ) {
           hockeyAssist = lastFewMoves[4].piece;
           unambigHockeyAssistPiece = lastFewMoves[4].unambiguousSymbol;
         }
       }
-    } else {
-      // Handle non-checkmate endings here
-      console.log('The game did not end in a checkmate. The last piece that moved was:', lastPieceMoved);
     }
   }
-  console.log("mating piece: ", matingPiece);
-  console.log("assisting piece: ", assistingPiece);
-  console.log("hockey assisting piece: ", hockeyAssist);
-  console.log("unambig mating piece: ", unambigMatingPiece);
-  console.log("unambig mated piece: ", unambigMatedPiece);
-  console.log("unambig assisting piece: ", unambigAssistingPiece);
-  console.log("unambig hockey assisting piece: ", unambigHockeyAssistPiece);
-  console.log("last piece moved: ", lastPieceMoved);
-  
+  // console.log('mating piece: ', matingPiece);
+  // console.log('assisting piece: ', assistingPiece);
+  // console.log('hockey assisting piece: ', hockeyAssist);
+  // console.log('unambig mating piece: ', unambigMatingPiece);
+  // console.log('unambig mated piece: ', unambigMatedPiece);
+  // console.log('unambig assisting piece: ', unambigAssistingPiece);
+  // console.log('unambig hockey assisting piece: ', unambigHockeyAssistPiece);
+  // console.log('last piece moved: ', lastPieceMoved);
+
   return {
     matingPiece,
     assistingPiece,
@@ -414,41 +347,6 @@ export function getMateAndAssists(pgnMoveLine: string) {
     unambigMatedPiece,
     unambigAssistingPiece,
     unambigHockeyAssistPiece,
-    lastPieceMoved
+    lastPieceMoved,
   };
 }
-
-// convert PGN string to GameHistoryObject
-export function pgnToGameHistory(pgn: string): GameHistoryMove[] {
-  const chess = new Chess();
-  chess.loadPgn(pgn);
-  return chess.history({ verbose: true });
-}
-
-// convert gameHistory object to a PGN string
-export function gameHistoryToPgn(gameHistory: GameHistoryMove[]): string {
-  const chess = new Chess();
-
-  for (const move of gameHistory) {
-    chess.move(move);
-  }
-
-  return chess.pgn();
-}
-
-// This one could get complex if lib doesn't work https://github.com/jhlywa/chess.js/blob/master/README.md#isgameover
-function determineEndType() {}
-
-// I think this data may not exist in lichess
-function timeQuit() {}
-
-function miscChecksFromMove() {
-  // en passant
-  // castling
-  // promotion
-  // check
-}
-
-// function isFork(move, moveIndex, chess: Chess) {
-//   if
-// }
