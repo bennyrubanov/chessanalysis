@@ -1724,7 +1724,6 @@ export class Chess {
     moves = moves.filter((move) => move !== '');
 
     for (let halfMove = 0; halfMove < moves.length; halfMove++) {
-      console.log(moves[halfMove]);
       const move = this._moveFromSan(moves[halfMove], strict);
 
       // invalid move
