@@ -99,32 +99,24 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
     // Check if the move is a castling move
     if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
-      // move was done by black
-      if (moveInfo.move.color === 'b'){
-        // queenside castle
-        if (moveInfo.move.flags === 'q') {
-          distanceMap['k'] += 2
-          distanceMap['ra'] = (distanceMap['ra'] || 0) + 3
-        }
-        //kingside castle
-        else {
-          distanceMap['k'] += 2
-          distanceMap['rh'] = (distanceMap['rh'] || 0) + 2
-        }
+      let movingKing =  'k'
+      let movingRook, rookDistance;
+
+      if (moveInfo.move.flags === 'k') {
+      rookDistance = 2
+      movingRook = 'ra'
+      } else {
+      rookDistance = 3
+      movingRook = 'rh'
       }
-      // move was done by white
-      else {
-        // queenside castle
-        if (moveInfo.move.flags === 'q') {
-          distanceMap['K'] += 2
-          distanceMap['RA'] = (distanceMap['RA'] || 0) + 3
-        }
-        // kingside castle
-        else {
-          distanceMap['K'] += 2
-          distanceMap['RH'] = (distanceMap['RH'] || 0) + 2
-        }
+
+      if (moveInfo.move.color === 'w') {
+      movingRook = movingRook.toUpperCase()
+      movingKing = movingKing.toUpperCase()
       }
+      
+      distanceMap[movingKing] += 2
+      distanceMap[movingRook] += rookDistance
 
     } else {
       // Calculate the file (column) distance by subtracting ASCII values
