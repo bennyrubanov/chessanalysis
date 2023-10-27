@@ -101,6 +101,10 @@ function getMaxKillStreak(
     }
     i += 2;
   }
+  uapMap[streakPiece].killStreaks = Math.max(
+    uapMap[streakPiece].killStreaks,
+    streakLength
+  );
 }
 
 export function getBWKillStreaks(moves: PrettyMove[]) {
