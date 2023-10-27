@@ -1,4 +1,6 @@
 import {
+  ALL_SQUARES,
+  ALL_UNAMBIGUOUS_PIECE_SYMBOLS,
   Chess,
   PrettyMove,
   UnambiguousPieceSymbol,
@@ -349,4 +351,39 @@ export function getMateAndAssists(pgnMoveLine: string) {
     unambigHockeyAssistPiece,
     lastPieceMoved,
   };
+}
+
+interface BoardMap {
+  [key: string]: { [key: string]: { captured: number; captures: number } };
+}
+
+export function createBoardMap(): BoardMap {
+  /**
+   * i.e.
+   * a1: {
+   *   k: {
+   *    captured: 0,
+   *    captures: 0,
+   *   },
+   * },
+   */
+  const squareCaptureInfo: {
+    [key: string]: { [key: string]: { captured: number; captures: number } };
+  } = {};
+
+  for (const square of ALL_SQUARES) {
+    squareCaptureInfo[square] = {};
+    for (const piece of ALL_UNAMBIGUOUS_PIECE_SYMBOLS) {
+      squareCaptureInfo[square][piece] = { captured: 0, captures: 0 };
+    }
+  }
+
+  return squareCaptureInfo;
+}
+
+export function trackCaptures(boardMap: BoardMap, move: PrettyMove) {
+  if (move.capture) {
+    boardMap[move.to][move.unambiguousSymbol].captures++;
+    // boardMap[move.to][move.].captured++;
+  }
 }
