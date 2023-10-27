@@ -54,22 +54,6 @@ export type PrettyMove = {
 };
 
 export type UnambiguousPieceSymbol =
-  | 'ra'
-  | 'nb'
-  | 'bc'
-  | 'q'
-  | 'k'
-  | 'bf'
-  | 'ng'
-  | 'rh'
-  | 'pa'
-  | 'pb'
-  | 'pc'
-  | 'pd'
-  | 'pe'
-  | 'pf'
-  | 'pg'
-  | 'ph'
   | 'RA'
   | 'NB'
   | 'BC'
@@ -85,7 +69,23 @@ export type UnambiguousPieceSymbol =
   | 'PE'
   | 'PF'
   | 'PG'
-  | 'PH';
+  | 'PH'
+  | 'ra'
+  | 'nb'
+  | 'bc'
+  | 'q'
+  | 'k'
+  | 'bf'
+  | 'ng'
+  | 'rh'
+  | 'pa'
+  | 'pb'
+  | 'pc'
+  | 'pd'
+  | 'pe'
+  | 'pf'
+  | 'pg'
+  | 'ph';
 
 // prettier-ignore
 export type Square =
