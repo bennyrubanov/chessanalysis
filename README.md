@@ -26,7 +26,8 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
     - Diagonal moves count as 2 (1 horizontal, 1 vertical)
   - Knights
     - knight move counts as 3: 2 horizontal/vertical + 1 hor/vert
-    - knight move counts as 2: one diagonal and one horizontal
+    - knight move counts as 2: one diagonal and one hor/vert
+  - We are currently treating diagonal moves as 1, so bishop moves count as 1 and knight moves as 2
 
 # Questions to answer
 
@@ -36,20 +37,22 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
   - how many pieces does a Queen take before it gets taken down
   - overall KD ratio
   - Revenge kills (i.e. take back a piece immediately after it was taken)
-- best kill streaks
+- best kill streaks (i.e. one piece is the only one taking others for some time)
 - average distance each piece has traveled
   - furthest distance a piece has traveled in a game
-- average number of moves each game for a particular piece type
-- How many turns pieces have been moved
-- The game with the most moves played (or furthest collective distance moved)
+- average number of moves by piece
+- The game with the furthest collective distance moved
 - Which piece delivers checkmate most/least often
-- Checkmate assists (and maybe hockey assists)
+- Which piece has the most checkmate assists, and which piece has the most hockey assists
 - How often do games end with 3 fold repetition? Stalemate? Insufficient material? Loss on time? Lack of pawn advancement?
 - number of times various openings (bongcloud 😁) is played ♙
 - Most pieces hopped over by a knight
 - Average pieces hopped by a knight
+- Which side wins more often (white vs black)
+- Which side wins more often for each of the top 5 most used/popular openings
+- The game with the most moves played
 
-# Extra Credit
+## Extra Credit
 
 - what time people rage quit at different ELOs
 - Which piece is a "defender" for when checkmate within king capture range is possible
@@ -64,6 +67,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 - Heat map of which squares are "battleground", i.e. have the most captures
 - Heat map of where each piece gets its kills, vs. its deaths
 - How many games have no castling?
+- number of games with queen side vs king side castling
 
 I'm thinking we get it working without elo segmentation, if it's fast enough we can just repeat the analysis with elo filters
 
