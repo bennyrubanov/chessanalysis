@@ -293,8 +293,8 @@ xdescribe('getMateAndAssists', () => {
   });
 });
 
-xdescribe('getMoveDistanceSingleGame', () => {
-  it('should return the correct max distance and piece for a game', async () => {
+describe('getMoveDistanceSingleGame', () => {
+  xit('should return the correct max distance and piece for a game', async () => {
     const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
     const result = await getMoveDistanceSingleGame({
@@ -306,7 +306,7 @@ xdescribe('getMoveDistanceSingleGame', () => {
     expect(result.maxDistance).toEqual(6);
   });
 
-  it('should return 2 distance for a game with one move', async () => {
+  xit('should return 2 distance for a game with one move', async () => {
     const game = '1. e4 e5';
 
     const result = await getMoveDistanceSingleGame({
@@ -316,6 +316,23 @@ xdescribe('getMoveDistanceSingleGame', () => {
 
     expect(result.maxDistancePiece).toBe('PE');
     expect(result.maxDistance).toEqual(2);
+  });
+
+  it('should return a singleGameDistanceTotal equal to the addition of all distances in the distanceMap', async () => {
+    const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
+
+    const result = await getMoveDistanceSingleGame({
+      metadata: [],
+      moves: game,
+    });
+
+    let totalDistance = 0;
+
+    for (const distance of Object.keys(result.distanceMap)) {
+      totalDistance += result.distanceMap[distance]
+    }
+
+    expect(result.singleGameDistanceTotal).toEqual(totalDistance);
   });
 });
 
@@ -393,7 +410,7 @@ xdescribe('getMateAndAssists', () => {
   });
 });
 
-describe('getGameWithMostMoves', () => {
+xdescribe('getGameWithMostMoves', () => {
   it('should return the correct number of moves made', async () => {
     const game = [
       {

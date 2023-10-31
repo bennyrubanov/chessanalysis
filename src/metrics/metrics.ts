@@ -36,6 +36,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   // Initialize variables to keep track of the maximum distance and the piece
   let maxDistance = -1;
   let maxDistancePiece: UnambiguousPieceSymbol;
+  let singleGameDistanceTotal = 0;
 
   // evaluate each move, update the correct unambiguous piece's distance
   for (let moveInfo of moveGenerator) {
@@ -70,6 +71,9 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
       distanceMap[movingKing] += 2;
       distanceMap[movingRook] += rookDistance;
+      singleGameDistanceTotal += 2;
+      singleGameDistanceTotal += rookDistance;
+
     } else {
       // Calculate the file (column) distance by subtracting ASCII values
       const fileDist = Math.abs(fromMove.charCodeAt(0) - toMove.charCodeAt(0));
@@ -79,6 +83,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
       distance = Math.max(fileDist, rankDist);
 
       distanceMap[move.unambiguousSymbol] += distance;
+      singleGameDistanceTotal += distance;
     }
 
     if (distanceMap[move.unambiguousSymbol] > maxDistance) {
@@ -91,6 +96,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
     maxDistancePiece,
     maxDistance,
     distanceMap,
+    singleGameDistanceTotal,
   };
 }
 
@@ -102,6 +108,8 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   let gameWithFurthestPiece = null;
   let siteWithFurthestPiece = null;
   let lastGame;
+  let furthestCollectiveDistance = 0;
+  let gameLinkWithFurthestCollectiveDistance = null;
 
   let gameCount = 0;
   for await (const game of games) {
@@ -112,6 +120,7 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
       maxDistancePiece,
       maxDistance: distance,
       distanceMap,
+      singleGameDistanceTotal,
     } = await getMoveDistanceSingleGame(game);
 
     if (distance > maxDistance) {
@@ -123,6 +132,16 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
         ?.replace('[Site "', '')
         .replace('"]', '');
       siteWithFurthestPiece = site;
+    }
+
+    if (singleGameDistanceTotal > furthestCollectiveDistance) {
+      furthestCollectiveDistance = singleGameDistanceTotal;
+      console.log(furthestCollectiveDistance)
+      gameLinkWithFurthestCollectiveDistance = game.metadata
+      .find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      .replace('"]', '');
+      console.log(gameLinkWithFurthestCollectiveDistance)
     }
 
     for (const piece of Object.keys(distanceMap)) {
@@ -143,6 +162,8 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
     siteWithFurthestPiece,
     totalDistanceMap,
     lastGame,
+    furthestCollectiveDistance,
+    gameLinkWithFurthestCollectiveDistance,
   };
 }
 

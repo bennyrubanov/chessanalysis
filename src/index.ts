@@ -42,6 +42,8 @@ export async function main(path: string) {
     gameCount,
     siteWithFurthestPiece,
     totalDistanceMap,
+    furthestCollectiveDistance,
+    gameLinkWithFurthestCollectiveDistance,
   } = await getMoveDistanceSetOfGames(games);
   console.timeEnd("Task 2: getMoveDistanceSetOfGames")
 
@@ -96,6 +98,8 @@ export async function main(path: string) {
   console.log(
     `That piece's (${pieceWithHighestAverageDistance}'s) average distance moved per game: ${maxAverageDistance}`
   );
+  console.log(`Game with the furthest collective distance moved: ${gameLinkWithFurthestCollectiveDistance}`);
+  console.log(`Collective distance moved in that game: ${furthestCollectiveDistance}`);
   console.log("==============================================================");
   console.log("\n");
   
