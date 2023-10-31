@@ -107,9 +107,7 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   for await (const game of games) {
     // progress tracker
     gameCount++;
-    if (gameCount % 20 == 0) {
-      console.log('number of games analyzed: ', gameCount);
-    }
+
 
     const {
       maxDistancePiece,
@@ -137,8 +135,6 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
 
     lastGame = game;
   }
-
-  console.log('Last game analyzed: ', lastGame);
 
   return {
     pieceThatMovedTheFurthest,
@@ -182,8 +178,6 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
   for (const game of games) {
     const chess = new Chess();
     const moveGenerator = chess.historyGenerator(game.moves);
-    const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
-    console.log(`lichess link to game played: ${siteLink}`);
 
     for (let moveInfo of moveGenerator) {
       const { move, board } = moveInfo;
@@ -226,9 +220,6 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
       const { unambigMatingPiece, unambigMatedPiece } = getMateAndAssists(
         game.moves
       );
-      console.log(
-        `${unambigMatingPiece} was the unambiguous piece that delivered checkmate`
-      );
 
       if (unambigMatingPiece) {
         killsDeathsAssistsMap[unambigMatingPiece].kills++;
@@ -248,10 +239,6 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
       killDeathRatios[piece] = kills / deaths;
     }
   }
-
-  // Log the killDeathRatios and killsDeathsAssistsMap
-  console.log('killDeathRatios:', killDeathRatios);
-  console.log('killsDeathsAssistsMap:', killsDeathsAssistsMap);
 
   // find the piece with the highest kill death ratio
   let maxKillDeathRatio = 0;
@@ -349,4 +336,33 @@ export function getMateAndAssists(pgnMoveLine: string) {
     unambigHockeyAssistPiece,
     lastPieceMoved,
   };
+}
+
+export async function getGameWithMostMoves(games: FileReaderGame[]) {
+  let maxNumMoves = 0;
+  let gameWithMostMoves: FileReaderGame | null = null;
+  let gameLinkWithMostMoves = null;
+
+  for await (const game of games) {
+    const chess = new Chess();
+
+    chess.loadPgn(game.moves);
+    const numMoves = chess.history().length;
+
+    if (numMoves > maxNumMoves) {
+      maxNumMoves = numMoves;
+      gameWithMostMoves = game;
+      let site = game.metadata
+      .find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      .replace('"]', '');
+      gameLinkWithMostMoves = site;
+    }
+  }
+
+  return {
+    gameLinkWithMostMoves,
+    maxNumMoves,
+  };
+
 }

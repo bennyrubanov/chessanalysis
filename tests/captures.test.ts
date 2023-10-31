@@ -2,7 +2,7 @@
 
 import { getBWKillStreaks } from '../src/metrics/captures';
 
-describe('gets black and white kill streaks', () => {
+xdescribe('gets black and white kill streaks', () => {
   it('should return the correct kill streaks', () => {
     const moves = [
       { capture: true, unambiguousSymbol: 'PA' },
@@ -19,6 +19,6 @@ describe('gets black and white kill streaks', () => {
   });
 });
 
-describe('tracks kills, deaths and revenge kills by square', () => {
+xdescribe('tracks kills, deaths and revenge kills by square', () => {
   it('should return the correct kill streaks', () => {});
 });

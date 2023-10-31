@@ -1,6 +1,7 @@
 import { Chess as ChessOG } from 'chess.js';
 import { Chess } from '../cjsmin/src/chess';
 import {
+  getGameWithMostMoves,
   getKillDeathRatios,
   getMateAndAssists,
   getMoveDistanceSingleGame,
@@ -389,5 +390,21 @@ xdescribe('getMateAndAssists', () => {
     const result = getMateAndAssists(game[0].moves);
 
     expect(result.unambigMatingPiece).toEqual('PG');
+  });
+});
+
+describe('getGameWithMostMoves', () => {
+  it('should return the correct number of moves made', async () => {
+    const game = [
+      {
+        metadata: [],
+        moves:
+          '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1',
+      },
+    ];
+
+    const result = await getGameWithMostMoves(game);
+
+    expect(result.maxNumMoves).toEqual(24);
   });
 });
