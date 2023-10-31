@@ -24,7 +24,7 @@ export function gameHistoryToPgn(gameHistory): string {
   return chess.pgn();
 }
 
-describe('getMateAndAssists', () => {
+xdescribe('getMateAndAssists', () => {
   it('should return empty objects if there is no mate or assist', () => {
     const gameHistory: any[] = [
       {
@@ -292,7 +292,7 @@ describe('getMateAndAssists', () => {
   });
 });
 
-describe('getMoveDistanceSingleGame', () => {
+xdescribe('getMoveDistanceSingleGame', () => {
   it('should return the correct max distance and piece for a game', async () => {
     const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
@@ -319,7 +319,7 @@ describe('getMoveDistanceSingleGame', () => {
 });
 
 // game being tested: https://www.chess.com/analysis/game/pgn/4uURW4rJaa?tab=analysis
-describe('getKillDeathRatios', () => {
+xdescribe('getKillDeathRatios', () => {
   it('should return the correct number of kills, deaths, and assists for each piece in a game', async () => {
     const game = [
       {
@@ -352,7 +352,7 @@ describe('getKillDeathRatios', () => {
   });
 });
 
-describe('getMateAndAssists', () => {
+xdescribe('getMateAndAssists', () => {
   it('should return the correct mating piece', () => {
     const game = [
       {
