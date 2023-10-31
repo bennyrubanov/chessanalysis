@@ -4,6 +4,7 @@ import {
   getKillDeathRatios,
   getMoveDistanceSetOfGames,
   getGameWithMostMoves,
+  getPieceLevelMoveInfo,
 } from './metrics/metrics';
 import {
   getBWKillStreaks,
@@ -53,6 +54,15 @@ export async function main(path: string) {
     maxNumMoves,
   } = await getGameWithMostMoves(games);
 
+  const {
+    numMovesByPiece,
+    averageNumMovesByPiece,
+    pieceWithHighestAverageNumMoves,
+    pieceWithMostMovesInAGame,
+    gameLinkWithPieceMostMoves,
+    numMovesMadePieceWithMostMoves,
+  } = await getPieceLevelMoveInfo(games);
+
 
   console.log("\n");
   console.log(`Total number of games analyzed: ${gameCount}`);
@@ -86,6 +96,12 @@ export async function main(path: string) {
   console.log("MOVES FACTS:")
   console.log(`The game with the most moves played: ${gameWithMostMoves}`);
   console.log(`The number of moves played in that game: ${maxNumMoves}`);
+  console.log("The total number of moves by piece in the set of games:"), console.table(numMovesByPiece);
+  console.log("The average number of moves by piece in the set of games:"), console.table(averageNumMovesByPiece);
+  console.log(`The piece with the highest average number moves: ${pieceWithHighestAverageNumMoves}`);
+  console.log(`The piece with the most moves in a single game: ${pieceWithMostMovesInAGame}`);
+  console.log(`The number of moves played by that piece in that game: ${numMovesMadePieceWithMostMoves}`);
+  console.log(`The game that piece made that many moves in: ${gameLinkWithPieceMostMoves}`);
   console.log("==============================================================");
   console.log("\n");
 

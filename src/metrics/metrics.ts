@@ -108,7 +108,6 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
     // progress tracker
     gameCount++;
 
-
     const {
       maxDistancePiece,
       maxDistance: distance,
@@ -367,27 +366,38 @@ export async function getGameWithMostMoves(games: FileReaderGame[]) {
 
 }
 
-export async function getAverageNumMovesByPiece(games: FileReaderGame[]) {
-  const averageNumMoves = {};
+export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
+  const numMovesByPiece = {};
+  let averageNumMovesByPiece = {};
+  let pieceWithMostMovesInAGame = null;
+  let pieceWithHighestAverageNumMoves = null;
+  let gameLinkWithPieceMostMoves = null;
+  let numMovesMadePieceWithMostMoves = 0;
+  
+  let gameCount = 0;
 
   for (const game of games) {
+    gameCount++;
     const chess = new Chess();
     const moveGenerator = chess.historyGenerator(game.moves);
 
+    const numMovesByPieceThisGame = {};
+
+    // update move counts of each unambiguous piece
     for (let moveInfo of moveGenerator) {
       const { move } = moveInfo;
 
       let movedPiece = move.unambiguousSymbol;
 
       if (movedPiece) {
-        if (!averageNumMoves[movedPiece]){
-          averageNumMoves[movedPiece] = 0
+        if (!numMovesByPiece[movedPiece]){
+          numMovesByPiece[movedPiece] = 0
         }
-        averageNumMoves[movedPiece]++;
+        numMovesByPiece[movedPiece]++;
+        numMovesByPieceThisGame[movedPiece]++
 
         // Check if the move is a castling move
         if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
-          let movingKing = 'k';
           let movingRook;
     
           if (moveInfo.move.flags === 'k') {
@@ -399,11 +409,65 @@ export async function getAverageNumMovesByPiece(games: FileReaderGame[]) {
           if (moveInfo.move.color === 'w') {
             movingRook = movingRook.toUpperCase();
           }
-    
-          averageNumMoves[movingRook]++;
-          
+
+          if (!numMovesByPiece[movingRook]){
+            numMovesByPiece[movingRook] = 0
+          }
+
+          // duplicative action for the array capturing moves by piece for this game
+          if (!numMovesByPieceThisGame[movingRook]){
+            numMovesByPieceThisGame[movingRook] = 0
+          }
+
+          numMovesByPiece[movingRook]++;
+          numMovesByPieceThisGame[movingRook]++;
+
         }
       }
+
+      // console.log(move.originalString)
+      // console.log(numMovesByPiece)
+
+    }
+
+    for (const uahPiece of Object.keys(numMovesByPieceThisGame)) {
+      let maxMovesInGame = numMovesByPieceThisGame[uahPiece];
+
+      if (maxMovesInGame > numMovesMadePieceWithMostMoves) {
+        numMovesMadePieceWithMostMoves = maxMovesInGame;
+        pieceWithMostMovesInAGame = uahPiece;
+        gameLinkWithPieceMostMoves = game.metadata
+        .find((item) => item.startsWith('[Site "'))
+        ?.replace('[Site "', '')
+        .replace('"]', '');
+      }
+    }
+
+  }
+
+  // calculate average num moves by piece
+  for (const uahPiece of Object.keys(numMovesByPiece)) {
+    averageNumMovesByPiece[uahPiece] = numMovesByPiece[uahPiece] / gameCount
+  }
+
+  let maxAverageNumMoves = 0;
+
+  // find the piece with the highest average num moves
+  for (const uahPiece of Object.keys(averageNumMovesByPiece)) {
+    const averageNumMoves = averageNumMovesByPiece[uahPiece];
+    if (averageNumMoves > maxAverageNumMoves) {
+      maxAverageNumMoves = averageNumMoves;
+      pieceWithHighestAverageNumMoves = uahPiece;
     }
   }
+
+  return {
+    numMovesByPiece,
+    averageNumMovesByPiece,
+    pieceWithHighestAverageNumMoves,
+    pieceWithMostMovesInAGame,
+    gameLinkWithPieceMostMoves,
+    numMovesMadePieceWithMostMoves,
+  }
+
 }
