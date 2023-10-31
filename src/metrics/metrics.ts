@@ -57,10 +57,10 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
       if (moveInfo.move.flags === 'k') {
         rookDistance = 2;
-        movingRook = 'ra';
+        movingRook = 'rh';
       } else {
         rookDistance = 3;
-        movingRook = 'rh';
+        movingRook = 'ra';
       }
 
       if (moveInfo.move.color === 'w') {
@@ -365,4 +365,45 @@ export async function getGameWithMostMoves(games: FileReaderGame[]) {
     maxNumMoves,
   };
 
+}
+
+export async function getAverageNumMovesByPiece(games: FileReaderGame[]) {
+  const averageNumMoves = {};
+
+  for (const game of games) {
+    const chess = new Chess();
+    const moveGenerator = chess.historyGenerator(game.moves);
+
+    for (let moveInfo of moveGenerator) {
+      const { move } = moveInfo;
+
+      let movedPiece = move.unambiguousSymbol;
+
+      if (movedPiece) {
+        if (!averageNumMoves[movedPiece]){
+          averageNumMoves[movedPiece] = 0
+        }
+        averageNumMoves[movedPiece]++;
+
+        // Check if the move is a castling move
+        if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
+          let movingKing = 'k';
+          let movingRook;
+    
+          if (moveInfo.move.flags === 'k') {
+            movingRook = 'rh';
+          } else {
+            movingRook = 'ra';
+          }
+    
+          if (moveInfo.move.color === 'w') {
+            movingRook = movingRook.toUpperCase();
+          }
+    
+          averageNumMoves[movingRook]++;
+          
+        }
+      }
+    }
+  }
 }
