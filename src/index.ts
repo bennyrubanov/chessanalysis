@@ -17,6 +17,9 @@ import { FileReaderGame } from './types';
  * @returns
  */
 export async function main(path: string) {
+  console.time("Total Execution Time");
+
+  console.time("Task 1: FileReader")
   const gamesGenerator = gameChunks(path);
   const games: FileReaderGame[] = [];
   let gameCounter = 0;
@@ -30,6 +33,9 @@ export async function main(path: string) {
     // const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
     // console.log(`lichess link to game played: ${siteLink}`);
   }
+  console.timeEnd("Task 1: FileReader")
+
+  console.time("Task 2: getMoveDistanceSetOfGames")
   const {
     pieceThatMovedTheFurthest,
     maxDistance,
@@ -37,23 +43,31 @@ export async function main(path: string) {
     siteWithFurthestPiece,
     totalDistanceMap,
   } = await getMoveDistanceSetOfGames(games);
+  console.timeEnd("Task 2: getMoveDistanceSetOfGames")
 
+  console.time("Task 3: getAverageDistance")
   const { 
     pieceWithHighestAverageDistance,
     maxAverageDistance,
    } = getAverageDistance(totalDistanceMap, gameCount);
+  console.timeEnd("Task 3: getAverageDistance")
 
+  console.time("Task 4: getKillDeathRatios")
   const {
     killDeathRatios,
     killsDeathsAssistsMap,
     pieceWithHighestKillDeathRatio,
   } = await getKillDeathRatios(games);
+  console.timeEnd("Task 4: getKillDeathRatios")
 
+  console.time("Task 5: getGameWithMostMoves")
   const {
     gameLinkWithMostMoves : gameWithMostMoves,
     maxNumMoves,
   } = await getGameWithMostMoves(games);
+  console.timeEnd("Task 5: getGameWithMostMoves")
 
+  console.time("Task 6: getPieceLevelMoveInfo")
   const {
     numMovesByPiece,
     averageNumMovesByPiece,
@@ -62,8 +76,9 @@ export async function main(path: string) {
     gameLinkWithPieceMostMoves,
     numMovesMadePieceWithMostMoves,
   } = await getPieceLevelMoveInfo(games);
+  console.timeEnd("Task 6: getPieceLevelMoveInfo")
 
-
+  console.time("Final Task: print results to console")
   console.log("\n");
   console.log(`Total number of games analyzed: ${gameCount}`);
   console.log("\n");
@@ -105,6 +120,9 @@ export async function main(path: string) {
   console.log("==============================================================");
   console.log("\n");
 
+  console.timeEnd("Final Task: print results to console")
+
+  console.timeEnd("Total Execution Time");
 
   return {
     pieceThatMovedTheFurthest,
@@ -117,6 +135,7 @@ export async function main(path: string) {
     killsDeathsAssistsMap,
     pieceWithHighestKillDeathRatio,
   };
+
 }
 
 if (require.main === module) {
