@@ -1,15 +1,12 @@
 import { gameChunks } from './fileReader';
 import {
   getAverageDistance,
+  getGameWithMostMoves,
   getKillDeathRatios,
   getMoveDistanceSetOfGames,
-  getGameWithMostMoves,
   getPieceLevelMoveInfo,
   getPiecePromotionInfo,
 } from './metrics/metrics';
-import {
-  getBWKillStreaks,
-} from './metrics/captures';
 import { FileReaderGame } from './types';
 
 /**
@@ -19,12 +16,11 @@ import { FileReaderGame } from './types';
  */
 export async function main(path: string) {
   console.time("Total Execution Time");
-
-  console.log("\n");
-
   console.time("Task 1: FileReader")
+  
   const gamesGenerator = gameChunks(path);
   const games: FileReaderGame[] = [];
+  
   let gameCounter = 0;
   for await (const game of gamesGenerator) {
     gameCounter++;
