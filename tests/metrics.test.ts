@@ -1,6 +1,7 @@
 import { Chess as ChessOG } from 'chess.js';
 import { Chess } from '../cjsmin/src/chess';
 import {
+  getGameWithMostMoves,
   getKillDeathRatios,
   getMateAndAssists,
   getMoveDistanceSingleGame,
@@ -292,8 +293,8 @@ xdescribe('getMateAndAssists', () => {
   });
 });
 
-xdescribe('getMoveDistanceSingleGame', () => {
-  it('should return the correct max distance and piece for a game', async () => {
+describe('getMoveDistanceSingleGame', () => {
+  xit('should return the correct max distance and piece for a game', async () => {
     const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
     const result = await getMoveDistanceSingleGame({
@@ -305,7 +306,7 @@ xdescribe('getMoveDistanceSingleGame', () => {
     expect(result.maxDistance).toEqual(6);
   });
 
-  it('should return 2 distance for a game with one move', async () => {
+  xit('should return 2 distance for a game with one move', async () => {
     const game = '1. e4 e5';
 
     const result = await getMoveDistanceSingleGame({
@@ -315,6 +316,23 @@ xdescribe('getMoveDistanceSingleGame', () => {
 
     expect(result.maxDistancePiece).toBe('PE');
     expect(result.maxDistance).toEqual(2);
+  });
+
+  it('should return a singleGameDistanceTotal equal to the addition of all distances in the distanceMap', async () => {
+    const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
+
+    const result = await getMoveDistanceSingleGame({
+      metadata: [],
+      moves: game,
+    });
+
+    let totalDistance = 0;
+
+    for (const distance of Object.keys(result.distanceMap)) {
+      totalDistance += result.distanceMap[distance]
+    }
+
+    expect(result.singleGameDistanceTotal).toEqual(totalDistance);
   });
 });
 
@@ -389,5 +407,21 @@ xdescribe('getMateAndAssists', () => {
     const result = getMateAndAssists(game[0].moves);
 
     expect(result.unambigMatingPiece).toEqual('PG');
+  });
+});
+
+xdescribe('getGameWithMostMoves', () => {
+  it('should return the correct number of moves made', async () => {
+    const game = [
+      {
+        metadata: [],
+        moves:
+          '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1',
+      },
+    ];
+
+    const result = await getGameWithMostMoves(game);
+
+    expect(result.maxNumMoves).toEqual(24);
   });
 });
