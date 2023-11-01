@@ -73,9 +73,9 @@ export async function main(path: string) {
   const {
     numMovesByPiece,
     averageNumMovesByPiece,
-    pieceWithHighestAverageNumMoves,
-    pieceWithMostMovesInAGame,
-    gameLinkWithPieceMostMoves,
+    piecesWithHighestAverageNumMoves,
+    piecesWithMostMovesInAGame,
+    gameLinksWithPiecesMostMoves,
     numMovesMadePieceWithMostMoves,
   } = await getPieceLevelMoveInfo(games);
   console.timeEnd("Task 6: getPieceLevelMoveInfo")
@@ -117,10 +117,10 @@ export async function main(path: string) {
   console.log(`The number of moves played in that game: ${maxNumMoves}`);
   console.log("The total number of moves by piece in the set of games:"), console.table(numMovesByPiece);
   console.log("The average number of moves by piece in the set of games:"), console.table(averageNumMovesByPiece);
-  console.log(`The piece with the highest average number moves: ${pieceWithHighestAverageNumMoves}`);
-  console.log(`The piece with the most moves in a single game: ${pieceWithMostMovesInAGame}`);
+  console.log(`The piece(s) with the highest average number moves: ${piecesWithHighestAverageNumMoves}`);
+  console.log(`The piece(s) with the most moves in a single game: ${piecesWithMostMovesInAGame}`);
   console.log(`The number of moves played by that piece in that game: ${numMovesMadePieceWithMostMoves}`);
-  console.log(`The game that piece made that many moves in: ${gameLinkWithPieceMostMoves}`);
+  console.log(`The game(s) that piece/those pieces made that many moves in: ${gameLinksWithPiecesMostMoves}`);
   console.log("==============================================================");
   console.log("\n");
 
