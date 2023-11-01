@@ -528,3 +528,55 @@ export async function getPiecePromotionInfo(games: FileReaderGame[]) {
     promotingPieceMap,
   }
 }
+
+export async function countAmbigPiecesOnBoard(games: FileReaderGame[]) {
+  let piecesOnBoardCount = {};
+  let maxQueenCounts = 0;
+  let movesAndGamesWithMaxQueenCount = []
+
+  for (const game of games) {
+    const chess = new Chess();
+    const moveGenerator = chess.historyGenerator(game.moves);
+
+    for (const moveInfo of moveGenerator) {
+      const { move, board } = moveInfo;
+      let thisMoveQueenCount = 0;
+
+      for (const piece of board) {
+        if (piece) {
+          if (piece.type === 'q') {
+            thisMoveQueenCount++;
+          }
+          if (!piecesOnBoardCount[piece.type]) {
+            piecesOnBoardCount[piece.type] = 0;
+          }
+          piecesOnBoardCount[piece.type]++;
+        }
+      }
+      if (thisMoveQueenCount > maxQueenCounts) {
+        maxQueenCounts = thisMoveQueenCount;
+        movesAndGamesWithMaxQueenCount = [{
+          game: game.metadata.find((item) => item.startsWith('[Site "'))
+            ?.replace('[Site "', '')
+            ?.replace('"]', ''),
+          move: move.originalString
+        }];
+      } else if (thisMoveQueenCount === maxQueenCounts) {
+        movesAndGamesWithMaxQueenCount.push({
+          game: game.metadata.find((item) => item.startsWith('[Site "'))
+            ?.replace('[Site "', '')
+            ?.replace('"]', ''),
+          move: move.originalString
+        });
+      }
+    }
+
+
+  }
+
+  return {
+    piecesOnBoardCount,
+    maxQueenCounts,
+    movesAndGamesWithMaxQueenCount,
+  }
+}

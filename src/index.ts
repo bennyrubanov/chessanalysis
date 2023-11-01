@@ -6,6 +6,7 @@ import {
   getGameWithMostMoves,
   getPieceLevelMoveInfo,
   getPiecePromotionInfo,
+  countAmbigPiecesOnBoard,
 } from './metrics/metrics';
 import {
   getBWKillStreaks,
@@ -90,6 +91,14 @@ export async function main(path: string) {
   } = await getPiecePromotionInfo(games);
   console.timeEnd("Task 7: getPiecePromotionInfo")
 
+  console.time("Task 8: countAmbigPiecesOnBoard")
+  const {
+    piecesOnBoardCount,
+    maxQueenCounts,
+    movesAndGamesWithMaxQueenCount,
+  } = await countAmbigPiecesOnBoard(games);
+  console.timeEnd("Task 8: countAmbigPiecesOnBoard")
+
   console.time("Final Task: print results to console")
   console.log("\n");
   console.log(`Total number of games analyzed: ${gameCount}`);
@@ -139,6 +148,13 @@ export async function main(path: string) {
   console.log("How often a piece is promoted to different ambiguous piece types:"), console.table(ambigPiecePromotedToMap);
   console.log("How often unambiguous piece is promoted:"), console.table(promotingPieceMap);
   console.log("==============================================================");
+  console.log("\n");
+
+  // number of pieces to appear on board facts
+  console.log("NUMBER OF PIECES TO APPEAR ON BOARD FACTS:")
+  console.log("Number of times a piece type appeared on board:"), console.table(piecesOnBoardCount);
+  console.log(`The maximum number of queens to appear in a given move in a game: ${maxQueenCounts}`);
+  console.log(`The games(s) and last move(s) in that game in which that number of queens appeared: ${movesAndGamesWithMaxQueenCount.map(move => JSON.stringify(move, null, 2)).join(", ")}`);  console.log("==============================================================");
   console.log("\n");
   
 
