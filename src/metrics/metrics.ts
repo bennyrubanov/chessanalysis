@@ -8,12 +8,8 @@ import { FileReaderGame } from '../types';
 // calculates how many games in the dataset
 export function countGamesInDataset(datasetPath: string): number {
   const fs = require('fs');
-  const path = require('path');
 
-  let data = fs.readFileSync(
-    path.join(__dirname, '../data/10.10.23_test_set'),
-    'utf8'
-  );
+  let data = fs.readFileSync(datasetPath, 'utf8');
   let games = data.split('\n[Event');
   // If the first game doesn't start with a newline, add 1 back to the count
   if (data.startsWith('[Event')) {
@@ -29,6 +25,9 @@ export function countGamesInDataset(datasetPath: string): number {
 export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   const chess = new Chess();
   const moveGenerator = chess.historyGenerator(game.moves);
+
+  // try catch because this function is the first to be called by index.ts main, so it will crash first
+  try {
 
   // create an object to track distance value for each piece
   const distanceMap: { [key: string]: number } = {};
@@ -91,13 +90,19 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
       maxDistancePiece = move.unambiguousSymbol;
     }
   }
-
   return {
     maxDistancePiece,
     maxDistance,
     distanceMap,
     singleGameDistanceTotal,
   };
+
+  } catch (error) {
+    console.error(`Error processing game: ${JSON.stringify(game, null, 2)}`);
+    console.error(`Error message: ${error.message}`);
+    throw error; // re-throw the error after logging
+  }
+
 }
 
 // returns the piece that moved the furthest, the game it moved the furthest in, the distance it moved, and the number of games analyzed in the set

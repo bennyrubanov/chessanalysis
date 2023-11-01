@@ -27,12 +27,25 @@ export async function main(path: string) {
   const gamesGenerator = gameChunks(path);
   const games: FileReaderGame[] = [];
   let gameCounter = 0;
+
+  // Initialize a variable to hold the previous game
+  let previousGame: FileReaderGame | null = null;
+  
   for await (const game of gamesGenerator) {
     gameCounter++;
-    if (gameCounter % 20 == 0) {
+    if (gameCounter % 200 == 0) {
       console.log('number of games analyzed: ', gameCounter);
     }
-    games.push(game);
+    
+    // If there is a previous game, push it to the games array
+    // This is to prevent analysis of the last game, which can be incomplete depending on how it was downloaded/decompressed from lichess's open database
+    // This means the current game (which could be the last and incomplete one) is not processed yet
+    if (previousGame) {
+      games.push(previousGame);
+    }
+    
+    // Update the previous game to be the current game
+    previousGame = game;
 
     // const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
     // console.log(`lichess link to game played: ${siteLink}`);
@@ -180,6 +193,6 @@ export async function main(path: string) {
 }
 
 if (require.main === module) {
-  main(`data/10.10.23_test_set`).then(({}) => {}
+  main(`data/temp.pgn`).then(({}) => {}
   );
 }

@@ -17,6 +17,9 @@ export async function* gameChunks(
     // metadata & move lines chunked as a single game
     if (line.startsWith('[')) {
       metadata.push(line);
+    } else if (line === '0-1' || line === '1-0' || line === '1/2-1/2') {
+      // game result line, ignore and reset metadata
+      metadata = [];
     } else if (!line) {
       // empty line, do nothing
     } else if (line.startsWith('1.')) {
