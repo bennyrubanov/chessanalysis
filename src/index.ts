@@ -5,6 +5,7 @@ import {
   getMoveDistanceSetOfGames,
   getGameWithMostMoves,
   getPieceLevelMoveInfo,
+  getPiecePromotionInfo,
 } from './metrics/metrics';
 import {
   getBWKillStreaks,
@@ -18,6 +19,8 @@ import { FileReaderGame } from './types';
  */
 export async function main(path: string) {
   console.time("Total Execution Time");
+
+  console.log("\n");
 
   console.time("Task 1: FileReader")
   const gamesGenerator = gameChunks(path);
@@ -80,6 +83,13 @@ export async function main(path: string) {
   } = await getPieceLevelMoveInfo(games);
   console.timeEnd("Task 6: getPieceLevelMoveInfo")
 
+  console.time("Task 7: getPiecePromotionInfo")
+  const {
+    ambigPiecePromotedToMap,
+    promotingPieceMap,
+  } = await getPiecePromotionInfo(games);
+  console.timeEnd("Task 7: getPiecePromotionInfo")
+
   console.time("Final Task: print results to console")
   console.log("\n");
   console.log(`Total number of games analyzed: ${gameCount}`);
@@ -124,9 +134,20 @@ export async function main(path: string) {
   console.log("==============================================================");
   console.log("\n");
 
+  // promotions facts
+  console.log("PROMOTIONS FACTS:")
+  console.log("How often a piece is promoted to different ambiguous piece types:"), console.table(ambigPiecePromotedToMap);
+  console.log("How often unambiguous piece is promoted:"), console.table(promotingPieceMap);
+  console.log("==============================================================");
+  console.log("\n");
+  
+
   console.timeEnd("Final Task: print results to console")
+  console.log("\n");
 
   console.timeEnd("Total Execution Time");
+  console.log("\n");
+
 
   return {
     pieceThatMovedTheFurthest,

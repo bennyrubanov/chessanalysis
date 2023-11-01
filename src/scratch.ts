@@ -1,6 +1,5 @@
 import {
-    getPieceLevelMoveInfo,
-    getGameWithMostMoves,
+    getPiecePromotionInfo
   } from '../src/metrics/metrics';
 
 // game being tested: https://lichess.org/jo73x9y8
@@ -11,7 +10,7 @@ const game = [
     }
   ];
 
-  getPieceLevelMoveInfo(game)
+  getPiecePromotionInfo(game)
   .then((result) => {
     console.log(result);
   })

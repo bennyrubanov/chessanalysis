@@ -136,12 +136,10 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
 
     if (singleGameDistanceTotal > furthestCollectiveDistance) {
       furthestCollectiveDistance = singleGameDistanceTotal;
-      console.log(furthestCollectiveDistance)
       gameLinkWithFurthestCollectiveDistance = game.metadata
       .find((item) => item.startsWith('[Site "'))
       ?.replace('[Site "', '')
       .replace('"]', '');
-      console.log(gameLinkWithFurthestCollectiveDistance)
     }
 
     for (const piece of Object.keys(distanceMap)) {
@@ -491,4 +489,42 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
     numMovesMadePieceWithMostMoves,
   }
 
+}
+
+export async function getPiecePromotionInfo(games: FileReaderGame[]) {
+  let ambigPiecePromotedToMap = {};
+  let promotingPieceMap = {};
+  
+  for (const game of games) {
+    const chess = new Chess();
+    chess.loadPgn(game.moves)
+    const chessHistory = chess.history();
+
+    for (const moveInfo of chessHistory) {
+      if (moveInfo.originalString.includes('=')) {
+        // REGEX to only capture the piece type
+        const piecePromotedTo = moveInfo.originalString.split('=')[1].match(/[a-zA-Z]/)[0];
+        
+        const promotingPiece = moveInfo.unambiguousSymbol;
+
+        // update ambigPiecePromotedToMap
+        if (!ambigPiecePromotedToMap[piecePromotedTo]){
+          ambigPiecePromotedToMap[piecePromotedTo] = 0
+        }
+        ambigPiecePromotedToMap[piecePromotedTo]++;
+
+        // update promotingPieceMap
+        if (!promotingPieceMap[promotingPiece]) {
+          promotingPieceMap[promotingPiece] = 0
+        }
+        promotingPieceMap[promotingPiece]++
+
+      }
+    }
+  }
+
+  return {
+    ambigPiecePromotedToMap,
+    promotingPieceMap,
+  }
 }
