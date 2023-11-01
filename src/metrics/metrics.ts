@@ -421,11 +421,7 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
         if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
           let movingRook;
     
-          if (moveInfo.move.flags === 'k') {
-            movingRook = 'rh';
-          } else {
-            movingRook = 'ra';
-          }
+            let movingRook = moveInfo.move.flags === 'k' ? 'rh' : 'ra"
     
           if (moveInfo.move.color === 'w') {
             movingRook = movingRook.toUpperCase();
