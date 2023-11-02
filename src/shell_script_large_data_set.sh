@@ -4,10 +4,10 @@
 files=("lichess_db_standard_rated_2023-08.pgn.zst" "lichess_db_standard_rated_2023-09.pgn.zst" ...)
 
 # Size of each chunk in bytes (10MB = 10 * 1024 * 1024 bytes) which should yield around 30k games
-chunk_size=$((1 * 1024 * 1024))
+chunk_size=$((10 * 1024 * 1024))
 
 # Maximum number of chunks to analyze
-max_chunks=1
+max_chunks=3
 
 # Counter for the number of chunks analyzed
 chunk_counter=0
@@ -39,7 +39,7 @@ do
     # zstdcat $file | awk -v RS= -v ORS='\n\n' 'NR <= 100' > /path/to/your/project/data/temp.pgn
 
     # Run your analysis script
-    node /Users/bennyrubanov/chessanalysis/src/index.ts
+    node /Users/bennyrubanov/chessanalysis/dist/src/index.js
 
     # Delete the temporary file
     rm /Users/bennyrubanov/chessanalysis/data/temp.pgn
