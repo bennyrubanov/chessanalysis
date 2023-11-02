@@ -1,8 +1,4 @@
-import {
-  Chess,
-  PrettyMove,
-  UnambiguousPieceSymbol,
-} from '../../cjsmin/src/chess';
+import { Chess, PrettyMove } from '../../cjsmin/src/chess';
 import { FileReaderGame } from '../types';
 
 // calculates how many games in the dataset
@@ -25,164 +21,9 @@ export function countGamesInDataset(datasetPath: string): number {
   }
 }
 
-// take a start and end board position and return the distances moved
-export async function getMoveDistanceSingleGame(game: FileReaderGame) {
-  const chess = new Chess();
-  const moveGenerator = chess.historyGenerator(game.moves);
-
-  // create an object to track distance value for each piece
-  const distanceMap: { [key: string]: number } = {};
-
-  // Initialize variables to keep track of the maximum distance and the piece
-  let maxDistance = -1;
-  let maxDistancePiece: UnambiguousPieceSymbol;
-  let singleGameDistanceTotal = 0;
-
-  // evaluate each move, update the correct unambiguous piece's distance
-  for (let moveInfo of moveGenerator) {
-    const { move, board } = moveInfo;
-
-    if (!distanceMap[move.unambiguousSymbol]) {
-      distanceMap[move.unambiguousSymbol] = 0;
-    }
-
-    const fromMove = moveInfo.move.from;
-    const toMove = moveInfo.move.to;
-
-    let distance = 0;
-
-    // Check if the move is a castling move
-    if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
-      let movingKing = 'k';
-      let movingRook, rookDistance;
-
-      if (moveInfo.move.flags === 'k') {
-        rookDistance = 2;
-        movingRook = 'rh';
-      } else {
-        rookDistance = 3;
-        movingRook = 'ra';
-      }
-
-      if (moveInfo.move.color === 'w') {
-        movingRook = movingRook.toUpperCase();
-        movingKing = movingKing.toUpperCase();
-      }
-
-      distanceMap[movingKing] += 2;
-      distanceMap[movingRook] += rookDistance;
-      singleGameDistanceTotal += 2;
-      singleGameDistanceTotal += rookDistance;
-    } else {
-      // Calculate the file (column) distance by subtracting ASCII values
-      const fileDist = Math.abs(fromMove.charCodeAt(0) - toMove.charCodeAt(0));
-      // Calculate the rank (row) distance by subtracting numeric values
-      const rankDist = Math.abs(Number(fromMove[1]) - Number(toMove[1]));
-      // The distance moved is the maximum of fileDist and rankDist
-      distance = Math.max(fileDist, rankDist);
-
-      distanceMap[move.unambiguousSymbol] += distance;
-      singleGameDistanceTotal += distance;
-    }
-
-    if (distanceMap[move.unambiguousSymbol] > maxDistance) {
-      maxDistance = distanceMap[move.unambiguousSymbol];
-      maxDistancePiece = move.unambiguousSymbol;
-    }
-  }
-
-  return {
-    maxDistancePiece,
-    maxDistance,
-    distanceMap,
-    singleGameDistanceTotal,
-  };
-}
-
-// returns the piece that moved the furthest, the game it moved the furthest in, the distance it moved, and the number of games analyzed in the set
-export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
-  let maxDistance = 0;
-  let pieceThatMovedTheFurthest = null;
-  let totalDistanceMap: { [key: string]: number } = {};
-  let gameWithFurthestPiece = null;
-  let siteWithFurthestPiece = null;
-  let lastGame;
-  let furthestCollectiveDistance = 0;
-  let gameLinkWithFurthestCollectiveDistance = null;
-
-  let gameCount = 0;
-  for await (const game of games) {
-    // progress tracker
-    gameCount++;
-
-    const {
-      maxDistancePiece,
-      maxDistance: distance,
-      distanceMap,
-      singleGameDistanceTotal,
-    } = await getMoveDistanceSingleGame(game);
-
-    if (distance > maxDistance) {
-      maxDistance = distance;
-      pieceThatMovedTheFurthest = maxDistancePiece;
-      gameWithFurthestPiece = game;
-      let site = game.metadata
-        .find((item) => item.startsWith('[Site "'))
-        ?.replace('[Site "', '')
-        .replace('"]', '');
-      siteWithFurthestPiece = site;
-    }
-
-    if (singleGameDistanceTotal > furthestCollectiveDistance) {
-      furthestCollectiveDistance = singleGameDistanceTotal;
-      gameLinkWithFurthestCollectiveDistance = game.metadata
-        .find((item) => item.startsWith('[Site "'))
-        ?.replace('[Site "', '')
-        .replace('"]', '');
-    }
-
-    for (const piece of Object.keys(distanceMap)) {
-      if (!totalDistanceMap[piece]) {
-        totalDistanceMap[piece] = 0;
-      }
-      totalDistanceMap[piece] += distanceMap[piece];
-    }
-
-    lastGame = game;
-  }
-
-  return {
-    pieceThatMovedTheFurthest,
-    maxDistance,
-    gameCount,
-    gameWithFurthestPiece,
-    siteWithFurthestPiece,
-    totalDistanceMap,
-    lastGame,
-    furthestCollectiveDistance,
-    gameLinkWithFurthestCollectiveDistance,
-  };
-}
-
-// calculates piece with highest average distance and that piece's average distance covered per game in a set of games
-export function getAverageDistance(
-  distanceMap: { [key: string]: number },
-  gameCount: number
-) {
-  let maxAverageDistance = 0;
-  let pieceWithHighestAverageDistance = null;
-  for (const piece of Object.keys(distanceMap)) {
-    const averageDistance = distanceMap[piece] / gameCount;
-    if (averageDistance > maxAverageDistance) {
-      maxAverageDistance = averageDistance;
-      pieceWithHighestAverageDistance = piece;
-    }
-  }
-  return { pieceWithHighestAverageDistance, maxAverageDistance };
-}
-
 // calculates piece with highest K/D ratio and also contains assists by that piece
 export async function getKillDeathRatios(games: FileReaderGame[]) {
+  console.time('Task 4: getKillDeathRatios');
   // create an object to track kills, deaths, and assists of each piece
   // The killsDeathsAssistsMap is an object where each key is a piece and the value is another object with kills, deaths, and assists properties.
   const killsDeathsAssistsMap: {
@@ -259,20 +100,33 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
 
   // find the piece with the highest kill death ratio
   let maxKillDeathRatio = 0;
-  let pieceWithHighestKillDeathRatio = null;
+  let pieceWithHighestKDRatio = null;
 
   for (const piece of Object.keys(killDeathRatios)) {
     const ratio = killDeathRatios[piece];
     if (ratio > maxKillDeathRatio) {
       maxKillDeathRatio = ratio;
-      pieceWithHighestKillDeathRatio = piece;
+      pieceWithHighestKDRatio = piece;
     }
   }
 
+  // KDR facts
+  console.log('KDR FACTS (INCLUDING CHECKMATES AS KILLS):');
+  console.log(
+    `Piece with the highest kill death ratio: ${pieceWithHighestKDRatio}`
+  );
+  console.log('Kills, Deaths, and Assists for each unambiguous piece:'),
+    console.table(killsDeathsAssistsMap);
+  console.log(
+    'Kill Death Ratios for each unambiguous piece: ' +
+      JSON.stringify(killDeathRatios, null, 2)
+  );
+
+  console.timeEnd('Task 4: getKillDeathRatios');
   return {
     killDeathRatios,
     killsDeathsAssistsMap,
-    pieceWithHighestKillDeathRatio,
+    pieceWithHighestKDRatio,
   };
 }
 
@@ -356,6 +210,7 @@ export function getMateAndAssists(pgnMoveLine: string) {
 }
 
 export async function getGameWithMostMoves(games: FileReaderGame[]) {
+  console.time('Task 5: getGameWithMostMoves');
   let maxNumMoves = 0;
   let gameWithMostMoves: FileReaderGame | null = null;
   let gameLinkWithMostMoves = null;
@@ -377,6 +232,16 @@ export async function getGameWithMostMoves(games: FileReaderGame[]) {
     }
   }
 
+  console.timeEnd('Task 5: getGameWithMostMoves');
+
+  // moves facts
+  console.log('MOVES FACTS:');
+  console.log(`The game with the most moves played: ${gameWithMostMoves}`);
+  console.log(`The number of moves played in that game: ${maxNumMoves}`);
+
+  console.log('==============================================================');
+  console.log('\n');
+
   return {
     gameLinkWithMostMoves,
     maxNumMoves,
@@ -384,12 +249,13 @@ export async function getGameWithMostMoves(games: FileReaderGame[]) {
 }
 
 export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
+  console.time('Task 6: getPieceLevelMoveInfo');
   const numMovesByPiece = {};
-  let averageNumMovesByPiece = {};
+  let avgMovesByPiece = {};
   let piecesWithMostMovesInAGame = [];
-  let piecesWithHighestAverageNumMoves = [];
-  let gameLinksWithPiecesMostMoves = [];
-  let numMovesMadePieceWithMostMoves = 0;
+  let piecesWithHighestAvgMoves = [];
+  let linkWithMostMoves = [];
+  let maxMoves = 0;
 
   let gameCount = 0;
 
@@ -438,18 +304,18 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
     for (const uahPiece of Object.keys(numMovesByPieceThisGame)) {
       let maxMovesInGame = numMovesByPieceThisGame[uahPiece];
 
-      if (maxMovesInGame > numMovesMadePieceWithMostMoves) {
-        numMovesMadePieceWithMostMoves = maxMovesInGame;
+      if (maxMovesInGame > maxMoves) {
+        maxMoves = maxMovesInGame;
         piecesWithMostMovesInAGame = [uahPiece]; // New highest moves, reset the array
-        gameLinksWithPiecesMostMoves = [
+        linkWithMostMoves = [
           game.metadata
             .find((item) => item.startsWith('[Site "'))
             ?.replace('[Site "', '')
             .replace('"]', ''),
         ]; // New highest moves, reset the array
-      } else if (maxMovesInGame === numMovesMadePieceWithMostMoves) {
+      } else if (maxMovesInGame === maxMoves) {
         piecesWithMostMovesInAGame.push(uahPiece); // Tie, add to the array
-        gameLinksWithPiecesMostMoves.push(
+        linkWithMostMoves.push(
           game.metadata
             .find((item) => item.startsWith('[Site "'))
             ?.replace('[Site "', '')
@@ -461,67 +327,47 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
 
   // calculate average num moves by piece
   for (const uahPiece of Object.keys(numMovesByPiece)) {
-    averageNumMovesByPiece[uahPiece] = numMovesByPiece[uahPiece] / gameCount;
+    avgMovesByPiece[uahPiece] = numMovesByPiece[uahPiece] / gameCount;
   }
 
   let maxAverageNumMoves = 0;
 
   // find the piece with the highest average num moves
-  for (const uahPiece of Object.keys(averageNumMovesByPiece)) {
-    const averageNumMoves = averageNumMovesByPiece[uahPiece];
+  for (const uahPiece of Object.keys(avgMovesByPiece)) {
+    const averageNumMoves = avgMovesByPiece[uahPiece];
     if (averageNumMoves > maxAverageNumMoves) {
       maxAverageNumMoves = averageNumMoves;
-      piecesWithHighestAverageNumMoves = [uahPiece]; // New highest average, reset the array
+      piecesWithHighestAvgMoves = [uahPiece]; // New highest average, reset the array
     } else if (averageNumMoves === maxAverageNumMoves) {
-      piecesWithHighestAverageNumMoves.push(uahPiece); // Tie, add to the array
+      piecesWithHighestAvgMoves.push(uahPiece); // Tie, add to the array
     }
   }
+
+  console.log(
+    `The piece with the highest average number moves: ${piecesWithHighestAvgMoves}`
+  );
+  console.log(
+    `The piece with the most moves in a single game: ${piecesWithMostMovesInAGame}`
+  );
+  console.log('The total number of moves by piece in the set of games:'),
+    console.table(numMovesByPiece);
+  console.log('The average number of moves by piece in the set of games:'),
+    console.table(avgMovesByPiece);
+  console.log(
+    `The number of moves played by that piece in that game: ${maxMoves}`
+  );
+  console.log(
+    `The game that piece made that many moves in: ${linkWithMostMoves}`
+  );
+
+  console.timeEnd('Task 6: getPieceLevelMoveInfo');
 
   return {
     numMovesByPiece,
-    averageNumMovesByPiece,
-    piecesWithHighestAverageNumMoves,
+    avgMovesByPiece: avgMovesByPiece,
+    piecesWithHighestAvgMoves: piecesWithHighestAvgMoves,
     piecesWithMostMovesInAGame,
-    gameLinksWithPiecesMostMoves,
-    numMovesMadePieceWithMostMoves,
-  };
-}
-
-export async function getPiecePromotionInfo(games: FileReaderGame[]) {
-  let ambigPiecePromotedToMap = {};
-  let promotingPieceMap = {};
-
-  for (const game of games) {
-    const chess = new Chess();
-    chess.loadPgn(game.moves);
-    const chessHistory = chess.history();
-
-    for (const moveInfo of chessHistory) {
-      if (moveInfo.originalString.includes('=')) {
-        // REGEX to only capture the piece type
-        const piecePromotedTo = moveInfo.originalString
-          .split('=')[1]
-          .match(/[a-zA-Z]/)[0];
-
-        const promotingPiece = moveInfo.unambiguousSymbol;
-
-        // update ambigPiecePromotedToMap
-        if (!ambigPiecePromotedToMap[piecePromotedTo]) {
-          ambigPiecePromotedToMap[piecePromotedTo] = 0;
-        }
-        ambigPiecePromotedToMap[piecePromotedTo]++;
-
-        // update promotingPieceMap
-        if (!promotingPieceMap[promotingPiece]) {
-          promotingPieceMap[promotingPiece] = 0;
-        }
-        promotingPieceMap[promotingPiece]++;
-      }
-    }
-  }
-
-  return {
-    ambigPiecePromotedToMap,
-    promotingPieceMap,
+    linkWithMostMoves,
+    maxMoves,
   };
 }
