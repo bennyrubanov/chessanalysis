@@ -388,9 +388,9 @@ export async function getGameWithMostMoves(games: FileReaderGame[]) {
 export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
   const numMovesByPiece = {};
   let averageNumMovesByPiece = {};
-  let pieceWithMostMovesInAGame = null;
-  let pieceWithHighestAverageNumMoves = null;
-  let gameLinkWithPieceMostMoves = null;
+  let piecesWithMostMovesInAGame = [];
+  let piecesWithHighestAverageNumMoves = [];
+  let gameLinksWithPiecesMostMoves = [];
   let numMovesMadePieceWithMostMoves = 0;
   
   let gameCount = 0;
@@ -417,14 +417,8 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
 
         // Check if the move is a castling move
         if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
-          let movingRook;
-    
-          if (moveInfo.move.flags === 'k') {
-            movingRook = 'rh';
-          } else {
-            movingRook = 'ra';
-          }
-    
+          let movingRook = moveInfo.move.flags === 'k' ? 'rh' : 'ra'
+          
           if (moveInfo.move.color === 'w') {
             movingRook = movingRook.toUpperCase();
           }
@@ -454,11 +448,17 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
 
       if (maxMovesInGame > numMovesMadePieceWithMostMoves) {
         numMovesMadePieceWithMostMoves = maxMovesInGame;
-        pieceWithMostMovesInAGame = uahPiece;
-        gameLinkWithPieceMostMoves = game.metadata
-        .find((item) => item.startsWith('[Site "'))
-        ?.replace('[Site "', '')
-        .replace('"]', '');
+        piecesWithMostMovesInAGame = [uahPiece]; // New highest moves, reset the array
+        gameLinksWithPiecesMostMoves = [game.metadata
+          .find((item) => item.startsWith('[Site "'))
+          ?.replace('[Site "', '')
+          .replace('"]', '')]; // New highest moves, reset the array
+      } else if (maxMovesInGame === numMovesMadePieceWithMostMoves) {
+        piecesWithMostMovesInAGame.push(uahPiece); // Tie, add to the array
+        gameLinksWithPiecesMostMoves.push(game.metadata
+          .find((item) => item.startsWith('[Site "'))
+          ?.replace('[Site "', '')
+          .replace('"]', '')); // Tie, add to the array
       }
     }
 
@@ -476,7 +476,9 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
     const averageNumMoves = averageNumMovesByPiece[uahPiece];
     if (averageNumMoves > maxAverageNumMoves) {
       maxAverageNumMoves = averageNumMoves;
-      pieceWithHighestAverageNumMoves = uahPiece;
+      piecesWithHighestAverageNumMoves = [uahPiece]; // New highest average, reset the array
+    } else if (averageNumMoves === maxAverageNumMoves) {
+      piecesWithHighestAverageNumMoves.push(uahPiece); // Tie, add to the array
     }
   }
 
@@ -578,5 +580,9 @@ export async function countAmbigPiecesOnBoard(games: FileReaderGame[]) {
     piecesOnBoardCount,
     maxQueenCounts,
     movesAndGamesWithMaxQueenCount,
+    piecesWithHighestAverageNumMoves,
+    piecesWithMostMovesInAGame,
+    gameLinksWithPiecesMostMoves,
+    numMovesMadePieceWithMostMoves,
   }
 }

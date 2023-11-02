@@ -1,5 +1,5 @@
 import {
-    getPiecePromotionInfo
+    getPieceLevelMoveInfo,
   } from '../src/metrics/metrics';
 
 // game being tested: https://lichess.org/jo73x9y8
@@ -10,7 +10,7 @@ const game = [
     }
   ];
 
-  getPiecePromotionInfo(game)
+  getPieceLevelMoveInfo(game)
   .then((result) => {
     console.log(result);
   })
