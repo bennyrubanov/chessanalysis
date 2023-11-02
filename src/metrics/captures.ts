@@ -2,10 +2,11 @@ import {
   ALL_SQUARES,
   ALL_UNAMBIGUOUS_PIECE_SYMBOLS,
   Chess,
+  Piece,
   PrettyMove,
   UnambiguousPieceSymbol,
 } from '../../cjsmin/src/chess';
-import { FileReaderGame } from '../types';
+import { Metric } from './metric';
 
 export function createBoardMap(): BoardMap {
   /**
@@ -56,11 +57,11 @@ export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
   let i = 0;
   for (const move of moves) {
     if (move.capture) {
-      boardMap[move.to][move.unambiguousSymbol].captures++;
+      boardMap[move.to][move.uas].captures++;
       boardMap[move.to][move.capture.unambiguousSymbol].captured++;
       // revenge kills
       if (lastMove.capture && move.to === lastMove.to) {
-        boardMap[move.to][move.unambiguousSymbol].revengeKills++;
+        boardMap[move.to][move.uas].revengeKills++;
       }
     }
     lastMove = move;
@@ -89,9 +90,9 @@ function getMaxKillStreak(
     const move = moves[i];
     if (move.capture) {
       if (streakLength === 0) {
-        streakPiece = move.unambiguousSymbol;
+        streakPiece = move.uas;
         streakLength++;
-      } else if (streakPiece === move.unambiguousSymbol) {
+      } else if (streakPiece === move.uas) {
         streakLength++;
       } else {
         uapMap[streakPiece].killStreaks = Math.max(
@@ -117,50 +118,103 @@ export function getBWKillStreaks(moves: PrettyMove[]) {
   return tracker;
 }
 
-// calculates piece with highest K/D ratio and also contains assists by that piece
-export async function getKillDeathRatios(games: FileReaderGame[]) {
-  console.time('Task 4: getKillDeathRatios');
+export class KDRatioMetric implements Metric {
   // create an object to track kills, deaths, and assists of each piece
-  // The killsDeathsAssistsMap is an object where each key is a piece and the value is another object with kills, deaths, and assists properties.
-  const killsDeathsAssistsMap: {
-    [key: string]: { kills: number; deaths: number; assists: number };
-  } = {};
+  // The kDAssistsMap is an object where each key is a piece and the value is another object with kills, deaths, and assists properties.
+  KDAssistsMap: {
+    [key: string]: {
+      kills: number;
+      deaths: number;
+      assists: number;
+    };
+  };
+  pieceWithHighestKDRatio: string;
+  KDRatios: {
+    [key: string]: number;
+  };
 
-  const killDeathRatios = {};
+  constructor() {
+    this.KDAssistsMap = {};
+    this.KDRatios = {};
+  }
 
-  // look at each game and find the piece with the largest kill/death ratio
-  for (const game of games) {
-    const chess = new Chess();
-    const moveGenerator = chess.historyGenerator(game.moves);
+  logResults(): void {
+    // KDR facts
+    console.log('KDR FACTS (INCLUDING CHECKMATES AS KILLS):');
+    console.log(
+      `Piece with the highest KD ratio: ${this.pieceWithHighestKDRatio}`
+    );
+    console.log('Kills, Deaths, and Assists for each unambiguous piece:'),
+      console.table(this.KDAssistsMap);
+    console.log(
+      'Kill Death Ratios for each unambiguous piece: ' +
+        JSON.stringify(this.KDRatios, null, 2)
+    );
+  }
 
-    for (let moveInfo of moveGenerator) {
-      const { move, board } = moveInfo;
+  aggregate() {
+    // calculate the KD ratios of each piece
+    for (const piece of Object.keys(this.KDAssistsMap)) {
+      const kills = this.KDAssistsMap[piece].kills;
+      const deaths = this.KDAssistsMap[piece].deaths || 0;
+      if (deaths !== 0) {
+        this.KDRatios[piece] = kills / deaths;
+      }
+    }
 
-      let piece = move.unambiguousSymbol;
+    // find the piece with the highest KD ratio
+    let maxKDRatio = 0;
+    let pieceWithHighestKDRatio = null;
 
-      if (!killsDeathsAssistsMap[piece]) {
-        killsDeathsAssistsMap[piece] = { kills: 0, deaths: 0, assists: 0 };
+    for (const piece of Object.keys(this.KDRatios)) {
+      if (this.KDRatios[piece] > maxKDRatio) {
+        maxKDRatio = pieceWithHighestKDRatio = this.KDRatios[piece];
+      }
+    }
+
+    return {
+      maxKDRatio,
+      pieceWithHighestKDRatio,
+      KDRatios: this.KDRatios,
+    };
+  }
+
+  // calculates piece with highest K/D ratio and also contains assists by that piece
+  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+    // export function getKillDeathRatios(games: FileReaderGame[]) {
+    console.time('Task 4: getKillDeathRatios');
+
+    // look at each game and find the piece with the largest kill/death ratio
+
+    for (const { move, board } of game) {
+      // TODO: we can initialize this
+      if (!this.KDAssistsMap[move.uas]) {
+        this.KDAssistsMap[move.uas] = {
+          kills: 0,
+          deaths: 0,
+          assists: 0,
+        };
       }
 
-      const movedPiece = move.unambiguousSymbol;
+      const movedPiece = move.uas;
 
       // Check if movedPiece is not undefined
       if (movedPiece) {
         // update the kill & death counts of movedPiece
         if (move.capture) {
-          killsDeathsAssistsMap[movedPiece].kills++;
+          this.KDAssistsMap[movedPiece].kills++;
 
           const capturedPiece = board[move.toIndex]?.unambiguousSymbol; // Get the unambiguous piece symbol from the board state
 
           if (capturedPiece) {
-            if (!killsDeathsAssistsMap[capturedPiece]) {
-              killsDeathsAssistsMap[capturedPiece] = {
+            if (!this.KDAssistsMap[capturedPiece]) {
+              this.KDAssistsMap[capturedPiece] = {
                 kills: 0,
                 deaths: 0,
                 assists: 0,
               };
             }
-            killsDeathsAssistsMap[capturedPiece].deaths++;
+            this.KDAssistsMap[capturedPiece].deaths++;
           }
         }
       } else {
@@ -170,60 +224,19 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
     }
 
     // Check if the game is in checkmate after the last move
-    if (chess.isCheckmate()) {
-      const { unambigMatingPiece, unambigMatedPiece } = getMateAndAssists(
-        game.moves
-      );
+    if (game[game.length - 1].move.originalString.includes('#')) {
+      const unambigMatingPiece = game[game.length - 1].move.uas;
+      this.KDAssistsMap[unambigMatingPiece].kills++;
 
-      if (unambigMatingPiece) {
-        killsDeathsAssistsMap[unambigMatingPiece].kills++;
-      }
-
-      if (unambigMatedPiece) {
-        killsDeathsAssistsMap[unambigMatedPiece].deaths++;
-      }
+      // only kings can get mated, and we know whose move it is
+      const matedKing = game[game.length - 1].move.color === 'w' ? 'k' : 'K';
+      this.KDAssistsMap[matedKing].deaths++;
     }
+
+    console.timeEnd('Task 4: getKillDeathRatios');
+
+    // }
   }
-
-  // calculate the kill death ratios of each piece
-  for (const piece of Object.keys(killsDeathsAssistsMap)) {
-    const kills = killsDeathsAssistsMap[piece].kills;
-    const deaths = killsDeathsAssistsMap[piece].deaths || 0;
-    if (deaths !== 0) {
-      killDeathRatios[piece] = kills / deaths;
-    }
-  }
-
-  // find the piece with the highest kill death ratio
-  let maxKillDeathRatio = 0;
-  let pieceWithHighestKDRatio = null;
-
-  for (const piece of Object.keys(killDeathRatios)) {
-    const ratio = killDeathRatios[piece];
-    if (ratio > maxKillDeathRatio) {
-      maxKillDeathRatio = ratio;
-      pieceWithHighestKDRatio = piece;
-    }
-  }
-
-  // KDR facts
-  console.log('KDR FACTS (INCLUDING CHECKMATES AS KILLS):');
-  console.log(
-    `Piece with the highest kill death ratio: ${pieceWithHighestKDRatio}`
-  );
-  console.log('Kills, Deaths, and Assists for each unambiguous piece:'),
-    console.table(killsDeathsAssistsMap);
-  console.log(
-    'Kill Death Ratios for each unambiguous piece: ' +
-      JSON.stringify(killDeathRatios, null, 2)
-  );
-
-  console.timeEnd('Task 4: getKillDeathRatios');
-  return {
-    killDeathRatios,
-    killsDeathsAssistsMap,
-    pieceWithHighestKDRatio,
-  };
 }
 
 // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery checks (currently we disregard this by just referring to whatever the PGN says. If the piece that moves causes checkmate, then it is the "mating piece")
@@ -256,7 +269,7 @@ export function getMateAndAssists(pgnMoveLine: string) {
 
     if (move?.originalString.includes('#')) {
       matingPiece = move.piece;
-      unambigMatingPiece = move.unambiguousSymbol;
+      unambigMatingPiece = move.uas;
 
       // Determine the color of the mated king
       const matedKingColor = move.color === 'w' ? 'b' : 'w';
@@ -266,20 +279,20 @@ export function getMateAndAssists(pgnMoveLine: string) {
       if (
         lastFewMoves[2] &&
         lastFewMoves[2].originalString.includes('+') &&
-        lastFewMoves[2].unambiguousSymbol !== unambigMatingPiece
+        lastFewMoves[2].uas !== unambigMatingPiece
       ) {
         assistingPiece = lastFewMoves[2].piece;
-        unambigAssistingPiece = lastFewMoves[2].unambiguousSymbol;
+        unambigAssistingPiece = lastFewMoves[2].uas;
 
         // If assist check for hockey assist
         if (
           lastFewMoves[4] &&
           lastFewMoves[4].originalString.includes('+') &&
-          lastFewMoves[4].unambiguousSymbol !== unambigAssistingPiece &&
-          lastFewMoves[4].unambiguousSymbol !== unambigMatingPiece
+          lastFewMoves[4].uas !== unambigAssistingPiece &&
+          lastFewMoves[4].uas !== unambigMatingPiece
         ) {
           hockeyAssist = lastFewMoves[4].piece;
-          unambigHockeyAssistPiece = lastFewMoves[4].unambiguousSymbol;
+          unambigHockeyAssistPiece = lastFewMoves[4].uas;
         }
       }
     }

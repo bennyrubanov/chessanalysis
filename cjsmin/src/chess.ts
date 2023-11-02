@@ -50,7 +50,7 @@ export type PrettyMove = {
   capture?: Capture | undefined;
   promotion?: PieceType | undefined;
   flags: string;
-  unambiguousSymbol: UnambiguousPieceSymbol;
+  uas: UnambiguousPieceSymbol;
 };
 
 export type UnambiguousPieceSymbol =
@@ -1975,7 +1975,7 @@ export class Chess {
       to: move.to,
       flags: move.flags,
       piece: move.piece,
-      unambiguousSymbol: uglyMove.unambiguousSymbol,
+      uas: uglyMove.unambiguousSymbol,
       originalString,
     };
 

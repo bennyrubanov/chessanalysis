@@ -18,7 +18,7 @@ export async function getPiecePromotionInfo(games: FileReaderGame[]) {
           .split('=')[1]
           .match(/[a-zA-Z]/)[0];
 
-        const promotingPiece = moveInfo.unambiguousSymbol;
+        const promotingPiece = moveInfo.uas;
 
         // update ambigPiecePromotedToMap
         if (!ambigPiecePromotedToMap[piecePromotedTo]) {
@@ -34,6 +34,17 @@ export async function getPiecePromotionInfo(games: FileReaderGame[]) {
       }
     }
   }
+
+  // promotions facts
+  console.log('PROMOTIONS FACTS:');
+  console.log(
+    'How often a piece is promoted to different ambiguous piece types:'
+  ),
+    console.table(ambigPiecePromotedToMap);
+  console.log('How often unambiguous piece is promoted:'),
+    console.table(promotingPieceMap);
+  console.log('==============================================================');
+  console.log('\n');
 
   console.timeEnd('Task 7: getPiecePromotionInfo');
   return {
