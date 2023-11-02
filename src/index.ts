@@ -1,13 +1,10 @@
 import { gameChunks } from './fileReader';
+import { getKillDeathRatios } from './metrics/captures';
 import {
   getAverageDistance,
   getMoveDistanceSetOfGames,
 } from './metrics/distances';
-import {
-  getGameWithMostMoves,
-  getKillDeathRatios,
-  getPieceLevelMoveInfo,
-} from './metrics/metrics';
+import { getGameWithMostMoves, getPieceLevelMoveInfo } from './metrics/metrics';
 import { getPiecePromotionInfo } from './metrics/promotions';
 import { FileReaderGame } from './types';
 
