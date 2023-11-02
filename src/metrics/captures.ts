@@ -218,6 +218,8 @@ export async function getKillDeathRatios(games: FileReaderGame[]) {
       JSON.stringify(killDeathRatios, null, 2)
   );
 
+  
+
   console.timeEnd('Task 4: getKillDeathRatios');
   return {
     killDeathRatios,

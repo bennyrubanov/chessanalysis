@@ -35,7 +35,25 @@ export async function getPiecePromotionInfo(games: FileReaderGame[]) {
     }
   }
 
+  // promotions facts
+  console.log('PROMOTIONS FACTS:');
+  console.log(
+    'How often a piece is promoted to different ambiguous piece types:'
+  ),
+    console.table(ambigPiecePromotedToMap);
+  console.log('How often unambiguous piece is promoted:'),
+    console.table(promotingPieceMap);
+  console.log('==============================================================');
+  console.log('\n');
+
+  console.timeEnd('Final Task: print results to console');
+  console.log('\n');
+
+  console.timeEnd('Total Execution Time');
+  console.log('\n');
+
   console.timeEnd('Task 7: getPiecePromotionInfo');
+
   return {
     ambigPiecePromotedToMap,
     promotingPieceMap,

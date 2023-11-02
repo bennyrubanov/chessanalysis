@@ -40,14 +40,9 @@ export async function main(path: string) {
   getAverageDistance(totalDistanceMap, gameCount);
 
   await getKillDeathRatios(games);
-
-  const { gameLinkWithMostMoves: gameWithMostMoves, maxNumMoves } =
-    await getGameWithMostMoves(games);
-
+  await getGameWithMostMoves(games);
   await getPieceLevelMoveInfo(games);
-
-  const { ambigPiecePromotedToMap, promotingPieceMap } =
-    await getPiecePromotionInfo(games);
+  await getPiecePromotionInfo(games);
 
   console.time('Final Task: print results to console');
   console.log('\n');
@@ -55,23 +50,6 @@ export async function main(path: string) {
   console.log('\n');
 
   console.log('==============================================================');
-  console.log('\n');
-
-  // promotions facts
-  console.log('PROMOTIONS FACTS:');
-  console.log(
-    'How often a piece is promoted to different ambiguous piece types:'
-  ),
-    console.table(ambigPiecePromotedToMap);
-  console.log('How often unambiguous piece is promoted:'),
-    console.table(promotingPieceMap);
-  console.log('==============================================================');
-  console.log('\n');
-
-  console.timeEnd('Final Task: print results to console');
-  console.log('\n');
-
-  console.timeEnd('Total Execution Time');
   console.log('\n');
 }
 
