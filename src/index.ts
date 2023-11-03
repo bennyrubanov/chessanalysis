@@ -61,7 +61,6 @@ function gameIterator(
   metricFunctions: ((game: { move: PrettyMove; board: Piece[] }[]) => void)[]
 ) {
   const KDRatio = new KDRatioMetric();
-  KDRatio.getKillDeathRatios(games);
 }
 
 if (require.main === module) {

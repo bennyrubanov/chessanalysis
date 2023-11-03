@@ -179,6 +179,11 @@ export class KDRatioMetric implements Metric {
     };
   }
 
+  clear(): void {
+    this.KDAssistsMap = {};
+    this.KDRatios = {};
+  }
+
   // calculates piece with highest K/D ratio and also contains assists by that piece
   processGame(game: { move: PrettyMove; board: Piece[] }[]) {
     for (const { move } of game) {
@@ -191,6 +196,7 @@ export class KDRatioMetric implements Metric {
       }
 
       if (move.capture) {
+        console.log('move: ', move);
         this.KDAssistsMap[move.uas].kills++;
 
         // capture stores which piece was captured
@@ -202,9 +208,6 @@ export class KDRatioMetric implements Metric {
           };
         }
         this.KDAssistsMap[move.capture.uas].deaths++;
-      } else {
-        console.log('No piece found for square:', move.from);
-        console.log('move: ', move);
       }
     }
 

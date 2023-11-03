@@ -6,7 +6,7 @@ export interface Metric {
   logResults?(): void;
 
   // Reset the maps used to track metrics
-  reset?(): void;
+  clear?(): void;
 
   // Aggregate the results of the metric
   aggregate?(): any;

@@ -1999,7 +1999,7 @@ export class Chess {
     return null;
   }
 
-  history() {
+  history(): PrettyMove[] {
     return this._history.map((h) => {
       return {
         ...this._makePretty(h.move, h.originalString),
