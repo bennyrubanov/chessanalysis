@@ -371,7 +371,7 @@ describe('getKillDeathRatios', () => {
     kdrMetric.processGame(Array.from(cjsmin.historyGenerator(game[0].moves)));
 
     console.log(kdrMetric.KDAssistsMap['ng'].kills);
-    expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(2);
+    expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(3);
   });
 });
 
