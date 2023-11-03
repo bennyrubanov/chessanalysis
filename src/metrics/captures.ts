@@ -58,7 +58,7 @@ export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
   for (const move of moves) {
     if (move.capture) {
       boardMap[move.to][move.uas].captures++;
-      boardMap[move.to][move.capture.unambiguousSymbol].captured++;
+      boardMap[move.to][move.capture.uas].captured++;
       // revenge kills
       if (lastMove.capture && move.to === lastMove.to) {
         boardMap[move.to][move.uas].revengeKills++;
@@ -181,13 +181,7 @@ export class KDRatioMetric implements Metric {
 
   // calculates piece with highest K/D ratio and also contains assists by that piece
   processGame(game: { move: PrettyMove; board: Piece[] }[]) {
-    // export function getKillDeathRatios(games: FileReaderGame[]) {
-    console.time('Task 4: getKillDeathRatios');
-
-    // look at each game and find the piece with the largest kill/death ratio
-
-    for (const { move, board } of game) {
-      // TODO: we can initialize this
+    for (const { move } of game) {
       if (!this.KDAssistsMap[move.uas]) {
         this.KDAssistsMap[move.uas] = {
           kills: 0,
@@ -196,27 +190,18 @@ export class KDRatioMetric implements Metric {
         };
       }
 
-      const movedPiece = move.uas;
+      if (move.capture) {
+        this.KDAssistsMap[move.uas].kills++;
 
-      // Check if movedPiece is not undefined
-      if (movedPiece) {
-        // update the kill & death counts of movedPiece
-        if (move.capture) {
-          this.KDAssistsMap[movedPiece].kills++;
-
-          const capturedPiece = board[move.toIndex]?.unambiguousSymbol; // Get the unambiguous piece symbol from the board state
-
-          if (capturedPiece) {
-            if (!this.KDAssistsMap[capturedPiece]) {
-              this.KDAssistsMap[capturedPiece] = {
-                kills: 0,
-                deaths: 0,
-                assists: 0,
-              };
-            }
-            this.KDAssistsMap[capturedPiece].deaths++;
-          }
+        // capture stores which piece was captured
+        if (!this.KDAssistsMap[move.capture.uas]) {
+          this.KDAssistsMap[move.capture.uas] = {
+            kills: 0,
+            deaths: 0,
+            assists: 0,
+          };
         }
+        this.KDAssistsMap[move.capture.uas].deaths++;
       } else {
         console.log('No piece found for square:', move.from);
         console.log('move: ', move);
@@ -232,10 +217,6 @@ export class KDRatioMetric implements Metric {
       const matedKing = game[game.length - 1].move.color === 'w' ? 'k' : 'K';
       this.KDAssistsMap[matedKing].deaths++;
     }
-
-    console.timeEnd('Task 4: getKillDeathRatios');
-
-    // }
   }
 }
 
