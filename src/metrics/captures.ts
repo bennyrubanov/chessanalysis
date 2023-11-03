@@ -196,7 +196,6 @@ export class KDRatioMetric implements Metric {
       }
 
       if (move.capture) {
-        console.log('move: ', move);
         this.KDAssistsMap[move.uas].kills++;
 
         // capture stores which piece was captured
