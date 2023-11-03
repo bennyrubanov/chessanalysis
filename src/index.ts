@@ -34,7 +34,7 @@ export async function main(path: string) {
   for await (const game of gamesGenerator) {
     gameCounter++;
     if (gameCounter % 200 == 0) {
-      console.log('number of games analyzed: ', gameCounter);
+      console.log('number of games downloaded, decompressed, and parsed: ', gameCounter);
     }
     
     // If there is a previous game, push it to the games array
@@ -159,7 +159,7 @@ export async function main(path: string) {
   // promotions facts
   console.log("PROMOTIONS FACTS:")
   console.log("How often a piece is promoted to different ambiguous piece types:"), console.table(ambigPiecePromotedToMap);
-  console.log("How often unambiguous piece is promoted:"), console.table(promotingPieceMap);
+  console.log("How often each unambiguous piece is promoted:"), console.table(promotingPieceMap);
   console.log("==============================================================");
   console.log("\n");
 

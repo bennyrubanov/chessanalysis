@@ -4,7 +4,7 @@
 files=("lichess_db_standard_rated_2023-08.pgn.zst" "lichess_db_standard_rated_2023-09.pgn.zst" ...)
 
 # Size of each chunk in bytes (10MB = 10 * 1024 * 1024 bytes) which should yield around 30k games
-chunk_size=$((10 * 1024 * 1024))
+chunk_size=$((10 * 1024))
 
 # Maximum number of chunks to analyze
 max_chunks=3
@@ -25,27 +25,17 @@ do
       break
     fi
 
-    # Download a chunk of the file
-    curl -O -r $start-$end https://database.lichess.org/standard/$file
-
-    # Check if the file was downloaded
-    if [ ! -f $file ]; then
-      echo "File $file not found!"
-      break
-    fi
-
-    # Decompress the file and save the games to a new file
-    zstdcat $file > /Users/bennyrubanov/chessanalysis/data/temp.pgn
-    # zstdcat $file | awk -v RS= -v ORS='\n\n' 'NR <= 100' > /path/to/your/project/data/temp.pgn
+    # Download a chunk of the file and decompress it
+    curl -r $start-$end https://database.lichess.org/standard/$file | zstd -d -c > /Users/bennyrubanov/chessanalysis/data/temp.pgn
+    echo "Chunk of size $(($chunk_size / 1024 / 1024)) MB of $file downloaded and decompressed."
 
     # Run your analysis script
     node /Users/bennyrubanov/chessanalysis/dist/src/index.js
+    echo "Analysis script run on chunk of $file."
 
     # Delete the temporary file
     rm /Users/bennyrubanov/chessanalysis/data/temp.pgn
-
-    # Delete the downloaded file
-    rm $file
+    echo "Temporary file deleted."
 
     # Update the byte range for the next chunk
     start=$((start + chunk_size + 1))
