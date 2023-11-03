@@ -30,6 +30,21 @@ const downloadFile = async (file, maxRetries = 100) => {
     while (retries < maxRetries) {
         try {
             await new Promise(async (resolve, reject) => {
+
+                let headResponse = await axios({
+                    url,
+                    method: 'HEAD'
+                });
+
+                const fileSize = headResponse.headers['content-length'];
+
+                console.log(`startByte: ${startByte}, fileSize: ${fileSize}`);
+
+                if (startByte >= fileSize) {
+                    console.log('File already fully downloaded');
+                    return;
+                }
+                
                 const response = await axios({
                     url,
                     method: 'GET',
@@ -40,9 +55,28 @@ const downloadFile = async (file, maxRetries = 100) => {
                     timeout: 5000 // Timeout of 5 seconds
                 });
 
-                const totalLength = response.headers['content-length'];
 
+                const acceptRanges = response.headers['accept-ranges'];
+                if (acceptRanges !== 'bytes') {
+                    console.log('Server does not support range requests');
+                    // Handle the lack of support for range requests...
+                }
+                
+                const contentRange = response.headers['content-range'];
+                if (contentRange) {
+                    const range = contentRange.split('/')[0].split('-');
+                    const rangeStart = parseInt(range[0]);
+                    const rangeEnd = parseInt(range[1]);
+                
+                    if (rangeStart !== startByte) {
+                        console.log(`Server returned unexpected range: ${rangeStart}-${rangeEnd}`);
+                        // Handle the unexpected range...
+                    }
+                }
+
+                const totalLength = response.headers['content-length'];
                 console.log('totalLength', totalLength);
+                console.log('contentRange', contentRange);
 
                 const progressBar = new ProgressBar('-> downloading [:bar] :percent :etas', {
                     width: 40,
@@ -178,7 +212,7 @@ const decompressChunkAndAnalyze = async (file, start = 0) => {
             // Update the byte range for the next chunk
             start = end;
             end = start + chunk_size;
-            
+
         } catch (error) {
             console.error(`Error decompressing data: ${error.message}`);
             break;
