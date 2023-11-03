@@ -359,6 +359,7 @@ describe('getKillDeathRatios', () => {
   });
 
   it('should return the correct number of kills for a piece in a game, including counting checkmates as a "kill"', async () => {
+    // In this game 'ng' takes 2 pawns and also delivers checkmate, for 3 kills
     const game = [
       {
         metadata: [],
