@@ -82,7 +82,7 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
     for (let moveInfo of moveGenerator) {
       const { move } = moveInfo;
 
-      let movedPiece = move.unambiguousSymbol;
+      let movedPiece = move.uas;
 
       if (movedPiece) {
         if (!numMovesByPiece[movedPiece]) {

@@ -18,9 +18,7 @@ xdescribe('Game history for en passant move should show valid captured piece', (
     for (const { move } of gen) {
       if (move.flags === 'e') {
         expect(move.capture.type).toEqual('p');
-        expect(move.capture.unambiguousSymbol.charAt(0)).not.toEqual(
-          move.unambiguousSymbol.charAt(0)
-        );
+        expect(move.capture.uas.charAt(0)).not.toEqual(move.uas.charAt(0));
       }
     }
   });

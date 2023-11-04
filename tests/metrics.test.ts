@@ -1,11 +1,8 @@
 import { Chess as ChessOG } from 'chess.js';
 import { Chess } from '../cjsmin/src/chess';
-import {
-  getGameWithMostMoves,
-  getKillDeathRatios,
-  getMateAndAssists,
-  getMoveDistanceSingleGame,
-} from '../src/metrics/metrics';
+import { KDRatioMetric, getMateAndAssists } from '../src/metrics/captures';
+import { getMoveDistanceSingleGame } from '../src/metrics/distances';
+import { getGameWithMostMoves } from '../src/metrics/metrics';
 
 // convert PGN string to GameHistoryObject
 export function pgnToGameHistory(pgn: string) {
@@ -329,7 +326,7 @@ describe('getMoveDistanceSingleGame', () => {
     let totalDistance = 0;
 
     for (const distance of Object.keys(result.distanceMap)) {
-      totalDistance += result.distanceMap[distance]
+      totalDistance += result.distanceMap[distance];
     }
 
     expect(result.singleGameDistanceTotal).toEqual(totalDistance);
@@ -337,7 +334,16 @@ describe('getMoveDistanceSingleGame', () => {
 });
 
 // game being tested: https://www.chess.com/analysis/game/pgn/4uURW4rJaa?tab=analysis
-xdescribe('getKillDeathRatios', () => {
+describe('getKillDeathRatios', () => {
+  // this could be a beforeAll
+  const kdrMetric = new KDRatioMetric();
+  const cjsmin = new Chess();
+
+  // Reset state before next test
+  afterEach(() => {
+    kdrMetric.clear();
+  });
+
   it('should return the correct number of kills, deaths, and assists for each piece in a game', async () => {
     const game = [
       {
@@ -346,16 +352,14 @@ xdescribe('getKillDeathRatios', () => {
           '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1',
       },
     ];
+    kdrMetric.processGame(Array.from(cjsmin.historyGenerator(game[0].moves)));
 
-    const result = await getKillDeathRatios(game);
-
-    console.log('result', result);
-
-    expect(result.killsDeathsAssistsMap['pe'].kills).toEqual(1);
-    expect(result.killsDeathsAssistsMap['pe'].deaths).toEqual(1);
+    expect(kdrMetric.KDAssistsMap['pe'].kills).toEqual(1);
+    expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
   });
 
   it('should return the correct number of kills for a piece in a game, including counting checkmates as a "kill"', async () => {
+    // In this game 'ng' takes 2 pawns and also delivers checkmate, for 3 kills
     const game = [
       {
         metadata: [],
@@ -364,9 +368,10 @@ xdescribe('getKillDeathRatios', () => {
       },
     ];
 
-    const result = await getKillDeathRatios(game);
+    kdrMetric.processGame(Array.from(cjsmin.historyGenerator(game[0].moves)));
 
-    expect(result.killsDeathsAssistsMap['ng'].kills).toEqual(2);
+    console.log(kdrMetric.KDAssistsMap['ng'].kills);
+    expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(3);
   });
 });
 

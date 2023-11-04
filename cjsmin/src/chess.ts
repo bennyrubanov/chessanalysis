@@ -50,7 +50,7 @@ export type PrettyMove = {
   capture?: Capture | undefined;
   promotion?: PieceType | undefined;
   flags: string;
-  unambiguousSymbol: UnambiguousPieceSymbol;
+  uas: UnambiguousPieceSymbol;
 };
 
 export type UnambiguousPieceSymbol =
@@ -164,7 +164,7 @@ export type Piece = {
 
 type Capture = {
   type: PieceType;
-  unambiguousSymbol: UnambiguousPieceSymbol;
+  uas: UnambiguousPieceSymbol;
 };
 
 export type InternalMove = {
@@ -812,7 +812,7 @@ export class Chess {
             unambiguousSymbol: this._board[square]?.unambiguousSymbol,
             capture: {
               type: PAWN,
-              unambiguousSymbol: this._board[square]?.unambiguousSymbol,
+              uas: this._board[square]?.unambiguousSymbol,
             },
             flags: BITS.EP_CAPTURE,
           });
@@ -1292,7 +1292,7 @@ export class Chess {
               this._board[from].unambiguousSymbol,
               {
                 type: this._board[to].type,
-                unambiguousSymbol: this._board[to].unambiguousSymbol,
+                uas: this._board[to].unambiguousSymbol,
               },
               BITS.CAPTURE
             );
@@ -1313,7 +1313,7 @@ export class Chess {
               this._board[from].unambiguousSymbol,
               {
                 type: PAWN,
-                unambiguousSymbol: uas as UnambiguousPieceSymbol,
+                uas: uas as UnambiguousPieceSymbol,
               },
               BITS.EP_CAPTURE
             );
@@ -1352,7 +1352,7 @@ export class Chess {
                 this._board[from].unambiguousSymbol,
                 {
                   type: this._board[to].type,
-                  unambiguousSymbol: this._board[to].unambiguousSymbol,
+                  uas: this._board[to].unambiguousSymbol,
                 },
                 BITS.CAPTURE
               );
@@ -1605,7 +1605,7 @@ export class Chess {
         this._board[index] = {
           type: PAWN,
           color: them,
-          unambiguousSymbol: move.capture.unambiguousSymbol,
+          unambiguousSymbol: move.capture.uas,
         };
       } else {
         // regular capture
@@ -1613,7 +1613,7 @@ export class Chess {
           type: move.capture.type,
           color: them,
           // TODO: Implement unambiguousSymbol
-          unambiguousSymbol: move.capture.unambiguousSymbol,
+          unambiguousSymbol: move.capture.uas,
         };
       }
     }
@@ -1975,7 +1975,7 @@ export class Chess {
       to: move.to,
       flags: move.flags,
       piece: move.piece,
-      unambiguousSymbol: uglyMove.unambiguousSymbol,
+      uas: uglyMove.unambiguousSymbol,
       originalString,
     };
 
@@ -1999,7 +1999,7 @@ export class Chess {
     return null;
   }
 
-  history() {
+  history(): PrettyMove[] {
     return this._history.map((h) => {
       return {
         ...this._makePretty(h.move, h.originalString),

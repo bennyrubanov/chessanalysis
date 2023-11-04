@@ -18,8 +18,8 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
   for (let moveInfo of moveGenerator) {
     const { move, board } = moveInfo;
 
-    if (!distanceMap[move.unambiguousSymbol]) {
-      distanceMap[move.unambiguousSymbol] = 0;
+    if (!distanceMap[move.uas]) {
+      distanceMap[move.uas] = 0;
     }
 
     const fromMove = moveInfo.move.from;
@@ -57,13 +57,13 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
       // The distance moved is the maximum of fileDist and rankDist
       distance = Math.max(fileDist, rankDist);
 
-      distanceMap[move.unambiguousSymbol] += distance;
+      distanceMap[move.uas] += distance;
       singleGameDistanceTotal += distance;
     }
 
-    if (distanceMap[move.unambiguousSymbol] > maxDistance) {
-      maxDistance = distanceMap[move.unambiguousSymbol];
-      maxDistancePiece = move.unambiguousSymbol;
+    if (distanceMap[move.uas] > maxDistance) {
+      maxDistance = distanceMap[move.uas];
+      maxDistancePiece = move.uas;
     }
   }
 

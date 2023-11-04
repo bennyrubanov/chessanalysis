@@ -18,9 +18,7 @@ xdescribe('Chess', () => {
         console.log(move);
         // validate that the piece that was moved is of the same type as the destination square
         expect(move.piece).toEqual(board[move.toIndex].type);
-        expect(move.unambiguousSymbol).toEqual(
-          board[move.toIndex].unambiguousSymbol
-        );
+        expect(move.uas).toEqual(board[move.toIndex].unambiguousSymbol);
         // validate that the original string in the move matches the expected string
         expect(move.originalString).toEqual(expectedMoves.shift());
       }
