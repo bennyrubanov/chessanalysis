@@ -1,4 +1,4 @@
-import { Chess, UnambiguousPieceSymbol } from '../../cjsmin/src/chess';
+import { Chess, UAPSymbol } from '../../cjsmin/src/chess';
 import { FileReaderGame } from '../types';
 
 // take a start and end board position and return the distances moved
@@ -11,7 +11,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
   // Initialize variables to keep track of the maximum distance and the piece
   let maxDistance = -1;
-  let maxDistancePiece: UnambiguousPieceSymbol;
+  let maxDistancePiece: UAPSymbol;
   let singleGameDistanceTotal = 0;
 
   // evaluate each move, update the correct unambiguous piece's distance

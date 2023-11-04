@@ -50,10 +50,10 @@ export type PrettyMove = {
   capture?: Capture | undefined;
   promotion?: PieceType | undefined;
   flags: string;
-  uas: UnambiguousPieceSymbol;
+  uas: UAPSymbol;
 };
 
-export type UnambiguousPieceSymbol =
+export type UAPSymbol =
   | 'RA'
   | 'NB'
   | 'BC'
@@ -146,7 +146,7 @@ export const ALL_SQUARES: Square[] = [
 ]
 
 // prettier-ignore
-export const ALL_UNAMBIGUOUS_PIECE_SYMBOLS: UnambiguousPieceSymbol[] = [
+export const ALL_UNAMBIGUOUS_PIECE_SYMBOLS: UAPSymbol[] = [
   "RA", "NB", "BC", "Q", "K", "BF", "NG", "RH",
   "PA", "PB", "PC", "PD", "PE", "PF", "PG", "PH",
   "ra", "nb", "bc", "q", "k", "bf", "ng", "rh",
@@ -159,12 +159,12 @@ export const DEFAULT_POSITION =
 export type Piece = {
   color: Color;
   type: PieceType;
-  uas: UnambiguousPieceSymbol;
+  uas: UAPSymbol;
 };
 
 type Capture = {
   type: PieceType;
-  uas: UnambiguousPieceSymbol;
+  uas: UAPSymbol;
 };
 
 export type InternalMove = {
@@ -172,7 +172,7 @@ export type InternalMove = {
   from: number;
   to: number;
   piece: PieceType;
-  uas: UnambiguousPieceSymbol;
+  uas: UAPSymbol;
   capture?: Capture;
   promotion?: PieceType;
   flags: number;
@@ -197,7 +197,7 @@ export type Move = {
   capture?: Capture;
   promotion?: PieceType;
   flags: string;
-  umabiguousSymbol: UnambiguousPieceSymbol;
+  umabiguousSymbol: UAPSymbol;
   // san: string;
   // lan: string;
   // before: string;
@@ -612,7 +612,7 @@ function addMove(
   from: number,
   to: number,
   piece: PieceType,
-  uas: UnambiguousPieceSymbol,
+  uas: UAPSymbol,
   capture: Capture | undefined = undefined,
   flags: number = BITS.NORMAL
 ) {
@@ -867,9 +867,7 @@ export class Chess {
     square: Square
   ) {
     //@ts-ignore this breaks for non init
-    const uas = SQUARE_TO_STARTING_POSITION_MAP[
-      square
-    ] as UnambiguousPieceSymbol;
+    const uas = SQUARE_TO_STARTING_POSITION_MAP[square] as UAPSymbol;
 
     // check for piece
     if (SYMBOLS.indexOf(type.toLowerCase()) === -1) {
@@ -1306,7 +1304,7 @@ export class Chess {
               this._board[from].uas,
               {
                 type: PAWN,
-                uas: uas as UnambiguousPieceSymbol,
+                uas: uas as UAPSymbol,
               },
               BITS.EP_CAPTURE
             );

@@ -1,11 +1,11 @@
 import {
   ALL_SQUARES,
   ALL_UNAMBIGUOUS_PIECE_SYMBOLS,
-  Chess,
   Piece,
   PrettyMove,
-  UnambiguousPieceSymbol,
+  UAPSymbol,
 } from '../../cjsmin/src/chess';
+import { BoardMap, UAPMap } from '../types';
 import { Metric } from './metric';
 
 export function createBoardMap(): BoardMap {
@@ -18,15 +18,7 @@ export function createBoardMap(): BoardMap {
    *   },
    * },
    */
-  const squareCaptureInfo: {
-    [key: string]: {
-      [key: string]: {
-        captured: number;
-        captures: number;
-        revengeKills: number;
-      };
-    };
-  } = {};
+  const squareCaptureInfo: any = {}; // make typing simpler
 
   for (const square of ALL_SQUARES) {
     squareCaptureInfo[square] = {};
@@ -42,42 +34,15 @@ export function createBoardMap(): BoardMap {
   return squareCaptureInfo;
 }
 
-interface BoardMap {
-  [key: string]: {
-    [key: string]: {
-      captured: number;
-      captures: number;
-      revengeKills: number;
-    };
-  };
-}
-
-export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
-  let lastMove: PrettyMove;
-  let i = 0;
-  for (const move of moves) {
-    if (move.capture) {
-      boardMap[move.to][move.uas].captures++;
-      boardMap[move.to][move.capture.uas].captured++;
-      // revenge kills
-      if (lastMove.capture && move.to === lastMove.to) {
-        boardMap[move.to][move.uas].revengeKills++;
-      }
-    }
-    lastMove = move;
-    i++;
-  }
-}
-
 /**
  * A utitily function to create an object with unambiguous piece symbols as keys
  */
-function createUAPMap<T>(object: T): { [key: string]: T } {
+function createUAPMap<T>(object: T): UAPMap<T> {
   const map = {};
   for (const uap of ALL_UNAMBIGUOUS_PIECE_SYMBOLS) {
     map[uap] = { ...object };
   }
-  return map;
+  return map as UAPMap<T>;
 }
 
 export class KillStreakMetric implements Metric {
@@ -91,12 +56,6 @@ export class KillStreakMetric implements Metric {
     this.killStreakMap = createUAPMap({ killStreaks: 0 });
   }
 
-  logResults(): void {}
-
-  aggregate() {
-    return this.killStreakMap;
-  }
-
   clear(): void {
     this.killStreakMap = createUAPMap({ killStreaks: 0 });
   }
@@ -107,7 +66,7 @@ export class KillStreakMetric implements Metric {
   ) {
     let i = startingIndex;
     let streakLength = 0;
-    let streakPiece: UnambiguousPieceSymbol;
+    let streakPiece: UAPSymbol;
 
     while (i < game.length) {
       const move = game[i].move;
@@ -243,81 +202,93 @@ export class KDRatioMetric implements Metric {
   }
 }
 
-// One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery checks (currently we disregard this by just referring to whatever the PGN says. If the piece that moves causes checkmate, then it is the "mating piece")
-export function getMateAndAssists(pgnMoveLine: string) {
-  const chess = new Chess();
-  const moveGenerator = chess.historyGenerator(pgnMoveLine);
+export class MateAndAssistMetric implements Metric {
+  mateAndAssistMap: UAPMap<{
+    mates: number;
+    assists: number;
+    hockeyAssists: number;
+  }>;
+  matedCounts: {
+    k: number;
+    K: number;
+  };
 
-  let matingPiece,
-    assistingPiece,
-    hockeyAssist,
-    unambigMatingPiece,
-    unambigMatedPiece,
-    unambigAssistingPiece,
-    unambigHockeyAssistPiece,
-    lastPieceMoved;
+  // these are initialized as undefined
+  constructor() {
+    this.clear();
+  }
 
-  // Keep track of the last few moves
-  let lastFewMoves: PrettyMove[] = [];
+  // TODO: maybe slightly better if we don't recreate when clearing
+  clear(): void {
+    this.mateAndAssistMap = createUAPMap({
+      mates: 0,
+      assists: 0,
+      hockeyAssists: 0,
+    });
 
-  for (let moveInfo of moveGenerator) {
-    const { move, board } = moveInfo;
+    // We delete kings because they cannot deliver checks and can only be mated
+    delete this.mateAndAssistMap.k;
+    delete this.mateAndAssistMap.K;
+    this.matedCounts = {
+      k: 0,
+      K: 0,
+    };
+  }
 
-    // Add the current move to the start of the array
-    lastFewMoves.unshift(move);
-
-    // If we have more than 5 moves in the array, remove the oldest one
-    if (lastFewMoves.length > 5) {
-      lastFewMoves.pop();
+  // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery
+  // checks (currently we disregard this by just saying the last piece to move is the "mating piece")
+  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+    // Take no action if the game didn't end in checkmate
+    if (!game[game.length - 1].move.originalString.includes('#')) {
+      return;
     }
 
-    if (move?.originalString.includes('#')) {
-      matingPiece = move.piece;
-      unambigMatingPiece = move.uas;
+    const lastMove = game[game.length - 1].move;
 
-      // Determine the color of the mated king
-      const matedKingColor = move.color === 'w' ? 'b' : 'w';
-      unambigMatedPiece = matedKingColor === 'w' ? 'K' : 'k';
+    // increment the mate count of the mating piece
+    this.mateAndAssistMap[lastMove.uas].mates++;
+    // increment the mated (death) count of the mated king
+    this.matedCounts[lastMove.color === 'w' ? 'k' : 'K']++;
 
-      // If mate see if also assist
+    // The fastest possible checkmate is in 2 moves, so we do have to check for out of bounds
+
+    // Look back 2 moves to see if there was an assist
+    if (game.length > 2) {
+      const assistMove = game[game.length - 3].move;
       if (
-        lastFewMoves[2] &&
-        lastFewMoves[2].originalString.includes('+') &&
-        lastFewMoves[2].uas !== unambigMatingPiece
+        assistMove.originalString.includes('+') &&
+        assistMove.uas !== lastMove.uas
       ) {
-        assistingPiece = lastFewMoves[2].piece;
-        unambigAssistingPiece = lastFewMoves[2].uas;
+        this.mateAndAssistMap[assistMove.uas].assists++;
+      }
 
-        // If assist check for hockey assist
+      // hockey assist is only counted if there was also an assist
+      if (game.length > 4) {
+        const hockeyAssistMove = game[game.length - 5].move;
         if (
-          lastFewMoves[4] &&
-          lastFewMoves[4].originalString.includes('+') &&
-          lastFewMoves[4].uas !== unambigAssistingPiece &&
-          lastFewMoves[4].uas !== unambigMatingPiece
+          hockeyAssistMove.originalString.includes('+') &&
+          assistMove.uas !== lastMove.uas
         ) {
-          hockeyAssist = lastFewMoves[4].piece;
-          unambigHockeyAssistPiece = lastFewMoves[4].uas;
+          this.mateAndAssistMap[hockeyAssistMove.uas].hockeyAssists++;
         }
       }
     }
   }
-  // console.log('mating piece: ', matingPiece);
-  // console.log('assisting piece: ', assistingPiece);
-  // console.log('hockey assisting piece: ', hockeyAssist);
-  // console.log('unambig mating piece: ', unambigMatingPiece);
-  // console.log('unambig mated piece: ', unambigMatedPiece);
-  // console.log('unambig assisting piece: ', unambigAssistingPiece);
-  // console.log('unambig hockey assisting piece: ', unambigHockeyAssistPiece);
-  // console.log('last piece moved: ', lastPieceMoved);
+}
 
-  return {
-    matingPiece,
-    assistingPiece,
-    hockeyAssist,
-    unambigMatingPiece,
-    unambigMatedPiece,
-    unambigAssistingPiece,
-    unambigHockeyAssistPiece,
-    lastPieceMoved,
-  };
+export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
+  let lastMove: PrettyMove;
+  let i = 0;
+  for (const move of moves) {
+    if (move.capture) {
+      boardMap[move.to][move.uas].captures++;
+      boardMap[move.to][move.capture.uas].captured++;
+      // revenge kills
+      if (lastMove.capture && move.to === lastMove.to) {
+        boardMap[move.to][move.uas].revengeKills++;
+      }
+    }
+    lastMove = move;
+    i++;
+  }
 }

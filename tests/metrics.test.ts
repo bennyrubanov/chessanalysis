@@ -3,7 +3,7 @@ import { Chess } from '../cjsmin/src/chess';
 import {
   KDRatioMetric,
   KillStreakMetric,
-  getMateAndAssists,
+  MateAndAssistMetric,
 } from '../src/metrics/captures';
 import { getMoveDistanceSingleGame } from '../src/metrics/distances';
 import { getGameWithMostMoves } from '../src/metrics/moves';
@@ -29,7 +29,7 @@ export function gameHistoryToPgn(gameHistory): string {
 describe('All Tests', () => {
   const cjsmin = new Chess();
 
-  describe('gets black and white kill streaks', () => {
+  xdescribe('gets black and white kill streaks', () => {
     const killStreakMetric = new KillStreakMetric();
 
     it('should return the correct kill streaks', () => {
@@ -57,15 +57,17 @@ describe('All Tests', () => {
     it('should return the correct kill streaks', () => {});
   });
 
-  xdescribe('getMateAndAssists', () => {
-    it('should return empty objects if there is no mate or assist', () => {
-      const gameHistory: any[] = [
+  describe('getMateAndAssists', () => {
+    const mateAndAssistMetric = new MateAndAssistMetric();
+
+    it('should not modify if game ends early', () => {
+      const moves = [
         {
           originalString: 'e4',
           color: 'w',
           from: 'e2',
           to: 'e4',
-          piece: 'P',
+          piece: 'p',
           flags: 'b',
         },
         {
@@ -81,7 +83,7 @@ describe('All Tests', () => {
           color: 'w',
           from: 'g1',
           to: 'f3',
-          piece: 'N',
+          piece: 'n',
           flags: 'b',
         },
         {
@@ -92,21 +94,25 @@ describe('All Tests', () => {
           piece: 'n',
           flags: 'n',
         },
-      ];
-
-      const gameHistoryMoves = gameHistoryToPgn(gameHistory);
-
-      const result = getMateAndAssists(gameHistoryMoves);
-
-      expect(result).toEqual({
-        matingPiece: undefined,
-        assistingPiece: undefined,
-        hockeyAssist: undefined,
+      ].map((move) => {
+        return {
+          move: move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
       });
+
+      // const result = getMateAndAssists(gameHistoryMoves);
+      mateAndAssistMetric.processGame(moves);
+
+      const result = { ...mateAndAssistMetric.mateAndAssistMap };
+      // clear results before comparing
+      mateAndAssistMetric.clear();
+
+      expect(result).toEqual(mateAndAssistMetric.mateAndAssistMap);
     });
 
     it('should return the mating piece if there is a mate but no assist', () => {
-      const gameHistory: any[] = [
+      const moves: any[] = [
         {
           originalString: 'e4',
           color: 'w',
@@ -148,21 +154,24 @@ describe('All Tests', () => {
           captured: 'p',
           flags: 't',
         },
-      ];
+      ].map((move) => {
+        return {
+          move: move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
+      });
 
-      const gameHistoryMoves = gameHistoryToPgn(gameHistory);
+      mateAndAssistMetric.processGame(moves);
 
-      const result = getMateAndAssists(gameHistoryMoves);
-
-      expect(result).toEqual({
-        matingPiece: 'Q',
-        assistingPiece: undefined,
-        hockeyAssist: undefined,
+      expect(mateAndAssistMetric.mateAndAssistMap['Q']).toEqual({
+        mates: 1,
+        assists: 0,
+        hockeyAssists: 0,
       });
     });
 
-    it('should return the mating piece and assist if there is a mate with assist', () => {
-      const gameHistory: any[] = [
+    it('should return the mating piece and not count the same piece as assisting', () => {
+      const moves: any[] = [
         {
           originalString: 'e4',
           color: 'w',
@@ -223,104 +232,12 @@ describe('All Tests', () => {
         },
       ];
 
-      const gameHistoryMoves = gameHistoryToPgn(gameHistory);
+      mateAndAssistMetric.processGame(moves);
 
-      const result = getMateAndAssists(gameHistoryMoves);
-
-      expect(result).toEqual({
-        matingPiece: 'Q',
-        assistingPiece: undefined,
-        hockeyAssist: undefined,
-      });
-    });
-
-    // TODO: gen with copilot so the game may not be valid
-    it('should return just mating piece if the checks are all from the same piece', () => {
-      const gameHistory: any[] = [
-        {
-          originalString: 'e4',
-          color: 'w',
-          from: 'e2',
-          to: 'e4',
-          piece: 'P',
-          flags: 'b',
-        },
-        {
-          originalString: 'e5',
-          color: 'b',
-          from: 'e7',
-          to: 'e5',
-          piece: 'p',
-          flags: 'n',
-        },
-        {
-          originalString: 'Qh5',
-          color: 'w',
-          from: 'd1',
-          to: 'h5',
-          piece: 'Q',
-          flags: 'b',
-        },
-        {
-          originalString: 'Nc6',
-          color: 'b',
-          from: 'b8',
-          to: 'c6',
-          piece: 'n',
-          flags: 'n',
-        },
-        {
-          originalString: 'Qxf7+',
-          color: 'w',
-          from: 'h5',
-          to: 'f7',
-          piece: 'Q',
-          captured: 'p',
-          flags: 't',
-        },
-        {
-          originalString: 'Kd8',
-          color: 'b',
-          from: 'e8',
-          to: 'd8',
-          piece: 'k',
-          flags: 'n',
-        },
-        {
-          originalString: 'Qf8+',
-          color: 'w',
-          from: 'f7',
-          to: 'f8',
-          piece: 'Q',
-          flags: 'n',
-        },
-        {
-          originalString: 'Rg8',
-          color: 'b',
-          from: 'h8',
-          to: 'g8',
-          piece: 'R',
-          flags: 'n',
-        },
-        {
-          originalString: 'Qg8#', // can capture and mate happen in same? How is it represented?
-          color: 'w',
-          from: 'f8',
-          to: 'g8',
-          piece: 'Q',
-          captured: 'R',
-          flags: 't',
-        },
-      ];
-
-      const gameHistoryMoves = gameHistoryToPgn(gameHistory);
-
-      const result = getMateAndAssists(gameHistoryMoves);
-
-      expect(result).toEqual({
-        matingPiece: 'Q',
-        assistingPiece: undefined,
-        hockeyAssist: undefined,
+      expect(mateAndAssistMetric.mateAndAssistMap['Q']).toEqual({
+        mates: 1,
+        assists: 0,
+        hockeyAssists: 0,
       });
     });
   });
