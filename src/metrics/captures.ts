@@ -59,21 +59,18 @@ export class KillStreakMetric implements Metric {
 export class KDRatioMetric implements Metric {
   // create an object to track kills, deaths, and assists of each piece
   // The kDAssistsMap is an object where each key is a piece and the value is another object with kills, deaths, and assists properties.
-  KDAssistsMap: {
-    [key: string]: {
-      kills: number;
-      deaths: number;
-      assists: number;
-    };
-  };
+  KDAssistsMap: UAPMap<{
+    kills: number;
+    deaths: number;
+    assists: number;
+    revengeKills: number;
+  }>;
   pieceWithHighestKDRatio: string;
-  KDRatios: {
-    [key: string]: number;
-  };
+  // KDRatios is a convenience object for aggregation
+  kdRatios: UAPMap<number>;
 
   constructor() {
-    this.KDAssistsMap = {};
-    this.KDRatios = {};
+    this.clear();
   }
 
   logResults(): void {
@@ -86,17 +83,18 @@ export class KDRatioMetric implements Metric {
       console.table(this.KDAssistsMap);
     console.log(
       'Kill Death Ratios for each unambiguous piece: ' +
-        JSON.stringify(this.KDRatios, null, 2)
+        JSON.stringify(this.kdRatios, null, 2)
     );
   }
 
   aggregate() {
+    const KDRatios = createUAPMap(0);
     // calculate the KD ratios of each piece
     for (const piece of Object.keys(this.KDAssistsMap)) {
       const kills = this.KDAssistsMap[piece].kills;
       const deaths = this.KDAssistsMap[piece].deaths || 0;
       if (deaths !== 0) {
-        this.KDRatios[piece] = kills / deaths;
+        KDRatios[piece] = kills / deaths;
       }
     }
 
@@ -104,58 +102,60 @@ export class KDRatioMetric implements Metric {
     let maxKDRatio = 0;
     let pieceWithHighestKDRatio = null;
 
-    for (const piece of Object.keys(this.KDRatios)) {
-      if (this.KDRatios[piece] > maxKDRatio) {
-        maxKDRatio = pieceWithHighestKDRatio = this.KDRatios[piece];
+    for (const piece of Object.keys(KDRatios)) {
+      if (KDRatios[piece] > maxKDRatio) {
+        maxKDRatio = pieceWithHighestKDRatio = KDRatios[piece];
       }
     }
 
     return {
       maxKDRatio,
       pieceWithHighestKDRatio,
-      KDRatios: this.KDRatios,
+      KDRatios: KDRatios,
     };
   }
 
   clear(): void {
-    this.KDAssistsMap = {};
-    this.KDRatios = {};
+    // KDRatios is reset JIT since it is only used in aggregation
+    this.KDAssistsMap = createUAPMap({
+      kills: 0,
+      deaths: 0,
+      assists: 0,
+      revengeKills: 0,
+    });
   }
 
   // calculates piece with highest K/D ratio and also contains assists by that piece
   processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+    // @ts-ignore initialize with no capture
+    let previousMove: PrettyMove = {};
     for (const { move } of game) {
-      if (!this.KDAssistsMap[move.uas]) {
-        this.KDAssistsMap[move.uas] = {
-          kills: 0,
-          deaths: 0,
-          assists: 0,
-        };
-      }
-
       if (move.capture) {
         this.KDAssistsMap[move.uas].kills++;
-
-        // capture stores which piece was captured
-        if (!this.KDAssistsMap[move.capture.uas]) {
-          this.KDAssistsMap[move.capture.uas] = {
-            kills: 0,
-            deaths: 0,
-            assists: 0,
-          };
-        }
         this.KDAssistsMap[move.capture.uas].deaths++;
+
+        if (previousMove.capture && move.to === previousMove.to) {
+          this.KDAssistsMap[move.to][move.uas].revengeKills++;
+        }
+        previousMove = move;
       }
     }
 
+    const lastMove = game[game.length - 1].move;
     // Check if the game is in checkmate after the last move
-    if (game[game.length - 1].move.originalString.includes('#')) {
-      const unambigMatingPiece = game[game.length - 1].move.uas;
+    if (lastMove.originalString.includes('#')) {
+      const unambigMatingPiece = lastMove.uas;
       this.KDAssistsMap[unambigMatingPiece].kills++;
 
       // only kings can get mated, and we know whose move it is
-      const matedKing = game[game.length - 1].move.color === 'w' ? 'k' : 'K';
+      const matedKing = lastMove.color === 'w' ? 'k' : 'K';
       this.KDAssistsMap[matedKing].deaths++;
+
+      // A revenge kill can occur by checkmate too
+      const secondToLastMove = game[game.length - 2].move;
+      if (secondToLastMove.capture && secondToLastMove.uas === matedKing) {
+        this.KDAssistsMap[lastMove.uas].revengeKills++;
+      }
     }
   }
 }
@@ -234,6 +234,7 @@ export class MateAndAssistMetric implements Metric {
   }
 }
 
+// Not sure what's different from KD Ratio here except for revenge kills, so moving that and will deprecated
 export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
   let lastMove: PrettyMove;
   let i = 0;
