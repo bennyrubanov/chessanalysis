@@ -3,7 +3,7 @@ import { Chess } from '../cjsmin/src/chess';
 /**
  * @beta - this test was generated partially with chatGPT so might be an invalid PGN
  */
-xdescribe('Chess', () => {
+describe('Chess', () => {
   describe('historyGenerator', () => {
     it('should generate the correct move history for a given PGN string', () => {
       const chess = new Chess();
@@ -14,8 +14,6 @@ xdescribe('Chess', () => {
       const expectedMoves = moveString.split(' ').filter((_, i) => i % 3 !== 0);
       expectedMoves.pop(); // remove the result from the end of the array
       for (const { move, board } of gen) {
-        // console.log(board);
-        console.log(move);
         // validate that the piece that was moved is of the same type as the destination square
         expect(move.piece).toEqual(board[move.toIndex].type);
         expect(move.uas).toEqual(board[move.toIndex].uas);

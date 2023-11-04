@@ -29,7 +29,7 @@ export function gameHistoryToPgn(gameHistory): string {
 describe('All Tests', () => {
   const cjsmin = new Chess();
 
-  xdescribe('gets black and white kill streaks', () => {
+  describe('gets black and white kill streaks', () => {
     const killStreakMetric = new KillStreakMetric();
 
     it('should return the correct kill streaks', () => {
@@ -53,7 +53,7 @@ describe('All Tests', () => {
     });
   });
 
-  xdescribe('tracks kills, deaths and revenge kills by square', () => {
+  describe('tracks kills, deaths and revenge kills by square', () => {
     it('should return the correct kill streaks', () => {});
   });
 
@@ -124,6 +124,7 @@ describe('All Tests', () => {
           to: 'e4',
           piece: 'P',
           flags: 'b',
+          uas: 'PE',
         },
         {
           originalString: 'e5',
@@ -132,6 +133,7 @@ describe('All Tests', () => {
           to: 'e5',
           piece: 'p',
           flags: 'n',
+          uas: 'pe',
         },
         {
           originalString: 'Qh5',
@@ -148,6 +150,7 @@ describe('All Tests', () => {
           to: 'c6',
           piece: 'n',
           flags: 'n',
+          uas: 'ng',
         },
         {
           originalString: 'Qxf7#',
@@ -157,6 +160,7 @@ describe('All Tests', () => {
           piece: 'Q',
           captured: 'p',
           flags: 't',
+          uas: 'Q',
         },
       ].map((move) => {
         return {
@@ -216,6 +220,7 @@ describe('All Tests', () => {
           piece: 'Q',
           captured: 'p',
           flags: 't',
+          uas: 'Q',
         },
         {
           originalString: 'Kd8',
@@ -224,6 +229,7 @@ describe('All Tests', () => {
           to: 'd8',
           piece: 'k',
           flags: 'n',
+          uas: 'k',
         },
         {
           originalString: 'Qf8#',
@@ -233,8 +239,14 @@ describe('All Tests', () => {
           piece: 'Q',
           captured: 'k',
           flags: 't',
+          uas: 'Q',
         },
-      ];
+      ].map((move) => {
+        return {
+          move: move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
+      });
 
       mateAndAssistMetric.processGame(moves);
 
@@ -246,8 +258,8 @@ describe('All Tests', () => {
     });
   });
 
-  xdescribe('getMoveDistanceSingleGame', () => {
-    xit('should return the correct max distance and piece for a game', async () => {
+  describe('getMoveDistanceSingleGame', () => {
+    it('should return the correct max distance and piece for a game', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
       const result = await getMoveDistanceSingleGame({
@@ -259,7 +271,7 @@ describe('All Tests', () => {
       expect(result.maxDistance).toEqual(6);
     });
 
-    xit('should return 2 distance for a game with one move', async () => {
+    it('should return 2 distance for a game with one move', async () => {
       const game = '1. e4 e5';
 
       const result = await getMoveDistanceSingleGame({
@@ -290,7 +302,7 @@ describe('All Tests', () => {
   });
 
   // game being tested: https://www.chess.com/analysis/game/pgn/4uURW4rJaa?tab=analysis
-  xdescribe('getKillDeathRatios', () => {
+  describe('getKillDeathRatios', () => {
     // this could be a beforeAll
     const kdrMetric = new KDRatioMetric();
 
@@ -330,7 +342,7 @@ describe('All Tests', () => {
     });
   });
 
-  xdescribe('getGameWithMostMoves', () => {
+  describe('getGameWithMostMoves', () => {
     it('should return the correct number of moves made', async () => {
       const game = [
         {

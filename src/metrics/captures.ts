@@ -1,5 +1,5 @@
 import { Piece, PrettyMove, UAPSymbol } from '../../cjsmin/src/chess';
-import { BoardMap, UAPMap } from '../types';
+import { UAPMap } from '../types';
 import { createUAPMap } from '../utils';
 import { Metric } from './metric';
 
@@ -129,13 +129,13 @@ export class KDRatioMetric implements Metric {
   processGame(game: { move: PrettyMove; board: Piece[] }[]) {
     // @ts-ignore initialize with no capture
     let previousMove: PrettyMove = {};
-    for (const { move } of game) {
+    for (const { move, board } of game) {
       if (move.capture) {
         this.KDAssistsMap[move.uas].kills++;
         this.KDAssistsMap[move.capture.uas].deaths++;
 
         if (previousMove.capture && move.to === previousMove.to) {
-          this.KDAssistsMap[move.to][move.uas].revengeKills++;
+          this.KDAssistsMap[move.uas].revengeKills++;
         }
         previousMove = move;
       }
@@ -203,6 +203,8 @@ export class MateAndAssistMetric implements Metric {
 
     const lastMove = game[game.length - 1].move;
 
+    console.log(this.mateAndAssistMap);
+    console.log(lastMove.uas);
     // increment the mate count of the mating piece
     this.mateAndAssistMap[lastMove.uas].mates++;
     // increment the mated (death) count of the mated king
@@ -235,19 +237,19 @@ export class MateAndAssistMetric implements Metric {
 }
 
 // Not sure what's different from KD Ratio here except for revenge kills, so moving that and will deprecated
-export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
-  let lastMove: PrettyMove;
-  let i = 0;
-  for (const move of moves) {
-    if (move.capture) {
-      boardMap[move.to][move.uas].captures++;
-      boardMap[move.to][move.capture.uas].captured++;
-      // revenge kills
-      if (lastMove.capture && move.to === lastMove.to) {
-        boardMap[move.to][move.uas].revengeKills++;
-      }
-    }
-    lastMove = move;
-    i++;
-  }
-}
+// export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
+//   let lastMove: PrettyMove;
+//   let i = 0;
+//   for (const move of moves) {
+//     if (move.capture) {
+//       boardMap[move.to][move.uas].captures++;
+//       boardMap[move.to][move.capture.uas].captured++;
+//       // revenge kills
+//       if (lastMove.capture && move.to === lastMove.to) {
+//         boardMap[move.to][move.uas].revengeKills++;
+//       }
+//     }
+//     lastMove = move;
+//     i++;
+//   }
+// }

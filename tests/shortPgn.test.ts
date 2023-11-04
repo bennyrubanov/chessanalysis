@@ -1,6 +1,6 @@
 import { getHistoriesFromFilePath } from '../src/gameHistory';
 
-xdescribe('Using modified cjsmin returns expected results', () => {
+describe('Using modified cjsmin returns expected results', () => {
   it('should not throw an error', async () => {
     const histShort = JSON.parse(
       require('fs').readFileSync('historiesShort.json').toString().trim()
@@ -11,8 +11,6 @@ xdescribe('Using modified cjsmin returns expected results', () => {
     for await (const history of historiesGenerator) {
       histories.push(history);
     }
-
-    // require('fs').writeFileSync('historiestst.json', JSON.stringify(histories));
 
     expect(histShort[0]).toEqual(histories[0]);
   });
