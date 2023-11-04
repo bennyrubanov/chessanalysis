@@ -69,53 +69,74 @@ export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
   }
 }
 
-function uapMap() {
+/**
+ * A utitily function to create an object with unambiguous piece symbols as keys
+ */
+function createUAPMap<T>(object: T): { [key: string]: T } {
   const map = {};
   for (const uap of ALL_UNAMBIGUOUS_PIECE_SYMBOLS) {
-    map[uap] = { killStreaks: 0 };
+    map[uap] = { ...object };
   }
   return map;
 }
 
-function getMaxKillStreak(
-  uapMap: any,
-  moves: PrettyMove[],
-  startingIndex: 0 | 1 // assume games have at least 2 moves
-) {
-  let i = startingIndex;
-  let streakLength = 0;
-  let streakPiece: UnambiguousPieceSymbol;
+export class KillStreakMetric implements Metric {
+  killStreakMap: {
+    [key: string]: {
+      killStreaks: number;
+    };
+  };
 
-  while (i < moves.length) {
-    const move = moves[i];
-    if (move.capture) {
-      if (streakLength === 0) {
-        streakPiece = move.uas;
-        streakLength++;
-      } else if (streakPiece === move.uas) {
-        streakLength++;
-      } else {
-        uapMap[streakPiece].killStreaks = Math.max(
-          uapMap[streakPiece].killStreaks,
-          streakLength
-        );
-        streakLength = 0;
-      }
-    }
-    i += 2;
+  constructor() {
+    this.killStreakMap = createUAPMap({ killStreaks: 0 });
   }
-  uapMap[streakPiece].killStreaks = Math.max(
-    uapMap[streakPiece].killStreaks,
-    streakLength
-  );
-}
 
-export function getBWKillStreaks(moves: PrettyMove[]) {
-  const tracker = uapMap();
-  getMaxKillStreak(tracker, moves, 0);
-  getMaxKillStreak(tracker, moves, 1);
+  logResults(): void {}
 
-  return tracker;
+  aggregate() {
+    return this.killStreakMap;
+  }
+
+  clear(): void {
+    this.killStreakMap = createUAPMap({ killStreaks: 0 });
+  }
+
+  getMaxKillStreak(
+    game: { move: PrettyMove; board: Piece[] }[],
+    startingIndex: 0 | 1 // assume games have at least 2 moves
+  ) {
+    let i = startingIndex;
+    let streakLength = 0;
+    let streakPiece: UnambiguousPieceSymbol;
+
+    while (i < game.length) {
+      const move = game[i].move;
+      if (move.capture) {
+        if (streakLength === 0) {
+          streakPiece = move.uas;
+          streakLength++;
+        } else if (streakPiece === move.uas) {
+          streakLength++;
+        } else {
+          this.killStreakMap[streakPiece].killStreaks = Math.max(
+            this.killStreakMap[streakPiece].killStreaks,
+            streakLength
+          );
+          streakLength = 0;
+        }
+      }
+      i += 2;
+    }
+    this.killStreakMap[streakPiece].killStreaks = Math.max(
+      this.killStreakMap[streakPiece].killStreaks,
+      streakLength
+    );
+  }
+
+  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+    this.getMaxKillStreak(game, 0);
+    this.getMaxKillStreak(game, 1);
+  }
 }
 
 export class KDRatioMetric implements Metric {
