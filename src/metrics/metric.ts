@@ -9,5 +9,5 @@ export interface Metric {
   clear?(): void;
 
   // Aggregate the results of the metric
-  aggregate?(): any;
+  aggregate?(...args: any[]): any;
 }

@@ -1,5 +1,7 @@
-import { Chess, UAPSymbol } from '../../cjsmin/src/chess';
-import { FileReaderGame } from '../types';
+import { Chess, Piece, PrettyMove, UAPSymbol } from '../../cjsmin/src/chess';
+import { FileReaderGame, UAPMap } from '../types';
+import { createUAPMap } from '../utils';
+import { Metric } from './metric';
 
 // take a start and end board position and return the distances moved
 export async function getMoveDistanceSingleGame(game: FileReaderGame) {
@@ -161,30 +163,83 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
   };
 }
 
-// calculates piece with highest average distance and that piece's average distance covered per game in a set of games
-export function getAverageDistance(
-  distanceMap: { [key: string]: number },
-  gameCount: number
-) {
-  console.time('Task 3: getAverageDistance');
-  let maxAverageDistance = 0;
-  let pieceWithHighestAverageDistance = null;
+export class AverageDistanceMetric implements Metric {
+  distanceMap: UAPMap<{ totalDistance: number }>;
+  pieceWithHighestAvg: UAPSymbol;
+  pieceWithLowestAvg: UAPSymbol;
+  maxAvgDistance: number;
+  minAvgDistance: number;
+  totalDistance: number;
 
-  for (const piece of Object.keys(distanceMap)) {
-    const averageDistance = distanceMap[piece] / gameCount;
-    if (averageDistance > maxAverageDistance) {
-      maxAverageDistance = averageDistance;
-      pieceWithHighestAverageDistance = piece;
+  constructor() {
+    this.distanceMap = createUAPMap({ totalDistance: 0 });
+    this.maxAvgDistance = 0;
+    this.minAvgDistance = Infinity; // Set high so first will overwrite
+  }
+
+  aggregate(gameCount: number) {
+    for (const piece of Object.keys(this.distanceMap)) {
+      const avgDistance = this.distanceMap[piece].totalDistance / gameCount;
+      if (avgDistance > this.maxAvgDistance) {
+        this.maxAvgDistance = avgDistance;
+        this.pieceWithHighestAvg = piece as UAPSymbol;
+      }
+      if (avgDistance < this.minAvgDistance) {
+        this.minAvgDistance = avgDistance;
+        this.pieceWithLowestAvg = piece as UAPSymbol;
+      }
     }
   }
 
-  console.log(
-    `Piece with highest avg distance for games analyzed: ${pieceWithHighestAverageDistance}`
-  );
-  console.log(
-    `That piece's (${pieceWithHighestAverageDistance}'s) average distance moved per game: ${maxAverageDistance}`
-  );
+  logResults(): void {
+    console.log(
+      `Piece with highest avg distance for games analyzed: ${this.pieceWithHighestAvg}`
+    );
+    console.log(
+      `That piece's (${this.pieceWithHighestAvg}'s) average distance moved per game: ${this.maxAvgDistance}`
+    );
+  }
 
-  console.timeEnd('Task 3: getAverageDistance');
-  return { pieceWithHighestAverageDistance, maxAverageDistance };
+  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+    // Initialize variables to keep track of the maximum distance and the piece
+    // evaluate each move, update the correct unambiguous piece's distance
+    for (const { move } of game) {
+      // Check if the move is a castling move
+      if (move.flags === 'k' || move.flags === 'q') {
+        let movingKing = 'k';
+        let movingRook, rookDistance;
+
+        if (move.flags === 'k') {
+          rookDistance = 2;
+          movingRook = 'rh';
+        } else {
+          rookDistance = 3;
+          movingRook = 'ra';
+        }
+
+        if (move.color === 'w') {
+          movingRook = movingRook.toUpperCase();
+          movingKing = movingKing.toUpperCase();
+        }
+
+        // 2 for king + rook distance
+        this.distanceMap[movingKing] += 2;
+        this.distanceMap[movingRook] += rookDistance;
+        this.totalDistance += 2;
+        this.totalDistance += rookDistance;
+      } else {
+        // Calculate the file (column) distance by subtracting ASCII values
+        const fileDist = Math.abs(
+          move.from.charCodeAt(0) - move.to.charCodeAt(0)
+        );
+        // Calculate the rank (row) distance by subtracting numeric values
+        const rankDist = Math.abs(Number(move.from[1]) - Number(move.to[1]));
+        // The distance moved is the maximum of fileDist and rankDist
+        const distance = Math.max(fileDist, rankDist);
+
+        this.distanceMap[move.uas].totalDistance += distance;
+        this.totalDistance += distance;
+      }
+    }
+  }
 }

@@ -2,7 +2,7 @@ import { Piece, PrettyMove } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 import { KDRatioMetric } from './metrics/captures';
 import {
-  getAverageDistance,
+  AverageDistanceMetric,
   getMoveDistanceSetOfGames,
 } from './metrics/distances';
 import { getGameWithMostMoves, getPieceLevelMoveInfo } from './metrics/moves';
@@ -38,7 +38,6 @@ export async function main(path: string) {
     games
   );
 
-  getAverageDistance(totalDistanceMap, gameCount);
   getGameWithMostMoves(games);
   getPieceLevelMoveInfo(games);
   getPiecePromotionInfo(games);
@@ -60,7 +59,8 @@ export async function main(path: string) {
 function gameIterator(
   metricFunctions: ((game: { move: PrettyMove; board: Piece[] }[]) => void)[]
 ) {
-  const KDRatio = new KDRatioMetric();
+  const kdrm = new KDRatioMetric();
+  const adm = new AverageDistanceMetric();
 }
 
 if (require.main === module) {
