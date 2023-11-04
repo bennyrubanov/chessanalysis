@@ -1,4 +1,4 @@
-import { Piece, PrettyMove, UAPSymbol } from '../../cjsmin/src/chess';
+import { Piece, PrettyMove, UASymbol } from '../../cjsmin/src/chess';
 import { UAPMap } from '../types';
 import { createUAPMap } from '../utils';
 import { Metric } from './metric';
@@ -24,7 +24,7 @@ export class KillStreakMetric implements Metric {
   ) {
     let i = startingIndex;
     let streakLength = 0;
-    let streakPiece: UAPSymbol;
+    let streakPiece: UASymbol;
 
     while (i < game.length) {
       const move = game[i].move;

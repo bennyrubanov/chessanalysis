@@ -1,4 +1,4 @@
-import { Chess, Piece, PrettyMove, UAPSymbol } from '../../cjsmin/src/chess';
+import { Chess, Piece, PrettyMove, UASymbol } from '../../cjsmin/src/chess';
 import { FileReaderGame, UAPMap } from '../types';
 import { createUAPMap } from '../utils';
 import { Metric } from './metric';
@@ -13,7 +13,7 @@ export async function getMoveDistanceSingleGame(game: FileReaderGame) {
 
   // Initialize variables to keep track of the maximum distance and the piece
   let maxDistance = -1;
-  let maxDistancePiece: UAPSymbol;
+  let maxDistancePiece: UASymbol;
   let singleGameDistanceTotal = 0;
 
   // evaluate each move, update the correct unambiguous piece's distance
@@ -165,8 +165,8 @@ export async function getMoveDistanceSetOfGames(games: FileReaderGame[]) {
 
 export class AverageDistanceMetric implements Metric {
   distanceMap: UAPMap<{ totalDistance: number }>;
-  pieceWithHighestAvg: UAPSymbol;
-  pieceWithLowestAvg: UAPSymbol;
+  pieceWithHighestAvg: UASymbol;
+  pieceWithLowestAvg: UASymbol;
   maxAvgDistance: number;
   minAvgDistance: number;
   totalDistance: number;
@@ -182,11 +182,11 @@ export class AverageDistanceMetric implements Metric {
       const avgDistance = this.distanceMap[piece].totalDistance / gameCount;
       if (avgDistance > this.maxAvgDistance) {
         this.maxAvgDistance = avgDistance;
-        this.pieceWithHighestAvg = piece as UAPSymbol;
+        this.pieceWithHighestAvg = piece as UASymbol;
       }
       if (avgDistance < this.minAvgDistance) {
         this.minAvgDistance = avgDistance;
-        this.pieceWithLowestAvg = piece as UAPSymbol;
+        this.pieceWithLowestAvg = piece as UASymbol;
       }
     }
   }
