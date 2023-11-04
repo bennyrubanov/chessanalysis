@@ -5,7 +5,7 @@ import {
   getAverageDistance,
   getMoveDistanceSetOfGames,
 } from './metrics/distances';
-import { getGameWithMostMoves, getPieceLevelMoveInfo } from './metrics/metrics';
+import { getGameWithMostMoves, getPieceLevelMoveInfo } from './metrics/moves';
 import { getPiecePromotionInfo } from './metrics/promotions';
 import { FileReaderGame } from './types';
 

@@ -159,7 +159,7 @@ export const DEFAULT_POSITION =
 export type Piece = {
   color: Color;
   type: PieceType;
-  unambiguousSymbol: UnambiguousPieceSymbol;
+  uas: UnambiguousPieceSymbol;
 };
 
 type Capture = {
@@ -172,7 +172,7 @@ export type InternalMove = {
   from: number;
   to: number;
   piece: PieceType;
-  unambiguousSymbol: UnambiguousPieceSymbol;
+  uas: UnambiguousPieceSymbol;
   capture?: Capture;
   promotion?: PieceType;
   flags: number;
@@ -612,7 +612,7 @@ function addMove(
   from: number,
   to: number,
   piece: PieceType,
-  unambiguousSymbol: UnambiguousPieceSymbol,
+  uas: UnambiguousPieceSymbol,
   capture: Capture | undefined = undefined,
   flags: number = BITS.NORMAL
 ) {
@@ -628,7 +628,7 @@ function addMove(
         piece,
         capture,
         promotion,
-        unambiguousSymbol,
+        uas: uas,
         flags: flags | BITS.PROMOTION,
       });
     }
@@ -639,7 +639,7 @@ function addMove(
       to,
       piece,
       capture,
-      unambiguousSymbol,
+      uas: uas,
       flags,
     });
   }
@@ -809,10 +809,10 @@ export class Chess {
             from: square,
             to: this._epSquare,
             piece: PAWN,
-            unambiguousSymbol: this._board[square]?.unambiguousSymbol,
+            uas: this._board[square]?.uas,
             capture: {
               type: PAWN,
-              uas: this._board[square]?.unambiguousSymbol,
+              uas: this._board[square]?.uas,
             },
             flags: BITS.EP_CAPTURE,
           });
@@ -867,7 +867,7 @@ export class Chess {
     square: Square
   ) {
     //@ts-ignore this breaks for non init
-    const unambiguousSymbol = SQUARE_TO_STARTING_POSITION_MAP[
+    const uas = SQUARE_TO_STARTING_POSITION_MAP[
       square
     ] as UnambiguousPieceSymbol;
 
@@ -894,7 +894,7 @@ export class Chess {
     this._board[sq] = {
       type: type as PieceType,
       color: color as Color,
-      unambiguousSymbol,
+      uas: uas,
     };
 
     if (type === KING) {
@@ -1252,14 +1252,7 @@ export class Chess {
         // single square, non-capturing
         to = from + PAWN_OFFSETS[us][0];
         if (!this._board[to]) {
-          addMove(
-            moves,
-            us,
-            from,
-            to,
-            PAWN,
-            this._board[from].unambiguousSymbol
-          );
+          addMove(moves, us, from, to, PAWN, this._board[from].uas);
 
           // double square
           to = from + PAWN_OFFSETS[us][1];
@@ -1270,7 +1263,7 @@ export class Chess {
               from,
               to,
               PAWN,
-              this._board[from].unambiguousSymbol,
+              this._board[from].uas,
               undefined,
               BITS.BIG_PAWN
             );
@@ -1289,10 +1282,10 @@ export class Chess {
               from,
               to,
               PAWN,
-              this._board[from].unambiguousSymbol,
+              this._board[from].uas,
               {
                 type: this._board[to].type,
-                uas: this._board[to].unambiguousSymbol,
+                uas: this._board[to].uas,
               },
               BITS.CAPTURE
             );
@@ -1310,7 +1303,7 @@ export class Chess {
               from,
               to,
               PAWN,
-              this._board[from].unambiguousSymbol,
+              this._board[from].uas,
               {
                 type: PAWN,
                 uas: uas as UnambiguousPieceSymbol,
@@ -1331,14 +1324,7 @@ export class Chess {
             if (to & 0x88) break;
 
             if (!this._board[to]) {
-              addMove(
-                moves,
-                us,
-                from,
-                to,
-                type,
-                this._board[from].unambiguousSymbol
-              );
+              addMove(moves, us, from, to, type, this._board[from].uas);
             } else {
               // own color, stop loop
               if (this._board[to].color === us) break;
@@ -1349,10 +1335,10 @@ export class Chess {
                 from,
                 to,
                 type,
-                this._board[from].unambiguousSymbol,
+                this._board[from].uas,
                 {
                   type: this._board[to].type,
-                  uas: this._board[to].unambiguousSymbol,
+                  uas: this._board[to].uas,
                 },
                 BITS.CAPTURE
               );
@@ -1392,7 +1378,7 @@ export class Chess {
               this._kings[us],
               castlingTo,
               KING,
-              this._board[this._kings[us]].unambiguousSymbol,
+              this._board[this._kings[us]].uas,
               undefined,
               BITS.KSIDE_CASTLE
             );
@@ -1418,7 +1404,7 @@ export class Chess {
               this._kings[us],
               castlingTo,
               KING,
-              this._board[this._kings[us]].unambiguousSymbol,
+              this._board[this._kings[us]].uas,
               undefined,
               BITS.QSIDE_CASTLE
             );
@@ -1484,7 +1470,7 @@ export class Chess {
       this._board[move.to] = {
         type: move.promotion,
         color: us,
-        unambiguousSymbol: this._board[move.to].unambiguousSymbol,
+        uas: this._board[move.to].uas,
       };
     }
 
@@ -1605,7 +1591,7 @@ export class Chess {
         this._board[index] = {
           type: PAWN,
           color: them,
-          unambiguousSymbol: move.capture.uas,
+          uas: move.capture.uas,
         };
       } else {
         // regular capture
@@ -1613,7 +1599,7 @@ export class Chess {
           type: move.capture.type,
           color: them,
           // TODO: Implement unambiguousSymbol
-          unambiguousSymbol: move.capture.uas,
+          uas: move.capture.uas,
         };
       }
     }
@@ -1956,7 +1942,7 @@ export class Chess {
       to: toAlgebraic,
       flags: prettyFlags,
       piece,
-      umabiguousSymbol: uglyMove.unambiguousSymbol,
+      umabiguousSymbol: uglyMove.uas,
     };
 
     if (capture) {
@@ -1975,7 +1961,7 @@ export class Chess {
       to: move.to,
       flags: move.flags,
       piece: move.piece,
-      uas: uglyMove.unambiguousSymbol,
+      uas: uglyMove.uas,
       originalString,
     };
 

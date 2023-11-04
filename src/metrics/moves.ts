@@ -1,26 +1,5 @@
 import { Chess } from '../../cjsmin/src/chess';
 import { FileReaderGame } from '../types';
-
-// calculates how many games in the dataset
-export function countGamesInDataset(datasetPath: string): number {
-  const fs = require('fs');
-  const path = require('path');
-
-  let data = fs.readFileSync(
-    path.join(__dirname, '../data/10.10.23_test_set'),
-    'utf8'
-  );
-  let games = data.split('\n[Event');
-  // If the first game doesn't start with a newline, add 1 back to the count
-  if (data.startsWith('[Event')) {
-    console.log(`Number of games: ${games.length}`);
-    return games.length;
-  } else {
-    console.log(`Number of games: ${games.length - 1}`); // Subtract 1 because the first split item will be an empty string
-    return games.length - 1;
-  }
-}
-
 export async function getGameWithMostMoves(games: FileReaderGame[]) {
   console.time('Task 5: getGameWithMostMoves');
   let maxNumMoves = 0;
