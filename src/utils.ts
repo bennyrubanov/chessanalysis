@@ -1,6 +1,7 @@
 import {
   ALL_SQUARES,
   ALL_UNAMBIGUOUS_PIECE_SYMBOLS,
+  UASymbol,
 } from '../cjsmin/src/chess';
 import { BoardMap, UAPMap } from './types';
 
@@ -42,10 +43,10 @@ export function createBoardMap(): BoardMap {
 /**
  * A utitily function to create an object with unambiguous piece symbols as keys
  */
-export function createUAPMap<T>(object: T): UAPMap<T> {
+export function createUAPMap<T extends Object>(object: T): UAPMap<T> {
   const map = {};
   for (const uap of ALL_UNAMBIGUOUS_PIECE_SYMBOLS) {
     map[uap] = { ...object };
   }
-  return map as UAPMap<T>;
+  return map as { [key in UASymbol]: T };
 }

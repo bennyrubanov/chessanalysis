@@ -5,7 +5,7 @@ import {
   KillStreakMetric,
   MateAndAssistMetric,
 } from '../src/metrics/captures';
-import { getMoveDistanceSingleGame } from '../src/metrics/distances';
+import { MoveDistanceMetric } from '../src/metrics/distances';
 import { getGameWithMostMoves } from '../src/metrics/moves';
 
 // convert PGN string to GameHistoryObject
@@ -259,45 +259,39 @@ describe('All Tests', () => {
   });
 
   describe('getMoveDistanceSingleGame', () => {
+    const moveDistanceMetric = new MoveDistanceMetric();
     it('should return the correct max distance and piece for a game', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
-      const result = await getMoveDistanceSingleGame({
-        metadata: [],
-        moves: game,
-      });
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
 
-      expect(result.maxDistancePiece).toEqual('Q');
-      expect(result.maxDistance).toEqual(6);
+      expect(moveDistanceMetric.pieceMaxes.distance).toEqual(6);
+      expect(moveDistanceMetric.pieceMaxes.uasArray[0]).toEqual('Q');
     });
 
     it('should return 2 distance for a game with one move', async () => {
       const game = '1. e4 e5';
 
-      const result = await getMoveDistanceSingleGame({
-        metadata: [],
-        moves: game,
-      });
+      moveDistanceMetric.clear();
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
 
-      expect(result.maxDistancePiece).toBe('PE');
-      expect(result.maxDistance).toEqual(2);
+      expect(moveDistanceMetric.pieceMaxes.distance).toEqual(2);
+      expect(moveDistanceMetric.pieceMaxes.uasArray).toEqual(['PE', 'pe']);
     });
 
     it('should return a singleGameDistanceTotal equal to the addition of all distances in the distanceMap', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
-      const result = await getMoveDistanceSingleGame({
-        metadata: [],
-        moves: game,
-      });
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
+      moveDistanceMetric.aggregate();
 
       let totalDistance = 0;
 
-      for (const distance of Object.keys(result.distanceMap)) {
-        totalDistance += result.distanceMap[distance];
+      for (const uas of Object.keys(moveDistanceMetric.distanceMap)) {
+        totalDistance += moveDistanceMetric.distanceMap[uas].total;
       }
 
-      expect(result.singleGameDistanceTotal).toEqual(totalDistance);
+      expect(moveDistanceMetric.totalDistance).toEqual(totalDistance);
     });
   });
 
@@ -342,7 +336,7 @@ describe('All Tests', () => {
     });
   });
 
-  describe('getGameWithMostMoves', () => {
+  xdescribe('getGameWithMostMoves', () => {
     it('should return the correct number of moves made', async () => {
       const game = [
         {

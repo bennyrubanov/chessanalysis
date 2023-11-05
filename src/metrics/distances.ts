@@ -11,24 +11,44 @@ export class MoveDistanceMetric implements Metric {
   minAvgDistance: number;
   totalDistance: number;
   maxSingleGameTotal: number;
-  singleGameMaxPiece: {
-    uas: UASymbol;
+  // This has arrays to account for ties. Postions connect link to uas
+  pieceMaxes: {
     distance: number;
-    link: string;
+    uasArray: UASymbol[];
+    linkArray: string[];
   };
+  gamesProcessed: number;
 
   constructor() {
+    this.clear();
+  }
+
+  clear(): void {
     this.distanceMap = createUAPMap({
       total: 0,
       maxSingleGame: 0,
     });
+    this.pieceWithHighestAvg = undefined;
+    this.pieceWithLowestAvg = undefined;
     this.maxAvgDistance = 0;
     this.minAvgDistance = Infinity; // Set high so first will overwrite
+    this.totalDistance = 0;
+    this.pieceMaxes = {
+      distance: 0,
+      uasArray: [],
+      linkArray: [],
+    };
+    this.gamesProcessed = 0;
   }
 
-  aggregate(gameCount: number) {
+  aggregate() {
+    // reset just the total aggregates, the others don't need a reset
+    this.totalDistance = 0;
     for (const uas of Object.keys(this.distanceMap)) {
-      const avgDistance = this.distanceMap[uas].totalDistance / gameCount;
+      // increment the total distance by adding all pieces
+      this.totalDistance += this.distanceMap[uas].total;
+
+      const avgDistance = this.distanceMap[uas].total / this.gamesProcessed;
       if (avgDistance > this.maxAvgDistance) {
         this.maxAvgDistance = avgDistance;
         this.pieceWithHighestAvg = uas as UASymbol;
@@ -56,15 +76,13 @@ export class MoveDistanceMetric implements Metric {
     );
 
     // Facts
-    console.log(
-      `Piece that moved the furthest: ${this.singleGameMaxPiece.uas}`
-    );
+    console.log(`Piece that moved the furthest: ${this.pieceMaxes.uasArray}`);
     // Game link support will come later
     // console.log(
     //   `Game in which that piece (${this.maxSingleGameDistancePiece}) moved the furthest: ${siteWithFurthestPiece}`
     // );
     console.log(
-      `Distance that piece moved in the game: ${this.singleGameMaxPiece.distance}`
+      `Distance that piece moved in the game: ${this.pieceMaxes.distance}`
     );
     // console.log(
     //   `Game with the furthest collective distance moved: ${gameLinkWithFurthestCollectiveDistance}`
@@ -76,7 +94,7 @@ export class MoveDistanceMetric implements Metric {
 
   processGame(game: { move: PrettyMove; board: Piece[] }[]) {
     // Initialize variables to keep track of the maximum distance and the piece
-    const singleGameMap = createUAPMap(0);
+    const singleGameMap = createUAPMap({ total: 0 });
 
     for (const { move } of game) {
       // Check if the move is a castling move
@@ -98,10 +116,8 @@ export class MoveDistanceMetric implements Metric {
         }
 
         // 2 for king + rook distance
-        this.distanceMap[movingKing] += 2;
-        this.distanceMap[movingRook] += rookDistance;
-        this.totalDistance += 2;
-        this.totalDistance += rookDistance;
+        singleGameMap[movingKing].total += 2;
+        singleGameMap[movingRook].total += rookDistance;
       } else {
         // Calculate the file (column) distance by subtracting ASCII values
         const fileDist = Math.abs(
@@ -112,17 +128,29 @@ export class MoveDistanceMetric implements Metric {
         // The distance moved is the maximum of fileDist and rankDist
         const distance = Math.max(fileDist, rankDist);
 
-        singleGameMap[move.uas] += distance;
-        this.totalDistance += distance;
+        singleGameMap[move.uas].total += distance;
       }
     }
 
     // add the single game aggregates to the state object
     for (const uas of Object.keys(singleGameMap)) {
-      this.distanceMap[uas].totalDistance += singleGameMap[uas];
-      if (singleGameMap[uas] > this.distanceMap[uas].maxSingleGameDistance) {
-        this.distanceMap[uas].maxSingleGameDistance = singleGameMap[uas];
+      this.distanceMap[uas].total += singleGameMap[uas].total;
+      if (
+        singleGameMap[uas].total > this.distanceMap[uas].maxSingleGameDistance
+      ) {
+        this.distanceMap[uas].maxSingleGameDistance = singleGameMap[uas].total;
+      }
+
+      // find the individual piece maxes
+      if (singleGameMap[uas].total > this.pieceMaxes.distance) {
+        this.pieceMaxes.uasArray = [uas as UASymbol];
+        this.pieceMaxes.distance = singleGameMap[uas].total;
+        // this.singleGameMaxPiece.link = undefined; // TODO: add game link support
+      } else if (singleGameMap[uas].total === this.pieceMaxes.distance) {
+        this.pieceMaxes.uasArray.push(uas as UASymbol);
       }
     }
+
+    this.gamesProcessed++;
   }
 }
