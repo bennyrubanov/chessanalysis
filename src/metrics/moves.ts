@@ -209,5 +209,14 @@ export class PieceLevelMoveInfoMetric implements Metric {
     this.gamesProcessed++;
   }
 
-  aggregate() {}
+  aggregate() {
+    const averagesMap = createUAPMap({ avgMoves: 0 });
+    // Calculate averages
+    for (const uas of Object.keys(this.totalMovesByPiece)) {
+      averagesMap[uas].avgMoves =
+        this.totalMovesByPiece[uas].numMoves / this.gamesProcessed;
+    }
+
+    return averagesMap;
+  }
 }

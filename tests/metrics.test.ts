@@ -6,7 +6,7 @@ import {
   MateAndAssistMetric,
 } from '../src/metrics/captures';
 import { MoveDistanceMetric } from '../src/metrics/distances';
-import { getGameWithMostMoves } from '../src/metrics/moves';
+import { GameWithMostMovesMetric } from '../src/metrics/moves';
 import { PromotionMetric } from '../src/metrics/promotions';
 
 // convert PGN string to GameHistoryObject
@@ -336,7 +336,8 @@ describe('All Tests', () => {
     });
   });
 
-  xdescribe('getGameWithMostMoves', () => {
+  describe('getGameWithMostMoves', () => {
+    const mostMovesMetric = new GameWithMostMovesMetric();
     it('should return the correct number of moves made', async () => {
       const game = [
         {
@@ -346,9 +347,11 @@ describe('All Tests', () => {
         },
       ];
 
-      const result = await getGameWithMostMoves(game);
+      mostMovesMetric.processGame(
+        Array.from(cjsmin.historyGenerator(game[0].moves))
+      );
 
-      expect(result.maxNumMoves).toEqual(24);
+      expect(mostMovesMetric.numMoves).toEqual(24);
     });
   });
 

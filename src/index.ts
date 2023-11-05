@@ -1,8 +1,7 @@
 import { gameChunks } from './fileReader';
 import { KDRatioMetric } from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
-import { getGameWithMostMoves, getPieceLevelMoveInfo } from './metrics/moves';
-import { getPiecePromotionInfo } from './metrics/promotions';
+import { getPieceLevelMoveInfo } from './metrics/moves';
 import { FileReaderGame } from './types';
 
 /**
@@ -30,9 +29,7 @@ export async function main(path: string) {
   }
   console.timeEnd('Task 1: FileReader');
 
-  getGameWithMostMoves(games);
   getPieceLevelMoveInfo(games);
-  getPiecePromotionInfo(games);
 }
 
 /**

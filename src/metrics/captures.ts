@@ -203,8 +203,6 @@ export class MateAndAssistMetric implements Metric {
 
     const lastMove = game[game.length - 1].move;
 
-    console.log(this.mateAndAssistMap);
-    console.log(lastMove.uas);
     // increment the mate count of the mating piece
     this.mateAndAssistMap[lastMove.uas].mates++;
     // increment the mated (death) count of the mated king
