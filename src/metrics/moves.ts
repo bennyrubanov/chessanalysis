@@ -1,44 +1,8 @@
-import { Chess } from '../../cjsmin/src/chess';
-import { FileReaderGame } from '../types';
-
-export async function getGameWithMostMoves(games: FileReaderGame[]) {
-  console.time('Task 5: getGameWithMostMoves');
-  let maxNumMoves = 0;
-  let gameWithMostMoves: FileReaderGame | null = null;
-  let gameLinkWithMostMoves = null;
-
-  for await (const game of games) {
-    const chess = new Chess();
-
-    chess.loadPgn(game.moves);
-    const numMoves = chess.history().length;
-
-    if (numMoves > maxNumMoves) {
-      maxNumMoves = numMoves;
-      gameWithMostMoves = game;
-      let site = game.metadata
-        .find((item) => item.startsWith('[Site "'))
-        ?.replace('[Site "', '')
-        .replace('"]', '');
-      gameLinkWithMostMoves = site;
-    }
-  }
-
-  console.timeEnd('Task 5: getGameWithMostMoves');
-
-  // moves facts
-  console.log('MOVES FACTS:');
-  console.log(`The game with the most moves played: ${gameWithMostMoves}`);
-  console.log(`The number of moves played in that game: ${maxNumMoves}`);
-
-  console.log('==============================================================');
-  console.log('\n');
-
-  return {
-    gameLinkWithMostMoves,
-    maxNumMoves,
-  };
-}
+import { UnambiguousPieceSymbol } from '../../cjsmin/dist/types/chess';
+import { Chess, Piece, PrettyMove } from '../../cjsmin/src/chess';
+import { FileReaderGame, UAPMap } from '../types';
+import { createUAPMap } from '../utils';
+import { Metric } from './metric';
 
 export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
   console.time('Task 6: getPieceLevelMoveInfo');
@@ -162,4 +126,88 @@ export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
     linkWithMostMoves,
     maxMoves,
   };
+}
+
+export class GameWithMostMovesMetric implements Metric {
+  link: string;
+  numMoves: number;
+
+  constructor() {
+    this.clear();
+  }
+
+  clear(): void {
+    this.link = undefined;
+    this.numMoves = 0;
+  }
+
+  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink?: string) {
+    if (game.length > this.numMoves) {
+      this.numMoves = game.length;
+      this.link = gameLink;
+    }
+  }
+
+  logResults(): void {
+    console.log('MOVES FACTS:');
+    console.log(`The game with the most moves played: ${this.link}`);
+    console.log(`The number of moves played in that game: ${this.numMoves}`);
+
+    console.log(
+      '=============================================================='
+    );
+    console.log('\n');
+  }
+}
+
+export class PieceLevelMoveInfoMetric implements Metric {
+  totalMovesByPiece: UAPMap<{ numMoves: number }>;
+  singleGameMaxMoves: number;
+  uasWithMostMoves: UnambiguousPieceSymbol[];
+  gamesWithMostMoves: string[];
+  gamesProcessed: number; // this could be tracked externally also, in other metrics
+
+  constructor() {
+    this.clear();
+  }
+
+  clear(): void {
+    this.totalMovesByPiece = createUAPMap({ numMoves: 0 });
+    this.singleGameMaxMoves = 0;
+    this.uasWithMostMoves = [];
+    this.gamesProcessed = 0;
+  }
+
+  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink?: string) {
+    // update move counts of each unambiguous piece
+    for (let { move } of game) {
+      this.totalMovesByPiece[move.uas].numMoves++;
+
+      // Check if the move is a castling move, if so we need to increment rook too
+      if (move.flags === 'k' || move.flags === 'q') {
+        let movingRook = move.flags === 'k' ? 'rh' : 'ra';
+        if (move.color === 'w') {
+          movingRook = movingRook.toUpperCase();
+        }
+
+        this.totalMovesByPiece[movingRook].numMoves++;
+      }
+    }
+
+    // Calculate single game maxes
+    for (const uas of Object.keys(this.totalMovesByPiece)) {
+      if (this.totalMovesByPiece[uas] > this.singleGameMaxMoves) {
+        this.singleGameMaxMoves = this.totalMovesByPiece[uas];
+        this.uasWithMostMoves = [uas as UnambiguousPieceSymbol]; // New highest moves, reset the array
+        this.gamesWithMostMoves = [gameLink]; // New highest moves, reset the array
+      } else if (this.totalMovesByPiece[uas] === this.singleGameMaxMoves) {
+        this.uasWithMostMoves.push(uas as UnambiguousPieceSymbol); // Tie, add to the array
+        this.gamesWithMostMoves.push(gameLink);
+      }
+    }
+
+    this.gamesProcessed++;
+  }
+
+  aggregate() {}
 }
