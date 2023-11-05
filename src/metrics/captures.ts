@@ -90,11 +90,11 @@ export class KDRatioMetric implements Metric {
   aggregate() {
     const KDRatios = createUAPMap(0);
     // calculate the KD ratios of each piece
-    for (const piece of Object.keys(this.KDAssistsMap)) {
-      const kills = this.KDAssistsMap[piece].kills;
-      const deaths = this.KDAssistsMap[piece].deaths || 0;
+    for (const uas of Object.keys(this.KDAssistsMap)) {
+      const kills = this.KDAssistsMap[uas].kills;
+      const deaths = this.KDAssistsMap[uas].deaths || 0;
       if (deaths !== 0) {
-        KDRatios[piece] = kills / deaths;
+        KDRatios[uas] = kills / deaths;
       }
     }
 
@@ -102,9 +102,9 @@ export class KDRatioMetric implements Metric {
     let maxKDRatio = 0;
     let pieceWithHighestKDRatio = null;
 
-    for (const piece of Object.keys(KDRatios)) {
-      if (KDRatios[piece] > maxKDRatio) {
-        maxKDRatio = pieceWithHighestKDRatio = KDRatios[piece];
+    for (const uas of Object.keys(KDRatios)) {
+      if (KDRatios[uas] > maxKDRatio) {
+        maxKDRatio = pieceWithHighestKDRatio = KDRatios[uas];
       }
     }
 

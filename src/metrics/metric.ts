@@ -1,7 +1,10 @@
 import { Piece, PrettyMove } from '../../cjsmin/src/chess';
 
 export interface Metric {
-  processGame(game: { move: PrettyMove; board: Piece[] }[]): any;
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    gameLink?: string
+  ): any;
 
   logResults?(): void;
 

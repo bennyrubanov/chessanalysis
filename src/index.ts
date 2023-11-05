@@ -1,10 +1,6 @@
-import { Piece, PrettyMove } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 import { KDRatioMetric } from './metrics/captures';
-import {
-  AverageDistanceMetric,
-  getMoveDistanceSetOfGames,
-} from './metrics/distances';
+import { MoveDistanceMetric } from './metrics/distances';
 import { getGameWithMostMoves, getPieceLevelMoveInfo } from './metrics/moves';
 import { getPiecePromotionInfo } from './metrics/promotions';
 import { FileReaderGame } from './types';
@@ -34,33 +30,23 @@ export async function main(path: string) {
   }
   console.timeEnd('Task 1: FileReader');
 
-  const { gameCount, totalDistanceMap } = await getMoveDistanceSetOfGames(
-    games
-  );
-
   getGameWithMostMoves(games);
   getPieceLevelMoveInfo(games);
   getPiecePromotionInfo(games);
-
-  console.log(`Total number of games analyzed: ${gameCount}`);
-  console.log('\n');
-
-  console.log('==============================================================');
-  console.log('\n');
-
-  console.timeEnd('Total Execution Time');
-  console.log('\n');
 }
 
 /**
  * Metric functions will ingest a single game at a time
  * @param metricFunctions
  */
-function gameIterator(
-  metricFunctions: ((game: { move: PrettyMove; board: Piece[] }[]) => void)[]
-) {
+function gameIterator() {
+  // Logic to get link to the game, which should be passed in processGame
+  // let site = game.metadata
+  // .find((item) => item.startsWith('[Site "'))
+  // ?.replace('[Site "', '')
+  // .replace('"]', '');
   const kdrm = new KDRatioMetric();
-  const adm = new AverageDistanceMetric();
+  const adm = new MoveDistanceMetric();
 }
 
 if (require.main === module) {
