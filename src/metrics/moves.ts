@@ -1,5 +1,6 @@
 import { Chess } from '../../cjsmin/src/chess';
 import { FileReaderGame } from '../types';
+
 export async function getGameWithMostMoves(games: FileReaderGame[]) {
   console.time('Task 5: getGameWithMostMoves');
   let maxNumMoves = 0;

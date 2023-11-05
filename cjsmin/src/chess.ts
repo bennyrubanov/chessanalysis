@@ -53,6 +53,26 @@ export type PrettyMove = {
   uas: UASymbol;
 };
 
+export type PromotablePiece = 'q' | 'r' | 'b' | 'n';
+
+export type Pawns =
+  | 'pa'
+  | 'pb'
+  | 'pc'
+  | 'pd'
+  | 'pe'
+  | 'pf'
+  | 'pg'
+  | 'ph'
+  | 'PA'
+  | 'PB'
+  | 'PC'
+  | 'PD'
+  | 'PE'
+  | 'PF'
+  | 'PG'
+  | 'PH';
+
 export type UASymbol =
   | 'RA'
   | 'NB'

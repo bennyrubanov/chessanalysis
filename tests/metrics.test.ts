@@ -7,6 +7,7 @@ import {
 } from '../src/metrics/captures';
 import { MoveDistanceMetric } from '../src/metrics/distances';
 import { getGameWithMostMoves } from '../src/metrics/moves';
+import { PromotionMetric } from '../src/metrics/promotions';
 
 // convert PGN string to GameHistoryObject
 export function pgnToGameHistory(pgn: string) {
@@ -331,7 +332,6 @@ describe('All Tests', () => {
 
       kdrMetric.processGame(Array.from(cjsmin.historyGenerator(game[0].moves)));
 
-      console.log(kdrMetric.KDAssistsMap['ng'].kills);
       expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(3);
     });
   });
@@ -349,6 +349,112 @@ describe('All Tests', () => {
       const result = await getGameWithMostMoves(game);
 
       expect(result.maxNumMoves).toEqual(24);
+    });
+  });
+
+  describe('PromotionMetric', () => {
+    const promotionMetric = new PromotionMetric();
+
+    afterEach(() => {
+      promotionMetric.clear();
+    });
+
+    it('should update the promotion map when a promotion occurs', () => {
+      const moves = [
+        {
+          move: {
+            originalString: 'e8=Q',
+            color: 'b',
+            from: 'e7',
+            to: 'e8',
+            piece: 'p',
+            flags: 'p',
+            promotion: 'q',
+            uas: 'pe',
+          },
+          board: [],
+        },
+        {
+          move: {
+            originalString: 'a2=a1',
+            color: 'w',
+            from: 'a2',
+            to: 'a1',
+            piece: 'p',
+            flags: 'p',
+            promotion: 'q',
+            uas: 'PA',
+          },
+        },
+        {
+          move: {
+            originalString: 'b7=b8',
+            color: 'b',
+            from: 'b7',
+            to: 'b8',
+            piece: 'p',
+            flags: 'p',
+            promotion: 'r',
+            uas: 'pb',
+          },
+        },
+      ].map((entry) => {
+        return {
+          move: entry.move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
+      });
+
+      promotionMetric.processGame(moves);
+
+      expect(promotionMetric.promotionMap.pe.q).toEqual(1);
+      expect(promotionMetric.promotionMap.PA.q).toEqual(1);
+      expect(promotionMetric.promotionMap.pb.r).toEqual(1);
+    });
+
+    it('should not update the promotion map when a promotion does not occur', () => {
+      const moves = [
+        {
+          move: {
+            originalString: 'e4',
+            color: 'w',
+            from: 'e2',
+            to: 'e4',
+            piece: 'p',
+            flags: 'b',
+            uas: 'PE',
+          },
+        },
+        {
+          move: {
+            originalString: 'e5',
+            color: 'b',
+            from: 'e7',
+            to: 'e5',
+            piece: 'p',
+            flags: 'n',
+            uas: 'pe',
+          },
+        },
+      ].map((entry) => {
+        return {
+          move: entry.move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
+      });
+
+      promotionMetric.processGame(moves);
+      let promoTotal = 0;
+
+      for (const k of Object.keys(promotionMetric.promotionMap)) {
+        for (const promoCount of Object.values(
+          promotionMetric.promotionMap[k]
+        )) {
+          promoTotal += promoCount as number;
+        }
+      }
+
+      expect(promoTotal).toEqual(0);
     });
   });
 });
