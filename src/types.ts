@@ -9,12 +9,8 @@ export type UAPMap<T> = {
   [key in UASymbol]: T;
 };
 
-export type BoardMap = {
+export type BoardMap<T> = {
   [key in Square]: {
-    [key in UASymbol]: {
-      captured: number;
-      captures: number;
-      revengeKills: number;
-    };
+    [key in UASymbol]: T;
   };
 };

@@ -16,7 +16,11 @@ export function orderObject(unordered) {
     }, {});
 }
 
-export function createBoardMap(): BoardMap {
+export function createBoardMapOld(): BoardMap<{
+  captured: number;
+  captures: number;
+  revengeKills: number;
+}> {
   /**
    * i.e.
    * a1: {
@@ -51,6 +55,14 @@ export function createUAPMap<T extends Object>(object: T): UAPMap<T> {
     map[uap] = { ...object };
   }
   return map as { [key in UASymbol]: T };
+}
+
+export function createBoardMap<T extends Object>(object: T): BoardMap<T> {
+  const map = {};
+  for (const square of ALL_SQUARES) {
+    map[square] = createUAPMap(object);
+  }
+  return map as BoardMap<T>;
 }
 
 export async function* getHistoriesFromFilePath(path: string) {

@@ -1,5 +1,4 @@
-import { UnambiguousPieceSymbol } from '../../cjsmin/dist/types/chess';
-import { Piece, PrettyMove } from '../../cjsmin/src/chess';
+import { Piece, PrettyMove, UASymbol } from '../../cjsmin/src/chess';
 import { UAPMap } from '../types';
 import { createUAPMap } from '../utils';
 import { Metric } from './metric';
@@ -39,7 +38,7 @@ export class GameWithMostMovesMetric implements Metric {
 export class PieceLevelMoveInfoMetric implements Metric {
   totalMovesByPiece: UAPMap<{ numMoves: number }>;
   singleGameMaxMoves: number;
-  uasWithMostMoves: UnambiguousPieceSymbol[];
+  uasWithMostMoves: UASymbol[];
   gamesWithMostMoves: string[];
   gamesProcessed: number; // this could be tracked externally also, in other metrics
 
@@ -78,10 +77,10 @@ export class PieceLevelMoveInfoMetric implements Metric {
 
       if (currentGameStats[uas].numMoves > this.singleGameMaxMoves) {
         this.singleGameMaxMoves = currentGameStats[uas].numMoves;
-        this.uasWithMostMoves = [uas as UnambiguousPieceSymbol]; // New highest moves, reset the array
+        this.uasWithMostMoves = [uas as UASymbol]; // New highest moves, reset the array
         this.gamesWithMostMoves = [gameLink]; // New highest moves, reset the array
       } else if (currentGameStats[uas] === this.singleGameMaxMoves) {
-        this.uasWithMostMoves.push(uas as UnambiguousPieceSymbol); // Tie, add to the array
+        this.uasWithMostMoves.push(uas as UASymbol); // Tie, add to the array
         this.gamesWithMostMoves.push(gameLink);
       }
     }

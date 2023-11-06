@@ -5,8 +5,8 @@ import {
   Square,
   UASymbol,
 } from '../../cjsmin/src/chess';
-import { UAPMap } from '../types';
-import { createUAPMap } from '../utils';
+import { BoardMap, UAPMap } from '../types';
+import { createBoardMap, createUAPMap } from '../utils';
 import { Metric } from './metric';
 
 export class KillStreakMetric implements Metric {
@@ -279,3 +279,45 @@ export class CaptureLocationMetric implements Metric {
     }
   }
 }
+
+export class MatingSquareMetric implements Metric {
+  matingSquareMap: BoardMap<{
+    mates: number;
+    assists: number;
+    hockeyAssists: number;
+  }>;
+
+  // these are initialized as undefined
+  constructor() {
+    this.clear();
+  }
+
+  // TODO: maybe slightly better if we don't recreate when clearing
+  clear(): void {
+    this.matingSquareMap = createBoardMap({
+      mates: 0,
+      assists: 0,
+      hockeyAssists: 0,
+    });
+  }
+
+  // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery
+  // checks (currently we disregard this by just saying the last piece to move is the "mating piece")
+  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+    // Take no action if the game didn't end in checkmate
+    if (!game[game.length - 1].move.originalString.includes('#')) {
+      return;
+    }
+
+    const lastMove = game[game.length - 1].move;
+    // TODO: this is not properly tracking which pieces are delivering mates or asssits, because discovery checks can be delivered
+    // by pieces other than the last piece to move
+    this.matingSquareMap[lastMove.to][lastMove.uas].mates++;
+  }
+}
+
+/**
+ * When determining discovery checks, we need to look at the ray that was revealed. That measn tracking the index of the king
+ * and the index of the moving piece, tracing that line back and seeing if a piece is now threatening.
+ * We also need to track the new piece and see if its movement has created a new threat ray
+ */
