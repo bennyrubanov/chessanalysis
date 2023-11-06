@@ -1,7 +1,12 @@
+import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { KDRatioMetric } from './metrics/captures';
+import { KDRatioMetric, MateAndAssistMetric } from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
-import { FileReaderGame } from './types';
+import {
+  GameWithMostMovesMetric,
+  PieceLevelMoveInfoMetric,
+} from './metrics/moves';
+import { PromotionMetric } from './metrics/promotions';
 
 /**
  *
@@ -10,10 +15,34 @@ import { FileReaderGame } from './types';
  */
 export async function main(path: string) {
   console.time('Total Execution Time');
-  console.time('Task 1: FileReader');
+  await gameIterator(path);
+  console.timeEnd('Total Execution Time');
+}
 
+/**
+ * Metric functions will ingest a single game at a time
+ * @param metricFunctions
+ */
+async function gameIterator(path) {
   const gamesGenerator = gameChunks(path);
-  const games: FileReaderGame[] = [];
+  const kdRatioMetric = new KDRatioMetric();
+  const killStreakMetric = new MoveDistanceMetric();
+  const mateAndAssistMetric = new MateAndAssistMetric();
+  const promotionMetric = new PromotionMetric();
+  const moveDistanceMetric = new MoveDistanceMetric();
+  const gameWithMostMovesMetric = new GameWithMostMovesMetric();
+  const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
+  const metrics = [
+    kdRatioMetric,
+    killStreakMetric,
+    mateAndAssistMetric,
+    promotionMetric,
+    moveDistanceMetric,
+    gameWithMostMovesMetric,
+    pieceLevelMoveInfoMetric,
+  ];
+
+  const cjsmin = new Chess();
 
   let gameCounter = 0;
   for await (const game of gamesGenerator) {
@@ -21,28 +50,15 @@ export async function main(path: string) {
     if (gameCounter % 20 == 0) {
       console.log('number of games ingested: ', gameCounter);
     }
-    games.push(game);
+    const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
 
-    // const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
-    // console.log(`lichess link to game played: ${siteLink}`);
+    for (const metric of metrics) {
+      const historyGenerator = cjsmin.historyGenerator(game.moves);
+      metric.processGame(Array.from(historyGenerator), siteLink);
+    }
   }
-  console.timeEnd('Task 1: FileReader');
-}
-
-/**
- * Metric functions will ingest a single game at a time
- * @param metricFunctions
- */
-function gameIterator() {
-  // Logic to get link to the game, which should be passed in processGame
-  // let site = game.metadata
-  // .find((item) => item.startsWith('[Site "'))
-  // ?.replace('[Site "', '')
-  // .replace('"]', '');
-  const kdrm = new KDRatioMetric();
-  const adm = new MoveDistanceMetric();
 }
 
 if (require.main === module) {
-  main(`data/10.10.23_test_set`).then(({}) => {});
+  main(`data/10.10.23_test_set`).then((a) => {});
 }

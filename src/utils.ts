@@ -1,8 +1,10 @@
 import {
   ALL_SQUARES,
   ALL_UNAMBIGUOUS_PIECE_SYMBOLS,
+  Chess,
   UASymbol,
 } from '../cjsmin/src/chess';
+import { gameChunks } from './fileReader';
 import { BoardMap, UAPMap } from './types';
 
 export function orderObject(unordered) {
@@ -49,4 +51,13 @@ export function createUAPMap<T extends Object>(object: T): UAPMap<T> {
     map[uap] = { ...object };
   }
   return map as { [key in UASymbol]: T };
+}
+
+export async function* getHistoriesFromFilePath(path: string) {
+  const chess = new Chess();
+  const gamesGenerator = gameChunks(path);
+  for await (const game of gamesGenerator) {
+    chess.loadPgn(game.moves);
+    yield chess.history();
+  }
 }

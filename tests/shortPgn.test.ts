@@ -1,4 +1,14 @@
-import { getHistoriesFromFilePath } from '../src/gameHistory';
+import { Chess } from '../cjsmin/src/chess';
+import { gameChunks } from '../src/fileReader';
+
+async function* getHistoriesFromFilePath(path: string) {
+  const chess = new Chess();
+  const gamesGenerator = gameChunks(path);
+  for await (const game of gamesGenerator) {
+    chess.loadPgn(game.moves);
+    yield chess.history();
+  }
+}
 
 describe('Using modified cjsmin returns expected results', () => {
   it('should not throw an error', async () => {
