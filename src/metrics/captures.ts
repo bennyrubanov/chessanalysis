@@ -1,4 +1,10 @@
-import { Piece, PrettyMove, UASymbol } from '../../cjsmin/src/chess';
+import {
+  ALL_SQUARES,
+  Piece,
+  PrettyMove,
+  Square,
+  UASymbol,
+} from '../../cjsmin/src/chess';
 import { UAPMap } from '../types';
 import { createUAPMap } from '../utils';
 import { Metric } from './metric';
@@ -234,20 +240,42 @@ export class MateAndAssistMetric implements Metric {
   }
 }
 
-// Not sure what's different from KD Ratio here except for revenge kills, so moving that and will deprecated
-// export function trackCaptures(boardMap: BoardMap, moves: PrettyMove[]) {
-//   let lastMove: PrettyMove;
-//   let i = 0;
-//   for (const move of moves) {
-//     if (move.capture) {
-//       boardMap[move.to][move.uas].captures++;
-//       boardMap[move.to][move.capture.uas].captured++;
-//       // revenge kills
-//       if (lastMove.capture && move.to === lastMove.to) {
-//         boardMap[move.to][move.uas].revengeKills++;
-//       }
-//     }
-//     lastMove = move;
-//     i++;
-//   }
-// }
+export class CaptureLocationMetric implements Metric {
+  captureLocationMap: {
+    [key in Square]: UAPMap<{ captures: number; captured: number }>;
+  };
+
+  constructor() {
+    this.clear();
+  }
+
+  clear(): void {
+    const newMap = {};
+    for (const square of ALL_SQUARES) {
+      newMap[square] = createUAPMap({ captures: 0, captured: 0 });
+    }
+    this.captureLocationMap = newMap as any;
+  }
+
+  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink?: string) {
+    let lastMove: PrettyMove;
+    for (const { move, board } of game) {
+      if (move.capture) {
+        board[move.to][move.uas].captures++;
+        board[move.to][move.capture.uas].captured++;
+      }
+      lastMove = move;
+    }
+  }
+
+  aggregate() {
+    // Gets a capture total for each square
+    const captureTotals = createUAPMap({ captures: 0, captured: 0 });
+    for (const square of Object.keys(this.captureLocationMap)) {
+      for (const uas of Object.keys(this.captureLocationMap[square])) {
+        captureTotals[square] += this.captureLocationMap[square][uas].captures;
+        captureTotals[square] += this.captureLocationMap[square][uas].captured;
+      }
+    }
+  }
+}
