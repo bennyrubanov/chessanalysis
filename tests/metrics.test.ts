@@ -6,7 +6,10 @@ import {
   MateAndAssistMetric,
 } from '../src/metrics/captures';
 import { MoveDistanceMetric } from '../src/metrics/distances';
-import { GameWithMostMovesMetric } from '../src/metrics/moves';
+import {
+  GameWithMostMovesMetric,
+  PieceLevelMoveInfoMetric,
+} from '../src/metrics/moves';
 import { PromotionMetric } from '../src/metrics/promotions';
 
 // convert PGN string to GameHistoryObject
@@ -352,6 +355,71 @@ describe('All Tests', () => {
       );
 
       expect(mostMovesMetric.numMoves).toEqual(24);
+    });
+  });
+
+  describe('PieceLevelMoveInfoMetric', () => {
+    const cjsmin = new Chess();
+
+    describe('processGame', () => {
+      let metric = new PieceLevelMoveInfoMetric();
+
+      beforeEach(() => {
+        metric.clear();
+      });
+
+      it('should update totalMovesByPiece correctly', () => {
+        const game =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+
+        metric.processGame(Array.from(cjsmin.historyGenerator(game)));
+
+        expect(metric.totalMovesByPiece['Q'].numMoves).toEqual(4);
+        expect(metric.totalMovesByPiece['K'].numMoves).toEqual(1);
+        // This last one is not manually verified
+        expect(
+          metric.totalMovesByPiece['RA'].numMoves +
+            metric.totalMovesByPiece['RH'].numMoves
+        ).toEqual(6);
+      });
+
+      it('should update singleGameMaxMoves correctly', () => {
+        const game1 =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+        const game2 =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+
+        metric.processGame(Array.from(cjsmin.historyGenerator(game1)));
+        metric.processGame(Array.from(cjsmin.historyGenerator(game2)));
+
+        expect(metric.singleGameMaxMoves).toEqual(9);
+        expect(metric.uasWithMostMoves).toEqual(['k']);
+        expect(metric.gamesWithMostMoves).toEqual([undefined, undefined]);
+      });
+    });
+
+    describe('aggregate', () => {
+      let metric = new PieceLevelMoveInfoMetric();
+
+      beforeEach(() => {
+        metric.clear();
+      });
+
+      it('should return the correct averages', () => {
+        const game1 =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+        const game2 =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+
+        metric.processGame(Array.from(cjsmin.historyGenerator(game1)));
+        metric.processGame(Array.from(cjsmin.historyGenerator(game2)));
+
+        const averages = metric.aggregate();
+
+        expect(averages['Q'].avgMoves).toEqual(4);
+        expect(averages['K'].avgMoves).toEqual(1);
+        expect(averages['pa'].avgMoves).toEqual(3);
+      });
     });
   });
 

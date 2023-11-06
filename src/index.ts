@@ -1,7 +1,6 @@
 import { gameChunks } from './fileReader';
 import { KDRatioMetric } from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
-import { getPieceLevelMoveInfo } from './metrics/moves';
 import { FileReaderGame } from './types';
 
 /**
@@ -28,8 +27,6 @@ export async function main(path: string) {
     // console.log(`lichess link to game played: ${siteLink}`);
   }
   console.timeEnd('Task 1: FileReader');
-
-  getPieceLevelMoveInfo(games);
 }
 
 /**
