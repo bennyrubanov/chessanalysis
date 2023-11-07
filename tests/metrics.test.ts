@@ -3,10 +3,14 @@ import { Chess } from '../cjsmin/src/chess';
 import {
   KDRatioMetric,
   KillStreakMetric,
-  getMateAndAssists,
+  MateAndAssistMetric,
 } from '../src/metrics/captures';
-import { getMoveDistanceSingleGame } from '../src/metrics/distances';
-import { getGameWithMostMoves } from '../src/metrics/moves';
+import { MoveDistanceMetric } from '../src/metrics/distances';
+import {
+  GameWithMostMovesMetric,
+  PieceLevelMoveInfoMetric,
+} from '../src/metrics/moves';
+import { PromotionMetric } from '../src/metrics/promotions';
 
 // convert PGN string to GameHistoryObject
 export function pgnToGameHistory(pgn: string) {
@@ -53,19 +57,25 @@ describe('All Tests', () => {
     });
   });
 
-  xdescribe('tracks kills, deaths and revenge kills by square', () => {
+  describe('tracks kills, deaths and revenge kills by square', () => {
     it('should return the correct kill streaks', () => {});
   });
 
-  xdescribe('getMateAndAssists', () => {
-    it('should return empty objects if there is no mate or assist', () => {
-      const gameHistory: any[] = [
+  describe('getMateAndAssists', () => {
+    const mateAndAssistMetric = new MateAndAssistMetric();
+
+    afterEach(() => {
+      mateAndAssistMetric.clear();
+    });
+
+    it('should not modify if game ends early', () => {
+      const moves = [
         {
           originalString: 'e4',
           color: 'w',
           from: 'e2',
           to: 'e4',
-          piece: 'P',
+          piece: 'p',
           flags: 'b',
         },
         {
@@ -81,7 +91,7 @@ describe('All Tests', () => {
           color: 'w',
           from: 'g1',
           to: 'f3',
-          piece: 'N',
+          piece: 'n',
           flags: 'b',
         },
         {
@@ -92,21 +102,25 @@ describe('All Tests', () => {
           piece: 'n',
           flags: 'n',
         },
-      ];
-
-      const gameHistoryMoves = gameHistoryToPgn(gameHistory);
-
-      const result = getMateAndAssists(gameHistoryMoves);
-
-      expect(result).toEqual({
-        matingPiece: undefined,
-        assistingPiece: undefined,
-        hockeyAssist: undefined,
+      ].map((move) => {
+        return {
+          move: move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
       });
+
+      // const result = getMateAndAssists(gameHistoryMoves);
+      mateAndAssistMetric.processGame(moves);
+
+      const result = { ...mateAndAssistMetric.mateAndAssistMap };
+      // clear results before comparing
+      mateAndAssistMetric.clear();
+
+      expect(result).toEqual(mateAndAssistMetric.mateAndAssistMap);
     });
 
     it('should return the mating piece if there is a mate but no assist', () => {
-      const gameHistory: any[] = [
+      const moves: any[] = [
         {
           originalString: 'e4',
           color: 'w',
@@ -114,6 +128,7 @@ describe('All Tests', () => {
           to: 'e4',
           piece: 'P',
           flags: 'b',
+          uas: 'PE',
         },
         {
           originalString: 'e5',
@@ -122,6 +137,7 @@ describe('All Tests', () => {
           to: 'e5',
           piece: 'p',
           flags: 'n',
+          uas: 'pe',
         },
         {
           originalString: 'Qh5',
@@ -138,6 +154,7 @@ describe('All Tests', () => {
           to: 'c6',
           piece: 'n',
           flags: 'n',
+          uas: 'ng',
         },
         {
           originalString: 'Qxf7#',
@@ -147,22 +164,26 @@ describe('All Tests', () => {
           piece: 'Q',
           captured: 'p',
           flags: 't',
+          uas: 'Q',
         },
-      ];
+      ].map((move) => {
+        return {
+          move: move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
+      });
 
-      const gameHistoryMoves = gameHistoryToPgn(gameHistory);
+      mateAndAssistMetric.processGame(moves);
 
-      const result = getMateAndAssists(gameHistoryMoves);
-
-      expect(result).toEqual({
-        matingPiece: 'Q',
-        assistingPiece: undefined,
-        hockeyAssist: undefined,
+      expect(mateAndAssistMetric.mateAndAssistMap['Q']).toEqual({
+        mates: 1,
+        assists: 0,
+        hockeyAssists: 0,
       });
     });
 
-    it('should return the mating piece and assist if there is a mate with assist', () => {
-      const gameHistory: any[] = [
+    it('should return the mating piece and not count the same piece as assisting', () => {
+      const moves: any[] = [
         {
           originalString: 'e4',
           color: 'w',
@@ -203,6 +224,7 @@ describe('All Tests', () => {
           piece: 'Q',
           captured: 'p',
           flags: 't',
+          uas: 'Q',
         },
         {
           originalString: 'Kd8',
@@ -211,6 +233,7 @@ describe('All Tests', () => {
           to: 'd8',
           piece: 'k',
           flags: 'n',
+          uas: 'k',
         },
         {
           originalString: 'Qf8#',
@@ -220,156 +243,64 @@ describe('All Tests', () => {
           piece: 'Q',
           captured: 'k',
           flags: 't',
+          uas: 'Q',
         },
-      ];
-
-      const gameHistoryMoves = gameHistoryToPgn(gameHistory);
-
-      const result = getMateAndAssists(gameHistoryMoves);
-
-      expect(result).toEqual({
-        matingPiece: 'Q',
-        assistingPiece: undefined,
-        hockeyAssist: undefined,
+      ].map((move) => {
+        return {
+          move: move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
       });
-    });
 
-    // TODO: gen with copilot so the game may not be valid
-    it('should return just mating piece if the checks are all from the same piece', () => {
-      const gameHistory: any[] = [
-        {
-          originalString: 'e4',
-          color: 'w',
-          from: 'e2',
-          to: 'e4',
-          piece: 'P',
-          flags: 'b',
-        },
-        {
-          originalString: 'e5',
-          color: 'b',
-          from: 'e7',
-          to: 'e5',
-          piece: 'p',
-          flags: 'n',
-        },
-        {
-          originalString: 'Qh5',
-          color: 'w',
-          from: 'd1',
-          to: 'h5',
-          piece: 'Q',
-          flags: 'b',
-        },
-        {
-          originalString: 'Nc6',
-          color: 'b',
-          from: 'b8',
-          to: 'c6',
-          piece: 'n',
-          flags: 'n',
-        },
-        {
-          originalString: 'Qxf7+',
-          color: 'w',
-          from: 'h5',
-          to: 'f7',
-          piece: 'Q',
-          captured: 'p',
-          flags: 't',
-        },
-        {
-          originalString: 'Kd8',
-          color: 'b',
-          from: 'e8',
-          to: 'd8',
-          piece: 'k',
-          flags: 'n',
-        },
-        {
-          originalString: 'Qf8+',
-          color: 'w',
-          from: 'f7',
-          to: 'f8',
-          piece: 'Q',
-          flags: 'n',
-        },
-        {
-          originalString: 'Rg8',
-          color: 'b',
-          from: 'h8',
-          to: 'g8',
-          piece: 'R',
-          flags: 'n',
-        },
-        {
-          originalString: 'Qg8#', // can capture and mate happen in same? How is it represented?
-          color: 'w',
-          from: 'f8',
-          to: 'g8',
-          piece: 'Q',
-          captured: 'R',
-          flags: 't',
-        },
-      ];
+      mateAndAssistMetric.processGame(moves);
 
-      const gameHistoryMoves = gameHistoryToPgn(gameHistory);
-
-      const result = getMateAndAssists(gameHistoryMoves);
-
-      expect(result).toEqual({
-        matingPiece: 'Q',
-        assistingPiece: undefined,
-        hockeyAssist: undefined,
+      expect(mateAndAssistMetric.mateAndAssistMap['Q']).toEqual({
+        mates: 1,
+        assists: 0,
+        hockeyAssists: 0,
       });
     });
   });
 
-  xdescribe('getMoveDistanceSingleGame', () => {
-    xit('should return the correct max distance and piece for a game', async () => {
+  describe('getMoveDistanceSingleGame', () => {
+    const moveDistanceMetric = new MoveDistanceMetric();
+    it('should return the correct max distance and piece for a game', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
-      const result = await getMoveDistanceSingleGame({
-        metadata: [],
-        moves: game,
-      });
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
 
-      expect(result.maxDistancePiece).toEqual('Q');
-      expect(result.maxDistance).toEqual(6);
+      expect(moveDistanceMetric.pieceMaxes.distance).toEqual(6);
+      expect(moveDistanceMetric.pieceMaxes.uasArray[0]).toEqual('Q');
     });
 
-    xit('should return 2 distance for a game with one move', async () => {
+    it('should return 2 distance for a game with one move', async () => {
       const game = '1. e4 e5';
 
-      const result = await getMoveDistanceSingleGame({
-        metadata: [],
-        moves: game,
-      });
+      moveDistanceMetric.clear();
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
 
-      expect(result.maxDistancePiece).toBe('PE');
-      expect(result.maxDistance).toEqual(2);
+      expect(moveDistanceMetric.pieceMaxes.distance).toEqual(2);
+      expect(moveDistanceMetric.pieceMaxes.uasArray).toEqual(['PE', 'pe']);
     });
 
     it('should return a singleGameDistanceTotal equal to the addition of all distances in the distanceMap', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
-      const result = await getMoveDistanceSingleGame({
-        metadata: [],
-        moves: game,
-      });
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
+      moveDistanceMetric.aggregate();
 
       let totalDistance = 0;
 
-      for (const distance of Object.keys(result.distanceMap)) {
-        totalDistance += result.distanceMap[distance];
+      for (const uas of Object.keys(moveDistanceMetric.distanceMap)) {
+        totalDistance += moveDistanceMetric.distanceMap[uas].total;
       }
 
-      expect(result.singleGameDistanceTotal).toEqual(totalDistance);
+      expect(moveDistanceMetric.totalDistance).toEqual(totalDistance);
     });
   });
 
   // game being tested: https://www.chess.com/analysis/game/pgn/4uURW4rJaa?tab=analysis
-  xdescribe('getKillDeathRatios', () => {
+  describe('getKillDeathRatios', () => {
     // this could be a beforeAll
     const kdrMetric = new KDRatioMetric();
 
@@ -386,7 +317,10 @@ describe('All Tests', () => {
             '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1',
         },
       ];
-      kdrMetric.processGame(Array.from(cjsmin.historyGenerator(game[0].moves)));
+      kdrMetric.processGame(
+        Array.from(cjsmin.historyGenerator(game[0].moves)),
+        ['m', 'et']
+      );
 
       expect(kdrMetric.KDAssistsMap['pe'].kills).toEqual(1);
       expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
@@ -402,54 +336,17 @@ describe('All Tests', () => {
         },
       ];
 
-      kdrMetric.processGame(Array.from(cjsmin.historyGenerator(game[0].moves)));
+      kdrMetric.processGame(
+        Array.from(cjsmin.historyGenerator(game[0].moves)),
+        ['m', 'et']
+      );
 
-      console.log(kdrMetric.KDAssistsMap['ng'].kills);
       expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(3);
     });
   });
 
-  xdescribe('getMateAndAssists', () => {
-    it('should return the correct mating piece', () => {
-      const game = [
-        {
-          metadata: [],
-          moves:
-            '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1',
-        },
-      ];
-
-      const result = getMateAndAssists(game[0].moves);
-
-      expect(result.matingPiece).toEqual('ng');
-      // expect(result).toEqual({
-      //   matingPiece: '',
-      //   assistingPiece: '',
-      //   hockeyAssist: ,
-      //   unambigAssistingPiece: ,
-      //   unambigMatingPiece: ,
-      //   unambigHockeyAssist: ,
-      //   lastPieceMoved:
-      // });
-    });
-
-    it.only('should return the correct mating piece', () => {
-      // game: https://lichess.org/jo73x9y8
-      const game = [
-        {
-          metadata: [],
-          moves:
-            '1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3 Bc5 5. cxd4 Nxd4 6. Nxd4 Bxd4 7. Qxd4 d6 8. Qxg7 Qf6 9. Qxf6 Nxf6 10. Bc4 Be6 11. Bxe6 fxe6 12. Nc3 O-O-O 13. O-O Kb8 14. Bg5 Rhf8 15. Rad1 Rd7 16. e5 dxe5 17. Bxf6 Rxd1 18. Rxd1 a6 19. Bxe5 b5 20. Rd7 b4 21. Na4 Kb7 22. Rxc7+ Kb8 23. Rxh7+ Kc8 24. Rc7+ Kd8 25. Rc6 Ke7 26. Rxa6 Rd8 27. Ra7+ Ke8 28. Kf1 Rd2 29. Ra8+ Kd7 30. Rb8 Rd5 31. Bg3 Ra5 32. b3 Rd5 33. Rb7+ Kc6 34. Rb6+ Kd7 35. Rd6+ Rxd6 36. Bxd6 Kxd6 37. Ke2 Kc6 38. Kd3 Kb5 39. Ke4 Kc6 40. h4 Kd7 41. g4 Ke7 42. h5 Kf7 43. Ke5 Kg7 44. f4 Kh6 45. Kxe6 Kg7 46. g5 Kh7 47. Kf6 Kh8 48. g6 Kg8 49. h6 Kh8 50. Kg5 Kg8 51. f5 Kh8 52. f6 Kg8 53. g7 Kh7 54. Kf5 Kg8 55. Ke6 Kh7 56. f7 Kg6 57. f8=Q Kh7 58. g8=Q# 1-0',
-        },
-      ];
-
-      const result = getMateAndAssists(game[0].moves);
-
-      expect(result.unambigMatingPiece).toEqual('PG');
-    });
-  });
-
-  xdescribe('getGameWithMostMoves', () => {
+  describe('getGameWithMostMoves', () => {
+    const mostMovesMetric = new GameWithMostMovesMetric();
     it('should return the correct number of moves made', async () => {
       const game = [
         {
@@ -459,9 +356,198 @@ describe('All Tests', () => {
         },
       ];
 
-      const result = await getGameWithMostMoves(game);
+      mostMovesMetric.processGame(
+        Array.from(cjsmin.historyGenerator(game[0].moves)),
+        ['m', '"et"']
+      );
 
-      expect(result.maxNumMoves).toEqual(24);
+      expect(mostMovesMetric.numMoves).toEqual(24);
+    });
+  });
+
+  describe('PieceLevelMoveInfoMetric', () => {
+    const cjsmin = new Chess();
+
+    describe('processGame', () => {
+      let plmiMetric = new PieceLevelMoveInfoMetric();
+
+      beforeEach(() => {
+        plmiMetric.clear();
+      });
+
+      it('should update totalMovesByPiece correctly', () => {
+        const game =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+
+        plmiMetric.processGame(Array.from(cjsmin.historyGenerator(game)), [
+          'm',
+          '"et"',
+        ]);
+
+        expect(plmiMetric.totalMovesByPiece['Q'].numMoves).toEqual(4);
+        expect(plmiMetric.totalMovesByPiece['K'].numMoves).toEqual(1);
+        // This last one is not manually verified
+        expect(
+          plmiMetric.totalMovesByPiece['RA'].numMoves +
+            plmiMetric.totalMovesByPiece['RH'].numMoves
+        ).toEqual(6);
+      });
+
+      it('should update singleGameMaxMoves correctly', () => {
+        const game1 =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+        const game2 =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+
+        plmiMetric.processGame(Array.from(cjsmin.historyGenerator(game1)), [
+          'm',
+          '"et"',
+        ]);
+        plmiMetric.processGame(Array.from(cjsmin.historyGenerator(game2)), [
+          'm',
+          '"et"',
+        ]);
+
+        expect(plmiMetric.singleGameMaxMoves).toEqual(9);
+        expect(plmiMetric.uasWithMostMoves).toEqual(['k']);
+        expect(plmiMetric.gamesWithMostMoves).toEqual(['et']);
+      });
+    });
+
+    describe('aggregate', () => {
+      let metric = new PieceLevelMoveInfoMetric();
+
+      beforeEach(() => {
+        metric.clear();
+      });
+
+      it('should return the correct averages', () => {
+        const game1 =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+        const game2 =
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
+
+        metric.processGame(Array.from(cjsmin.historyGenerator(game1)), [
+          'a',
+          '"l"',
+        ]);
+        metric.processGame(Array.from(cjsmin.historyGenerator(game2)), [
+          'a',
+          '"p"',
+        ]);
+
+        const averages = metric.aggregate();
+
+        expect(averages['Q'].avgMoves).toEqual(4);
+        expect(averages['K'].avgMoves).toEqual(1);
+        expect(averages['pa'].avgMoves).toEqual(3);
+      });
+    });
+  });
+
+  describe('PromotionMetric', () => {
+    const promotionMetric = new PromotionMetric();
+
+    afterEach(() => {
+      promotionMetric.clear();
+    });
+
+    it('should update the promotion map when a promotion occurs', () => {
+      const moves = [
+        {
+          move: {
+            originalString: 'e8=Q',
+            color: 'b',
+            from: 'e7',
+            to: 'e8',
+            piece: 'p',
+            flags: 'p',
+            promotion: 'q',
+            uas: 'pe',
+          },
+          board: [],
+        },
+        {
+          move: {
+            originalString: 'a2=a1',
+            color: 'w',
+            from: 'a2',
+            to: 'a1',
+            piece: 'p',
+            flags: 'p',
+            promotion: 'q',
+            uas: 'PA',
+          },
+        },
+        {
+          move: {
+            originalString: 'b7=b8',
+            color: 'b',
+            from: 'b7',
+            to: 'b8',
+            piece: 'p',
+            flags: 'p',
+            promotion: 'r',
+            uas: 'pb',
+          },
+        },
+      ].map((entry) => {
+        return {
+          move: entry.move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
+      });
+
+      promotionMetric.processGame(moves);
+
+      expect(promotionMetric.promotionMap.pe.q).toEqual(1);
+      expect(promotionMetric.promotionMap.PA.q).toEqual(1);
+      expect(promotionMetric.promotionMap.pb.r).toEqual(1);
+    });
+
+    it('should not update the promotion map when a promotion does not occur', () => {
+      const moves = [
+        {
+          move: {
+            originalString: 'e4',
+            color: 'w',
+            from: 'e2',
+            to: 'e4',
+            piece: 'p',
+            flags: 'b',
+            uas: 'PE',
+          },
+        },
+        {
+          move: {
+            originalString: 'e5',
+            color: 'b',
+            from: 'e7',
+            to: 'e5',
+            piece: 'p',
+            flags: 'n',
+            uas: 'pe',
+          },
+        },
+      ].map((entry) => {
+        return {
+          move: entry.move as any, // cast to match type checks in the processGame handler
+          board: [],
+        };
+      });
+
+      promotionMetric.processGame(moves);
+      let promoTotal = 0;
+
+      for (const k of Object.keys(promotionMetric.promotionMap)) {
+        for (const promoCount of Object.values(
+          promotionMetric.promotionMap[k]
+        )) {
+          promoTotal += promoCount as number;
+        }
+      }
+
+      expect(promoTotal).toEqual(0);
     });
   });
 });

@@ -1,164 +1,108 @@
-import { Chess } from '../../cjsmin/src/chess';
-import { FileReaderGame } from '../types';
-export async function getGameWithMostMoves(games: FileReaderGame[]) {
-  console.time('Task 5: getGameWithMostMoves');
-  let maxNumMoves = 0;
-  let gameWithMostMoves: FileReaderGame | null = null;
-  let gameLinkWithMostMoves = null;
+import { Piece, PrettyMove, UASymbol } from '../../cjsmin/src/chess';
+import { UAPMap } from '../types';
+import { createUAPMap } from '../utils';
+import { Metric } from './metric';
 
-  for await (const game of games) {
-    const chess = new Chess();
+export class GameWithMostMovesMetric implements Metric {
+  link: string;
+  numMoves: number;
 
-    chess.loadPgn(game.moves);
-    const numMoves = chess.history().length;
+  constructor() {
+    this.clear();
+  }
 
-    if (numMoves > maxNumMoves) {
-      maxNumMoves = numMoves;
-      gameWithMostMoves = game;
-      let site = game.metadata
-        .find((item) => item.startsWith('[Site "'))
-        ?.replace('[Site "', '')
-        .replace('"]', '');
-      gameLinkWithMostMoves = site;
+  clear(): void {
+    this.link = undefined;
+    this.numMoves = 0;
+  }
+
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata: string[]
+  ) {
+    if (game.length > this.numMoves) {
+      this.numMoves = game.length;
+      this.link = metadata[1].match(/"(.*?)"/)[1];
     }
   }
 
-  console.timeEnd('Task 5: getGameWithMostMoves');
+  logResults(): void {
+    console.log('MOVES FACTS:');
+    console.log(`The game with the most moves played: ${this.link}`);
+    console.log(`The number of moves played in that game: ${this.numMoves}`);
 
-  // moves facts
-  console.log('MOVES FACTS:');
-  console.log(`The game with the most moves played: ${gameWithMostMoves}`);
-  console.log(`The number of moves played in that game: ${maxNumMoves}`);
-
-  console.log('==============================================================');
-  console.log('\n');
-
-  return {
-    gameLinkWithMostMoves,
-    maxNumMoves,
-  };
+    console.log(
+      '=============================================================='
+    );
+    console.log('\n');
+  }
 }
 
-export async function getPieceLevelMoveInfo(games: FileReaderGame[]) {
-  console.time('Task 6: getPieceLevelMoveInfo');
-  const numMovesByPiece = {};
-  let avgMovesByPiece = {};
-  let piecesWithMostMovesInAGame = [];
-  let piecesWithHighestAvgMoves = [];
-  let linkWithMostMoves = [];
-  let maxMoves = 0;
+export class PieceLevelMoveInfoMetric implements Metric {
+  totalMovesByPiece: UAPMap<{ numMoves: number }>;
+  singleGameMaxMoves: number;
+  uasWithMostMoves: UASymbol[];
+  gamesWithMostMoves: string[];
+  gamesProcessed: number; // this could be tracked externally also, in other metrics
 
-  let gameCount = 0;
+  constructor() {
+    this.clear();
+  }
 
-  for (const game of games) {
-    gameCount++;
-    const chess = new Chess();
-    const moveGenerator = chess.historyGenerator(game.moves);
+  clear(): void {
+    this.totalMovesByPiece = createUAPMap({ numMoves: 0 });
+    this.singleGameMaxMoves = 0;
+    this.uasWithMostMoves = [];
+    this.gamesProcessed = 0;
+  }
 
-    const numMovesByPieceThisGame = {};
-
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata: string[]
+  ) {
     // update move counts of each unambiguous piece
-    for (let moveInfo of moveGenerator) {
-      const { move } = moveInfo;
+    const currentGameStats = createUAPMap({ numMoves: 0 });
+    for (let { move } of game) {
+      currentGameStats[move.uas].numMoves++;
 
-      let movedPiece = move.uas;
-
-      if (movedPiece) {
-        if (!numMovesByPiece[movedPiece]) {
-          numMovesByPiece[movedPiece] = 0;
+      // Check if the move is a castling move, if so we need to increment rook too
+      if (move.flags === 'k' || move.flags === 'q') {
+        let movingRook = move.flags === 'k' ? 'rh' : 'ra';
+        if (move.color === 'w') {
+          movingRook = movingRook.toUpperCase();
         }
-        numMovesByPiece[movedPiece]++;
-        numMovesByPieceThisGame[movedPiece]++;
 
-        // Check if the move is a castling move
-        if (moveInfo.move.flags === 'k' || moveInfo.move.flags === 'q') {
-          let movingRook = moveInfo.move.flags === 'k' ? 'rh' : 'ra';
-          if (moveInfo.move.color === 'w') {
-            movingRook = movingRook.toUpperCase();
-          }
-
-          if (!numMovesByPiece[movingRook]) {
-            numMovesByPiece[movingRook] = 0;
-          }
-
-          // duplicative action for the array capturing moves by piece for this game
-          if (!numMovesByPieceThisGame[movingRook]) {
-            numMovesByPieceThisGame[movingRook] = 0;
-          }
-
-          numMovesByPiece[movingRook]++;
-          numMovesByPieceThisGame[movingRook]++;
-        }
+        currentGameStats[movingRook].numMoves++;
       }
     }
 
-    for (const uahPiece of Object.keys(numMovesByPieceThisGame)) {
-      let maxMovesInGame = numMovesByPieceThisGame[uahPiece];
+    // Calculate single game maxes & add to global totals
+    for (const uas of Object.keys(currentGameStats)) {
+      // increment global totals
+      this.totalMovesByPiece[uas].numMoves += currentGameStats[uas].numMoves;
+      const gameLink = metadata[1].match(/"(.*?)"/)[1];
 
-      if (maxMovesInGame > maxMoves) {
-        maxMoves = maxMovesInGame;
-        piecesWithMostMovesInAGame = [uahPiece]; // New highest moves, reset the array
-        linkWithMostMoves = [
-          game.metadata
-            .find((item) => item.startsWith('[Site "'))
-            ?.replace('[Site "', '')
-            .replace('"]', ''),
-        ]; // New highest moves, reset the array
-      } else if (maxMovesInGame === maxMoves) {
-        piecesWithMostMovesInAGame.push(uahPiece); // Tie, add to the array
-        linkWithMostMoves.push(
-          game.metadata
-            .find((item) => item.startsWith('[Site "'))
-            ?.replace('[Site "', '')
-            .replace('"]', '')
-        ); // Tie, add to the array
+      if (currentGameStats[uas].numMoves > this.singleGameMaxMoves) {
+        this.singleGameMaxMoves = currentGameStats[uas].numMoves;
+        this.uasWithMostMoves = [uas as UASymbol]; // New highest moves, reset the array
+        this.gamesWithMostMoves = [gameLink]; // New highest moves, reset the array
+      } else if (currentGameStats[uas] === this.singleGameMaxMoves) {
+        this.uasWithMostMoves.push(uas as UASymbol); // Tie, add to the array
+        this.gamesWithMostMoves.push(gameLink);
       }
     }
+
+    this.gamesProcessed++;
   }
 
-  // calculate average num moves by piece
-  for (const uahPiece of Object.keys(numMovesByPiece)) {
-    avgMovesByPiece[uahPiece] = numMovesByPiece[uahPiece] / gameCount;
-  }
-
-  let maxAverageNumMoves = 0;
-
-  // find the piece with the highest average num moves
-  for (const uahPiece of Object.keys(avgMovesByPiece)) {
-    const averageNumMoves = avgMovesByPiece[uahPiece];
-    if (averageNumMoves > maxAverageNumMoves) {
-      maxAverageNumMoves = averageNumMoves;
-      piecesWithHighestAvgMoves = [uahPiece]; // New highest average, reset the array
-    } else if (averageNumMoves === maxAverageNumMoves) {
-      piecesWithHighestAvgMoves.push(uahPiece); // Tie, add to the array
+  aggregate() {
+    const averagesMap = createUAPMap({ avgMoves: 0 });
+    // Calculate averages
+    for (const uas of Object.keys(this.totalMovesByPiece)) {
+      averagesMap[uas].avgMoves =
+        this.totalMovesByPiece[uas].numMoves / this.gamesProcessed;
     }
+
+    return averagesMap;
   }
-
-  console.log(
-    `The piece with the highest average number moves: ${piecesWithHighestAvgMoves}`
-  );
-  console.log(
-    `The piece with the most moves in a single game: ${piecesWithMostMovesInAGame}`
-  );
-  console.log('The total number of moves by piece in the set of games:'),
-    console.table(numMovesByPiece);
-  console.log('The average number of moves by piece in the set of games:'),
-    console.table(avgMovesByPiece);
-  console.log(
-    `The number of moves played by that piece in that game: ${maxMoves}`
-  );
-  console.log(
-    `The game that piece made that many moves in: ${linkWithMostMoves}`
-  );
-
-  console.timeEnd('Task 6: getPieceLevelMoveInfo');
-
-  return {
-    numMovesByPiece,
-    avgMovesByPiece: avgMovesByPiece,
-    piecesWithHighestAvgMoves: piecesWithHighestAvgMoves,
-    piecesWithMostMovesInAGame,
-    linkWithMostMoves,
-    maxMoves,
-  };
 }

@@ -1,6 +1,16 @@
-import { getHistoriesFromFilePath } from '../src/gameHistory';
+import { Chess } from '../cjsmin/src/chess';
+import { gameChunks } from '../src/fileReader';
 
-xdescribe('Using modified cjsmin returns expected results', () => {
+async function* getHistoriesFromFilePath(path: string) {
+  const chess = new Chess();
+  const gamesGenerator = gameChunks(path);
+  for await (const game of gamesGenerator) {
+    chess.loadPgn(game.moves);
+    yield chess.history();
+  }
+}
+
+describe('Using modified cjsmin returns expected results', () => {
   it('should not throw an error', async () => {
     const histShort = JSON.parse(
       require('fs').readFileSync('historiesShort.json').toString().trim()
@@ -11,8 +21,6 @@ xdescribe('Using modified cjsmin returns expected results', () => {
     for await (const history of historiesGenerator) {
       histories.push(history);
     }
-
-    // require('fs').writeFileSync('historiestst.json', JSON.stringify(histories));
 
     expect(histShort[0]).toEqual(histories[0]);
   });

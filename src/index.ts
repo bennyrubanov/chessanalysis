@@ -1,13 +1,12 @@
-import { Piece, PrettyMove } from '../cjsmin/src/chess';
+import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { KDRatioMetric } from './metrics/captures';
+import { KDRatioMetric, MateAndAssistMetric } from './metrics/captures';
+import { MoveDistanceMetric } from './metrics/distances';
 import {
-  getAverageDistance,
-  getMoveDistanceSetOfGames,
-} from './metrics/distances';
-import { getGameWithMostMoves, getPieceLevelMoveInfo } from './metrics/moves';
-import { getPiecePromotionInfo } from './metrics/promotions';
-import { FileReaderGame } from './types';
+  GameWithMostMovesMetric,
+  PieceLevelMoveInfoMetric,
+} from './metrics/moves';
+import { PromotionMetric } from './metrics/promotions';
 
 /**
  *
@@ -16,53 +15,50 @@ import { FileReaderGame } from './types';
  */
 export async function main(path: string) {
   console.time('Total Execution Time');
-  console.time('Task 1: FileReader');
-
-  const gamesGenerator = gameChunks(path);
-  const games: FileReaderGame[] = [];
-
-  let gameCounter = 0;
-  for await (const game of gamesGenerator) {
-    gameCounter++;
-    if (gameCounter % 20 == 0) {
-      console.log('number of games ingested: ', gameCounter);
-    }
-    games.push(game);
-
-    // const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
-    // console.log(`lichess link to game played: ${siteLink}`);
-  }
-  console.timeEnd('Task 1: FileReader');
-
-  const { gameCount, totalDistanceMap } = await getMoveDistanceSetOfGames(
-    games
-  );
-
-  getAverageDistance(totalDistanceMap, gameCount);
-  getGameWithMostMoves(games);
-  getPieceLevelMoveInfo(games);
-  getPiecePromotionInfo(games);
-
-  console.log(`Total number of games analyzed: ${gameCount}`);
-  console.log('\n');
-
-  console.log('==============================================================');
-  console.log('\n');
-
+  await gameIterator(path);
   console.timeEnd('Total Execution Time');
-  console.log('\n');
 }
 
 /**
  * Metric functions will ingest a single game at a time
  * @param metricFunctions
  */
-function gameIterator(
-  metricFunctions: ((game: { move: PrettyMove; board: Piece[] }[]) => void)[]
-) {
-  const KDRatio = new KDRatioMetric();
+async function gameIterator(path) {
+  const gamesGenerator = gameChunks(path);
+  const kdRatioMetric = new KDRatioMetric();
+  const killStreakMetric = new MoveDistanceMetric();
+  const mateAndAssistMetric = new MateAndAssistMetric();
+  const promotionMetric = new PromotionMetric();
+  const moveDistanceMetric = new MoveDistanceMetric();
+  const gameWithMostMovesMetric = new GameWithMostMovesMetric();
+  const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
+  const metrics = [
+    kdRatioMetric,
+    killStreakMetric,
+    mateAndAssistMetric,
+    promotionMetric,
+    moveDistanceMetric,
+    gameWithMostMovesMetric,
+    pieceLevelMoveInfoMetric,
+  ];
+
+  const cjsmin = new Chess();
+
+  let gameCounter = 0;
+  for await (const { moves, metadata } of gamesGenerator) {
+    gameCounter++;
+    if (gameCounter % 20 == 0) {
+      console.log('number of games ingested: ', gameCounter);
+    }
+
+    for (const metric of metrics) {
+      // with array creation
+      const historyGenerator = cjsmin.historyGeneratorArr(moves);
+      metric.processGame(Array.from(historyGenerator), metadata);
+    }
+  }
 }
 
 if (require.main === module) {
-  main(`data/10.10.23_test_set`).then(({}) => {});
+  main(`data/lichess_db_standard_rated_2013-01.pgn`).then((a) => {});
 }

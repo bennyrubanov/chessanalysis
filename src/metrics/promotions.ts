@@ -1,54 +1,60 @@
-import { Chess } from '../../cjsmin/src/chess';
-import { FileReaderGame } from '../types';
+import {
+  Pawns,
+  Piece,
+  PrettyMove,
+  PromotablePiece,
+} from '../../cjsmin/src/chess';
+import { Metric } from './metric';
 
-export async function getPiecePromotionInfo(games: FileReaderGame[]) {
-  console.time('Task 7: getPiecePromotionInfo');
-  let ambigPiecePromotedToMap = {};
-  let promotingPieceMap = {};
+export class PromotionMetric implements Metric {
+  //uas pawns mapped to count of promotions to each piece type
+  //prettier-ignore
+  promotionMap: {
+    [key in Pawns]: {
+      [key in PromotablePiece]: number;
+      }
+  };
 
-  for (const game of games) {
-    const chess = new Chess();
-    chess.loadPgn(game.moves);
-    const chessHistory = chess.history();
+  constructor() {
+    this.clear();
+  }
 
-    for (const moveInfo of chessHistory) {
-      if (moveInfo.originalString.includes('=')) {
-        // REGEX to only capture the piece type
-        const piecePromotedTo = moveInfo.originalString
-          .split('=')[1]
-          .match(/[a-zA-Z]/)[0];
+  clear(): void {
+    let promotionMap = {};
+    //prettier-ignore
+    for (const pawn of ["pa", "pb", "pc", "pd", "pe", "pf", "pg", "ph", 'PA', 'PB', 'PC', 'PD', 'PE', 'PF', 'PG', 'PH']) {
+      promotionMap[pawn] = { q: 0, r: 0, b: 0, n: 0 };
+    }
+    this.promotionMap = promotionMap as any;
+  }
 
-        const promotingPiece = moveInfo.uas;
-
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata?: string[]
+  ) {
+    for (const { move } of game) {
+      // TODO: we can use flags instead of includes('=)
+      if (move.originalString.includes('=')) {
         // update ambigPiecePromotedToMap
-        if (!ambigPiecePromotedToMap[piecePromotedTo]) {
-          ambigPiecePromotedToMap[piecePromotedTo] = 0;
-        }
-        ambigPiecePromotedToMap[piecePromotedTo]++;
-
-        // update promotingPieceMap
-        if (!promotingPieceMap[promotingPiece]) {
-          promotingPieceMap[promotingPiece] = 0;
-        }
-        promotingPieceMap[promotingPiece]++;
+        this.promotionMap[move.uas][move.promotion]++;
       }
     }
   }
 
-  // promotions facts
-  console.log('PROMOTIONS FACTS:');
-  console.log(
-    'How often a piece is promoted to different ambiguous piece types:'
-  ),
-    console.table(ambigPiecePromotedToMap);
-  console.log('How often unambiguous piece is promoted:'),
-    console.table(promotingPieceMap);
-  console.log('==============================================================');
-  console.log('\n');
+  aggregate() {}
 
-  console.timeEnd('Task 7: getPiecePromotionInfo');
-  return {
-    ambigPiecePromotedToMap,
-    promotingPieceMap,
-  };
+  logResults(): void {
+    // promotions facts
+    console.log('PROMOTIONS FACTS:');
+    console.log(
+      'How often a piece is promoted to different ambiguous piece types:'
+    ),
+      console.table(this.promotionMap);
+    console.log('How often unambiguous piece is promoted:'),
+      console.table(this.promotionMap);
+    console.log(
+      '=============================================================='
+    );
+    console.log('\n');
+  }
 }

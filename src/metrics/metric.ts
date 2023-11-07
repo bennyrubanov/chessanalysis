@@ -1,7 +1,10 @@
 import { Piece, PrettyMove } from '../../cjsmin/src/chess';
 
 export interface Metric {
-  processGame(game: { move: PrettyMove; board: Piece[] }[]): any;
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata?: string[]
+  ): any;
 
   logResults?(): void;
 
@@ -9,5 +12,5 @@ export interface Metric {
   clear?(): void;
 
   // Aggregate the results of the metric
-  aggregate?(): any;
+  aggregate?(...args: any[]): any;
 }

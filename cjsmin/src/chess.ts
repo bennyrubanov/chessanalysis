@@ -50,10 +50,30 @@ export type PrettyMove = {
   capture?: Capture | undefined;
   promotion?: PieceType | undefined;
   flags: string;
-  uas: UnambiguousPieceSymbol;
+  uas: UASymbol;
 };
 
-export type UnambiguousPieceSymbol =
+export type PromotablePiece = 'q' | 'r' | 'b' | 'n';
+
+export type Pawns =
+  | 'pa'
+  | 'pb'
+  | 'pc'
+  | 'pd'
+  | 'pe'
+  | 'pf'
+  | 'pg'
+  | 'ph'
+  | 'PA'
+  | 'PB'
+  | 'PC'
+  | 'PD'
+  | 'PE'
+  | 'PF'
+  | 'PG'
+  | 'PH';
+
+export type UASymbol =
   | 'RA'
   | 'NB'
   | 'BC'
@@ -146,7 +166,7 @@ export const ALL_SQUARES: Square[] = [
 ]
 
 // prettier-ignore
-export const ALL_UNAMBIGUOUS_PIECE_SYMBOLS: UnambiguousPieceSymbol[] = [
+export const ALL_UNAMBIGUOUS_PIECE_SYMBOLS: UASymbol[] = [
   "RA", "NB", "BC", "Q", "K", "BF", "NG", "RH",
   "PA", "PB", "PC", "PD", "PE", "PF", "PG", "PH",
   "ra", "nb", "bc", "q", "k", "bf", "ng", "rh",
@@ -159,12 +179,12 @@ export const DEFAULT_POSITION =
 export type Piece = {
   color: Color;
   type: PieceType;
-  uas: UnambiguousPieceSymbol;
+  uas: UASymbol;
 };
 
 type Capture = {
   type: PieceType;
-  uas: UnambiguousPieceSymbol;
+  uas: UASymbol;
 };
 
 export type InternalMove = {
@@ -172,7 +192,7 @@ export type InternalMove = {
   from: number;
   to: number;
   piece: PieceType;
-  uas: UnambiguousPieceSymbol;
+  uas: UASymbol;
   capture?: Capture;
   promotion?: PieceType;
   flags: number;
@@ -197,7 +217,7 @@ export type Move = {
   capture?: Capture;
   promotion?: PieceType;
   flags: string;
-  umabiguousSymbol: UnambiguousPieceSymbol;
+  umabiguousSymbol: UASymbol;
   // san: string;
   // lan: string;
   // before: string;
@@ -612,7 +632,7 @@ function addMove(
   from: number,
   to: number,
   piece: PieceType,
-  uas: UnambiguousPieceSymbol,
+  uas: UASymbol,
   capture: Capture | undefined = undefined,
   flags: number = BITS.NORMAL
 ) {
@@ -867,9 +887,7 @@ export class Chess {
     square: Square
   ) {
     //@ts-ignore this breaks for non init
-    const uas = SQUARE_TO_STARTING_POSITION_MAP[
-      square
-    ] as UnambiguousPieceSymbol;
+    const uas = SQUARE_TO_STARTING_POSITION_MAP[square] as UASymbol;
 
     // check for piece
     if (SYMBOLS.indexOf(type.toLowerCase()) === -1) {
@@ -1306,7 +1324,7 @@ export class Chess {
               this._board[from].uas,
               {
                 type: PAWN,
-                uas: uas as UnambiguousPieceSymbol,
+                uas: uas as UASymbol,
               },
               BITS.EP_CAPTURE
             );
@@ -1548,14 +1566,6 @@ export class Chess {
     this._turn = them;
   }
 
-  private _makeAndReturnMove(
-    move: InternalMove,
-    originalString?: string
-  ): InternalMove {
-    this._makeMove(move, originalString);
-    return move;
-  }
-
   private _undoMove() {
     const old = this._history.pop();
     if (old === undefined) {
@@ -1731,6 +1741,58 @@ export class Chess {
         };
       }
     }
+  }
+
+  historyGeneratorArr(
+    pgnMoveLine: string,
+    { strict = false }: { strict?: boolean; newlineChar?: string } = {}
+  ): { move: PrettyMove; board: Array<Piece> }[] {
+    this.load(DEFAULT_POSITION);
+    const result: any[] = [];
+
+    // We don't mind destructive deletion of the comments
+    let ms = pgnMoveLine.replace(new RegExp(`({[^}]*})+?`, 'g'), '');
+
+    // delete move numbers
+    ms = ms.replace(/\d+\.(\.\.)?/g, '');
+
+    // delete ... indicating black to move
+    ms = ms.replace('...', '');
+
+    /* delete numeric annotation glyphs */
+    ms = ms.replace(/\$\d+/g, '');
+
+    // trim and get array of moves
+    // let moves = ms.trim().split(new RegExp(/\s+/));
+    let moves = ms.trim().split(' ');
+
+    // delete empty entries
+    moves = moves.filter((move) => move !== '');
+
+    for (let halfMove = 0; halfMove < moves.length; halfMove++) {
+      const move = this._moveFromSan(moves[halfMove], strict);
+
+      // invalid move
+      if (move == null) {
+        // was the move an end of game marker
+        if (!(TERMINATION_MARKERS.indexOf(moves[halfMove]) > -1)) {
+          throw new Error(`Invalid move in PGN: ${moves[halfMove]}`);
+        }
+      } else {
+        // reset the end of game marker if making a valid move
+        this._makeMove(move, moves[halfMove]);
+        const prettyMove = {
+          ...this._makePretty(move, moves[halfMove]),
+          originalString: moves[halfMove],
+        };
+        result.push({
+          move: prettyMove,
+          board: this._board,
+        });
+      }
+    }
+
+    return result;
   }
 
   /*
