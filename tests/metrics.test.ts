@@ -319,7 +319,7 @@ describe('All Tests', () => {
       ];
       kdrMetric.processGame(
         Array.from(cjsmin.historyGenerator(game[0].moves)),
-        ''
+        ['m', 'et']
       );
 
       expect(kdrMetric.KDAssistsMap['pe'].kills).toEqual(1);
@@ -338,7 +338,7 @@ describe('All Tests', () => {
 
       kdrMetric.processGame(
         Array.from(cjsmin.historyGenerator(game[0].moves)),
-        ''
+        ['m', 'et']
       );
 
       expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(3);
@@ -357,7 +357,8 @@ describe('All Tests', () => {
       ];
 
       mostMovesMetric.processGame(
-        Array.from(cjsmin.historyGenerator(game[0].moves))
+        Array.from(cjsmin.historyGenerator(game[0].moves)),
+        ['m', '"et"']
       );
 
       expect(mostMovesMetric.numMoves).toEqual(24);
@@ -368,24 +369,27 @@ describe('All Tests', () => {
     const cjsmin = new Chess();
 
     describe('processGame', () => {
-      let metric = new PieceLevelMoveInfoMetric();
+      let plmiMetric = new PieceLevelMoveInfoMetric();
 
       beforeEach(() => {
-        metric.clear();
+        plmiMetric.clear();
       });
 
       it('should update totalMovesByPiece correctly', () => {
         const game =
           '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
 
-        metric.processGame(Array.from(cjsmin.historyGenerator(game)));
+        plmiMetric.processGame(Array.from(cjsmin.historyGenerator(game)), [
+          'm',
+          '"et"',
+        ]);
 
-        expect(metric.totalMovesByPiece['Q'].numMoves).toEqual(4);
-        expect(metric.totalMovesByPiece['K'].numMoves).toEqual(1);
+        expect(plmiMetric.totalMovesByPiece['Q'].numMoves).toEqual(4);
+        expect(plmiMetric.totalMovesByPiece['K'].numMoves).toEqual(1);
         // This last one is not manually verified
         expect(
-          metric.totalMovesByPiece['RA'].numMoves +
-            metric.totalMovesByPiece['RH'].numMoves
+          plmiMetric.totalMovesByPiece['RA'].numMoves +
+            plmiMetric.totalMovesByPiece['RH'].numMoves
         ).toEqual(6);
       });
 
@@ -395,12 +399,18 @@ describe('All Tests', () => {
         const game2 =
           '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
 
-        metric.processGame(Array.from(cjsmin.historyGenerator(game1)));
-        metric.processGame(Array.from(cjsmin.historyGenerator(game2)));
+        plmiMetric.processGame(Array.from(cjsmin.historyGenerator(game1)), [
+          'm',
+          '"et"',
+        ]);
+        plmiMetric.processGame(Array.from(cjsmin.historyGenerator(game2)), [
+          'm',
+          '"et"',
+        ]);
 
-        expect(metric.singleGameMaxMoves).toEqual(9);
-        expect(metric.uasWithMostMoves).toEqual(['k']);
-        expect(metric.gamesWithMostMoves).toEqual([undefined, undefined]);
+        expect(plmiMetric.singleGameMaxMoves).toEqual(9);
+        expect(plmiMetric.uasWithMostMoves).toEqual(['k']);
+        expect(plmiMetric.gamesWithMostMoves).toEqual(['et']);
       });
     });
 
@@ -417,8 +427,14 @@ describe('All Tests', () => {
         const game2 =
           '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Bd7 13. Nf1 Rfc8 14. d5 Nc4 15. b3 Nb6 16. Ng3 g6 17. Nh2 c4 18. b4 a5 19. f4 axb4 20. cxb4 exf4 21. Bxf4 Be8 22. Rf1 Nfd7 23. Ng4 h5 24. Nh6+ Kg7 25. Nxh5+ gxh5 26. Qxh5 f5 27. Nxf5+ Kf6 28. Bg5+ Ke5 29. Qh8+ Bf6 30. Bxf6+ Nxf6 31. Ng7 Qf7 32. Rf5+ Kd4 33. Ne6+ Kc3 34. Rf3+ Kxc2 35. Nd4+ Kb2 36. Rf2+ Kxa1 37. Qh6 c3 38. Qc1#';
 
-        metric.processGame(Array.from(cjsmin.historyGenerator(game1)));
-        metric.processGame(Array.from(cjsmin.historyGenerator(game2)));
+        metric.processGame(Array.from(cjsmin.historyGenerator(game1)), [
+          'a',
+          '"l"',
+        ]);
+        metric.processGame(Array.from(cjsmin.historyGenerator(game2)), [
+          'a',
+          '"p"',
+        ]);
 
         const averages = metric.aggregate();
 

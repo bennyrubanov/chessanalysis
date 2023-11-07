@@ -3,7 +3,7 @@ import { Piece, PrettyMove } from '../../cjsmin/src/chess';
 export interface Metric {
   processGame(
     game: { move: PrettyMove; board: Piece[] }[],
-    gameLink?: string
+    metadata?: string[]
   ): any;
 
   logResults?(): void;

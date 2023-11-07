@@ -16,10 +16,13 @@ export class GameWithMostMovesMetric implements Metric {
     this.numMoves = 0;
   }
 
-  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink?: string) {
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata: string[]
+  ) {
     if (game.length > this.numMoves) {
       this.numMoves = game.length;
-      this.link = gameLink;
+      this.link = metadata[1].match(/"(.*?)"/)[1];
     }
   }
 
@@ -53,7 +56,10 @@ export class PieceLevelMoveInfoMetric implements Metric {
     this.gamesProcessed = 0;
   }
 
-  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink?: string) {
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata: string[]
+  ) {
     // update move counts of each unambiguous piece
     const currentGameStats = createUAPMap({ numMoves: 0 });
     for (let { move } of game) {
@@ -74,6 +80,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
     for (const uas of Object.keys(currentGameStats)) {
       // increment global totals
       this.totalMovesByPiece[uas].numMoves += currentGameStats[uas].numMoves;
+      const gameLink = metadata[1].match(/"(.*?)"/)[1];
 
       if (currentGameStats[uas].numMoves > this.singleGameMaxMoves) {
         this.singleGameMaxMoves = currentGameStats[uas].numMoves;

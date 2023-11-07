@@ -45,17 +45,16 @@ async function gameIterator(path) {
   const cjsmin = new Chess();
 
   let gameCounter = 0;
-  for await (const game of gamesGenerator) {
+  for await (const { moves, metadata } of gamesGenerator) {
     gameCounter++;
     if (gameCounter % 20 == 0) {
       console.log('number of games ingested: ', gameCounter);
     }
-    const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
 
     for (const metric of metrics) {
       // with array creation
-      const historyGenerator = cjsmin.historyGeneratorArr(game.moves);
-      metric.processGame(Array.from(historyGenerator), siteLink);
+      const historyGenerator = cjsmin.historyGeneratorArr(moves);
+      metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
 }

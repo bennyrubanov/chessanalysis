@@ -2,7 +2,7 @@ import { Square, UASymbol } from '../cjsmin/src/chess';
 
 export interface FileReaderGame {
   moves: string;
-  metadata: string[];
+  metadata?: string[];
 }
 
 export type UAPMap<T> = {

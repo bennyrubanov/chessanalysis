@@ -132,7 +132,10 @@ export class KDRatioMetric implements Metric {
   }
 
   // calculates piece with highest K/D ratio and also contains assists by that piece
-  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink: string) {
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata?: string[]
+  ) {
     // @ts-ignore initialize with no capture
     let previousMove: PrettyMove = {};
     for (const { move } of game) {
@@ -257,7 +260,10 @@ export class CaptureLocationMetric implements Metric {
     this.captureLocationMap = newMap as any;
   }
 
-  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink?: string) {
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata?: string[]
+  ) {
     let lastMove: PrettyMove;
     for (const { move, board } of game) {
       if (move.capture) {

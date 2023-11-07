@@ -28,7 +28,10 @@ export class PromotionMetric implements Metric {
     this.promotionMap = promotionMap as any;
   }
 
-  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink?: string) {
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata?: string[]
+  ) {
     for (const { move } of game) {
       // TODO: we can use flags instead of includes('=)
       if (move.originalString.includes('=')) {
