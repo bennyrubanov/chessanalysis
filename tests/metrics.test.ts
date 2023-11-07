@@ -317,7 +317,10 @@ describe('All Tests', () => {
             '1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qa4 Nf6 5. Nc3 d5 6. exd5 Qe7+ 7. Kd1 Bg4+ 8. Kd2 Nxd5 9. Nb5 Ncb4 10. c3 O-O-O 11. f3 Qe3+ 12. Kd1 Nxc3# 0-1',
         },
       ];
-      kdrMetric.processGame(Array.from(cjsmin.historyGenerator(game[0].moves)));
+      kdrMetric.processGame(
+        Array.from(cjsmin.historyGenerator(game[0].moves)),
+        ''
+      );
 
       expect(kdrMetric.KDAssistsMap['pe'].kills).toEqual(1);
       expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
@@ -333,7 +336,10 @@ describe('All Tests', () => {
         },
       ];
 
-      kdrMetric.processGame(Array.from(cjsmin.historyGenerator(game[0].moves)));
+      kdrMetric.processGame(
+        Array.from(cjsmin.historyGenerator(game[0].moves)),
+        ''
+      );
 
       expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(3);
     });

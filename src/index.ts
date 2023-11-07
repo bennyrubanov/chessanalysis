@@ -53,12 +53,13 @@ async function gameIterator(path) {
     const siteLink = game.metadata[1].match(/"(.*?)"/)[1];
 
     for (const metric of metrics) {
-      const historyGenerator = cjsmin.historyGenerator(game.moves);
+      // with array creation
+      const historyGenerator = cjsmin.historyGeneratorArr(game.moves);
       metric.processGame(Array.from(historyGenerator), siteLink);
     }
   }
 }
 
 if (require.main === module) {
-  main(`data/10.10.23_test_set`).then((a) => {});
+  main(`data/lichess_db_standard_rated_2013-01.pgn`).then((a) => {});
 }

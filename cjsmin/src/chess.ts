@@ -1566,14 +1566,6 @@ export class Chess {
     this._turn = them;
   }
 
-  private _makeAndReturnMove(
-    move: InternalMove,
-    originalString?: string
-  ): InternalMove {
-    this._makeMove(move, originalString);
-    return move;
-  }
-
   private _undoMove() {
     const old = this._history.pop();
     if (old === undefined) {
@@ -1749,6 +1741,58 @@ export class Chess {
         };
       }
     }
+  }
+
+  historyGeneratorArr(
+    pgnMoveLine: string,
+    { strict = false }: { strict?: boolean; newlineChar?: string } = {}
+  ): { move: PrettyMove; board: Array<Piece> }[] {
+    this.load(DEFAULT_POSITION);
+    const result: any[] = [];
+
+    // We don't mind destructive deletion of the comments
+    let ms = pgnMoveLine.replace(new RegExp(`({[^}]*})+?`, 'g'), '');
+
+    // delete move numbers
+    ms = ms.replace(/\d+\.(\.\.)?/g, '');
+
+    // delete ... indicating black to move
+    ms = ms.replace('...', '');
+
+    /* delete numeric annotation glyphs */
+    ms = ms.replace(/\$\d+/g, '');
+
+    // trim and get array of moves
+    // let moves = ms.trim().split(new RegExp(/\s+/));
+    let moves = ms.trim().split(' ');
+
+    // delete empty entries
+    moves = moves.filter((move) => move !== '');
+
+    for (let halfMove = 0; halfMove < moves.length; halfMove++) {
+      const move = this._moveFromSan(moves[halfMove], strict);
+
+      // invalid move
+      if (move == null) {
+        // was the move an end of game marker
+        if (!(TERMINATION_MARKERS.indexOf(moves[halfMove]) > -1)) {
+          throw new Error(`Invalid move in PGN: ${moves[halfMove]}`);
+        }
+      } else {
+        // reset the end of game marker if making a valid move
+        this._makeMove(move, moves[halfMove]);
+        const prettyMove = {
+          ...this._makePretty(move, moves[halfMove]),
+          originalString: moves[halfMove],
+        };
+        result.push({
+          move: prettyMove,
+          board: this._board,
+        });
+      }
+    }
+
+    return result;
   }
 
   /*

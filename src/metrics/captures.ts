@@ -132,10 +132,10 @@ export class KDRatioMetric implements Metric {
   }
 
   // calculates piece with highest K/D ratio and also contains assists by that piece
-  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+  processGame(game: { move: PrettyMove; board: Piece[] }[], gameLink: string) {
     // @ts-ignore initialize with no capture
     let previousMove: PrettyMove = {};
-    for (const { move, board } of game) {
+    for (const { move } of game) {
       if (move.capture) {
         this.KDAssistsMap[move.uas].kills++;
         this.KDAssistsMap[move.capture.uas].deaths++;
