@@ -43,10 +43,12 @@ Promotions
 
 # Priority (& Silly) Questions to answer
 
-Kills/Deaths/Assists
+Kills/Deaths/Assists 
+
 thesis: beginners get forked by knights and lose a lot of high level pieces. Will be answered by KD ratio by piece value
-- K/D ratio which piece takes another piece the most
-  - KD ratio by piece value (where piece values are defined as: Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points
+
+- K/D ratios for each piece
+  - KD ratio by piece value (where piece values are defined as: Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points)
   - KD ratio by number of pieces taken
 - revenge kills (i.e. take back a piece immediately after it was taken)
 - best kill streaks (i.e. one piece is the only one taking others for some time)
@@ -63,22 +65,23 @@ Distances/Moves
 - the game with the most moves played
 
 Promotions
-- How often a piece is promoted to different pieces
+- how often a piece is promoted to different pieces (q, n, b, r)
 - how often each unambiguous pawn promotes
 
 Openings/Endings/Wins/Losses
 - how often do games end with 3 fold repetition? Stalemate? Ties in general? Insufficient material? Loss on time? Lack of pawn advancement?
-- percentage of games ending with white winning, black winning, and ties
-- number of times various openings (bongcloud 😁) are played ♙
+- top 5 most used/popular openings
+  - number of times various openings (e.g. bongcloud 😁) are played ♙
 - which side wins more often (white vs black)
+  - percentage of games ending with white winning, black winning, and ties
 - which side wins more often for each of the top 5 most used/popular openings
 
 Dataset facts
-- Number of games analyzed
-- Average rating of players
-- Quantity of games played by time control category (e.g. bullet/blitz/rapid/classical)
-- Quantity of games played by time control quantity (e.g. 180+2, 1500+0, etc)
-- Quantity of games ended by termination type (e.g. "normal", "time forfeit", etc)
+- number of games analyzed
+- average rating of players
+- quantity of games played by time control category (e.g. bullet/blitz/rapid/classical)
+- quantity of games played by time control quantity (e.g. 180+2, 1500+0, etc)
+- quantity of games ended by termination type (e.g. "normal", "time forfeit", etc)
 - player who played the most games in the dataset
 - average rating diff in games played
 - largest rating diff between players in games played
@@ -96,11 +99,14 @@ Miscellaneous
 - what time people rage quit at different ELOs
 - which piece is a "defender" for when checkmate within king capture range is possible
 - different number of mistakes for each ELO
-- has a single piece ever covered the entire board?
 - heat map of squares sat on and visited by piece type
 - furthest distance a single pawn has gone from it's original lane
 - heat map of where each piece gets its kills, vs. its deaths
 - at what move number in a chess game is a move played by fewer than 10% of the players who follow a particular opening or line?
+- average piece lifetime
+  - how many moves until a piece is captured on average
+  - how much clock time until a piece is captured on average
+- has a single piece ever covered the entire board in one game?
 
 # Planned Roadmap Items
 - Segment by ELO rating ranges
