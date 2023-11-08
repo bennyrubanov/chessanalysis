@@ -55,9 +55,13 @@ async function gameIterator(path) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
       metric.processGame(Array.from(historyGenerator), metadata);
-      if (metric === kdRatioMetric) {
-        metric.logResults();
-      }
+    }
+  }
+
+  for (const metric of metrics) {
+    if (metric === kdRatioMetric) {
+      metric.aggregate();
+      metric.logResults();
     }
   }
 }
