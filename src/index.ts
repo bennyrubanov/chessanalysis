@@ -55,10 +55,13 @@ async function gameIterator(path) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
       metric.processGame(Array.from(historyGenerator), metadata);
+      if (metric === kdRatioMetric) {
+        metric.logResults();
+      }
     }
   }
 }
 
 if (require.main === module) {
-  main(`data/lichess_db_standard_rated_2013-01.pgn`).then((a) => {});
+  main(`data/10.10.23_test_set`).then((a) => {});
 }
