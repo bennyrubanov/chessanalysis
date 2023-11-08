@@ -114,6 +114,8 @@ export class KDRatioMetric implements Metric {
       }
     }
 
+    this.kdRatios = KDRatios;
+
     return {
       maxKDRatio,
       pieceWithHighestKDRatio,
@@ -129,6 +131,7 @@ export class KDRatioMetric implements Metric {
       assists: 0,
       revengeKills: 0,
     });
+    this.kdRatios = undefined;
   }
 
   // calculates piece with highest K/D ratio and also contains assists by that piece
