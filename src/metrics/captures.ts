@@ -114,6 +114,8 @@ export class KDRatioMetric implements Metric {
       }
     }
 
+    this.kdRatios = KDRatios;
+
     return {
       maxKDRatio,
       pieceWithHighestKDRatio,
