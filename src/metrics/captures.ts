@@ -110,11 +110,13 @@ export class KDRatioMetric implements Metric {
 
     for (const uas of Object.keys(KDRatios)) {
       if (KDRatios[uas] > maxKDRatio) {
-        maxKDRatio = pieceWithHighestKDRatio = KDRatios[uas];
+        maxKDRatio = KDRatios[uas];
+        pieceWithHighestKDRatio = uas
       }
     }
 
     this.kdRatios = KDRatios;
+    this.pieceWithHighestKDRatio = pieceWithHighestKDRatio;
 
     return {
       maxKDRatio,
