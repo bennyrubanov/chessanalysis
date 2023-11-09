@@ -2,6 +2,7 @@ import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 import { KDRatioMetric, MateAndAssistMetric } from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
+import { MetadataMetric } from './metrics/misc';
 import {
   GameWithMostMovesMetric,
   PieceLevelMoveInfoMetric,
@@ -32,6 +33,7 @@ async function gameIterator(path) {
   const moveDistanceMetric = new MoveDistanceMetric();
   const gameWithMostMovesMetric = new GameWithMostMovesMetric();
   const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
+  const metadataMetric = new MetadataMetric();
   const metrics = [
     kdRatioMetric,
     killStreakMetric,
@@ -40,6 +42,7 @@ async function gameIterator(path) {
     moveDistanceMetric,
     gameWithMostMovesMetric,
     pieceLevelMoveInfoMetric,
+    metadataMetric,
   ];
 
   const cjsmin = new Chess();
@@ -59,7 +62,7 @@ async function gameIterator(path) {
   }
 
   for (const metric of metrics) {
-    if (metric === kdRatioMetric) {
+    if (metric === metadataMetric) {
       metric.aggregate();
       metric.logResults();
     }
