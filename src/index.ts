@@ -62,7 +62,7 @@ async function gameIterator(path) {
   }
 
   for (const metric of metrics) {
-    if (metric === metadataMetric) {
+    if (metric === promotionMetric) {
       metric.aggregate();
       metric.logResults();
     }

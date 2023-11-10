@@ -2025,6 +2025,8 @@ export class Chess {
       piece: move.piece,
       uas: uglyMove.uas,
       originalString,
+      capture: move.capture,
+      promotion: move.promotion,
     };
 
     if (move.capture) {
