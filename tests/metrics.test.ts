@@ -324,6 +324,8 @@ describe('All Tests', () => {
 
       expect(kdrMetric.KDAssistsMap['pe'].kills).toEqual(1);
       expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
+      expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
+
     });
 
     it('should return the correct number of kills for a piece in a game, including counting checkmates as a "kill"', async () => {

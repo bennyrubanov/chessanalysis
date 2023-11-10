@@ -2,6 +2,7 @@ import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 import { KDRatioMetric, MateAndAssistMetric } from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
+import { MetadataMetric } from './metrics/misc';
 import {
   GameWithMostMovesMetric,
   PieceLevelMoveInfoMetric,
@@ -32,6 +33,7 @@ async function gameIterator(path) {
   const moveDistanceMetric = new MoveDistanceMetric();
   const gameWithMostMovesMetric = new GameWithMostMovesMetric();
   const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
+  const metadataMetric = new MetadataMetric();
   const metrics = [
     kdRatioMetric,
     killStreakMetric,
@@ -40,6 +42,7 @@ async function gameIterator(path) {
     moveDistanceMetric,
     gameWithMostMovesMetric,
     pieceLevelMoveInfoMetric,
+    metadataMetric,
   ];
 
   const cjsmin = new Chess();
@@ -57,8 +60,10 @@ async function gameIterator(path) {
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
+  promotionMetric.aggregate();
+  promotionMetric.logResults();
 }
 
 if (require.main === module) {
-  main(`data/lichess_db_standard_rated_2013-01.pgn`).then((a) => {});
+  main(`data/10.10.23_test_set`).then((a) => {});
 }

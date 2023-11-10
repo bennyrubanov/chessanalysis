@@ -14,6 +14,9 @@ export class PromotionMetric implements Metric {
       [key in PromotablePiece]: number;
       }
   };
+  // property for the totals
+  totals: { [key in PromotablePiece]: number };
+
 
   constructor() {
     this.clear();
@@ -21,10 +24,14 @@ export class PromotionMetric implements Metric {
 
   clear(): void {
     let promotionMap = {};
+
     //prettier-ignore
     for (const pawn of ["pa", "pb", "pc", "pd", "pe", "pf", "pg", "ph", 'PA', 'PB', 'PC', 'PD', 'PE', 'PF', 'PG', 'PH']) {
       promotionMap[pawn] = { q: 0, r: 0, b: 0, n: 0 };
     }
+
+    this.totals = { q: 0, r: 0, b: 0, n: 0 };
+
     this.promotionMap = promotionMap as any;
   }
 
@@ -32,16 +39,28 @@ export class PromotionMetric implements Metric {
     game: { move: PrettyMove; board: Piece[] }[],
     metadata?: string[]
   ) {
-    for (const { move } of game) {
+    for (const { move, board } of game) {
       // TODO: we can use flags instead of includes('=)
+
       if (move.originalString.includes('=')) {
-        // update ambigPiecePromotedToMap
+        // update maps
         this.promotionMap[move.uas][move.promotion]++;
+      }
+
+      for (const piece of board) {
       }
     }
   }
 
-  aggregate() {}
+  aggregate() {
+    this.totals = { q: 0, r: 0, b: 0, n: 0 };
+
+    for (const pawn of Object.keys(this.promotionMap)) {
+      for (const piece of Object.keys(this.promotionMap[pawn])) {
+        this.totals[piece] += this.promotionMap[pawn][piece];
+      }
+    }
+  }
 
   logResults(): void {
     // promotions facts
@@ -49,12 +68,13 @@ export class PromotionMetric implements Metric {
     console.log(
       'How often a piece is promoted to different ambiguous piece types:'
     ),
-      console.table(this.promotionMap);
-    console.log('How often unambiguous piece is promoted:'),
+      console.table(this.totals);
+    console.log('How often each unambiguous piece is promoted:'),
       console.table(this.promotionMap);
     console.log(
       '=============================================================='
     );
     console.log('\n');
+
   }
 }
