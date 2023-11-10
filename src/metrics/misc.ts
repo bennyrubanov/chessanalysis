@@ -74,6 +74,7 @@ export class MetadataMetric implements Metric {
   // Aggregate the results of the metric
   aggregate() {
     // Calculate the average player rating after each game
+    // 2 players per game, so need to divide by two given that the totalPlayerRating adds all ratings up from both players
     this.averagePlayerRating = this.totalPlayerRating / (this.numberGamesAnalyzed * 2);
 
     // Calculate the average player rating diff
@@ -138,7 +139,7 @@ export class MetadataMetric implements Metric {
       }
     }
     
-    // Identify the time control type from the metadata
+    // Identify the time control type from the metadata and updatae gameTypeStats
     const gameType = metadata?.find((data) => data.startsWith('[Event'));
     if (gameType) {
       if (gameType.includes('Bullet')) {
@@ -167,10 +168,10 @@ export class MetadataMetric implements Metric {
       this.largestRatingDiffGame = metadata?.find((data) => data.startsWith('[Site')) || '';
     }
 
-    // Calculate the player with the most games played
+    // helping variables to identify the player with the most games played in the data set
+    // populate playerGameStats with the number of games each player has played (regardless if they played black or white)
     const whitePlayer = metadata?.find((data) => data.startsWith('[White'));
     const blackPlayer = metadata?.find((data) => data.startsWith('[Black'));
-    
     const whiteUsername = whitePlayer?.split('"')[1];
     const blackUsername = blackPlayer?.split('"')[1];
     

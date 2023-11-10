@@ -69,7 +69,7 @@ export class PromotionMetric implements Metric {
       'How often a piece is promoted to different ambiguous piece types:'
     ),
       console.table(this.totals);
-    console.log('How often unambiguous piece is promoted:'),
+    console.log('How often each unambiguous piece is promoted:'),
       console.table(this.promotionMap);
     console.log(
       '=============================================================='

@@ -60,13 +60,8 @@ async function gameIterator(path) {
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
-
-  for (const metric of metrics) {
-    if (metric === promotionMetric) {
-      metric.aggregate();
-      metric.logResults();
-    }
-  }
+  promotionMetric.aggregate();
+  promotionMetric.logResults();
 }
 
 if (require.main === module) {
