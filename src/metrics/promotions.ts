@@ -109,5 +109,14 @@ export class PromotionMetric implements Metric {
     );
     console.log('\n');
 
+    // number of pieces to appear on board facts
+    console.log("NUMBER OF PIECES TO APPEAR ON BOARD FACTS:")
+    console.log(`The maximum number of queens to appear in a given move in a game: ${this.maxQueenCounts}`);
+    console.log(`The games(s) and last move(s) in that game in which that number of queens appeared: 
+      ${this.movesAndGamesWithMaxQueenCount.map(move => 
+        JSON.stringify(move, null, 2)).join(", ")}`
+    );
+    console.log("==============================================================");
+    console.log("\n");
   }
 }
