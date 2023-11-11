@@ -107,7 +107,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
   }
 }
 
-export class MiscMoveFacts implements Metric {
+export class MiscMoveFactMetric implements Metric {
   enPassantMoves: number;
   knightHops: UAPMap<{ count: number }>; // the number of times a piece is hopped over by knights
 
@@ -125,14 +125,74 @@ export class MiscMoveFacts implements Metric {
     metadata?: string[]
   ) {
     // since a knight can take 2 paths to hop over a piece we ensure that it is forced to hop over at least one piece.
-    // When it must hop we randomly select a path and increment the count of all pieces hopped
+    // When it must hop we assume it hops all pieces so that the result is deterministic
     for (const { move, board } of game) {
       if (move.flags === 'e') {
         this.enPassantMoves++;
       }
 
       if (move.piece === 'n') {
-        throw new Error('Not implemented');
+        // a knight moving in a given direction has 4 things it can do in context of board index. It can increase by 1, decrease by 1, increase by 16, or decrease by 16.
+        // Right and down both increase total value, left and up decrease total value
+        // But it must do one of those things 2x. Meaning possible differences are 31, 33, 14, 18, -31, -33, -14, -18 (absolute values)
+        const moveDiff = move.toIndex - move.fromIndex;
+
+        // The offsets from current index to check for pieces hopped
+        let path1 = [];
+        let path2 = [];
+        switch (moveDiff) {
+          case 33:
+            path1 = [1, 17];
+            path2 = [16, 32];
+            break;
+          case 31:
+            path1 = [-1, 15];
+            path2 = [16, 32];
+            break;
+          case 18:
+            path1 = [1, 2];
+            path2 = [16, 17];
+            break;
+          case 14:
+            path1 = [-1, -2];
+            path2 = [16, 15];
+            break;
+          case -14:
+            path1 = [1, 2];
+            path2 = [-16, -15];
+            break;
+          case -18:
+            path1 = [-1, -2];
+            path2 = [-16, -17];
+            break;
+          case -31:
+            path1 = [1, -15];
+            path2 = [-16, -32];
+            break;
+          case -33:
+            path1 = [-1, -17];
+            path2 = [-16, -32];
+            break;
+          default:
+            throw new Error('unexpected moveDiff');
+        }
+        path1 = path1.map((offset) => move.fromIndex + offset);
+        path2 = path2.map((offset) => move.fromIndex + offset);
+        if (
+          (!board[path1[0]] && !board[path1[1]]) ||
+          (!board[path2[0]] && !board[path2[1]])
+        ) {
+          // if either path is clear we don't increment. Otherwise we randomly select a path to increment
+          continue;
+        } else {
+          // Could choose one path or the other at random. This makes a non-deterministic results
+          // const path = Math.random() > 0.5 ? path1[0] : path2[0];
+          for (const squareIndex of path1.concat(path2)) {
+            if (board[squareIndex]) {
+              this.knightHops[board[squareIndex].uas].count++;
+            }
+          }
+        }
       }
     }
   }
