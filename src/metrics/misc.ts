@@ -129,6 +129,8 @@ export class MetadataMetric implements Metric {
         this.gameTypeStats.numberRapidGames++;
       } else if (gameType.includes('Classical')) {
         this.gameTypeStats.numberClassicalGames++;
+      } else {
+        throw new Error('potential new game type');
       }
     }
 
