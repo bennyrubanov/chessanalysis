@@ -580,6 +580,7 @@ describe('All Tests', () => {
 
       console.log(miscMoveFactsMetric.knightHops);
 
+      // TODO: this needs a better suite of tests
       expect(miscMoveFactsMetric.knightHops['PF'].count).toEqual(2);
       expect(miscMoveFactsMetric.knightHops['pc'].count).toEqual(2);
       expect(miscMoveFactsMetric.knightHops['PG'].count).toEqual(2);
