@@ -16,6 +16,8 @@ export class PromotionMetric implements Metric {
   };
   // property for the totals
   totals: { [key in PromotablePiece]: number };
+  movesAndGamesWithMaxQueenCount = [];
+  maxQueenCounts = 0;
 
 
   constructor() {
@@ -33,21 +35,52 @@ export class PromotionMetric implements Metric {
     this.totals = { q: 0, r: 0, b: 0, n: 0 };
 
     this.promotionMap = promotionMap as any;
+
+    this.movesAndGamesWithMaxQueenCount = [];
   }
 
   processGame(
     game: { move: PrettyMove; board: Piece[] }[],
     metadata?: string[]
   ) {
-    for (const { move, board } of game) {
+
+    // 2 queens to start with
+    let thisGameQueenCount = 2;
+
+    for (const { move } of game) {
       // TODO: we can use flags instead of includes('=)
 
       if (move.originalString.includes('=')) {
         // update maps
         this.promotionMap[move.uas][move.promotion]++;
+        
+        // increment queen count if a promotion occurs
+        if (move.promotion === "q") {
+          thisGameQueenCount++;
+        }
       }
 
-      for (const piece of board) {
+      // decrement queen count if queen is captured
+      if (move.capture && (move.capture.uas === "q" || move.capture.uas === "Q")) {
+        thisGameQueenCount--;
+      }
+
+      // identify the maxQueenCount in a particular move, and the games and moves that that occured in
+      if (thisGameQueenCount > this.maxQueenCounts) {
+        this.maxQueenCounts = thisGameQueenCount;
+        this.movesAndGamesWithMaxQueenCount = [{
+          game: metadata.find((item) => item.startsWith('[Site "'))
+            ?.replace('[Site "', '')
+            ?.replace('"]', ''),
+          move: move.originalString
+        }];
+      } else if (thisGameQueenCount === this.maxQueenCounts) {
+        this.movesAndGamesWithMaxQueenCount.push({
+          game: metadata.find((item) => item.startsWith('[Site "'))
+            ?.replace('[Site "', '')
+            ?.replace('"]', ''),
+          move: move.originalString
+        });
       }
     }
   }

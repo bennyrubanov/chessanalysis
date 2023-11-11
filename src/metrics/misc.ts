@@ -130,7 +130,7 @@ export class MetadataMetric implements Metric {
       } else if (gameType.includes('Classical')) {
         this.gameTypeStats.numberClassicalGames++;
       } else {
-        throw new Error('potential new game type');
+        throw new Error('potential new game type')
       }
     }
 
