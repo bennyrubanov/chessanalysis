@@ -106,3 +106,46 @@ export class PieceLevelMoveInfoMetric implements Metric {
     return averagesMap;
   }
 }
+
+export class MiscMoveFacts implements Metric {
+  enPassantMoves: number;
+  knightHops: UAPMap<{ count: number }>; // the number of times a piece is hopped over by knights
+
+  constructor() {
+    this.clear();
+  }
+
+  clear(): void {
+    this.enPassantMoves = 0;
+    this.knightHops = createUAPMap({ count: 0 });
+  }
+
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata?: string[]
+  ) {
+    // since a knight can take 2 paths to hop over a piece we ensure that it is forced to hop over at least one piece.
+    // When it must hop we randomly select a path and increment the count of all pieces hopped
+    for (const { move, board } of game) {
+      if (move.flags === 'e') {
+        this.enPassantMoves++;
+      }
+
+      if (move.piece === 'n') {
+        throw new Error('Not implemented');
+      }
+    }
+  }
+
+  aggregate() {
+    let totalHops = 0;
+    for (const uas of Object.keys(this.knightHops)) {
+      totalHops += this.knightHops[uas].count;
+    }
+
+    return {
+      enPassantMoves: this.enPassantMoves,
+      knightHops: totalHops,
+    };
+  }
+}
