@@ -26,6 +26,8 @@ Kills/Deaths/Assists
 
 Distances
 - When a knight "hops" its path is chosen based on if the current move is even or odd: i.e. two squares first if even, one if odd (This is done to ensure consistency in metrics across runs)
+  - Since a knight can take 2 paths to hop over a piece, we ensure that it is forced to hop over at least one piece
+  - When it must hop we assume it hops all pieces so that the result is deterministic
 - For calculating distances:
   - Bishops:
     - **Diagonal moves count as 1**
