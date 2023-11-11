@@ -4,44 +4,45 @@ Welcome! Myself (@EllAchE) and @bennyrubanov are chess amateurs who also have in
 
 # Methodology
 
-### Data
+## Data
 
 Data is sourced from the public [Lichess games database](https://database.lichess.org/).
 
-### Credits
+## Credits
 
 We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little time.
 
-### Defintions
+## Definitions
+- UAP (Unambiguous Piece): pawn that started on a2
 - Ambiguous pieces: pawn, bishop, knight, rook, queen, king
-- Unambiguous pieces: pawn that started on a2
 
-### Edge Cases
+## Edge Cases
 
 Current implementation is **bolded** where multiple options exist:
 
-#### Kills/Deaths/Assists
+### Kills/Deaths/Assists
 - If two pieces simultaneously checkmate a king each is credited with 0.5 kills/mates (not currently implemented)
 - A checkmate is considered a "death" for the king and a "kill" for the mating piece
 
-#### Distances
+### Distances
+
+#### Knight
+- **knight move counts as 2: one diagonal and one hor/vert**. An alternative would be to count as 3: 2 horizontal/vertical + 1 hor/vert
 - To calculate when a knight "hops" a piece we do the following. 
   - A knight can take 2 paths to its destination, if either of those paths is clear we assume it takes the "easier path" and does not hop a piece.
   - If there is no clear path we count ALL pieces blocking both paths, then divide the aggregate by 2. There are two reasons for this:
     - We want deterministic outputs from processing games
     - We want to avoid selection bias.
     It would be possible to use a deterministic rule (i.e. short distance first when odd moves) to determine the knight's path, however that or similar decisions could introduce bias when considering common opening patterns. A randomness rule (i.e. generate a random number to choose the path) would avoid this but would lead to nondeterminisic results.
-- For calculating distances:
-  - Bishops:
-    - **Diagonal moves count as 1**
-    - Diagonal moves count as 2: 1 horizontal + 1 vertical
-  - Knights:
-    - **knight move counts as 2: one diagonal and one hor/vert**
-    - knight move counts as 3: 2 horizontal/vertical + 1 hor/vert
+
+#### Bishop
+- **Diagonal moves count as 1**. An alternative would be diagonal moves count as 2: 1 horizontal + 1 vertical
+
+#### Castling
 - Castling counts as a move for a rook as well as the king
 - The distance a rook covers during a castle move is also tracked
 
-Promotions
+### Promotions
 - After an unambiguous piece is promoted:
   - It is treated as the new piece
   - **It is treated as the original piece (i.e. if the pawn that started the game on a2 is promoted to a Queen, it is still treated as the pawn on a2 for the purposes of calculating distance functions, etc)**
