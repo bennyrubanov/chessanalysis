@@ -44,8 +44,6 @@ export class PromotionMetric implements Metric {
     metadata?: string[]
   ) {
 
-    console.log(metadata)
-
     // 2 queens to start with
     let thisGameQueenCount = 2;
 
@@ -67,7 +65,9 @@ export class PromotionMetric implements Metric {
         thisGameQueenCount--;
       }
 
-      // identify the maxQueenCount in a particular move, and the games and moves that that occured in
+      // identify the maxQueenCount in a particular move, and the games and moves that the maxQueenCount occured in
+      // push to array of games and moves if tie, otherwise wipe the array and add new game
+      // only add one move entry for each game maxQueenCount (rather than one entry for each move that the maxQueenCount appears in)
       if (thisGameQueenCount > this.maxQueenCounts) {
         this.maxQueenCounts = thisGameQueenCount;
         const gameSite = metadata.find((item) => item.startsWith('[Site "'))
