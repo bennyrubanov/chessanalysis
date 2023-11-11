@@ -20,14 +20,17 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 
 Current implementation is **bolded** where multiple options exist:
 
-Kills/Deaths/Assists
+#### Kills/Deaths/Assists
 - If two pieces simultaneously checkmate a king each is credited with 0.5 kills/mates (not currently implemented)
 - A checkmate is considered a "death" for the king and a "kill" for the mating piece
 
-Distances
-- When a knight "hops" its path is chosen based on if the current move is even or odd: i.e. two squares first if even, one if odd (This is done to ensure consistency in metrics across runs)
-  - Since a knight can take 2 paths to hop over a piece, we ensure that it is forced to hop over at least one piece
-  - When it must hop we assume it hops all pieces so that the result is deterministic
+#### Distances
+- To calculate when a knight "hops" a piece we do the following. 
+  - A knight can take 2 paths to its destination, if either of those paths is clear we assume it takes the "easier path" and does not hop a piece.
+  - If there is no clear path we count ALL pieces blocking both paths, then divide the aggregate by 2. There are two reasons for this:
+    - We want deterministic outputs from processing games
+    - We want to avoid selection bias.
+    It would be possible to use a deterministic rule (i.e. short distance first when odd moves) to determine the knight's path, however that or similar decisions could introduce bias when considering common opening patterns. A randomness rule (i.e. generate a random number to choose the path) would avoid this but would lead to nondeterminisic results.
 - For calculating distances:
   - Bishops:
     - **Diagonal moves count as 1**
