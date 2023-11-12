@@ -33,7 +33,13 @@ export class MetadataMetric implements Metric {
   blackWins: number;
   whiteWins: number;
   ties: number;
-  openings: { [key: string]: number };
+  openings: 
+  { [opening: string]: 
+    { appearances: number, 
+      blackWins: number, 
+      whiteWins: number, 
+      whiteToBlackWinRatio: number }
+  };
   bongcloud: number;
 
   gameTypeStats: {
@@ -81,7 +87,7 @@ export class MetadataMetric implements Metric {
       console.table(this.gameTypeStats);
     console.log('Number of games played by time control quantity: '),
       console.table(this.gameTimeControlStats);
-    console.log('Openings by number of times they appear: '),
+    console.log('Openings by number of times they appear and their win rates: '),
       console.table(this.openings);
     console.log('Number of times bongcloud appeared: ', this.bongcloud)
   }
@@ -107,6 +113,7 @@ export class MetadataMetric implements Metric {
     this.openings = {};
     this.bongcloud = 0;
 
+    // helping variables
     this.totalPlayerRating = 0;
     this.totalPlayerRatingDiff = 0;
     this.playerGameStats = {};
@@ -213,9 +220,20 @@ export class MetadataMetric implements Metric {
 
     // add opening to openings object
     if (this.openings[opening]) {
-      this.openings[opening]++;
+      this.openings[opening].appearances++;
+      if (result === '[Result "1-0"]') {
+        this.openings[opening].whiteWins++;
+      } else if (result === '[Result "0-1"]') {
+        this.openings[opening].blackWins++;
+      }
+      this.openings[opening].whiteToBlackWinRatio = this.openings[opening].whiteWins / this.openings[opening].blackWins;
     } else {
-      this.openings[opening] = 1;
+      this.openings[opening] = {
+        appearances: 1,
+        blackWins: result === '[Result "0-1"]' ? 1 : 0,
+        whiteWins: result === '[Result "1-0"]' ? 1 : 0,
+        whiteToBlackWinRatio: result === '[Result "1-0"]' ? 1 : 0,
+      };
     }
 
     // Increment the number of games analyzed
@@ -263,7 +281,7 @@ export class MetadataMetric implements Metric {
     this.gameTimeControlStats = sortedGameTimeControlStatsObj;
 
     // sort the openings from greatest to least by number of times they appear
-    let sortedOpenings = Object.entries(this.openings).sort((a, b) => b[1] - a[1]);
+    let sortedOpenings = Object.entries(this.openings).sort((a, b) => b[1].appearances - a[1].appearances);
     let sortedOpeningsObj = Object.fromEntries(sortedOpenings);
     this.openings = sortedOpeningsObj;
 
