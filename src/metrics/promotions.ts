@@ -73,22 +73,20 @@ export class PromotionMetric implements Metric {
         const gameSite = metadata.find((item) => item.startsWith('[Site "'))
           ?.replace('[Site "', '')
           ?.replace('"]', '');
-        const moveOS = move.originalString;
         if (!this.movesAndGamesWithMaxQueenCount.some((item) => item.game === gameSite)) {
           this.movesAndGamesWithMaxQueenCount = [{
             game: gameSite,
-            move: moveOS
+            move: move.originalString
           }];
         }
       } else if (thisGameQueenCount === this.maxQueenCounts) {
         const gameSite = metadata.find((item) => item.startsWith('[Site "'))
           ?.replace('[Site "', '')
           ?.replace('"]', '');
-        const moveOS = move.originalString;
         if (!this.movesAndGamesWithMaxQueenCount.some((item) => item.game === gameSite)) {
           this.movesAndGamesWithMaxQueenCount.push({
             game: gameSite,
-            move: moveOS
+            move: move.originalString
           });
         }
       }
