@@ -33,6 +33,8 @@ export class MetadataMetric implements Metric {
   blackWins: number;
   whiteWins: number;
   ties: number;
+  openings: { [key: string]: number };
+  bongcloud: number;
 
   gameTypeStats: {
     numberUltraBulletGames: number;
@@ -79,6 +81,9 @@ export class MetadataMetric implements Metric {
       console.table(this.gameTypeStats);
     console.log('Number of games played by time control quantity: '),
       console.table(this.gameTimeControlStats);
+    console.log('Openings by number of times they appear: '),
+      console.table(this.openings);
+    console.log('Number of times bongcloud appeared: ', this.bongcloud)
   }
 
   // Reset the maps used to track metrics
@@ -99,6 +104,8 @@ export class MetadataMetric implements Metric {
       numberOtherGames: 0,
     };
     this.gameTimeControlStats = {};
+    this.openings = {};
+    this.bongcloud = 0;
 
     this.totalPlayerRating = 0;
     this.totalPlayerRatingDiff = 0;
@@ -182,6 +189,7 @@ export class MetadataMetric implements Metric {
         (this.playerGameStats[blackUsername] || 0) + 1;
     }
 
+    // black vs white wins
     let result = metadata.find(item => item.startsWith('[Result'));
 
     if (result === '[Result "1-0"]') {
@@ -192,6 +200,22 @@ export class MetadataMetric implements Metric {
       this.ties++;
     } else {
       throw new Error('Invalid result');
+    }
+
+    // openings
+    const opening = metadata?.find((item) => item.startsWith('[Opening "'))
+    ?.replace('[Opening "', '')
+    ?.replace('"]', '');
+
+    if (opening.toLowerCase() == "bongcloud") {
+      this.bongcloud++;
+    }
+
+    // add opening to openings object
+    if (this.openings[opening]) {
+      this.openings[opening]++;
+    } else {
+      this.openings[opening] = 1;
     }
 
     // Increment the number of games analyzed
@@ -221,6 +245,28 @@ export class MetadataMetric implements Metric {
     this.mostGamesPlayed = maxGames;
     this.playerMostGames = playerMostGames;
 
+    // sort gameTypeStats from greatest to least by number of times they appear
+    let sortedGameTypeStats = Object.entries(this.gameTypeStats).sort((a, b) => b[1] - a[1]);
+    let sortedGameTypeStatsObj = Object.fromEntries(sortedGameTypeStats);
+    this.gameTypeStats = sortedGameTypeStatsObj as {
+      numberUltraBulletGames: number;
+      numberBulletGames: number;
+      numberBlitzGames: number;
+      numberRapidGames: number;
+      numberClassicalGames: number;
+      numberOtherGames: number;
+    };
+    
+    // sort gameTimeControlStats from greatest to least by number of times they appear
+    let sortedGameTimeControlStats = Object.entries(this.gameTimeControlStats).sort((a, b) => b[1] - a[1]);
+    let sortedGameTimeControlStatsObj = Object.fromEntries(sortedGameTimeControlStats);
+    this.gameTimeControlStats = sortedGameTimeControlStatsObj;
+
+    // sort the openings from greatest to least by number of times they appear
+    let sortedOpenings = Object.entries(this.openings).sort((a, b) => b[1] - a[1]);
+    let sortedOpeningsObj = Object.fromEntries(sortedOpenings);
+    this.openings = sortedOpeningsObj;
+
     return {
       averagePlayerRating: this.averagePlayerRating,
       averageRatingDiff: this.averageRatingDiff,
@@ -228,6 +274,7 @@ export class MetadataMetric implements Metric {
       playerMostGames,
       // This doesn't account for ties
       whiteWinRatio: this.whiteWins / (this.whiteWins + this.blackWins),
+      sortedOpeningsObj,
     };
   }
 }

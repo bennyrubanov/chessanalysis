@@ -60,10 +60,10 @@ async function gameIterator(path) {
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
-  promotionMetric.aggregate();
-  promotionMetric.logResults();
+  metadataMetric.aggregate();
+  metadataMetric.logResults();
 }
 
 if (require.main === module) {
-  main(`data/11.11.23 3 Game Test Set`).then((a) => {});
+  main(`data/10.10.23_test_set`).then((a) => {});
 }
