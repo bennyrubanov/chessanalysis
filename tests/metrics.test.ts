@@ -499,8 +499,10 @@ describe('All Tests', () => {
           board: [],
         };
       });
+      const metadata = [];
 
-      promotionMetric.processGame(moves);
+
+      promotionMetric.processGame(moves, metadata);
 
       expect(promotionMetric.promotionMap.pe.q).toEqual(1);
       expect(promotionMetric.promotionMap.PA.q).toEqual(1);

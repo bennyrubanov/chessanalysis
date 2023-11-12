@@ -16,6 +16,8 @@ export class PromotionMetric implements Metric {
   };
   // property for the totals
   totals: { [key in PromotablePiece]: number };
+  movesAndGamesWithMaxQueenCount = [];
+  maxQueenCounts = 0;
 
 
   constructor() {
@@ -33,21 +35,60 @@ export class PromotionMetric implements Metric {
     this.totals = { q: 0, r: 0, b: 0, n: 0 };
 
     this.promotionMap = promotionMap as any;
+
+    this.movesAndGamesWithMaxQueenCount = [];
   }
 
   processGame(
     game: { move: PrettyMove; board: Piece[] }[],
     metadata?: string[]
   ) {
-    for (const { move, board } of game) {
+
+    // 2 queens to start with
+    let thisGameQueenCount = 2;
+
+    for (const { move } of game) {
       // TODO: we can use flags instead of includes('=)
 
       if (move.originalString.includes('=')) {
         // update maps
         this.promotionMap[move.uas][move.promotion]++;
+        
+        // increment queen count if a promotion occurs
+        if (move.promotion === "q") {
+          thisGameQueenCount++;
+        }
       }
 
-      for (const piece of board) {
+      // decrement queen count if queen is captured
+      if (move.capture && (move.capture.uas === "q" || move.capture.uas === "Q")) {
+        thisGameQueenCount--;
+      }
+
+      // identify the maxQueenCount in a particular move, and the games and moves that the maxQueenCount occured in
+      // push to array of games and moves if tie, otherwise wipe the array and add new game
+      // only add one move entry for each game maxQueenCount (rather than one entry for each move that the maxQueenCount appears in)
+      if (thisGameQueenCount > this.maxQueenCounts) {
+        this.maxQueenCounts = thisGameQueenCount;
+        const gameSite = metadata.find((item) => item.startsWith('[Site "'))
+          ?.replace('[Site "', '')
+          ?.replace('"]', '');
+        if (!this.movesAndGamesWithMaxQueenCount.some((item) => item.game === gameSite)) {
+          this.movesAndGamesWithMaxQueenCount = [{
+            game: gameSite,
+            move: move.originalString
+          }];
+        }
+      } else if (thisGameQueenCount === this.maxQueenCounts) {
+        const gameSite = metadata.find((item) => item.startsWith('[Site "'))
+          ?.replace('[Site "', '')
+          ?.replace('"]', '');
+        if (!this.movesAndGamesWithMaxQueenCount.some((item) => item.game === gameSite)) {
+          this.movesAndGamesWithMaxQueenCount.push({
+            game: gameSite,
+            move: move.originalString
+          });
+        }
       }
     }
   }
@@ -76,5 +117,14 @@ export class PromotionMetric implements Metric {
     );
     console.log('\n');
 
+    // number of pieces to appear on board facts
+    console.log("NUMBER OF PIECES TO APPEAR ON BOARD FACTS:")
+    console.log(`The maximum number of queens to appear in a given move in a game: ${this.maxQueenCounts}`);
+    console.log(`The games(s) and first move(s) in that game in which that number of queens appeared: 
+      ${this.movesAndGamesWithMaxQueenCount.map(move => 
+        JSON.stringify(move, null, 2)).join(", ")}`
+    );
+    console.log("==============================================================");
+    console.log("\n");
   }
 }

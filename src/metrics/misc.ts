@@ -35,10 +35,12 @@ export class MetadataMetric implements Metric {
   ties: number;
 
   gameTypeStats: {
+    numberUltraBulletGames: number;
     numberBulletGames: number;
     numberBlitzGames: number;
     numberRapidGames: number;
     numberClassicalGames: number;
+    numberOtherGames: number;
   };
   gameTimeControlStats: {
     [timeControl: string]: number;
@@ -89,10 +91,12 @@ export class MetadataMetric implements Metric {
     this.mostGamesPlayed = 0;
     this.playerMostGames = '';
     this.gameTypeStats = {
+      numberUltraBulletGames: 0,
       numberBulletGames: 0,
       numberBlitzGames: 0,
       numberRapidGames: 0,
       numberClassicalGames: 0,
+      numberOtherGames: 0,
     };
     this.gameTimeControlStats = {};
 
@@ -121,7 +125,9 @@ export class MetadataMetric implements Metric {
     // Identify the time control type from the metadata and updatae gameTypeStats
     const gameType = metadata?.find((data) => data.startsWith('[Event'));
     if (gameType) {
-      if (gameType.includes('Bullet')) {
+      if (gameType.includes('UltraBullet')) {
+        this.gameTypeStats.numberUltraBulletGames++;
+      } else if (gameType.includes('Bullet')) {
         this.gameTypeStats.numberBulletGames++;
       } else if (gameType.includes('Blitz')) {
         this.gameTypeStats.numberBlitzGames++;
@@ -129,6 +135,8 @@ export class MetadataMetric implements Metric {
         this.gameTypeStats.numberRapidGames++;
       } else if (gameType.includes('Classical')) {
         this.gameTypeStats.numberClassicalGames++;
+      } else {
+        this.gameTypeStats.numberOtherGames++;
       }
     }
 
@@ -174,11 +182,13 @@ export class MetadataMetric implements Metric {
         (this.playerGameStats[blackUsername] || 0) + 1;
     }
 
-    if (metadata[4] === '[Result "1-0"]') {
+    let result = metadata.find(item => item.startsWith('[Result'));
+
+    if (result === '[Result "1-0"]') {
       this.whiteWins++;
-    } else if (metadata[4] === '[Result "0-1"]') {
+    } else if (result === '[Result "0-1"]') {
       this.blackWins++;
-    } else if (metadata[4] === '[Result "1/2-1/2"]') {
+    } else if (result === '[Result "1/2-1/2"]') {
       this.ties++;
     } else {
       throw new Error('Invalid result');
