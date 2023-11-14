@@ -111,7 +111,7 @@ export class KDRatioMetric implements Metric {
     for (const uas of Object.keys(KDRatios)) {
       if (KDRatios[uas] > maxKDRatio) {
         maxKDRatio = KDRatios[uas];
-        pieceWithHighestKDRatio = uas
+        pieceWithHighestKDRatio = uas;
       }
     }
 
@@ -199,8 +199,8 @@ export class MateAndAssistMetric implements Metric {
     });
 
     // We delete kings because they cannot deliver checks and can only be mated
-    delete this.mateAndAssistMap.k;
-    delete this.mateAndAssistMap.K;
+    // delete this.mateAndAssistMap.k;
+    // delete this.mateAndAssistMap.K;
     this.matedCounts = {
       k: 0,
       K: 0,
