@@ -25,6 +25,8 @@ export async function main(path: string) {
  * @param metricFunctions
  */
 async function gameIterator(path) {
+  const cjsmin = new Chess();
+
   const gamesGenerator = gameChunks(path);
   const kdRatioMetric = new KDRatioMetric();
   const killStreakMetric = new MoveDistanceMetric();
@@ -33,7 +35,7 @@ async function gameIterator(path) {
   const moveDistanceMetric = new MoveDistanceMetric();
   const gameWithMostMovesMetric = new GameWithMostMovesMetric();
   const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
-  const metadataMetric = new MetadataMetric();
+  const metadataMetric = new MetadataMetric(cjsmin);
   const metrics = [
     kdRatioMetric,
     killStreakMetric,
@@ -44,8 +46,6 @@ async function gameIterator(path) {
     pieceLevelMoveInfoMetric,
     metadataMetric,
   ];
-
-  const cjsmin = new Chess();
 
   let gameCounter = 0;
   for await (const { moves, metadata } of gamesGenerator) {
@@ -60,8 +60,8 @@ async function gameIterator(path) {
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
-  pieceLevelMoveInfoMetric.aggregate();
-  pieceLevelMoveInfoMetric.logResults();
+  metadataMetric.aggregate();
+  metadataMetric.logResults();
 }
 
 if (require.main === module) {

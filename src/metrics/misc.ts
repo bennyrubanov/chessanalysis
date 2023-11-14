@@ -23,6 +23,7 @@ export function countGamesInDataset(datasetPath: string): number {
 
 export class MetadataMetric implements Metric {
   // priority stats
+  chess: Chess;
   numberGamesAnalyzed: number;
   averagePlayerRating: number;
   averageRatingDiff: number;
@@ -65,8 +66,9 @@ export class MetadataMetric implements Metric {
     [player: string]: number;
   };
 
-  constructor() {
+  constructor(chess) {
     this.clear();
+    this.chess = chess;
   }
 
   logResults?(): void {
@@ -97,7 +99,7 @@ export class MetadataMetric implements Metric {
     console.log('\n')
 
     console.log('Game Endings: '),
-    console.table(this.gameEndings);
+      console.table(this.gameEndings);
   }
 
   // Reset the maps used to track metrics
@@ -130,7 +132,7 @@ export class MetadataMetric implements Metric {
 
   processGame(
     game: { move: PrettyMove; board: Piece[] }[],
-    metadata?: string[]
+    metadata?: string[],
   ) {
     // Update the gameTimeControlStats based on the time control of the game
     const timeControl = metadata?.find((data) =>
@@ -250,35 +252,36 @@ export class MetadataMetric implements Metric {
       };
     }
 
-    const chess = new Chess();
 
     // identify game endings from the game
-    for (const { move } of game) {
-      chess._makeMove({
-        from: move.fromIndex,
-        to: move.toIndex,
-        promotion: move.promotion,
-        color: move.color,
-        piece: move.piece,
-        uas: move.uas,
-        flags: parseInt(move.flags, 10)
-      });
+    let gameEnd = metadata.find(item => item.startsWith('[Checkmate'));
+    const lastMove = game[game.length - 1].move;
 
-      if (chess.isThreefoldRepetition()) {
-        this.gameEndings['threefold repetition'] = (this.gameEndings['threefold repetition'] || 0) + 1;
+    if (gameEnd === '[Termination "Normal"]') {
+      if (lastMove.originalString.includes('#')) {
+        this.gameEndings['checkmate'] = (this.gameEndings['checkmate'] || 0) + 1;
       }
+    } else if (gameEnd === '[Termination "Time forfeit"]') {
+      this.gameEndings['time out'] = (this.gameEndings['time out'] || 0) + 1;
+    }
+    //throw warning if not satisfied
+    // if not gameEnd
 
-      if (chess.isStalemate()) {
-        this.gameEndings['stalemate'] = (this.gameEndings['stalemate'] || 0) + 1;
-      }
 
-      if (chess.isInsufficientMaterial()) {
-        this.gameEndings['insufficient material'] = (this.gameEndings['insufficient material'] || 0) + 1;
-      }
+    if (this.chess.isThreefoldRepetition()) {
+      this.gameEndings['threefold repetition'] = (this.gameEndings['threefold repetition'] || 0) + 1;
+    }
 
-      if (chess.isGameOver()) {
-        this.gameEndings['game over'] = (this.gameEndings['game over'] || 0) + 1;
-      }
+    if (this.chess.isStalemate()) {
+      this.gameEndings['stalemate'] = (this.gameEndings['stalemate'] || 0) + 1;
+    }
+
+    if (this.chess.isInsufficientMaterial()) {
+      this.gameEndings['insufficient material'] = (this.gameEndings['insufficient material'] || 0) + 1;
+    }
+
+    if (this.chess.isGameOver()) {
+      this.gameEndings['game over'] = (this.gameEndings['game over'] || 0) + 1;
     }
 
     // Increment the number of games analyzed
