@@ -253,35 +253,60 @@ export class MetadataMetric implements Metric {
     }
 
 
-    // identify game endings from the game
-    let gameEnd = metadata.find(item => item.startsWith('[Checkmate'));
+    // identify game endings
+    let gameEnd = metadata.find(item => item.startsWith('[Termination'));
     const lastMove = game[game.length - 1].move;
 
     if (gameEnd === '[Termination "Normal"]') {
-      if (lastMove.originalString.includes('#')) {
+      if (lastMove.originalString.includes('#') || this.chess.isCheckmate()) {
         this.gameEndings['checkmate'] = (this.gameEndings['checkmate'] || 0) + 1;
+      } else if (result === '[Result "1/2-1/2"]') {
+        this.gameEndings['draw'] = (this.gameEndings['draw'] || 0) + 1;
+      } else if (this.chess.isStalemate()) {
+        this.gameEndings['stalemate'] = (this.gameEndings['stalemate'] || 0) + 1;
+      } else if (this.chess.isInsufficientMaterial()) {
+        this.gameEndings['insufficient material'] = (this.gameEndings['insufficient material'] || 0) + 1;
+      } else {
+        this.gameEndings['resignation'] = (this.gameEndings['resignation'] || 0) + 1;
       }
     } else if (gameEnd === '[Termination "Time forfeit"]') {
       this.gameEndings['time out'] = (this.gameEndings['time out'] || 0) + 1;
-    }
-    //throw warning if not satisfied
-    // if not gameEnd
+    } 
 
+    // check for threefold repetition (currently not checking if remaining castling rights and the possibility to capture en passant are the same per https://en.wikipedia.org/wiki/Threefold_repetition)
+    // check for 50-moves rule
+    let fiftyMovesCount = 0;
+    let boardPositions:  { [board: string]: number } =  {};
+    let threefoldRepetitionFound = false; // check if threeFoldRepetition has been found
+    const lastBoardString = JSON.stringify(game[game.length - 1].board) + this.chess.turn();
+    console.log(lastBoardString)
+    for (const { move, board } of game.reverse()) {
+      const boardString = JSON.stringify(board) + this.chess.turn(); // check if the same player has the move
+      boardPositions[boardString] = (boardPositions[boardString]|| 0) + 1;
 
-    if (this.chess.isThreefoldRepetition()) {
-      this.gameEndings['threefold repetition'] = (this.gameEndings['threefold repetition'] || 0) + 1;
-    }
+      // only count as threefold repetition if the last board position is included in the repetition and 
+      // the last board position has appeared 3 times (including the last time)
+      if (!threefoldRepetitionFound && boardPositions[boardString] === 3 && boardString === lastBoardString) {
+        this.gameEndings['threefold repetition'] = 
+          (this.gameEndings['threefold repetition'] || 0) + 1;
+        threefoldRepetitionFound = true;
+        console.log("boardPositions", boardPositions)
+        for (let bo in boardPositions) {
+          if (boardPositions[bo] >= 3) {
+            console.log("boardPositions[bo]", boardPositions)
+          }
+        }
 
-    if (this.chess.isStalemate()) {
-      this.gameEndings['stalemate'] = (this.gameEndings['stalemate'] || 0) + 1;
-    }
-
-    if (this.chess.isInsufficientMaterial()) {
-      this.gameEndings['insufficient material'] = (this.gameEndings['insufficient material'] || 0) + 1;
-    }
-
-    if (this.chess.isGameOver()) {
-      this.gameEndings['game over'] = (this.gameEndings['game over'] || 0) + 1;
+      }
+      // check for fifty game rule
+      if (move.capture || move.piece === 'p') {
+        fiftyMovesCount = 0;
+      } else {
+        fiftyMovesCount++
+      }
+      if (fiftyMovesCount === 50) {
+        this.gameEndings['fifty-move rule'] = (this.gameEndings['fifty-move rule'] || 0) + 1;
+      }
     }
 
     // Increment the number of games analyzed
