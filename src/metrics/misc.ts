@@ -279,7 +279,6 @@ export class MetadataMetric implements Metric {
     let boardPositions:  { [board: string]: number } =  {};
     let threefoldRepetitionFound = false; // check if threeFoldRepetition has been found
     const lastBoardString = JSON.stringify(game[game.length - 1].board) + this.chess.turn();
-    console.log(lastBoardString)
     for (const { move, board } of game.reverse()) {
       const boardString = JSON.stringify(board) + this.chess.turn(); // check if the same player has the move
       boardPositions[boardString] = (boardPositions[boardString]|| 0) + 1;
@@ -290,13 +289,6 @@ export class MetadataMetric implements Metric {
         this.gameEndings['threefold repetition'] = 
           (this.gameEndings['threefold repetition'] || 0) + 1;
         threefoldRepetitionFound = true;
-        console.log("boardPositions", boardPositions)
-        for (let bo in boardPositions) {
-          if (boardPositions[bo] >= 3) {
-            console.log("boardPositions[bo]", boardPositions)
-          }
-        }
-
       }
       // check for fifty game rule
       if (move.capture || move.piece === 'p') {
