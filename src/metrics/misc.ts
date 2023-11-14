@@ -262,10 +262,11 @@ export class MetadataMetric implements Metric {
         this.gameEndings['checkmate'] = (this.gameEndings['checkmate'] || 0) + 1;
       } else if (result === '[Result "1/2-1/2"]') {
         this.gameEndings['draw'] = (this.gameEndings['draw'] || 0) + 1;
-      } else if (this.chess.isStalemate()) {
-        this.gameEndings['stalemate'] = (this.gameEndings['stalemate'] || 0) + 1;
-      } else if (this.chess.isInsufficientMaterial()) {
-        this.gameEndings['insufficient material'] = (this.gameEndings['insufficient material'] || 0) + 1;
+        if (this.chess.isStalemate()) {
+          this.gameEndings['stalemate'] = (this.gameEndings['stalemate'] || 0) + 1;
+        } else if (this.chess.isInsufficientMaterial()) {
+          this.gameEndings['insufficient material'] = (this.gameEndings['insufficient material'] || 0) + 1;
+        } 
       } else {
         this.gameEndings['resignation'] = (this.gameEndings['resignation'] || 0) + 1;
       }
@@ -276,16 +277,17 @@ export class MetadataMetric implements Metric {
     // check for threefold repetition (currently not checking if remaining castling rights and the possibility to capture en passant are the same per https://en.wikipedia.org/wiki/Threefold_repetition)
     // check for 50-moves rule
     let fiftyMovesCount = 0;
-    let boardPositions:  { [board: string]: number } =  {};
+    let threefoldRepetitionCount = 0;
     let threefoldRepetitionFound = false; // check if threeFoldRepetition has been found
     const lastBoardString = JSON.stringify(game[game.length - 1].board) + this.chess.turn();
     for (const { move, board } of game.reverse()) {
       const boardString = JSON.stringify(board) + this.chess.turn(); // check if the same player has the move
-      boardPositions[boardString] = (boardPositions[boardString]|| 0) + 1;
-
+      if (boardString === lastBoardString) {
+        threefoldRepetitionCount++;
+      }
       // only count as threefold repetition if the last board position is included in the repetition and 
       // the last board position has appeared 3 times (including the last time)
-      if (!threefoldRepetitionFound && boardPositions[boardString] === 3 && boardString === lastBoardString) {
+      if (!threefoldRepetitionFound && threefoldRepetitionCount === 3 && boardString === lastBoardString) {
         this.gameEndings['threefold repetition'] = 
           (this.gameEndings['threefold repetition'] || 0) + 1;
         threefoldRepetitionFound = true;
