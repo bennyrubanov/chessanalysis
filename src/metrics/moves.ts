@@ -48,9 +48,11 @@ export class PieceLevelMoveInfoMetric implements Metric {
   highestAverageMoves: number;
   pieceHighestAverageMoves: UASymbol[];
   gamesWithNoCastling: number;
-  gamesQueenKingCastling: {
-    king: number;
-    queen: number;
+  castlingCounts: {
+    blackKing: number;
+    blackQueen: number;
+    whiteKing: number;
+    whiteQueen: number;
   }
 
   constructor() {
@@ -66,9 +68,11 @@ export class PieceLevelMoveInfoMetric implements Metric {
     this.highestAverageMoves = 0;
     this.pieceHighestAverageMoves = [];
     this.gamesWithNoCastling = 0;
-    this.gamesQueenKingCastling = {
-      king: 0,
-      queen: 0,
+    this.castlingCounts = {
+      blackKing: 0,
+      blackQueen: 0,
+      whiteKing: 0,
+      whiteQueen: 0,
     };
   }
 
@@ -88,7 +92,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
 
     console.log(`The number of games with no castling: ${this.gamesWithNoCastling}`);
     console.log('Number of queen and king side castlings: ', 
-      console.table(this.gamesQueenKingCastling)
+      console.table(this.castlingCounts)
     );
     console.log(
       '=============================================================='
@@ -118,12 +122,20 @@ export class PieceLevelMoveInfoMetric implements Metric {
         
         gameCastling++; // count that the game has castling
 
-        // update castling counts depending on queen or king side castling
+        // update castling counts depending on black/white queen/king side castling
         if (move.flags === 'k') {
-          this.gamesQueenKingCastling.king++;
+          if (move.color === 'b') {
+            this.castlingCounts.blackKing++;
+          } else if (move.color === 'w') {
+            this.castlingCounts.whiteKing++;
+          }
         }
         if (move.flags === 'q') {
-          this.gamesQueenKingCastling.queen++;
+          if (move.color === 'b') {
+            this.castlingCounts.blackQueen++;
+          } else if (move.color === 'w') {
+            this.castlingCounts.whiteQueen++;
+          }
         }
         currentGameStats[movingRook].numMoves++;
       }
