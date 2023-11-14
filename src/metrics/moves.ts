@@ -44,6 +44,16 @@ export class PieceLevelMoveInfoMetric implements Metric {
   uasWithMostMoves: UASymbol[];
   gamesWithMostMoves: string[];
   gamesProcessed: number; // this could be tracked externally also, in other metrics
+  averagesMap: UAPMap<{ avgMoves: number }>;
+  highestAverageMoves: number;
+  pieceHighestAverageMoves: UASymbol[];
+  gamesWithNoCastling: number;
+  castlingCounts: {
+    blackKing: number;
+    blackQueen: number;
+    whiteKing: number;
+    whiteQueen: number;
+  }
 
   constructor() {
     this.clear();
@@ -53,7 +63,41 @@ export class PieceLevelMoveInfoMetric implements Metric {
     this.totalMovesByPiece = createUAPMap({ numMoves: 0 });
     this.singleGameMaxMoves = 0;
     this.uasWithMostMoves = [];
+    this.gamesWithMostMoves = [];
     this.gamesProcessed = 0;
+    this.highestAverageMoves = 0;
+    this.pieceHighestAverageMoves = [];
+    this.gamesWithNoCastling = 0;
+    this.castlingCounts = {
+      blackKing: 0,
+      blackQueen: 0,
+      whiteKing: 0,
+      whiteQueen: 0,
+    };
+  }
+
+  logResults(): void {
+    console.log('PIECE LEVEL MOVE INFO FACTS:');
+    console.log('The total number of moves by piece in the set of games: ', 
+      console.table(this.totalMovesByPiece)
+    );
+    console.log('The average number of moves by piece in the set of games: ',
+      console.table(this.averagesMap)
+    );
+    console.log(`The piece(s) with the highest average number moves and the number of moves: 
+      ${this.pieceHighestAverageMoves}, ${this.highestAverageMoves}`);
+    console.log(`The piece with the most moves in a single game: ${this.uasWithMostMoves}`);
+    console.log(`The game that piece made that many moves in: ${this.gamesWithMostMoves}`);
+    console.log('\n');
+
+    console.log(`The number of games with no castling: ${this.gamesWithNoCastling}`);
+    console.log('Number of queen and king side castlings: ', 
+      console.table(this.castlingCounts)
+    );
+    console.log(
+      '=============================================================='
+    );
+    console.log('\n');
   }
 
   processGame(
@@ -62,6 +106,10 @@ export class PieceLevelMoveInfoMetric implements Metric {
   ) {
     // update move counts of each unambiguous piece
     const currentGameStats = createUAPMap({ numMoves: 0 });
+
+    // track if this game has no castling
+    let gameCastling = 0;
+
     for (let { move } of game) {
       currentGameStats[move.uas].numMoves++;
 
@@ -71,7 +119,24 @@ export class PieceLevelMoveInfoMetric implements Metric {
         if (move.color === 'w') {
           movingRook = movingRook.toUpperCase();
         }
+        
+        gameCastling++; // count that the game has castling
 
+        // update castling counts depending on black/white queen/king side castling
+        if (move.flags === 'k') {
+          if (move.color === 'b') {
+            this.castlingCounts.blackKing++;
+          } else if (move.color === 'w') {
+            this.castlingCounts.whiteKing++;
+          }
+        }
+        if (move.flags === 'q') {
+          if (move.color === 'b') {
+            this.castlingCounts.blackQueen++;
+          } else if (move.color === 'w') {
+            this.castlingCounts.whiteQueen++;
+          }
+        }
         currentGameStats[movingRook].numMoves++;
       }
     }
@@ -92,6 +157,10 @@ export class PieceLevelMoveInfoMetric implements Metric {
       }
     }
 
+    if (gameCastling = 0) {
+      this.gamesWithNoCastling++;
+    }
+
     this.gamesProcessed++;
   }
 
@@ -102,6 +171,18 @@ export class PieceLevelMoveInfoMetric implements Metric {
       averagesMap[uas].avgMoves =
         this.totalMovesByPiece[uas].numMoves / this.gamesProcessed;
     }
+
+    // identify piece with highest average number of moves
+    for (const uas of Object.keys(averagesMap)) {
+      if (averagesMap[uas].avgMoves > this.highestAverageMoves) {
+        this.highestAverageMoves = averagesMap[uas].avgMoves;
+        this.pieceHighestAverageMoves = [uas as UASymbol];
+      } else if (averagesMap[uas].avgMoves === this.highestAverageMoves) {
+          this.pieceHighestAverageMoves.push(uas as UASymbol); // if multiple pieces with same highestAverageMoves
+      }
+    }
+
+    this.averagesMap = averagesMap;
 
     return averagesMap;
   }
