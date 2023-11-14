@@ -2,11 +2,10 @@ import {
   ALL_SQUARES,
   Piece,
   PrettyMove,
-  Square,
   UASymbol,
 } from '../../cjsmin/src/chess';
-import { BoardMap, UAPMap } from '../types';
-import { createBoardMap, createUAPMap } from '../utils';
+import { BoardAndPieceMap, UAPMap } from '../types';
+import { createBoardAndPieceMap, createBoardMap, createUAPMap } from '../utils';
 import { Metric } from './metric';
 
 export class KillStreakMetric implements Metric {
@@ -111,7 +110,7 @@ export class KDRatioMetric implements Metric {
     for (const uas of Object.keys(KDRatios)) {
       if (KDRatios[uas] > maxKDRatio) {
         maxKDRatio = KDRatios[uas];
-        pieceWithHighestKDRatio = uas
+        pieceWithHighestKDRatio = uas;
       }
     }
 
@@ -249,9 +248,7 @@ export class MateAndAssistMetric implements Metric {
 }
 
 export class CaptureLocationMetric implements Metric {
-  captureLocationMap: {
-    [key in Square]: UAPMap<{ captures: number; captured: number }>;
-  };
+  captureLocationMap: BoardAndPieceMap<{ captures: number; captured: number }>;
 
   constructor() {
     this.clear();
@@ -272,8 +269,8 @@ export class CaptureLocationMetric implements Metric {
     let lastMove: PrettyMove;
     for (const { move, board } of game) {
       if (move.capture) {
-        board[move.to][move.uas].captures++;
-        board[move.to][move.capture.uas].captured++;
+        this.captureLocationMap[move.to][move.uas].captures++;
+        this.captureLocationMap[move.to][move.capture.uas].captured++;
       }
       lastMove = move;
     }
@@ -281,18 +278,22 @@ export class CaptureLocationMetric implements Metric {
 
   aggregate() {
     // Gets a capture total for each square
-    const captureTotals = createUAPMap({ captures: 0, captured: 0 });
+    const captureTotals = createBoardMap({ captures: 0, captured: 0 });
     for (const square of Object.keys(this.captureLocationMap)) {
       for (const uas of Object.keys(this.captureLocationMap[square])) {
-        captureTotals[square] += this.captureLocationMap[square][uas].captures;
-        captureTotals[square] += this.captureLocationMap[square][uas].captured;
+        captureTotals[square].captures +=
+          this.captureLocationMap[square][uas].captures;
+        captureTotals[square].captured +=
+          this.captureLocationMap[square][uas].captured;
       }
     }
+
+    return captureTotals;
   }
 }
 
 export class MatingSquareMetric implements Metric {
-  matingSquareMap: BoardMap<{
+  matingSquareMap: BoardAndPieceMap<{
     mates: number;
     assists: number;
     hockeyAssists: number;
@@ -305,7 +306,7 @@ export class MatingSquareMetric implements Metric {
 
   // TODO: maybe slightly better if we don't recreate when clearing
   clear(): void {
-    this.matingSquareMap = createBoardMap({
+    this.matingSquareMap = createBoardAndPieceMap({
       mates: 0,
       assists: 0,
       hockeyAssists: 0,

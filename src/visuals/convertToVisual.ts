@@ -25,8 +25,32 @@ export function convertToVisual<T>(
   return orderedSquares.map((square) => {
     return {
       all: {
-        w: convert(boardMap[square]),
-        b: null,
+        b: 0,
+        w: convert(boardMap[square]), // only this one mattter
+      },
+      b: {
+        b: 8,
+        w: 14,
+      },
+      k: {
+        b: 2,
+        w: 2,
+      },
+      n: {
+        b: 3,
+        w: 6,
+      },
+      p: {
+        b: 0,
+        w: 0,
+      },
+      q: {
+        b: 10,
+        w: 5,
+      },
+      r: {
+        b: 23,
+        w: 32,
       },
     };
   });

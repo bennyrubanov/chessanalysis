@@ -1,13 +1,7 @@
 import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { KDRatioMetric, MateAndAssistMetric } from './metrics/captures';
-import { MoveDistanceMetric } from './metrics/distances';
-import { MetadataMetric } from './metrics/misc';
-import {
-  GameWithMostMovesMetric,
-  PieceLevelMoveInfoMetric,
-} from './metrics/moves';
-import { PromotionMetric } from './metrics/promotions';
+import { CaptureLocationMetric } from './metrics/captures';
+import { convertToVisual } from './visuals/convertToVisual';
 
 /**
  *
@@ -26,23 +20,25 @@ export async function main(path: string) {
  */
 async function gameIterator(path) {
   const gamesGenerator = gameChunks(path);
-  const kdRatioMetric = new KDRatioMetric();
-  const killStreakMetric = new MoveDistanceMetric();
-  const mateAndAssistMetric = new MateAndAssistMetric();
-  const promotionMetric = new PromotionMetric();
-  const moveDistanceMetric = new MoveDistanceMetric();
-  const gameWithMostMovesMetric = new GameWithMostMovesMetric();
-  const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
-  const metadataMetric = new MetadataMetric();
+  // const kdRatioMetric = new KDRatioMetric();
+  // const killStreakMetric = new MoveDistanceMetric();
+  // const mateAndAssistMetric = new MateAndAssistMetric();
+  // const promotionMetric = new PromotionMetric();
+  // const moveDistanceMetric = new MoveDistanceMetric();
+  // const gameWithMostMovesMetric = new GameWithMostMovesMetric();
+  // const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
+  // const metadataMetric = new MetadataMetric();
+  const captureLocationMetric = new CaptureLocationMetric();
   const metrics = [
-    kdRatioMetric,
-    killStreakMetric,
-    mateAndAssistMetric,
-    promotionMetric,
-    moveDistanceMetric,
-    gameWithMostMovesMetric,
-    pieceLevelMoveInfoMetric,
-    metadataMetric,
+    // kdRatioMetric,
+    // killStreakMetric,
+    // mateAndAssistMetric,
+    // promotionMetric,
+    // moveDistanceMetric,
+    // gameWithMostMovesMetric,
+    // pieceLevelMoveInfoMetric,
+    // metadataMetric,
+    captureLocationMetric,
   ];
 
   const cjsmin = new Chess();
@@ -57,11 +53,29 @@ async function gameIterator(path) {
     for (const metric of metrics) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
+      cjsmin.isCheckmate();
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
-  metadataMetric.aggregate();
-  metadataMetric.logResults();
+
+  const boardMap = captureLocationMetric.aggregate();
+  const capturedMap = convertToVisual(
+    boardMap,
+    (boardInput) => boardInput.captured
+  );
+  const captureMap = convertToVisual(
+    boardMap,
+    (boardInput) => boardInput.captures
+  );
+  require('fs').writeFileSync('boardMap.json', JSON.stringify(boardMap));
+  require('fs').writeFileSync('capturedMap.json', JSON.stringify(capturedMap));
+  require('fs').writeFileSync('captureMap.json', JSON.stringify(captureMap));
+
+  console.log(captureMap);
+  console.log(capturedMap);
+
+  // metadataMetric.aggregate();
+  // metadataMetric.logResults();
 }
 
 if (require.main === module) {
