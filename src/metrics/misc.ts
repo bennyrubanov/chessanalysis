@@ -1,4 +1,4 @@
-import { Piece, PrettyMove } from '../../cjsmin/src/chess';
+import { Piece, PrettyMove, Chess} from '../../cjsmin/src/chess';
 import { Metric } from './metric';
 
 // calculates how many games in the dataset
@@ -54,6 +54,9 @@ export class MetadataMetric implements Metric {
   gameTimeControlStats: {
     [timeControl: string]: number;
   };
+  gameEndings: {
+    [gameEnding: string]: number;
+  };
 
   // helping variables
   totalPlayerRating: number;
@@ -91,6 +94,10 @@ export class MetadataMetric implements Metric {
     console.log('Openings by number of times they appear and their win rates: '),
       console.table(this.openings);
     console.log('Number of times bongcloud appeared: ', this.bongcloud)
+    console.log('\n')
+
+    console.log('Game Endings: '),
+    console.table(this.gameEndings);
   }
 
   // Reset the maps used to track metrics
@@ -113,6 +120,7 @@ export class MetadataMetric implements Metric {
     this.gameTimeControlStats = {};
     this.openings = {};
     this.bongcloud = 0;
+    this.gameEndings = {};
 
     // helping variables
     this.totalPlayerRating = 0;
@@ -240,6 +248,37 @@ export class MetadataMetric implements Metric {
         ties: result === '[Result "1/2-1/2"]' ? 1 : 0,
         whiteToBlackWinRatio: result === '[Result "1-0"]' ? 1 : 0,
       };
+    }
+
+    const chess = new Chess();
+
+    // identify game endings from the game
+    for (const { move } of game) {
+      chess._makeMove({
+        from: move.fromIndex,
+        to: move.toIndex,
+        promotion: move.promotion,
+        color: move.color,
+        piece: move.piece,
+        uas: move.uas,
+        flags: parseInt(move.flags, 10)
+      });
+
+      if (chess.isThreefoldRepetition()) {
+        this.gameEndings['threefold repetition'] = (this.gameEndings['threefold repetition'] || 0) + 1;
+      }
+
+      if (chess.isStalemate()) {
+        this.gameEndings['stalemate'] = (this.gameEndings['stalemate'] || 0) + 1;
+      }
+
+      if (chess.isInsufficientMaterial()) {
+        this.gameEndings['insufficient material'] = (this.gameEndings['insufficient material'] || 0) + 1;
+      }
+
+      if (chess.isGameOver()) {
+        this.gameEndings['game over'] = (this.gameEndings['game over'] || 0) + 1;
+      }
     }
 
     // Increment the number of games analyzed
