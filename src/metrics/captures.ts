@@ -69,7 +69,6 @@ export class KDRatioMetric implements Metric {
   KDAssistsMap: UAPMap<{
     kills: number;
     deaths: number;
-    assists: number;
     revengeKills: number;
   }>;
   pieceWithHighestKDRatio: string;
@@ -79,7 +78,6 @@ export class KDRatioMetric implements Metric {
   KDAssistsValuesMap: UAPMap<{
     valueKills: number;
     deaths: number;
-    assists: number;
   }>;
   pieceWithHighestKDRatioValues: string;
   kdRatiosValues: UAPMap<number>;
@@ -178,14 +176,12 @@ export class KDRatioMetric implements Metric {
     this.KDAssistsMap = createUAPMap({
       kills: 0,
       deaths: 0,
-      assists: 0,
       revengeKills: 0,
     });
     this.kdRatios = undefined;
     this.KDAssistsValuesMap = createUAPMap({
       valueKills: 0,
       deaths: 0,
-      assists: 0,
     });
     this.kdRatiosValues = undefined;
   }
