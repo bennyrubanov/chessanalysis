@@ -269,7 +269,8 @@ describe('All Tests', () => {
     it('should return the correct max distance and piece for a game', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
-      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)),
+      ['m', 'et']);
 
       expect(moveDistanceMetric.pieceMaxes.distance).toEqual(6);
       expect(moveDistanceMetric.pieceMaxes.uasArray[0]).toEqual('Q');
@@ -279,7 +280,8 @@ describe('All Tests', () => {
       const game = '1. e4 e5';
 
       moveDistanceMetric.clear();
-      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)),
+      ['m', 'et']);
 
       expect(moveDistanceMetric.pieceMaxes.distance).toEqual(2);
       expect(moveDistanceMetric.pieceMaxes.uasArray).toEqual(['PE', 'pe']);
@@ -288,7 +290,8 @@ describe('All Tests', () => {
     it('should return a singleGameDistanceTotal equal to the addition of all distances in the distanceMap', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
-      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)),
+      ['m', 'et']);
       moveDistanceMetric.aggregate();
 
       let totalDistance = 0;
