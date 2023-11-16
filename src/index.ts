@@ -60,8 +60,8 @@ async function gameIterator(path) {
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
-  metadataMetric.aggregate();
-  metadataMetric.logResults();
+  kdRatioMetric.aggregate();
+  kdRatioMetric.logResults();
 }
 
 if (require.main === module) {
