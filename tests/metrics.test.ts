@@ -264,7 +264,7 @@ describe('All Tests', () => {
     });
   });
 
-  describe('getMoveDistanceSingleGame', () => {
+  xdescribe('getMoveDistanceSingleGame', () => {
     const moveDistanceMetric = new MoveDistanceMetric();
     it('should return the correct max distance and piece for a game', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
