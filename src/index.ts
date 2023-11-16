@@ -65,5 +65,5 @@ async function gameIterator(path) {
 }
 
 if (require.main === module) {
-  main(`data/11.11.23 3 Game Test Set`).then((a) => {});
+  main(`data/10.10.23_test_set`).then((a) => {});
 }

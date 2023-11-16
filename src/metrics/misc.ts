@@ -217,7 +217,7 @@ export class MetadataMetric implements Metric {
     } else if (result === '[Result "1/2-1/2"]') {
       this.ties++;
     } else {
-      throw new Error('Invalid result');
+      console.log('Invalid result');
     }
 
     // extract openings from metadata
@@ -225,31 +225,33 @@ export class MetadataMetric implements Metric {
     ?.replace('[Opening "', '')
     ?.replace('"]', '');
 
-    if (opening.toLowerCase() == "bongcloud") {
-      this.bongcloud++;
-    }
-
-    // add opening to openings object
-    if (this.openings[opening]) {
-      this.openings[opening].appearances++;
-      if (result === '[Result "1-0"]') {
-        this.openings[opening].whiteWins++;
-      } else if (result === '[Result "0-1"]') {
-        this.openings[opening].blackWins++;
-      } else if (result === '[Result "1/2-1/2"]') {
-        this.openings[opening].whiteWins += 0.5;
-        this.openings[opening].blackWins += 0.5;
-        this.openings[opening].ties++;
+    if(opening) {
+      if (opening.toLowerCase() == "bongcloud") {
+        this.bongcloud++;
       }
-      this.openings[opening].whiteToBlackWinRatio = this.openings[opening].whiteWins / this.openings[opening].blackWins;
-    } else {
-      this.openings[opening] = {
-        appearances: 1,
-        blackWins: result === '[Result "0-1"]' ? 1 : (result === '[Result "1/2-1/2"]' ? 0.5 : 0),
-        whiteWins: result === '[Result "1-0"]' ? 1 : (result === '[Result "1/2-1/2"]' ? 0.5 : 0),
-        ties: result === '[Result "1/2-1/2"]' ? 1 : 0,
-        whiteToBlackWinRatio: result === '[Result "1-0"]' ? 1 : 0,
-      };
+  
+      // add opening to openings object
+      if (this.openings[opening]) {
+        this.openings[opening].appearances++;
+        if (result === '[Result "1-0"]') {
+          this.openings[opening].whiteWins++;
+        } else if (result === '[Result "0-1"]') {
+          this.openings[opening].blackWins++;
+        } else if (result === '[Result "1/2-1/2"]') {
+          this.openings[opening].whiteWins += 0.5;
+          this.openings[opening].blackWins += 0.5;
+          this.openings[opening].ties++;
+        }
+        this.openings[opening].whiteToBlackWinRatio = this.openings[opening].whiteWins / this.openings[opening].blackWins;
+      } else {
+        this.openings[opening] = {
+          appearances: 1,
+          blackWins: result === '[Result "0-1"]' ? 1 : (result === '[Result "1/2-1/2"]' ? 0.5 : 0),
+          whiteWins: result === '[Result "1-0"]' ? 1 : (result === '[Result "1/2-1/2"]' ? 0.5 : 0),
+          ties: result === '[Result "1/2-1/2"]' ? 1 : 0,
+          whiteToBlackWinRatio: result === '[Result "1-0"]' ? 1 : 0,
+        };
+      }
     }
 
 
@@ -292,6 +294,7 @@ export class MetadataMetric implements Metric {
           (this.gameEndings['threefold repetition'] || 0) + 1;
         threefoldRepetitionFound = true;
       }
+      
       // check for fifty game rule
       if (move.capture || move.piece === 'p') {
         fiftyMovesCount = 0;

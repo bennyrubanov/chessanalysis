@@ -12,6 +12,7 @@ import {
   PieceLevelMoveInfoMetric,
 } from '../src/metrics/moves';
 import { PromotionMetric } from '../src/metrics/promotions';
+import { MetadataMetric } from '../src/metrics/misc';
 
 // convert PGN string to GameHistoryObject
 export function pgnToGameHistory(pgn: string) {
@@ -587,6 +588,32 @@ describe('All Tests', () => {
       expect(miscMoveFactsMetric.knightHops['pc'].count).toEqual(2);
       expect(miscMoveFactsMetric.knightHops['PG'].count).toEqual(2);
       expect(miscMoveFactsMetric.knightHops['pb'].count).toEqual(2);
+    });
+  });
+
+  describe('MetadataMetric', () => {
+    const chess = new Chess();
+    const metadataMetric = new MetadataMetric(chess);
+    
+    // https://www.chessgames.com/perl/chessgame?gid=1972221
+    const game50MovesRule = [
+      {
+        metadata: [],
+        moves:
+          '1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Na6 8. Be3 Qe8 9. dxe5 dxe5 10. h3 b6 11. a3 Nc5 12. Qc2 Nfd7 13. Nd5 Qd8 14. b4 Ne6 15. b5 Bb7 16. Rad1 c6 17. bxc6 Bxc6 18. Qb1 Rc8 19. Bd3 Ndc5 20. Bc2 Qe8 21. g3 Kh8 22. h4 h5 23. Kh2 Bd7 24. Rd2 Nd8 25. Kg1 Ndb7 26. Re1 Bg4 27. Nh2 Be6 28. Nf3 Na5 29. Qa2 Ncb7 30. Bd3 Qa4 31. Ng5 Bxd5 32. cxd5 Nd6 33. Rc2 Rxc2 34. Bxc2 Qb5 35. a4 Qb4 36. Rb1 Qc4 37. Qxc4 Naxc4 38. Bc1 Rc8 39. Bd3 Kg8 40. Kf1 Nb7 41. Ke2 Bf8 42. f4 Bd6 43. f5 gxf5 44. exf5 Be7 45. Ne4 Ncd6 46. f6 Bd8 47. Ba3 Nxe4 48. Bxe4 Bxf6 49. d6 Nd8 50. Rc1 Rxc1 51. Bxc1 Ne6 52. Be3 Kf8 53. Kd3 Nd4 54. Kc4 Ke8 55. Kd5 Ne2 56. Kc6 Nxg3 57. d7+ Kd8 58. a5 bxa5 59. Bxa7 Ke7 60. Bd5 Kf8 61. Be3 Bd8 62. Bc5+ Kg7 63. Bb6 Be7 64. Bxa5 Nf5 65. d8=Q Bxd8 66. Bxd8 f6 67. Kd7 Nxh4 68. Ke6 Ng6 69. Bxf6+ Kh6 70. Kf5 h4 71. Bg5+ Kg7 72. Be4 Kf7 73. Bf6 Ne7+ 74. Kxe5 Ng6+ 75. Kf5 Ne7+ 76. Kg5 Ke6 77. Bd4 h3 78. Bg1 Ke5 79. Bb1 Nd5 80. Bf5 h2 81. Bxh2+ Kd4 82. Bh7 Nb4 83. Kf5 Nd3 84. Bg1+ Kd5 85. Bg8+ Kd6 86. Ke4 Nc5+ 87. Kd4 Ne6+ 88. Kc4 Ke5 89. Bh2+ Kf5 90. Bh7+ Kf6 91. Kd5 Ng7 92. Be5+ Kf7 93. Bc2 Ne8 94. Bb2 Ng7 95. Ke5 Ne8 96. Bc1 Ng7 97. Bb3+ Kg6 98. Ba4 Kf7 99. Bd7 Ke7 100. Bg4 Kf7 101. Be2 Kg6 102. Bd1 Kf7 103. Bd2 Kg6 104. Bc2+ Kf7 105. Kd6 Ne8+ 106. Kd7 Nf6+ 107. Kc6 Ne8 108. Kd5 Nf6+ 109. Ke5 Ne8 110. Bb3+ Kg6 111. Ba5 Ng7 112. Bd8 Nh5 113. Bh4 Ng7 114. Bc2+ Kf7 115. Kd6 Ne8+ 116. Kd7 Nf6+ 117. Kd8 Ke6 118. Bb3+ Ke5 119. Bg3+ Kd4 120. Ke7 Ne4 121. Bh2 Nd2 122. Bd1 Ne4 123. Ke6 Nc5+ 124. Kd6 Nd3 125. Bg3 Kc4 126. Be2 Kd4 127. Bh4 Kc3 128. Bg5 Nb2 129. Kd5 Kb3 130. Bf6 Kc2 131. Bh5 Kb3 132. Bg6 1/2-1/2',
+      },
+    ];
+
+    afterEach(() => {
+      metadataMetric.clear();
+    });
+
+    it('should correctly identify that 50-moves have occured without capture or pawn movement', () => {
+      
+      metadataMetric.processGame(Array.from(cjsmin.historyGenerator(game50MovesRule[0].moves)),
+      ['m', 'et']);
+
+      expect(metadataMetric.gameEndings['fifty-move rule']).toEqual(1);
     });
   });
 });
