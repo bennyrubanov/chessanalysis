@@ -71,7 +71,7 @@ export class KDRatioMetric implements Metric {
     deaths: number;
     revengeKills: number;
   }>;
-  pieceWithHighestKDRatio: string;
+  pieceWithHighestKDRatio: UASymbol[];
   // KDRatios is a convenience object for aggregation
   kdRatios: UAPMap<number>;
 
@@ -79,7 +79,7 @@ export class KDRatioMetric implements Metric {
     valueKills: number;
     deaths: number;
   }>;
-  pieceWithHighestKDRatioValues: string;
+  pieceWithHighestKDRatioValues: UASymbol[];
   kdRatiosValues: UAPMap<number>;
 
   constructor() {
@@ -140,7 +140,9 @@ export class KDRatioMetric implements Metric {
     for (const uas of Object.keys(KDRatios)) {
       if (KDRatios[uas] > maxKDRatio) {
         maxKDRatio = KDRatios[uas];
-        pieceWithHighestKDRatio = uas
+        pieceWithHighestKDRatio = [uas as UASymbol];
+      } else if (KDRatios[uas] === maxKDRatio) {
+        pieceWithHighestKDRatio.push(uas as UASymbol); // tie, add to the array
       }
     }
 
@@ -154,7 +156,9 @@ export class KDRatioMetric implements Metric {
     for (const uas of Object.keys(KDRatiosValues)) {
       if (KDRatiosValues[uas] > maxKDRatioValues) {
         maxKDRatioValues = KDRatiosValues[uas];
-        pieceWithHighestKDRatioValues = uas
+        pieceWithHighestKDRatioValues = [uas as UASymbol];
+      } else if (KDRatiosValues[uas] === maxKDRatio) {
+        pieceWithHighestKDRatioValues.push(uas as UASymbol); // tie, add to the array
       }
     }
 

@@ -4,7 +4,7 @@ import { createUAPMap } from '../utils';
 import { Metric } from './metric';
 
 export class GameWithMostMovesMetric implements Metric {
-  link: string;
+  link: string[];
   numMoves: number;
 
   constructor() {
@@ -12,7 +12,7 @@ export class GameWithMostMovesMetric implements Metric {
   }
 
   clear(): void {
-    this.link = undefined;
+    this.link = [];
     this.numMoves = 0;
   }
 
@@ -22,8 +22,10 @@ export class GameWithMostMovesMetric implements Metric {
   ) {
     if (game.length > this.numMoves) {
       this.numMoves = game.length;
-      this.link = metadata[1].match(/"(.*?)"/)[1];
-    }
+      this.link = [metadata[1].match(/"(.*?)"/)[1]];
+    } else if (game.length === this.numMoves) {
+      this.link.push(metadata[1].match(/"(.*?)"/)[1]);
+    } 
   }
 
   logResults(): void {

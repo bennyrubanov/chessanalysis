@@ -28,9 +28,9 @@ export class MetadataMetric implements Metric {
   averagePlayerRating: number;
   averageRatingDiff: number;
   largestRatingDiff: number;
-  largestRatingDiffGame: string;
+  largestRatingDiffGame: string[];
   mostGamesPlayed: number;
-  playerMostGames: string;
+  playerMostGames: string[];
   blackWins: number;
   whiteWins: number;
   ties: number;
@@ -108,9 +108,9 @@ export class MetadataMetric implements Metric {
     this.averagePlayerRating = 0;
     this.averageRatingDiff = 0;
     this.largestRatingDiff = 0;
-    this.largestRatingDiffGame = '';
+    this.largestRatingDiffGame = [];
     this.mostGamesPlayed = 0;
-    this.playerMostGames = '';
+    this.playerMostGames = [];
     this.gameTypeStats = {
       numberUltraBulletGames: 0,
       numberBulletGames: 0,
@@ -181,14 +181,17 @@ export class MetadataMetric implements Metric {
     this.totalPlayerRating += whiteRating + blackRating;
 
     // Calculate the player rating diffs
-    const ratingDiff = Math.abs(whiteRating - blackRating);
+    let ratingDiff = Math.abs(whiteRating - blackRating);
     this.totalPlayerRatingDiff += ratingDiff;
 
     // Check if this game has the largest rating differential
     if (ratingDiff > this.largestRatingDiff) {
       this.largestRatingDiff = ratingDiff;
-      this.largestRatingDiffGame =
-        metadata?.find((data) => data.startsWith('[Site')) || '';
+      this.largestRatingDiffGame = [
+        metadata?.find((data) => data.startsWith('[Site')) || ''];
+    } else if (ratingDiff === this.largestRatingDiff) {
+      this.largestRatingDiffGame.push(
+        metadata?.find((data) => data.startsWith('[Site')) || ''); // tie, add to array
     }
 
     // helping variables to identify the player with the most games played in the data set
@@ -323,11 +326,13 @@ export class MetadataMetric implements Metric {
 
     // Calculate the player with the most games played
     let maxGames = 0;
-    let playerMostGames = '';
+    let playerMostGames = [];
     for (const player in this.playerGameStats) {
       if (this.playerGameStats[player] > maxGames) {
         maxGames = this.playerGameStats[player];
-        playerMostGames = player;
+        playerMostGames = [player];
+      } else if (this.playerGameStats[player] === maxGames) {
+        playerMostGames.push(player);
       }
     }
     this.mostGamesPlayed = maxGames;

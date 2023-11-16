@@ -11,6 +11,7 @@ export class MoveDistanceMetric implements Metric {
   minAvgDistance: number;
   totalDistance: number;
   maxSingleGameTotal: number;
+  singleGameMaxPiece: string[];
   // This has arrays to account for ties. Postions connect link to uas
   pieceMaxes: {
     distance: number;
@@ -39,6 +40,7 @@ export class MoveDistanceMetric implements Metric {
       linkArray: [],
     };
     this.gamesProcessed = 0;
+    this.singleGameMaxPiece = [];
   }
 
   aggregate() {
@@ -77,10 +79,8 @@ export class MoveDistanceMetric implements Metric {
 
     // Facts
     console.log(`Piece that moved the furthest: ${this.pieceMaxes.uasArray}`);
-    // Game link support will come later
-    // console.log(
-    //   `Game in which that piece (${this.maxSingleGameDistancePiece}) moved the furthest: ${siteWithFurthestPiece}`
-    // );
+    console.log(`Game in which that piece (${this.pieceMaxes.uasArray}) moved the furthest: ${this.singleGameMaxPiece}`
+    );
     console.log(
       `Distance that piece moved in the game: ${this.pieceMaxes.distance}`
     );
@@ -92,7 +92,10 @@ export class MoveDistanceMetric implements Metric {
     );
   }
 
-  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata: string[]
+  ) {
     // Initialize variables to keep track of the maximum distance and the piece
     const singleGameMap = createUAPMap({ total: 0 });
 
@@ -135,6 +138,8 @@ export class MoveDistanceMetric implements Metric {
     // add the single game aggregates to the state object
     for (const uas of Object.keys(singleGameMap)) {
       this.distanceMap[uas].total += singleGameMap[uas].total;
+      const gameLink = metadata[1].match(/"(.*?)"/)[1];
+
       if (
         singleGameMap[uas].total > this.distanceMap[uas].maxSingleGameDistance
       ) {
@@ -145,9 +150,10 @@ export class MoveDistanceMetric implements Metric {
       if (singleGameMap[uas].total > this.pieceMaxes.distance) {
         this.pieceMaxes.uasArray = [uas as UASymbol];
         this.pieceMaxes.distance = singleGameMap[uas].total;
-        // this.singleGameMaxPiece.link = undefined; // TODO: add game link support
+        this.singleGameMaxPiece = [gameLink];
       } else if (singleGameMap[uas].total === this.pieceMaxes.distance) {
         this.pieceMaxes.uasArray.push(uas as UASymbol);
+        this.singleGameMaxPiece.push[gameLink];
       }
     }
 
