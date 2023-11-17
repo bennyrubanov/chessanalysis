@@ -66,15 +66,11 @@ async function gameIterator(path) {
     boardMap,
     (boardInput) => boardInput.captures
   );
+
+  // To create the visuals we need to copy metric results into the visualization libary
   require('fs').writeFileSync('boardMap.json', JSON.stringify(boardMap));
   require('fs').writeFileSync('capturedMap.json', JSON.stringify(capturedMap));
   require('fs').writeFileSync('captureMap.json', JSON.stringify(captureMap));
-
-  console.log(captureMap);
-  console.log(capturedMap);
-
-  // metadataMetric.aggregate();
-  // metadataMetric.logResults();
 }
 
 if (require.main === module) {

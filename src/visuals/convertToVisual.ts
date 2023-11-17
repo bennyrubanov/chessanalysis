@@ -1,15 +1,22 @@
 import { BoardMap } from '../types';
 import { SquareUtilization } from './visualTypesRaw';
 
+/**
+ * Takes some arbitrary metric result in board format, as well as a conversion function &
+ * returns a list of objects that can be passed to the heatmap library.
+ *
+ * Until we write a custom implementation we'll be limited by the setup of the library;
+ * To match the patterns of the viz lib we need to pass a list of objects with structure:
+ * {piece: string, color: string}[]
+ *
+ * @param boardMap
+ * @param convert
+ * @returns
+ */
 export function convertToVisual<T>(
   boardMap: BoardMap<T>,
   convert: (boardInput: T) => number
 ): Pick<SquareUtilization, 'all'>[] {
-  // Until we write a custom implementation we'll be limited by the setup of the library
-  // Creating custom visuals would be a PITA
-
-  // To match the patterns of the repo we'll need to pass a list of objects with {piece: string, color: string}[] structure
-
   //prettier-ignore
   const orderedSquares = [
     "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
@@ -26,7 +33,8 @@ export function convertToVisual<T>(
     return {
       all: {
         b: 0,
-        w: convert(boardMap[square]), // only this one mattter
+        w: convert(boardMap[square]), // Because of how we use the heatmap lib only this value  matters.
+        // But we do need the other values to be present, or the lib will throw an error.
       },
       b: {
         b: 8,
