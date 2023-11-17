@@ -29,7 +29,7 @@ async function gameIterator(path) {
 
   const gamesGenerator = gameChunks(path);
   const kdRatioMetric = new KDRatioMetric();
-  const killStreakMetric = new KillStreakMetric();
+  // const killStreakMetric = new KillStreakMetric();
   const mateAndAssistMetric = new MateAndAssistMetric();
   const promotionMetric = new PromotionMetric();
   const moveDistanceMetric = new MoveDistanceMetric();
@@ -37,14 +37,14 @@ async function gameIterator(path) {
   const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
   const metadataMetric = new MetadataMetric(cjsmin);
   const metrics = [
+    metadataMetric,
     kdRatioMetric,
-    killStreakMetric,
+    // killStreakMetric,
     mateAndAssistMetric,
     promotionMetric,
     moveDistanceMetric,
     gameWithMostMovesMetric,
     pieceLevelMoveInfoMetric,
-    metadataMetric,
   ];
 
   let gameCounter = 0;
@@ -58,19 +58,18 @@ async function gameIterator(path) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
       metric.processGame(Array.from(historyGenerator), metadata);
-      metric.aggregate();
-      metric.logResults();
     }
   }
+  metadataMetric.aggregate();
+  metadataMetric.logResults();
+}
+
+// for use with streaming_partial_decompresser.js
+if (require.main === module) {
+  const path = process.argv[2];
+  main(path).then((a) => {});
 }
 
 // if (require.main === module) {
-//   const path = process.argv[2];
-//   main(path).then(({}) => {});
+//   main(`data/11.11.23 3 Game Test Set`).then((a) => {});
 // }
-
-
-if (require.main === module) {
-  main(`data/11.11.23 3 Game Test Set`).then(({}) => {}
-  );
-}

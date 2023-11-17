@@ -8,11 +8,55 @@ const files = ["lichess_db_standard_rated_2013-01.pgn.zst", /*...*/];
 
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = 15 million games?
+const SIZE_LIMIT = 10 * 1024 * 1024
+
+// function to check file size
+const getFileSize = (filePath) => {
+    if (!fs.existsSync(filePath)) {
+        return 0;
+    }
+    const stats = fs.statSync(filePath);
+    return stats.size;
+};
+
+const runAnalysis = (filePath) => {
+    return new Promise((resolve, reject) => {
+        // Run the analysis script
+        console.log(`Running analysis script on ${filePath}...`);
+
+        const child = spawn('ts-node', ['/Users/bennyrubanov/chessanalysis/src/index.ts', filePath]);
+
+        child.stdout.on('data', (data) => {
+            console.log(`stdout: ${data}`);
+        });
+
+        child.stderr.on('data', (data) => {
+            console.log(`stderr: ${data}`);
+        });
+
+        child.on('error', (error) => {
+            console.log(`error: ${error.message}`);
+            reject(error);
+        });
+
+        child.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+            resolve();
+        });
+    });
+};
 
 const decompressAndAnalyze = async (file, start = 0) => {
     let chunk_counter = 0; // Initialize the chunk counter
+    let file_counter = 0; // Initialize the file counter
 
-    const path = `/Users/bennyrubanov/chessanalysis/data/${file.replace('.zst', '')}`;
+    const base_path = `/Users/bennyrubanov/chessanalysis/data/${file.replace('.zst', '')}`;
+
+    // Create a new file path
+    let path = `${base_path}_${file_counter}`;
+
+    // Create a new writable stream
+    let decompressedStream = fs.createWriteStream(path, { flags: 'a' });
 
     // Check if file already exists
     if (fs.existsSync(path)) {
@@ -20,71 +64,80 @@ const decompressAndAnalyze = async (file, start = 0) => {
         start = stats.size;
     }
 
-    const decompressedStream = fs.createWriteStream(path, { flags: 'a' });
+    try {
+        await new Promise((resolve, reject) => {
+            console.log(`Starting decompression of chunk number ${chunk_counter}.`);
 
-    while (true) {
-        try {
-            await new Promise((resolve, reject) => {
-                console.log(`Starting decompression of chunk number ${chunk_counter}.`);
+            let startTime = Date.now();
 
-                let startTime = Date.now();
+            zstd.decompressionStreamFromFile(`/Users/bennyrubanov/chessanalysis/data/${file}`, (err, result) => {
+                if (err) return reject(err);
 
-                zstd.decompressionStreamFromFile(`/Users/bennyrubanov/chessanalysis/data/${file}`, (err, result) => {
-                    if (err) return reject(err);
+                let lastChunkLength = 0;
+                let fileLength = 0;
 
-                    let lastChunkLength = 0;
+                result.on('error', (err) => {
+                    return reject(err);
+                });
 
-                    result.on('error', (err) => {
-                        return reject(err);
-                    });
-                    result.on('data', (data) => {
-                        decompressedStream.write(data);
-                        lastChunkLength = data.length;
+                result.on('data', async (data) => {
+                    decompressedStream.write(data);
+                    lastChunkLength = data.length;
 
-                        const duration = Date.now() - startTime;
-                        const durationFormatted = formatDuration(duration);
-                        start += lastChunkLength;
+                    const duration = Date.now() - startTime;
+                    const durationFormatted = formatDuration(duration);
+                    fileLength += data.length
 
-                        console.log(`Decompressed data for chunk starting from byte ${start - lastChunkLength} and ending on byte ${start} of ${file} in ${durationFormatted}`);
+                    // Increment the chunk counter
+                    chunk_counter++;
 
-                        // Run the analysis script
-                        console.log(`Running analysis script on chunk from byte ${start - lastChunkLength} and ending on byte ${start} of ${file}...`);
+                    if (chunk_counter % 200 === 0) {
+                        console.log(`${chunk_counter} chunks decompressed of total size ${fileLength / 1024 / 1024} MB`)
+                    }
 
-                        const child = spawn('ts-node', ['/Users/bennyrubanov/chessanalysis/src/index.ts', path]);
-                        
-                        child.stdout.on('data', (data) => {
-                          console.log(`stdout: ${data}`);
-                        });
-                        
-                        child.stderr.on('data', (data) => {
-                          console.log(`stderr: ${data}`);
-                        });
-                        
-                        child.on('error', (error) => {
-                          console.log(`error: ${error.message}`);
-                        });
-                        
-                        child.on('close', (code) => {
-                          console.log(`child process exited with code ${code}`);
-                        });
+                    // Check if the file size exceeds the limit
+                    if (getFileSize(path) >= SIZE_LIMIT) {
+                        // Save the old path for analysis
+                        let oldPath = path;
+                    
+                        // Increment the file counter
+                        file_counter++;
+                    
+                        // Create a new file path
+                        path = `${base_path}_${file_counter}`;
+                    
+                        console.log(`Creating file number ${file_counter}`);
+                    
+                        // Switch to a new file
+                        decompressedStream = fs.createWriteStream(path, { flags: 'a' });
+                                        
+                        // Start the analysis on the old file, then delete the old file when finished
+                        if (fs.existsSync(oldPath)) {
+                            runAnalysis(oldPath).then(() => {
+                                if (fs.existsSync(oldPath)) {
+                                    fs.unlinkSync(oldPath);
+                                }
+                            }).catch(console.error);
+                        }
+                    
+                        console.log(`Total number of chunks decompressed so far: ${chunk_counter}`);
+                        console.log(`Finished decompression of data starting from byte ${start} and ending on byte ${start + fileLength} of ${file} in ${durationFormatted}`);
+                    
+                        start += fileLength;
+                        fileLength = 0;
+                    }
+                });
 
-                        // Increment the chunk counter
-                        chunk_counter++;
-
-                        console.log(`Analysis script run on chunk ${chunk_counter} of ${file}.`);
-
-                        console.log(`Chunk cycle for chunk ${chunk_counter} finished`);
-                    });
-                    result.on('end', () => {
-                        resolve();
-                    });
+                result.on('end', () => {
+                    // When all data is decompressed, run the analysis on the last file
+                    runAnalysis(path);
+                    resolve();               
                 });
             });
+        });
 
-        } catch (error) {
-            console.error(`Error decompressing data: ${error.message}`);
-            break;
-        }
+    } catch (error) {
+        console.error(`Error decompressing data: ${error.message}`);
     }
 };
 
