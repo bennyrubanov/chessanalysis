@@ -58,8 +58,8 @@ async function gameIterator(path) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
       metric.processGame(Array.from(historyGenerator), metadata);
-      // metric.aggregate();
-      // metric.logResults();
+      metric.aggregate();
+      metric.logResults();
     }
   }
   kdRatioMetric.aggregate();

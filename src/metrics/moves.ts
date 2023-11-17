@@ -28,6 +28,10 @@ export class GameWithMostMovesMetric implements Metric {
     } 
   }
 
+  aggregate() {
+    
+  }
+
   logResults(): void {
     console.log('MOVES FACTS:');
     console.log(`The game with the most moves played: ${this.link}`);

@@ -277,6 +277,14 @@ export class MateAndAssistMetric implements Metric {
     };
   }
 
+  aggregate() {
+
+  }
+
+  logResults() {
+    
+  }
+
   // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery
   // checks (currently we disregard this by just saying the last piece to move is the "mating piece")
   processGame(game: { move: PrettyMove; board: Piece[] }[]) {
