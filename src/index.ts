@@ -1,6 +1,6 @@
 import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { KDRatioMetric, MateAndAssistMetric } from './metrics/captures';
+import { KDRatioMetric, MateAndAssistMetric, KillStreakMetric } from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
 import { MetadataMetric } from './metrics/misc';
 import {
@@ -25,15 +25,17 @@ export async function main(path: string) {
  * @param metricFunctions
  */
 async function gameIterator(path) {
+  const cjsmin = new Chess();
+
   const gamesGenerator = gameChunks(path);
   const kdRatioMetric = new KDRatioMetric();
-  const killStreakMetric = new MoveDistanceMetric();
+  const killStreakMetric = new KillStreakMetric();
   const mateAndAssistMetric = new MateAndAssistMetric();
   const promotionMetric = new PromotionMetric();
   const moveDistanceMetric = new MoveDistanceMetric();
   const gameWithMostMovesMetric = new GameWithMostMovesMetric();
   const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
-  const metadataMetric = new MetadataMetric();
+  const metadataMetric = new MetadataMetric(cjsmin);
   const metrics = [
     kdRatioMetric,
     killStreakMetric,
@@ -44,8 +46,6 @@ async function gameIterator(path) {
     pieceLevelMoveInfoMetric,
     metadataMetric,
   ];
-
-  const cjsmin = new Chess();
 
   let gameCounter = 0;
   for await (const { moves, metadata } of gamesGenerator) {
@@ -58,12 +58,19 @@ async function gameIterator(path) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
       metric.processGame(Array.from(historyGenerator), metadata);
+      metric.aggregate();
+      metric.logResults();
     }
   }
-  pieceLevelMoveInfoMetric.aggregate();
-  pieceLevelMoveInfoMetric.logResults();
 }
 
+// if (require.main === module) {
+//   const path = process.argv[2];
+//   main(path).then(({}) => {});
+// }
+
+
 if (require.main === module) {
-  main(`data/10.10.23_test_set`).then((a) => {});
+  main(`data/11.11.23 3 Game Test Set`).then(({}) => {}
+  );
 }

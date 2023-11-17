@@ -4,7 +4,7 @@ import { createUAPMap } from '../utils';
 import { Metric } from './metric';
 
 export class GameWithMostMovesMetric implements Metric {
-  link: string;
+  link: string[];
   numMoves: number;
 
   constructor() {
@@ -12,7 +12,7 @@ export class GameWithMostMovesMetric implements Metric {
   }
 
   clear(): void {
-    this.link = undefined;
+    this.link = [];
     this.numMoves = 0;
   }
 
@@ -22,11 +22,23 @@ export class GameWithMostMovesMetric implements Metric {
   ) {
     if (game.length > this.numMoves) {
       this.numMoves = game.length;
-      this.link = metadata[1].match(/"(.*?)"/)[1];
-    }
+      this.link = [metadata.find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', '')];
+    } else if (game.length === this.numMoves) {
+      this.link.push(metadata.find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', ''));
+    } 
+  }
+
+  aggregate() {
+    
   }
 
   logResults(): void {
+    console.log('\n');
+
     console.log('MOVES FACTS:');
     console.log(`The game with the most moves played: ${this.link}`);
     console.log(`The number of moves played in that game: ${this.numMoves}`);
@@ -78,22 +90,23 @@ export class PieceLevelMoveInfoMetric implements Metric {
 
   logResults(): void {
     console.log('PIECE LEVEL MOVE INFO FACTS:');
-    console.log('The total number of moves by piece in the set of games: ', 
-      console.table(this.totalMovesByPiece)
-    );
-    console.log('The average number of moves by piece in the set of games: ',
-      console.table(this.averagesMap)
-    );
+    console.log('The total number of moves by piece in the set of games:');
+    console.table(this.totalMovesByPiece);
+    
+    console.log('The average number of moves by piece in the set of games:');
+    console.table(this.averagesMap);
+    
     console.log(`The piece(s) with the highest average number moves and the number of moves: 
       ${this.pieceHighestAverageMoves}, ${this.highestAverageMoves}`);
     console.log(`The piece with the most moves in a single game: ${this.uasWithMostMoves}`);
+    console.log(`The number of most moves that piece made in a single game: ${this.singleGameMaxMoves}`);
     console.log(`The game that piece made that many moves in: ${this.gamesWithMostMoves}`);
     console.log('\n');
 
     console.log(`The number of games with no castling: ${this.gamesWithNoCastling}`);
-    console.log('Number of queen and king side castlings: ', 
-      console.table(this.castlingCounts)
-    );
+    console.log('Number of queen and king side castlings:');
+    console.table(this.castlingCounts);
+    
     console.log(
       '=============================================================='
     );
@@ -145,7 +158,9 @@ export class PieceLevelMoveInfoMetric implements Metric {
     for (const uas of Object.keys(currentGameStats)) {
       // increment global totals
       this.totalMovesByPiece[uas].numMoves += currentGameStats[uas].numMoves;
-      const gameLink = metadata[1].match(/"(.*?)"/)[1];
+      const gameLink = metadata.find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', '');
 
       if (currentGameStats[uas].numMoves > this.singleGameMaxMoves) {
         this.singleGameMaxMoves = currentGameStats[uas].numMoves;

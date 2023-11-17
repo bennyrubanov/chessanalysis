@@ -1,3 +1,4 @@
+import { includes } from 'lodash';
 import {
   ALL_SQUARES,
   Piece,
@@ -22,6 +23,12 @@ export class KillStreakMetric implements Metric {
 
   clear(): void {
     this.killStreakMap = createUAPMap({ killStreaks: 0 });
+  }
+
+  aggregate() {}
+
+  logResults(): void {
+    
   }
 
   getMaxKillStreak(
@@ -68,12 +75,18 @@ export class KDRatioMetric implements Metric {
   KDAssistsMap: UAPMap<{
     kills: number;
     deaths: number;
-    assists: number;
     revengeKills: number;
   }>;
-  pieceWithHighestKDRatio: string;
+  pieceWithHighestKDRatio: UASymbol[];
   // KDRatios is a convenience object for aggregation
   kdRatios: UAPMap<number>;
+
+  KDAssistsValuesMap: UAPMap<{
+    valueKills: number;
+    deaths: number;
+  }>;
+  pieceWithHighestKDRatioValues: UASymbol[];
+  kdRatiosValues: UAPMap<number>;
 
   constructor() {
     this.clear();
@@ -91,16 +104,38 @@ export class KDRatioMetric implements Metric {
       'Kill Death Ratios for each unambiguous piece: ' +
         JSON.stringify(this.kdRatios, null, 2)
     );
+    console.log('\n')
+    console.log("KDRs TAKING INTO ACCOUNT PIECE VALUES (Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 1 point): ")
+    console.log(
+      `Piece with the highest KD ratio (taking into account piece values): ${this.pieceWithHighestKDRatioValues}`
+    );
+    console.log('Kills, Deaths, and Assists for each unambiguous piece (taking into account piece values):'),
+      console.table(this.KDAssistsValuesMap);
+    console.log(
+      'Kill Death Ratios for each unambiguous piece (taking into account piece values): ' +
+        JSON.stringify(this.kdRatiosValues, null, 2)
+    );
   }
 
   aggregate() {
     const KDRatios = createUAPMap(0);
+    const KDRatiosValues = createUAPMap(0);
+
     // calculate the KD ratios of each piece
     for (const uas of Object.keys(this.KDAssistsMap)) {
       const kills = this.KDAssistsMap[uas].kills;
       const deaths = this.KDAssistsMap[uas].deaths || 0;
       if (deaths !== 0) {
         KDRatios[uas] = kills / deaths;
+      }
+    }
+
+    // calculate the KD ratios of each piece depending on piece value
+    for (const uas of Object.keys(this.KDAssistsValuesMap)) {
+      const valueKills = this.KDAssistsValuesMap[uas].valueKills;
+      const deaths = this.KDAssistsValuesMap[uas].deaths || 0;
+      if (deaths !== 0) {
+        KDRatiosValues[uas] = valueKills / deaths;
       }
     }
 
@@ -111,17 +146,38 @@ export class KDRatioMetric implements Metric {
     for (const uas of Object.keys(KDRatios)) {
       if (KDRatios[uas] > maxKDRatio) {
         maxKDRatio = KDRatios[uas];
-        pieceWithHighestKDRatio = uas;
+        pieceWithHighestKDRatio = [uas as UASymbol];
+      } else if (KDRatios[uas] === maxKDRatio) {
+        pieceWithHighestKDRatio.push(uas as UASymbol); // tie, add to the array
       }
     }
 
     this.kdRatios = KDRatios;
     this.pieceWithHighestKDRatio = pieceWithHighestKDRatio;
 
+    // repeat for the KDRatios taking into account piece values
+    let maxKDRatioValues = 0;
+    let pieceWithHighestKDRatioValues = null;
+
+    for (const uas of Object.keys(KDRatiosValues)) {
+      if (KDRatiosValues[uas] > maxKDRatioValues) {
+        maxKDRatioValues = KDRatiosValues[uas];
+        pieceWithHighestKDRatioValues = [uas as UASymbol];
+      } else if (KDRatiosValues[uas] === maxKDRatio) {
+        pieceWithHighestKDRatioValues.push(uas as UASymbol); // tie, add to the array
+      }
+    }
+
+    this.kdRatiosValues = KDRatiosValues;
+    this.pieceWithHighestKDRatioValues = pieceWithHighestKDRatioValues;
+
+
     return {
       maxKDRatio,
       pieceWithHighestKDRatio,
       KDRatios: KDRatios,
+      KDRatiosValues,
+      pieceWithHighestKDRatioValues,
     };
   }
 
@@ -130,10 +186,14 @@ export class KDRatioMetric implements Metric {
     this.KDAssistsMap = createUAPMap({
       kills: 0,
       deaths: 0,
-      assists: 0,
       revengeKills: 0,
     });
     this.kdRatios = undefined;
+    this.KDAssistsValuesMap = createUAPMap({
+      valueKills: 0,
+      deaths: 0,
+    });
+    this.kdRatiosValues = undefined;
   }
 
   // calculates piece with highest K/D ratio and also contains assists by that piece
@@ -148,6 +208,20 @@ export class KDRatioMetric implements Metric {
         this.KDAssistsMap[move.uas].kills++;
         this.KDAssistsMap[move.capture.uas].deaths++;
 
+        this.KDAssistsValuesMap[move.capture.uas].deaths++;
+
+        // identify kill values based on captured piece type
+        if (move.capture.type === 'p' || move.capture.type === 'k') {
+          this.KDAssistsValuesMap[move.uas].valueKills++;
+        } else if (move.capture.type === 'n' || move.capture.type === 'b') {
+          this.KDAssistsValuesMap[move.uas].valueKills += 3;
+        } else if (move.capture.type === 'r') {
+          this.KDAssistsValuesMap[move.uas].valueKills += 5;
+        } else if (move.capture.type === 'q') {
+          this.KDAssistsValuesMap[move.uas].valueKills += 9;
+        } 
+
+        // identify a revenge kill if the previous move and the current move contained a capture, and the square moved to in the previous move is the same as the square moved to in this move
         if (previousMove.capture && move.to === previousMove.to) {
           this.KDAssistsMap[move.uas].revengeKills++;
         }
@@ -160,10 +234,12 @@ export class KDRatioMetric implements Metric {
     if (lastMove.originalString.includes('#')) {
       const unambigMatingPiece = lastMove.uas;
       this.KDAssistsMap[unambigMatingPiece].kills++;
+      this.KDAssistsValuesMap[unambigMatingPiece].valueKills++; // king kill counts as 1 point
 
       // only kings can get mated, and we know whose move it is
       const matedKing = lastMove.color === 'w' ? 'k' : 'K';
       this.KDAssistsMap[matedKing].deaths++;
+      this.KDAssistsValuesMap[matedKing].deaths++;
 
       // A revenge kill can occur by checkmate too
       const secondToLastMove = game[game.length - 2].move;
@@ -205,6 +281,14 @@ export class MateAndAssistMetric implements Metric {
       k: 0,
       K: 0,
     };
+  }
+
+  aggregate() {
+
+  }
+
+  logResults() {
+    
   }
 
   // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery
