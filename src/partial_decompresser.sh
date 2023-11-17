@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # List of all the database files you want to analyze
-files=("lichess_db_standard_rated_2023-08.pgn.zst" "lichess_db_standard_rated_2023-09.pgn.zst" ...)
+files=("lichess_db_standard_rated_2013-01.pgn.zst" ...)
 
 # Size of each chunk in bytes (10MB = 10 * 1024 * 1024 bytes) which should yield around 30k games
 chunk_size=$((10 * 1024))
@@ -26,7 +26,7 @@ do
     fi
 
     # Download a chunk of the file and decompress it
-    dd if=/data/$file bs=1 skip=$start count=$chunk_size | zstd -d -c > /Users/bennyrubanov/chessanalysis/data/temp.pgn
+    dd if=data/$file bs=1 skip=$start count=$chunk_size | zstd -d -c > /Users/bennyrubanov/chessanalysis/data/temp.pgn
     echo "Chunk of size $(($chunk_size / 1024 / 1024)) MB of $file read and decompressed."
 
     # Run your analysis script

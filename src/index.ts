@@ -57,15 +57,9 @@ async function gameIterator(path) {
     for (const metric of metrics) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
-      metric.processGame(Array.from(historyGenerator), metadata);
-      metric.aggregate();
-      metric.logResults();
+      await metric.processGame(Array.from(historyGenerator), metadata);
+      await metric.aggregate();
+      await metric.logResults();
     }
   }
-  kdRatioMetric.aggregate();
-  kdRatioMetric.logResults();
-}
-
-if (require.main === module) {
-  main(`data/10.10.23_test_set`).then((a) => {});
 }
