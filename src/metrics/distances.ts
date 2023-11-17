@@ -67,9 +67,6 @@ export class MoveDistanceMetric implements Metric {
     // distance facts
     console.log('DISTANCE FACTS:');
     console.log(
-      '==============================================================\n'
-    );
-    console.log(
       `Piece with highest avg distance for games analyzed: ${this.pieceWithHighestAvg}`
     );
     console.log(
@@ -86,9 +83,9 @@ export class MoveDistanceMetric implements Metric {
     // console.log(
     //   `Game with the furthest collective distance moved: ${gameLinkWithFurthestCollectiveDistance}`
     // );
-    console.log(
-      `Collective distance moved in that game: ${this.maxSingleGameTotal}`
-    );
+    // console.log(
+    //   `Collective distance moved in that game: ${this.maxSingleGameTotal}`
+    // );
   }
 
   processGame(
@@ -137,7 +134,9 @@ export class MoveDistanceMetric implements Metric {
     // add the single game aggregates to the state object
     for (const uas of Object.keys(singleGameMap)) {
       this.distanceMap[uas].total += singleGameMap[uas].total;
-      const gameLink = metadata[1].match(/"(.*?)"/)[1];
+      const gameLink = metadata.find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', '');
 
       if (
         singleGameMap[uas].total > this.distanceMap[uas].maxSingleGameDistance

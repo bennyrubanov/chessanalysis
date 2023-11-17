@@ -25,6 +25,12 @@ export class KillStreakMetric implements Metric {
     this.killStreakMap = createUAPMap({ killStreaks: 0 });
   }
 
+  aggregate() {}
+
+  logResults(): void {
+    
+  }
+
   getMaxKillStreak(
     game: { move: PrettyMove; board: Piece[] }[],
     startingIndex: 0 | 1 // assume games have at least 2 moves

@@ -1,6 +1,6 @@
 import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { KDRatioMetric, MateAndAssistMetric } from './metrics/captures';
+import { KDRatioMetric, MateAndAssistMetric, KillStreakMetric } from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
 import { MetadataMetric } from './metrics/misc';
 import {
@@ -29,7 +29,7 @@ async function gameIterator(path) {
 
   const gamesGenerator = gameChunks(path);
   const kdRatioMetric = new KDRatioMetric();
-  const killStreakMetric = new MoveDistanceMetric();
+  const killStreakMetric = new KillStreakMetric();
   const mateAndAssistMetric = new MateAndAssistMetric();
   const promotionMetric = new PromotionMetric();
   const moveDistanceMetric = new MoveDistanceMetric();
@@ -58,12 +58,10 @@ async function gameIterator(path) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
       metric.processGame(Array.from(historyGenerator), metadata);
-      // metric.aggregate();
-      // metric.logResults();
+      metric.aggregate();
+      metric.logResults();
     }
   }
-  kdRatioMetric.aggregate();
-  kdRatioMetric.logResults();
 }
 
 // if (require.main === module) {
