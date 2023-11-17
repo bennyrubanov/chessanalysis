@@ -53,7 +53,6 @@ async function gameIterator(path) {
     for (const metric of metrics) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
-      cjsmin.isCheckmate();
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
