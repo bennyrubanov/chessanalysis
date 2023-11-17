@@ -1787,7 +1787,7 @@ export class Chess {
         };
         result.push({
           move: prettyMove,
-          board: this._board,
+          board: [...this._board], // need to copy the board, not pass a reference to it since we are aggregating and doing one game at a time. Copying this is SLOW
         });
       }
     }

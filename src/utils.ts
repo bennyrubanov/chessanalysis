@@ -5,7 +5,7 @@ import {
   UASymbol,
 } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { BoardMap, UAPMap } from './types';
+import { BoardAndPieceMap, BoardMap, UAPMap } from './types';
 
 export function orderObject(unordered) {
   return Object.keys(unordered)
@@ -16,7 +16,7 @@ export function orderObject(unordered) {
     }, {});
 }
 
-export function createBoardMapOld(): BoardMap<{
+export function createBoardMapOld(): BoardAndPieceMap<{
   captured: number;
   captures: number;
   revengeKills: number;
@@ -57,10 +57,20 @@ export function createUAPMap<T extends Object>(object: T): UAPMap<T> {
   return map as { [key in UASymbol]: T };
 }
 
-export function createBoardMap<T extends Object>(object: T): BoardMap<T> {
+export function createBoardAndPieceMap<T extends Object>(
+  object: T
+): BoardAndPieceMap<T> {
   const map = {};
   for (const square of ALL_SQUARES) {
     map[square] = createUAPMap(object);
+  }
+  return map as BoardAndPieceMap<T>;
+}
+
+export function createBoardMap<T extends Object>(object: T): BoardMap<T> {
+  const map = {};
+  for (const square of ALL_SQUARES) {
+    map[square] = { ...object };
   }
   return map as BoardMap<T>;
 }
