@@ -63,7 +63,6 @@ export class MoveDistanceMetric implements Metric {
   }
 
   logResults(): void {
-    console.timeEnd('Task 2: getMoveDistanceSetOfGames');
 
     // distance facts
     console.log('DISTANCE FACTS:');

@@ -20,11 +20,13 @@ export async function* gameChunks(
     } else if (!line) {
       // empty line, do nothing
     } else if (line.startsWith('1.')) {
-      // move line, yield the game
-      yield {
-        metadata,
-        moves: line,
-      };
+      // ensure that gameChunks only yields a value when both metadata and moves are not empty to prevent getting "undefined" in src/index.ts.
+      if (metadata.length > 0 && line.trim() !== '') {
+        yield {
+          metadata,
+          moves: line,
+        };
+      }
       metadata = [];
     } else {
       // AFAIK this should never happen

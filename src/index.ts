@@ -57,9 +57,22 @@ async function gameIterator(path) {
     for (const metric of metrics) {
       // with array creation
       const historyGenerator = cjsmin.historyGeneratorArr(moves);
-      await metric.processGame(Array.from(historyGenerator), metadata);
-      await metric.aggregate();
-      await metric.logResults();
+      metric.processGame(Array.from(historyGenerator), metadata);
+      // metric.aggregate();
+      // metric.logResults();
     }
   }
+  kdRatioMetric.aggregate();
+  kdRatioMetric.logResults();
+}
+
+// if (require.main === module) {
+//   const path = process.argv[2];
+//   main(path).then(({}) => {});
+// }
+
+
+if (require.main === module) {
+  main(`data/11.11.23 3 Game Test Set`).then(({}) => {}
+  );
 }
