@@ -223,39 +223,71 @@ export class MetadataMetric implements Metric {
       console.log('Invalid result');
     }
 
-    // extract openings from metadata
-    const opening = metadata?.find((item) => item.startsWith('[Opening "'))
-    ?.replace('[Opening "', '')
-    ?.replace('"]', '');
+// extract openings from metadata
+const opening = metadata?.find((item) => item.startsWith('[Opening "'))
+?.replace('[Opening "', '')
+?.replace('"]', '');
 
-    if(opening) {
-      if (opening.toLowerCase() == "bongcloud") {
-        this.bongcloud++;
-      }
-  
-      // add opening to openings object
-      if (this.openings[opening]) {
-        this.openings[opening].appearances++;
-        if (result === '[Result "1-0"]') {
-          this.openings[opening].whiteWins++;
-        } else if (result === '[Result "0-1"]') {
-          this.openings[opening].blackWins++;
-        } else if (result === '[Result "1/2-1/2"]') {
-          this.openings[opening].whiteWins += 0.5;
-          this.openings[opening].blackWins += 0.5;
-          this.openings[opening].ties++;
-        }
-        this.openings[opening].whiteToBlackWinRatio = this.openings[opening].whiteWins / this.openings[opening].blackWins;
-      } else {
-        this.openings[opening] = {
-          appearances: 1,
-          blackWins: result === '[Result "0-1"]' ? 1 : (result === '[Result "1/2-1/2"]' ? 0.5 : 0),
-          whiteWins: result === '[Result "1-0"]' ? 1 : (result === '[Result "1/2-1/2"]' ? 0.5 : 0),
-          ties: result === '[Result "1/2-1/2"]' ? 1 : 0,
-          whiteToBlackWinRatio: result === '[Result "1-0"]' ? 1 : 0,
-        };
-      }
+if(opening) {
+  if (opening.toLowerCase() == "bongcloud") {
+    this.bongcloud++;
+  }
+
+  // add opening to openings object
+  if (this.openings[opening]) {
+    this.openings[opening].appearances++;
+    switch(result) {
+      case '[Result "1-0"]':
+        this.openings[opening].whiteWins++;
+        break;
+      case '[Result "0-1"]':
+        this.openings[opening].blackWins++;
+        break;
+      case '[Result "1/2-1/2"]':
+        this.openings[opening].whiteWins += 0.5;
+        this.openings[opening].blackWins += 0.5;
+        this.openings[opening].ties++;
+        break;
     }
+    this.openings[opening].whiteToBlackWinRatio = this.openings[opening].whiteWins / this.openings[opening].blackWins;
+  } else {
+    let blackWins, whiteWins, ties, whiteToBlackWinRatio;
+
+    switch(result) {
+      case '[Result "0-1"]':
+        blackWins = 1;
+        whiteWins = 0;
+        ties = 0;
+        whiteToBlackWinRatio = 0;
+        break;
+      case '[Result "1-0"]':
+        blackWins = 0;
+        whiteWins = 1;
+        ties = 0;
+        whiteToBlackWinRatio = Infinity;
+        break;
+      case '[Result "1/2-1/2"]':
+        blackWins = 0.5;
+        whiteWins = 0.5;
+        ties = 1;
+        whiteToBlackWinRatio = 1;
+        break;
+      default:
+        blackWins = 0;
+        whiteWins = 0;
+        ties = 0;
+        whiteToBlackWinRatio = 0;
+    }
+
+    this.openings[opening] = {
+      appearances: 1,
+      blackWins: blackWins,
+      whiteWins: whiteWins,
+      ties: ties,
+      whiteToBlackWinRatio: whiteToBlackWinRatio,
+    };
+  }
+}
 
 
     // identify game endings
@@ -263,7 +295,7 @@ export class MetadataMetric implements Metric {
     const lastMove = game[game.length - 1].move;
 
     if (gameEnd === '[Termination "Normal"]') {
-      if (lastMove.originalString.includes('#') || this.chess.isCheckmate()) {
+      if (lastMove.originalString.includes('#')) {
         this.gameEndings['checkmate'] = (this.gameEndings['checkmate'] || 0) + 1;
       } else if (result === '[Result "1/2-1/2"]') {
         this.gameEndings['draw'] = (this.gameEndings['draw'] || 0) + 1;

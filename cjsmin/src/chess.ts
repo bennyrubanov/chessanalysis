@@ -675,7 +675,6 @@ export class Chess {
   _moveNumber = 0;
   _history: History[] = [];
   _castling: Record<Color, number> = { w: 0, b: 0 };
-  _positionCounts: Record<string, number> = {}
 
   constructor() {
     this.load(DEFAULT_POSITION);
@@ -692,23 +691,6 @@ export class Chess {
     this._history = [];
     this._header = keepHeaders ? this._header : {};
     this._updateSetup(this.fen());
-    this._positionCounts = new Proxy({} as Record<string, number>, {
-      get: (target, position: string) =>
-        position === 'length'
-          ? Object.keys(target).length // length for unit testing
-          : target?.[this._trimFen(position)] || 0,
-      set: (target, position: string, count: number) => {
-        const trimmedFen = this._trimFen(position)
-        if (count === 0) delete target[trimmedFen]
-        else target[trimmedFen] = count
-        return true
-      },
-    })
-  }
-
-  private _trimFen(fen: string): string {
-    // remove last two fields in FEN string as they're not needed when checking for repetition
-    return fen.split(' ').slice(0, 4).join(' ')
   }
 
   load(fen: string, keepHeaders = false) {
@@ -769,7 +751,6 @@ export class Chess {
     this._moveNumber = parseInt(tokens[5], 10);
 
     this._updateSetup(this.fen());
-    this._positionCounts[fen]++
   }
 
   fen() {
@@ -1226,14 +1207,6 @@ export class Chess {
     return false;
   }
 
-  private _getRepetitionCount() {
-    return this._positionCounts[this.fen()]
-  }
-
-  isThreefoldRepetition(): boolean {
-    return this._getRepetitionCount() >= 3
-  }
-
   isDraw() {
     return (
       this._halfMoves >= 100 || // 50 moves per side = 100 half moves
@@ -1493,7 +1466,7 @@ export class Chess {
     });
   }
 
-  public _makeMove(move: InternalMove, originalString?: string) {
+  private _makeMove(move: InternalMove, originalString?: string) {
     const us = this._turn;
     const them = swapColor(us);
     this._push(move, originalString);
@@ -1717,7 +1690,6 @@ export class Chess {
       } else {
         // reset the end of game marker if making a valid move
         this._makeMove(move, moves[halfMove]);
-        this._positionCounts[this.fen()]++
       }
     }
   }
