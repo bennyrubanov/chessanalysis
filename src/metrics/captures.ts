@@ -105,7 +105,7 @@ export class KDRatioMetric implements Metric {
         JSON.stringify(this.kdRatios, null, 2)
     );
     console.log('\n')
-    console.log("KDRs TAKING INTO ACCOUNT PIECE VALUES (Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 1 point): ")
+    console.log("KDRs TAKING INTO ACCOUNT PIECE VALUES (Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points): ")
     console.log(
       `Piece with the highest KD ratio (taking into account piece values): ${this.pieceWithHighestKDRatioValues}`
     );
@@ -211,10 +211,12 @@ export class KDRatioMetric implements Metric {
         this.KDAssistsValuesMap[move.capture.uas].deaths++;
 
         // identify kill values based on captured piece type
-        if (move.capture.type === 'p' || move.capture.type === 'k') {
+        if (move.capture.type === 'p') {
           this.KDAssistsValuesMap[move.uas].valueKills++;
         } else if (move.capture.type === 'n' || move.capture.type === 'b') {
           this.KDAssistsValuesMap[move.uas].valueKills += 3;
+        } else if (move.capture.type === 'k') {
+          this.KDAssistsValuesMap[move.uas].valueKills += 4; // king's fighting value valued around 4 points in https://en.wikipedia.org/wiki/Chess_piece_relative_value
         } else if (move.capture.type === 'r') {
           this.KDAssistsValuesMap[move.uas].valueKills += 5;
         } else if (move.capture.type === 'q') {
