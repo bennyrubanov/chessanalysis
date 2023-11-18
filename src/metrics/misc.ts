@@ -92,10 +92,29 @@ export class MetadataMetric implements Metric {
     console.log(`Player with most games played: ${this.playerMostGames}`);
     console.log('Number of games played by time control type: '),
       console.table(this.gameTypeStats);
+
+    // only log gameTimeControlStats and openings tables if the object as appeared more than 5% of the total games analyzed (otherwise the tables are massive)
+    // Number of games played by time control type
+    console.log('Number of games played by time control type:');
+    const filteredTimeControlStats = Object.fromEntries(
+      Object.entries(this.gameTimeControlStats)
+        .filter(([_, count]) => count / this.numberGamesAnalyzed > 0.05)
+    );
+    console.table(filteredTimeControlStats);
+  
+    // Openings by number of times they appear and their win rates
+    console.log('Openings by number of times they appear and their win rates:');
+    const filteredOpenings = Object.fromEntries(
+      Object.entries(this.openings)
+        .filter(([_, data]) => data.appearances / this.numberGamesAnalyzed > 0.05)
+    );
+    console.table(filteredOpenings);
+
     // console.log('Number of games played by time control quantity: '),
-    //   console.table(this.gameTimeControlStats);
+    // console.table(this.gameTimeControlStats);
     // console.log('Openings by number of times they appear and their win rates: '),
-    //   console.table(this.openings);
+    // console.table(this.openings);
+
     console.log('Number of times bongcloud appeared: ', this.bongcloud)
     console.log('\n')
 
@@ -183,24 +202,21 @@ export class MetadataMetric implements Metric {
     // only add data if data is not NaN
     if (!isNaN(whiteRating) && !isNaN(blackRating)) {
       this.totalPlayerRating += whiteRating + blackRating;
-    }
-    // if missing rating data, ignore the game when calculating averages; i.e. so that this.numberGamesAnalyzedForRatings accurately reflects the number of games where both the white and black ratings were valid numbers and were added to this.totalPlayerRating
-    if (isNaN(whiteRating) || isNaN(blackRating)) {
-      this.numberGamesAnalyzedForRatings--; 
-    }
+      this.numberGamesAnalyzedForRatings++;
 
-    // Calculate the player rating diffs
-    let ratingDiff = Math.abs(whiteRating - blackRating);
-    this.totalPlayerRatingDiff += ratingDiff;
+      // Calculate the player rating diffs
+      let ratingDiff = Math.abs(whiteRating - blackRating);
+      this.totalPlayerRatingDiff += ratingDiff;
 
-    // Check if this game has the largest rating differential
-    if (ratingDiff > this.largestRatingDiff) {
-      this.largestRatingDiff = ratingDiff;
-      this.largestRatingDiffGame = [
-        metadata?.find((data) => data.startsWith('[Site')) || ''];
-    } else if (ratingDiff === this.largestRatingDiff) {
-      this.largestRatingDiffGame.push(
-        metadata?.find((data) => data.startsWith('[Site')) || ''); // tie, add to array
+      // Check if this game has the largest rating differential
+      if (ratingDiff > this.largestRatingDiff) {
+        this.largestRatingDiff = ratingDiff;
+        this.largestRatingDiffGame = [
+          metadata?.find((data) => data.startsWith('[Site')) || ''];
+      } else if (ratingDiff === this.largestRatingDiff) {
+        this.largestRatingDiffGame.push(
+          metadata?.find((data) => data.startsWith('[Site')) || ''); // tie, add to array
+      }
     }
 
     // helping variables to identify the player with the most games played in the data set
@@ -352,7 +368,6 @@ if(opening) {
 
     // Increment the number of games analyzed
     this.numberGamesAnalyzed++;
-    this.numberGamesAnalyzedForRatings++;
   }
 
   // Aggregate the results of the metric

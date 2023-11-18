@@ -135,6 +135,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
                             let analysisPromise = runAnalysis(oldPath).then(() => {
                                 if (fs.existsSync(oldPath)) {
                                     fs.unlinkSync(oldPath);
+                                    console.log(`File ${oldPath} has been deleted.`);
                                 }
                             }).catch(console.error);
                             analysisPromises.push(analysisPromise);
@@ -152,6 +153,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
                     let lastAnalysisPromise = runAnalysis(newFilePath).then(() => {
                         if (fs.existsSync(newFilePath)) {
                             fs.unlinkSync(newFilePath);
+                            console.log(`File ${newFilePath} has been deleted.`);
                         }
                     }).catch(console.error);
                     analysisPromises.push(lastAnalysisPromise);
