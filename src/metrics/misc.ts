@@ -65,6 +65,7 @@ export class MetadataMetric implements Metric {
   playerGameStats: {
     [player: string]: number;
   };
+  numberGamesAnalyzedForRatings: number; // some games have missing rating data, so will decrement this number when calculating average ratings when ratings are missing
 
   constructor(chess) {
     this.clear();
@@ -91,10 +92,10 @@ export class MetadataMetric implements Metric {
     console.log(`Player with most games played: ${this.playerMostGames}`);
     console.log('Number of games played by time control type: '),
       console.table(this.gameTypeStats);
-    console.log('Number of games played by time control quantity: '),
-      console.table(this.gameTimeControlStats);
-    console.log('Openings by number of times they appear and their win rates: '),
-      console.table(this.openings);
+    // console.log('Number of games played by time control quantity: '),
+    //   console.table(this.gameTimeControlStats);
+    // console.log('Openings by number of times they appear and their win rates: '),
+    //   console.table(this.openings);
     console.log('Number of times bongcloud appeared: ', this.bongcloud)
     console.log('\n')
 
@@ -128,6 +129,7 @@ export class MetadataMetric implements Metric {
     this.totalPlayerRating = 0;
     this.totalPlayerRatingDiff = 0;
     this.playerGameStats = {};
+    this.numberGamesAnalyzedForRatings = 0;
   }
 
   processGame(
@@ -178,7 +180,14 @@ export class MetadataMetric implements Metric {
         ?.replace(/"/g, '')
         .split(' ')[1]
     );
-    this.totalPlayerRating += whiteRating + blackRating;
+    // only add data if data is not NaN
+    if (!isNaN(whiteRating) && !isNaN(blackRating)) {
+      this.totalPlayerRating += whiteRating + blackRating;
+    }
+    // if missing rating data, ignore the game when calculating averages; i.e. so that this.numberGamesAnalyzedForRatings accurately reflects the number of games where both the white and black ratings were valid numbers and were added to this.totalPlayerRating
+    if (isNaN(whiteRating) || isNaN(blackRating)) {
+      this.numberGamesAnalyzedForRatings--; 
+    }
 
     // Calculate the player rating diffs
     let ratingDiff = Math.abs(whiteRating - blackRating);
@@ -343,6 +352,7 @@ if(opening) {
 
     // Increment the number of games analyzed
     this.numberGamesAnalyzed++;
+    this.numberGamesAnalyzedForRatings++;
   }
 
   // Aggregate the results of the metric
@@ -350,11 +360,11 @@ if(opening) {
     // Calculate the average player rating after each game
     // 2 players per game, so need to divide by two given that the totalPlayerRating adds all ratings up from both players
     this.averagePlayerRating =
-      this.totalPlayerRating / (this.numberGamesAnalyzed * 2);
+      this.totalPlayerRating / (this.numberGamesAnalyzedForRatings * 2);
 
     // Calculate the average player rating diff
     this.averageRatingDiff =
-      this.totalPlayerRatingDiff / this.numberGamesAnalyzed;
+      this.totalPlayerRatingDiff / this.numberGamesAnalyzedForRatings;
 
     // Calculate the player with the most games played
     let maxGames = 0;
@@ -388,7 +398,7 @@ if(opening) {
     this.gameTimeControlStats = sortedGameTimeControlStatsObj;
 
     // sort the openings from greatest to least by number of times they appear
-    const sortedOpenings = Object.entries(this.openings).sort((a, b) => b[1].appearances - a[1].appearances);
+    const sortedOpenings = Object.entries(this.openings).sort((a, b) => b[1].whiteToBlackWinRatio - a[1].whiteToBlackWinRatio);
     const sortedOpeningsObj = Object.fromEntries(sortedOpenings);
     this.openings = sortedOpeningsObj;
 

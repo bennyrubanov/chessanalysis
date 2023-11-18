@@ -50,7 +50,7 @@ async function gameIterator(path) {
   let gameCounter = 0;
   for await (const { moves, metadata } of gamesGenerator) {
     gameCounter++;
-    if (gameCounter % 20 == 0) {
+    if (gameCounter % 400 == 0) {
       console.log('number of games ingested: ', gameCounter);
     }
 

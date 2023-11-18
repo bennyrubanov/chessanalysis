@@ -3,7 +3,7 @@ const zstd = require('node-zstandard');
 const exec = require('child_process').exec;
 const { spawn } = require('child_process');
 
-// List of all the database files you want to download
+// List of all the database files you want to analyze (these need to be downloaded and in data folder)
 const files = ["lichess_db_standard_rated_2013-01.pgn.zst", /*...*/];
 
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
@@ -26,8 +26,16 @@ const runAnalysis = (filePath) => {
 
         const child = spawn('ts-node', ['/Users/bennyrubanov/chessanalysis/src/index.ts', filePath]);
 
+        // only log complete lines of output (no insertion of "stdout: " in the middle of a line)
+        // do this by accumulating the data until a newline character, and then logging the accumulated data
+        let accumulatedData = '';
         child.stdout.on('data', (data) => {
-            console.log(`stdout: ${data}`);
+            accumulatedData += data;
+            let newlineIndex;
+            while ((newlineIndex = accumulatedData.indexOf('\n')) >= 0) {
+                console.log(`stdout: ${accumulatedData.slice(0, newlineIndex)}`);
+                accumulatedData = accumulatedData.slice(newlineIndex + 1);
+            }
         });
 
         child.stderr.on('data', (data) => {
@@ -92,7 +100,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
                     const duration = Date.now() - startTime;
                     const durationFormatted = formatDuration(duration);
                     fileLength += data.length;
-                    all_files_lengths =+ data.length;
+                    all_files_lengths += data.length;
 
                     // Increment the chunk counter
                     total_chunk_counter++;
