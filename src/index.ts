@@ -83,7 +83,8 @@ async function gameIterator(path) {
 if (require.main === module) {
   const pathToAnalyze = process.argv[2];
   main(pathToAnalyze).then(async (results) => {
-    const analysisKey = `analysis${Date.now()}`;
+    const now = new Date();
+    const analysisKey = `analysis${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}`;
     const resultsPath = path.join(__dirname, 'results.json');
 
     let existingResults = {};
@@ -108,8 +109,8 @@ if (require.main === module) {
 // for use with index.ts
 // if (require.main === module) {
 //   main(`data/10.10.23_test_set`).then(async (results) => {
-//     const analysisKey = `analysis${Date.now()}`;
-//     const resultsPath = path.join(__dirname, 'results.json');
+//     const now = new Date();
+//     const analysisKey = `analysis${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}`;    const resultsPath = path.join(__dirname, 'results.json');
     
 //     let existingResults = {};
 //     if (fs.existsSync(resultsPath)) {

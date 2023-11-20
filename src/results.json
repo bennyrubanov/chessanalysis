@@ -83913,5 +83913,7070 @@
       "enPassantMovesCount": 394,
       "totalNumPiecesKnightHopped": 196967
     }
+  },
+  "analysis11_20_2023__7_40_59_PM": {
+    "Number of games analyzed": 158,
+    "MetadataMetric": {
+      "averagePlayerRating": 1598.753164556962,
+      "averageRatingDiff": 79.45569620253164,
+      "largestRatingDiff": 444,
+      "largestRatingDiffGame": [
+        "[Site \"https://lichess.org/mbr1sxue\"]"
+      ],
+      "mostGamesPlayed": 6,
+      "playerMostgames": [
+        "so_sad"
+      ],
+      "gameTypeStats": {
+        "numberBulletGames": 61,
+        "numberBlitzGames": 59,
+        "numberClassicalGames": 19,
+        "numberRapidGames": 16,
+        "numberUltraBulletGames": 2,
+        "numberOtherGames": 1
+      },
+      "gameTimeControlStats": {
+        "\"60+0\"]": 33,
+        "\"300+0\"]": 26,
+        "\"180+0\"]": 17,
+        "\"120+1\"]": 15,
+        "\"600+0\"]": 13,
+        "\"0+1\"]": 6,
+        "\"120+0\"]": 4,
+        "\"300+8\"]": 3,
+        "\"360+0\"]": 3,
+        "\"240+0\"]": 3,
+        "\"900+0\"]": 2,
+        "\"15+0\"]": 2,
+        "\"180+1\"]": 2,
+        "\"720+8\"]": 2,
+        "\"180+3\"]": 2,
+        "\"300+5\"]": 2,
+        "\"60+1\"]": 2,
+        "\"180+2\"]": 1,
+        "\"-\"]": 1,
+        "\"1500+0\"]": 1,
+        "\"600+5\"]": 1,
+        "\"420+0\"]": 1,
+        "\"1200+5\"]": 1,
+        "\"600+2\"]": 1,
+        "\"1200+0\"]": 1,
+        "\"300+2\"]": 1,
+        "\"420+1\"]": 1,
+        "\"660+11\"]": 1,
+        "\"60+2\"]": 1,
+        "\"600+8\"]": 1,
+        "\"480+2\"]": 1,
+        "\"420+17\"]": 1,
+        "\"300+3\"]": 1,
+        "\"1740+30\"]": 1,
+        "\"720+3\"]": 1,
+        "\"540+5\"]": 1,
+        "\"480+8\"]": 1,
+        "\"180+7\"]": 1
+      },
+      "whiteWinRatio": null,
+      "openings": {
+        "Polish Opening": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Ruy Lopez: Bird Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Englund Gambit": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Philidor Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Slav Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Sicilian Defense: Modern Variations": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Accepted: Schallopp Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Italian Game": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Semi-Slav Defense": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Old Indian Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Owen Defense": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Rat Defense: Antal Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Modern Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Van Geet Opening: Grünfeld Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Englund Gambit Declined: Reversed French": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Pirc Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Bishop's Opening: Berlin Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Mieses Opening: Reversed Rat": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Zukertort Opening: Black Mustang Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "English Opening: Symmetrical Variation, Two Knights Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Sicilian Defense: Bowdler Attack": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Three Knights Opening": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Italian Game: Giuoco Pianissimo, Lucchini Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Declined: Queen's Knight Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Krause Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Advance Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Scotch Game": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Chigorin Variation, Anti-Veresov": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Declined: Orthodox Defense, Main Line": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game: Double Spanish": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Scotch Game: Goering Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Normal Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Colle System, Anti-Colle": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game: Italian Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Chigorin Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Indian Game": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Center Game: Normal Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game #3": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Nimzowitsch Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Accepted: Showalter Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Baltic Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Albin Countergambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Franco-Hiva Gambit I": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Chigorin Defense, Main Line": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Alekhine Defense: Normal Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Accepted, King's Knight Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Philidor Defense #3": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game #2": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Center Game: Berger Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Declined, Classical Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Van't Kruijs Opening": {
+          "appearances": 3,
+          "blackWins": 0.5,
+          "whiteWins": 2.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 5
+        },
+        "Nimzo-Larsen Attack": {
+          "appearances": 2,
+          "blackWins": 0.5,
+          "whiteWins": 1.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 3
+        },
+        "French Defense #2": {
+          "appearances": 3,
+          "blackWins": 1,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 2
+        },
+        "Center Game": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: French Variation": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Benoni Defense: Hromádka System": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Bishop's Opening": {
+          "appearances": 3,
+          "blackWins": 1.5,
+          "whiteWins": 1.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Indian Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Ruy Lopez: Exchange Variation, Normal Variation": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Caro-Kann Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Hungarian Opening": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Italian Game: Anti-Fried Liver Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Modern Defense: Mongredien Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "English Opening: Caro-Kann Defensive System": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: Smith-Morra Gambit #2": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Horwitz Defense": {
+          "appearances": 5,
+          "blackWins": 3,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.6666666666666666
+        },
+        "Scandinavian Defense: Mieses-Kotroc Variation": {
+          "appearances": 5,
+          "blackWins": 3,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.6666666666666666
+        },
+        "Scandinavian Defense: Main Line": {
+          "appearances": 3,
+          "blackWins": 2,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.5
+        },
+        "Zukertort Opening: Sicilian Invitation": {
+          "appearances": 2,
+          "blackWins": 2,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Smith-Morra Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Kan Variation, Knight Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Declined: Baltic Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Indian Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Russian Game: Modern Attack, Symmetrical Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Two Knights Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: Queen's Knight": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: O'Kelly Variation, Yerevan System": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Pawn Game: Zukertort Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Pawn Game": {
+          "appearances": 4,
+          "blackWins": 4,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Benoni Defense: French Benoni": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "East Indian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Nimzowitsch Defense: Scandinavian Variation, Advance Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Pawn Game: Busch-Gass Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Gambit Accepted: Cunningham Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Zukertort Opening: Nimzo-Larsen Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Indian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Vienna Game: Vienna Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Old Sicilian": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Mieses Opening": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Scandinavian Defense: Blackburne Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Declined: Marshall Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Closed": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Russian Game: Stafford Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Alekhine Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Van Geet Opening: Battambang Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Ponziani Opening: Jaenisch Counterattack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Scotch Game: Göring Gambit, Double Pawn Sacrifice": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: Knight Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Gambit Accepted: MacLeod Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Löwenthal Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Hillbilly Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Italian Game: Classical Variation, Greco Gambit, Traditional Line": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Alekhine Defense: Maróczy Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Three Knights Opening: Steinitz Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Nimzowitsch Defense: Williams Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Indian Game: Budapest Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Philidor Defense #2": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Goldman Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: La Bourdonnais Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Italian Game: Classical Variation, Giuoco Pianissimo": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Englund Gambit Declined, Reversed French": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Refused: Marshall Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        }
+      },
+      "bongcloudAppearances": 0,
+      "gameEndings": {
+        "time out": 44,
+        "resignation": 61,
+        "checkmate": 48,
+        "draw": 5,
+        "threefold repetition": 3
+      },
+      "numberGamesAnalyzedForRatings": 158
+    },
+    "KDRatioMetric": {
+      "maxKDRatio": 2.780821917808219,
+      "pieceWithHighestKDRatio": [
+        "Q"
+      ],
+      "KDRatios": {
+        "RA": 1.6029411764705883,
+        "NB": 0.8165137614678899,
+        "BC": 1.091743119266055,
+        "Q": 2.780821917808219,
+        "K": 2.4285714285714284,
+        "BF": 1.0714285714285714,
+        "NG": 1,
+        "RH": 1.4246575342465753,
+        "PA": 0.5813953488372093,
+        "PB": 0.7192982456140351,
+        "PC": 0.65,
+        "PD": 0.5670103092783505,
+        "PE": 0.5757575757575758,
+        "PF": 0.5161290322580645,
+        "PG": 0.5636363636363636,
+        "PH": 0.5454545454545454,
+        "ra": 1.640625,
+        "nb": 1.0084745762711864,
+        "bc": 0.9035087719298246,
+        "q": 2.68,
+        "k": 2.074074074074074,
+        "bf": 1.102803738317757,
+        "ng": 0.9026548672566371,
+        "rh": 1.5217391304347827,
+        "pa": 0.4489795918367347,
+        "pb": 0.45,
+        "pc": 0.5844155844155844,
+        "pd": 0.5670103092783505,
+        "pe": 0.7157894736842105,
+        "pf": 0.5806451612903226,
+        "pg": 0.5185185185185185,
+        "ph": 0.6346153846153846
+      },
+      "KDRatiosValues": {
+        "RA": 5.073529411764706,
+        "NB": 2.1559633027522938,
+        "BC": 3.018348623853211,
+        "Q": 9.054794520547945,
+        "K": 8.142857142857142,
+        "BF": 2.732142857142857,
+        "NG": 2.43801652892562,
+        "RH": 4.219178082191781,
+        "PA": 1.0465116279069768,
+        "PB": 1.631578947368421,
+        "PC": 1.1,
+        "PD": 1.0206185567010309,
+        "PE": 1.1616161616161615,
+        "PF": 1.064516129032258,
+        "PG": 1.4363636363636363,
+        "PH": 0.9545454545454546,
+        "ra": 4.453125,
+        "nb": 2.8728813559322033,
+        "bc": 2.5701754385964914,
+        "q": 8.68,
+        "k": 7.333333333333333,
+        "bf": 3.102803738317757,
+        "ng": 2.2831858407079646,
+        "rh": 4.855072463768116,
+        "pa": 0.8163265306122449,
+        "pb": 1.2166666666666666,
+        "pc": 0.948051948051948,
+        "pd": 0.9381443298969072,
+        "pe": 1.1368421052631579,
+        "pf": 1.2580645161290323,
+        "pg": 1.5185185185185186,
+        "ph": 1.0192307692307692
+      },
+      "pieceWithHighestKDRatioValues": [
+        "Q"
+      ],
+      "KDAssistsValuesMap": {
+        "RA": {
+          "valueKills": 345,
+          "deaths": 68
+        },
+        "NB": {
+          "valueKills": 235,
+          "deaths": 109
+        },
+        "BC": {
+          "valueKills": 329,
+          "deaths": 109
+        },
+        "Q": {
+          "valueKills": 661,
+          "deaths": 73
+        },
+        "K": {
+          "valueKills": 171,
+          "deaths": 21
+        },
+        "BF": {
+          "valueKills": 306,
+          "deaths": 112
+        },
+        "NG": {
+          "valueKills": 295,
+          "deaths": 121
+        },
+        "RH": {
+          "valueKills": 308,
+          "deaths": 73
+        },
+        "PA": {
+          "valueKills": 45,
+          "deaths": 43
+        },
+        "PB": {
+          "valueKills": 93,
+          "deaths": 57
+        },
+        "PC": {
+          "valueKills": 88,
+          "deaths": 80
+        },
+        "PD": {
+          "valueKills": 99,
+          "deaths": 97
+        },
+        "PE": {
+          "valueKills": 115,
+          "deaths": 99
+        },
+        "PF": {
+          "valueKills": 66,
+          "deaths": 62
+        },
+        "PG": {
+          "valueKills": 79,
+          "deaths": 55
+        },
+        "PH": {
+          "valueKills": 42,
+          "deaths": 44
+        },
+        "ra": {
+          "valueKills": 285,
+          "deaths": 64
+        },
+        "nb": {
+          "valueKills": 339,
+          "deaths": 118
+        },
+        "bc": {
+          "valueKills": 293,
+          "deaths": 114
+        },
+        "q": {
+          "valueKills": 651,
+          "deaths": 75
+        },
+        "k": {
+          "valueKills": 198,
+          "deaths": 27
+        },
+        "bf": {
+          "valueKills": 332,
+          "deaths": 107
+        },
+        "ng": {
+          "valueKills": 258,
+          "deaths": 113
+        },
+        "rh": {
+          "valueKills": 335,
+          "deaths": 69
+        },
+        "pa": {
+          "valueKills": 40,
+          "deaths": 49
+        },
+        "pb": {
+          "valueKills": 73,
+          "deaths": 60
+        },
+        "pc": {
+          "valueKills": 73,
+          "deaths": 77
+        },
+        "pd": {
+          "valueKills": 91,
+          "deaths": 97
+        },
+        "pe": {
+          "valueKills": 108,
+          "deaths": 95
+        },
+        "pf": {
+          "valueKills": 78,
+          "deaths": 62
+        },
+        "pg": {
+          "valueKills": 82,
+          "deaths": 54
+        },
+        "ph": {
+          "valueKills": 53,
+          "deaths": 52
+        }
+      },
+      "KDAssistsMap": {
+        "RA": {
+          "kills": 109,
+          "deaths": 68,
+          "revengeKills": 39
+        },
+        "NB": {
+          "kills": 89,
+          "deaths": 109,
+          "revengeKills": 31
+        },
+        "BC": {
+          "kills": 119,
+          "deaths": 109,
+          "revengeKills": 35
+        },
+        "Q": {
+          "kills": 203,
+          "deaths": 73,
+          "revengeKills": 90
+        },
+        "K": {
+          "kills": 51,
+          "deaths": 21,
+          "revengeKills": 35
+        },
+        "BF": {
+          "kills": 120,
+          "deaths": 112,
+          "revengeKills": 39
+        },
+        "NG": {
+          "kills": 121,
+          "deaths": 121,
+          "revengeKills": 55
+        },
+        "RH": {
+          "kills": 104,
+          "deaths": 73,
+          "revengeKills": 31
+        },
+        "PA": {
+          "kills": 25,
+          "deaths": 43,
+          "revengeKills": 7
+        },
+        "PB": {
+          "kills": 41,
+          "deaths": 57,
+          "revengeKills": 24
+        },
+        "PC": {
+          "kills": 52,
+          "deaths": 80,
+          "revengeKills": 24
+        },
+        "PD": {
+          "kills": 55,
+          "deaths": 97,
+          "revengeKills": 22
+        },
+        "PE": {
+          "kills": 57,
+          "deaths": 99,
+          "revengeKills": 15
+        },
+        "PF": {
+          "kills": 32,
+          "deaths": 62,
+          "revengeKills": 21
+        },
+        "PG": {
+          "kills": 31,
+          "deaths": 55,
+          "revengeKills": 17
+        },
+        "PH": {
+          "kills": 24,
+          "deaths": 44,
+          "revengeKills": 10
+        },
+        "ra": {
+          "kills": 105,
+          "deaths": 64,
+          "revengeKills": 25
+        },
+        "nb": {
+          "kills": 119,
+          "deaths": 118,
+          "revengeKills": 40
+        },
+        "bc": {
+          "kills": 103,
+          "deaths": 114,
+          "revengeKills": 19
+        },
+        "q": {
+          "kills": 201,
+          "deaths": 75,
+          "revengeKills": 90
+        },
+        "k": {
+          "kills": 56,
+          "deaths": 27,
+          "revengeKills": 36
+        },
+        "bf": {
+          "kills": 118,
+          "deaths": 107,
+          "revengeKills": 45
+        },
+        "ng": {
+          "kills": 102,
+          "deaths": 113,
+          "revengeKills": 25
+        },
+        "rh": {
+          "kills": 105,
+          "deaths": 69,
+          "revengeKills": 36
+        },
+        "pa": {
+          "kills": 22,
+          "deaths": 49,
+          "revengeKills": 14
+        },
+        "pb": {
+          "kills": 27,
+          "deaths": 60,
+          "revengeKills": 16
+        },
+        "pc": {
+          "kills": 45,
+          "deaths": 77,
+          "revengeKills": 19
+        },
+        "pd": {
+          "kills": 55,
+          "deaths": 97,
+          "revengeKills": 20
+        },
+        "pe": {
+          "kills": 68,
+          "deaths": 95,
+          "revengeKills": 26
+        },
+        "pf": {
+          "kills": 36,
+          "deaths": 62,
+          "revengeKills": 25
+        },
+        "pg": {
+          "kills": 28,
+          "deaths": 54,
+          "revengeKills": 16
+        },
+        "ph": {
+          "kills": 33,
+          "deaths": 52,
+          "revengeKills": 15
+        }
+      }
+    },
+    "KillStreakMetric": {
+      "killStreakMap": {
+        "RA": {
+          "killStreaks": 6
+        },
+        "NB": {
+          "killStreaks": 3
+        },
+        "BC": {
+          "killStreaks": 3
+        },
+        "Q": {
+          "killStreaks": 5
+        },
+        "K": {
+          "killStreaks": 3
+        },
+        "BF": {
+          "killStreaks": 4
+        },
+        "NG": {
+          "killStreaks": 3
+        },
+        "RH": {
+          "killStreaks": 4
+        },
+        "PA": {
+          "killStreaks": 1
+        },
+        "PB": {
+          "killStreaks": 2
+        },
+        "PC": {
+          "killStreaks": 1
+        },
+        "PD": {
+          "killStreaks": 3
+        },
+        "PE": {
+          "killStreaks": 2
+        },
+        "PF": {
+          "killStreaks": 2
+        },
+        "PG": {
+          "killStreaks": 3
+        },
+        "PH": {
+          "killStreaks": 1
+        },
+        "ra": {
+          "killStreaks": 4
+        },
+        "nb": {
+          "killStreaks": 2
+        },
+        "bc": {
+          "killStreaks": 3
+        },
+        "q": {
+          "killStreaks": 4
+        },
+        "k": {
+          "killStreaks": 2
+        },
+        "bf": {
+          "killStreaks": 4
+        },
+        "ng": {
+          "killStreaks": 3
+        },
+        "rh": {
+          "killStreaks": 5
+        },
+        "pa": {
+          "killStreaks": 2
+        },
+        "pb": {
+          "killStreaks": 2
+        },
+        "pc": {
+          "killStreaks": 2
+        },
+        "pd": {
+          "killStreaks": 1
+        },
+        "pe": {
+          "killStreaks": 3
+        },
+        "pf": {
+          "killStreaks": 1
+        },
+        "pg": {
+          "killStreaks": 2
+        },
+        "ph": {
+          "killStreaks": 2
+        }
+      }
+    },
+    "MateAndAssistMetric": {
+      "mateAndAssistMap": {
+        "RA": {
+          "mates": 2,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NB": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "Q": {
+          "mates": 15,
+          "assists": 2,
+          "hockeyAssists": 1
+        },
+        "K": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BF": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NG": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "RH": {
+          "mates": 4,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "PA": {
+          "mates": 2,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "PB": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PD": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PE": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PF": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "PG": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PH": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "ra": {
+          "mates": 3,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "nb": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "bc": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "q": {
+          "mates": 10,
+          "assists": 3,
+          "hockeyAssists": 4
+        },
+        "k": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "bf": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 1
+        },
+        "ng": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 1
+        },
+        "rh": {
+          "mates": 6,
+          "assists": 2,
+          "hockeyAssists": 0
+        },
+        "pa": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pb": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pc": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pd": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pe": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pf": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pg": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ph": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        }
+      },
+      "matedCounts": {
+        "k": 27,
+        "K": 21
+      }
+    },
+    "PromotionMetric": {
+      "promotedToTotals": {
+        "q": 24,
+        "r": 0,
+        "b": 0,
+        "n": 0
+      },
+      "uasPromotingPieces": {
+        "pa": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pb": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pc": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pd": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pe": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pf": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pg": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "ph": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PA": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PB": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PC": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PD": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PE": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PF": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PG": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PH": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        }
+      },
+      "maxNumQueens": 3,
+      "movesAndGamesWithMaxQueenCount": [
+        {
+          "game": "https://lichess.org/A2AjN96n",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/4HSYXwuO",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/BqiNCtQO",
+          "move": "b4"
+        },
+        {
+          "game": "https://lichess.org/wTDbjwDM",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/MwGq9kio",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kSASxGRp",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/I54NiU6Y",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/B61HjRkW",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/EkqVfzfv",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/E9GhsFR5",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/bxbdGtBa",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/d5f1Nw9c",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/XHxGDFEl",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/MJxY6XkQ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/xe5Rlc6S",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/UrLPVRIb",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/uWM0SMQp",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/x5RDAUIs",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/VWC0vRBX",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/lHBhzszz",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LUg4JgIA",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/bO4kp2sK",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/3XU3cbul",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ZsJTnRyo",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/F2Q62DZV",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/T24w2sjS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/qQnJpzoI",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LXgZCfCm",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/5Ir8sNgy",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/mL91oI9u",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/KT5hZY9E",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/Li6XN0dt",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/WIeT2hcZ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/sR4J04gS",
+          "move": "e3"
+        },
+        {
+          "game": "https://lichess.org/X7TzqaDW",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/1wPnQjYR",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/BojMTGqm",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/m9SETFUk",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/o3lIBslQ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/9FoN1cQf",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/pmwxTMsp",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/mkRFnsbl",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/m9WcQFhf",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/oh7JFgLB",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/9hYEMFXv",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/eokRKWqu",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/xrerFF9p",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/i2UTwVRr",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/R5uOCt9Z",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/NByeNs8z",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kLKqVm2U",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/0soyDIjv",
+          "move": "b3"
+        },
+        {
+          "game": "https://lichess.org/TQUmpn7z",
+          "move": "d3"
+        },
+        {
+          "game": "https://lichess.org/ItxVuUMr",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/mrowWi6j",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/8NCOBA5z",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/pEwB37BI",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/mYReuLJz",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/4IJo4DlS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/KEjC1GXH",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/OfeaPP0R",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/c4s57iS9",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/YduZAW54",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/tpp3XsNH",
+          "move": "Nc3"
+        },
+        {
+          "game": "https://lichess.org/eR0ALEcK",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/AKqgCDkH",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/drwaxXe4",
+          "move": "g3"
+        },
+        {
+          "game": "https://lichess.org/TykZTxuS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ClHiXlvN",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/MzpHmJ7G",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/vsHTMLbd",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/PKJ4XKyy",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kRSBgC0u",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LB6Lk2xY",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/DJNX88WG",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/DCws7Yr6",
+          "move": "d3"
+        },
+        {
+          "game": "https://lichess.org/LGyoyzB7",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/SCujHKnH",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/Wd0tlQjF",
+          "move": "c4"
+        },
+        {
+          "game": "https://lichess.org/KXPkGPLq",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kfHzWOhG",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/nkerfwVx",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/1bF9atkS",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/BXneV9qe",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/zCrobZ7P",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kpLjLA7F",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/6b8IDGjH",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/QGiYEwHX",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ZrQX4bnu",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/VHpl3CXA",
+          "move": "d4"
+        }
+      ]
+    },
+    "MoveDistanceMetric": {
+      "pieceWithHighestAvg": "q",
+      "maxAvgDistance": 8.044303797468354,
+      "pieceWithLowestAvg": "pf",
+      "minAvgDistance": 1.0126582278481013,
+      "pieceThatMovedTheFurthest": [
+        "RA"
+      ],
+      "gameInWhichPieceMovedTheFurthest": [
+        "https://lichess.org/2s5888qw"
+      ],
+      "distanceThatPieceMovedInTheGame": 60,
+      "totalCollectiveDistance": 18499,
+      "gameMaxCollectiveDistance": {
+        "distance": 236,
+        "linkArray": [
+          "https://lichess.org/2s5888qw"
+        ]
+      },
+      "totalDistancesByPiece": {
+        "RA": {
+          "distance": 1076
+        },
+        "NB": {
+          "distance": 848
+        },
+        "BC": {
+          "distance": 787
+        },
+        "Q": {
+          "distance": 1218
+        },
+        "K": {
+          "distance": 776
+        },
+        "BF": {
+          "distance": 804
+        },
+        "NG": {
+          "distance": 880
+        },
+        "RH": {
+          "distance": 1061
+        },
+        "PA": {
+          "distance": 186
+        },
+        "PB": {
+          "distance": 185
+        },
+        "PC": {
+          "distance": 227
+        },
+        "PD": {
+          "distance": 359
+        },
+        "PE": {
+          "distance": 380
+        },
+        "PF": {
+          "distance": 194
+        },
+        "PG": {
+          "distance": 191
+        },
+        "PH": {
+          "distance": 183
+        },
+        "ra": {
+          "distance": 1085
+        },
+        "nb": {
+          "distance": 932
+        },
+        "bc": {
+          "distance": 764
+        },
+        "q": {
+          "distance": 1271
+        },
+        "k": {
+          "distance": 734
+        },
+        "bf": {
+          "distance": 717
+        },
+        "ng": {
+          "distance": 886
+        },
+        "rh": {
+          "distance": 974
+        },
+        "pa": {
+          "distance": 198
+        },
+        "pb": {
+          "distance": 182
+        },
+        "pc": {
+          "distance": 207
+        },
+        "pd": {
+          "distance": 307
+        },
+        "pe": {
+          "distance": 335
+        },
+        "pf": {
+          "distance": 160
+        },
+        "pg": {
+          "distance": 175
+        },
+        "ph": {
+          "distance": 217
+        }
+      }
+    },
+    "GameWithMostMovesMetric": {
+      "gameWithMostMoves": [
+        "https://lichess.org/lHBhzszz"
+      ],
+      "gameWithMostMovesNumMoves": 135
+    },
+    "PieceLevelMoveInfoMetric": {
+      "totalMovesByPiece": {
+        "RA": {
+          "numMoves": 394
+        },
+        "NB": {
+          "numMoves": 424
+        },
+        "BC": {
+          "numMoves": 379
+        },
+        "Q": {
+          "numMoves": 612
+        },
+        "K": {
+          "numMoves": 659
+        },
+        "BF": {
+          "numMoves": 422
+        },
+        "NG": {
+          "numMoves": 440
+        },
+        "RH": {
+          "numMoves": 458
+        },
+        "PA": {
+          "numMoves": 148
+        },
+        "PB": {
+          "numMoves": 152
+        },
+        "PC": {
+          "numMoves": 178
+        },
+        "PD": {
+          "numMoves": 247
+        },
+        "PE": {
+          "numMoves": 269
+        },
+        "PF": {
+          "numMoves": 149
+        },
+        "PG": {
+          "numMoves": 155
+        },
+        "PH": {
+          "numMoves": 152
+        },
+        "ra": {
+          "numMoves": 405
+        },
+        "nb": {
+          "numMoves": 466
+        },
+        "bc": {
+          "numMoves": 370
+        },
+        "q": {
+          "numMoves": 623
+        },
+        "k": {
+          "numMoves": 630
+        },
+        "bf": {
+          "numMoves": 411
+        },
+        "ng": {
+          "numMoves": 443
+        },
+        "rh": {
+          "numMoves": 399
+        },
+        "pa": {
+          "numMoves": 155
+        },
+        "pb": {
+          "numMoves": 140
+        },
+        "pc": {
+          "numMoves": 164
+        },
+        "pd": {
+          "numMoves": 225
+        },
+        "pe": {
+          "numMoves": 264
+        },
+        "pf": {
+          "numMoves": 129
+        },
+        "pg": {
+          "numMoves": 141
+        },
+        "ph": {
+          "numMoves": 176
+        }
+      },
+      "averageNumMovesPerGameByPiece": {
+        "RA": {
+          "avgMoves": 2.4936708860759493
+        },
+        "NB": {
+          "avgMoves": 2.6835443037974684
+        },
+        "BC": {
+          "avgMoves": 2.3987341772151898
+        },
+        "Q": {
+          "avgMoves": 3.8734177215189876
+        },
+        "K": {
+          "avgMoves": 4.170886075949367
+        },
+        "BF": {
+          "avgMoves": 2.670886075949367
+        },
+        "NG": {
+          "avgMoves": 2.7848101265822787
+        },
+        "RH": {
+          "avgMoves": 2.8987341772151898
+        },
+        "PA": {
+          "avgMoves": 0.9367088607594937
+        },
+        "PB": {
+          "avgMoves": 0.9620253164556962
+        },
+        "PC": {
+          "avgMoves": 1.1265822784810127
+        },
+        "PD": {
+          "avgMoves": 1.5632911392405062
+        },
+        "PE": {
+          "avgMoves": 1.7025316455696202
+        },
+        "PF": {
+          "avgMoves": 0.9430379746835443
+        },
+        "PG": {
+          "avgMoves": 0.9810126582278481
+        },
+        "PH": {
+          "avgMoves": 0.9620253164556962
+        },
+        "ra": {
+          "avgMoves": 2.5632911392405062
+        },
+        "nb": {
+          "avgMoves": 2.949367088607595
+        },
+        "bc": {
+          "avgMoves": 2.3417721518987342
+        },
+        "q": {
+          "avgMoves": 3.9430379746835444
+        },
+        "k": {
+          "avgMoves": 3.9873417721518987
+        },
+        "bf": {
+          "avgMoves": 2.6012658227848102
+        },
+        "ng": {
+          "avgMoves": 2.8037974683544302
+        },
+        "rh": {
+          "avgMoves": 2.5253164556962027
+        },
+        "pa": {
+          "avgMoves": 0.9810126582278481
+        },
+        "pb": {
+          "avgMoves": 0.8860759493670886
+        },
+        "pc": {
+          "avgMoves": 1.0379746835443038
+        },
+        "pd": {
+          "avgMoves": 1.4240506329113924
+        },
+        "pe": {
+          "avgMoves": 1.6708860759493671
+        },
+        "pf": {
+          "avgMoves": 0.8164556962025317
+        },
+        "pg": {
+          "avgMoves": 0.8924050632911392
+        },
+        "ph": {
+          "avgMoves": 1.1139240506329113
+        }
+      },
+      "pieceHighestAverageMoves": [
+        "K"
+      ],
+      "highestAverageMoves": 4.170886075949367,
+      "uasWithMostMovesSingleGame": [
+        "k"
+      ],
+      "uasSingleGameMaxMoves": 33,
+      "gamesWithUasMostMoves": [
+        "https://lichess.org/jo73x9y8"
+      ],
+      "gamesWithNoCastling": 0,
+      "queenKingCastlingCounts": {
+        "blackKing": 80,
+        "blackQueen": 24,
+        "whiteKing": 97,
+        "whiteQueen": 20
+      },
+      "gameWithMostMovesPlayed": [
+        "https://lichess.org/lHBhzszz"
+      ],
+      "gameMostMovesNumMoves": 137
+    },
+    "MiscMoveFactMetric": {
+      "enPassantMovesCount": 4,
+      "totalNumPiecesKnightHopped": 2321
+    }
+  },
+  "analysis11_20_2023__7_41_15_PM": {
+    "Number of games analyzed": 158,
+    "MetadataMetric": {
+      "averagePlayerRating": 1598.753164556962,
+      "averageRatingDiff": 79.45569620253164,
+      "largestRatingDiff": 444,
+      "largestRatingDiffGame": [
+        "[Site \"https://lichess.org/mbr1sxue\"]"
+      ],
+      "mostGamesPlayed": 6,
+      "playerMostgames": [
+        "so_sad"
+      ],
+      "gameTypeStats": {
+        "numberBulletGames": 61,
+        "numberBlitzGames": 59,
+        "numberClassicalGames": 19,
+        "numberRapidGames": 16,
+        "numberUltraBulletGames": 2,
+        "numberOtherGames": 1
+      },
+      "gameTimeControlStats": {
+        "\"60+0\"]": 33,
+        "\"300+0\"]": 26,
+        "\"180+0\"]": 17,
+        "\"120+1\"]": 15,
+        "\"600+0\"]": 13,
+        "\"0+1\"]": 6,
+        "\"120+0\"]": 4,
+        "\"300+8\"]": 3,
+        "\"360+0\"]": 3,
+        "\"240+0\"]": 3,
+        "\"900+0\"]": 2,
+        "\"15+0\"]": 2,
+        "\"180+1\"]": 2,
+        "\"720+8\"]": 2,
+        "\"180+3\"]": 2,
+        "\"300+5\"]": 2,
+        "\"60+1\"]": 2,
+        "\"180+2\"]": 1,
+        "\"-\"]": 1,
+        "\"1500+0\"]": 1,
+        "\"600+5\"]": 1,
+        "\"420+0\"]": 1,
+        "\"1200+5\"]": 1,
+        "\"600+2\"]": 1,
+        "\"1200+0\"]": 1,
+        "\"300+2\"]": 1,
+        "\"420+1\"]": 1,
+        "\"660+11\"]": 1,
+        "\"60+2\"]": 1,
+        "\"600+8\"]": 1,
+        "\"480+2\"]": 1,
+        "\"420+17\"]": 1,
+        "\"300+3\"]": 1,
+        "\"1740+30\"]": 1,
+        "\"720+3\"]": 1,
+        "\"540+5\"]": 1,
+        "\"480+8\"]": 1,
+        "\"180+7\"]": 1
+      },
+      "whiteWinRatio": null,
+      "openings": {
+        "Polish Opening": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Ruy Lopez: Bird Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Englund Gambit": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Philidor Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Slav Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Sicilian Defense: Modern Variations": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Accepted: Schallopp Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Italian Game": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Semi-Slav Defense": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Old Indian Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Owen Defense": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Rat Defense: Antal Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Modern Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Van Geet Opening: Grünfeld Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Englund Gambit Declined: Reversed French": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Pirc Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Bishop's Opening: Berlin Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Mieses Opening: Reversed Rat": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Zukertort Opening: Black Mustang Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "English Opening: Symmetrical Variation, Two Knights Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Sicilian Defense: Bowdler Attack": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Three Knights Opening": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Italian Game: Giuoco Pianissimo, Lucchini Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Declined: Queen's Knight Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Krause Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Advance Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Scotch Game": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Chigorin Variation, Anti-Veresov": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Declined: Orthodox Defense, Main Line": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game: Double Spanish": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Scotch Game: Goering Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Normal Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Colle System, Anti-Colle": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game: Italian Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Chigorin Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Indian Game": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Center Game: Normal Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game #3": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Nimzowitsch Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Accepted: Showalter Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Baltic Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Albin Countergambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Franco-Hiva Gambit I": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Chigorin Defense, Main Line": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Alekhine Defense: Normal Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Accepted, King's Knight Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Philidor Defense #3": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game #2": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Center Game: Berger Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Declined, Classical Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Van't Kruijs Opening": {
+          "appearances": 3,
+          "blackWins": 0.5,
+          "whiteWins": 2.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 5
+        },
+        "Nimzo-Larsen Attack": {
+          "appearances": 2,
+          "blackWins": 0.5,
+          "whiteWins": 1.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 3
+        },
+        "French Defense #2": {
+          "appearances": 3,
+          "blackWins": 1,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 2
+        },
+        "Center Game": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: French Variation": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Benoni Defense: Hromádka System": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Bishop's Opening": {
+          "appearances": 3,
+          "blackWins": 1.5,
+          "whiteWins": 1.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Indian Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Ruy Lopez: Exchange Variation, Normal Variation": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Caro-Kann Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Hungarian Opening": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Italian Game: Anti-Fried Liver Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Modern Defense: Mongredien Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "English Opening: Caro-Kann Defensive System": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: Smith-Morra Gambit #2": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Horwitz Defense": {
+          "appearances": 5,
+          "blackWins": 3,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.6666666666666666
+        },
+        "Scandinavian Defense: Mieses-Kotroc Variation": {
+          "appearances": 5,
+          "blackWins": 3,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.6666666666666666
+        },
+        "Scandinavian Defense: Main Line": {
+          "appearances": 3,
+          "blackWins": 2,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.5
+        },
+        "Zukertort Opening: Sicilian Invitation": {
+          "appearances": 2,
+          "blackWins": 2,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Smith-Morra Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Kan Variation, Knight Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Declined: Baltic Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Indian Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Russian Game: Modern Attack, Symmetrical Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Two Knights Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: Queen's Knight": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: O'Kelly Variation, Yerevan System": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Pawn Game: Zukertort Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Pawn Game": {
+          "appearances": 4,
+          "blackWins": 4,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Benoni Defense: French Benoni": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "East Indian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Nimzowitsch Defense: Scandinavian Variation, Advance Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Pawn Game: Busch-Gass Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Gambit Accepted: Cunningham Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Zukertort Opening: Nimzo-Larsen Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Indian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Vienna Game: Vienna Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Old Sicilian": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Mieses Opening": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Scandinavian Defense: Blackburne Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Declined: Marshall Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Closed": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Russian Game: Stafford Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Alekhine Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Van Geet Opening: Battambang Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Ponziani Opening: Jaenisch Counterattack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Scotch Game: Göring Gambit, Double Pawn Sacrifice": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: Knight Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Gambit Accepted: MacLeod Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Löwenthal Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Hillbilly Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Italian Game: Classical Variation, Greco Gambit, Traditional Line": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Alekhine Defense: Maróczy Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Three Knights Opening: Steinitz Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Nimzowitsch Defense: Williams Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Indian Game: Budapest Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Philidor Defense #2": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Goldman Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: La Bourdonnais Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Italian Game: Classical Variation, Giuoco Pianissimo": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Englund Gambit Declined, Reversed French": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Refused: Marshall Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        }
+      },
+      "bongcloudAppearances": 0,
+      "gameEndings": {
+        "time out": 44,
+        "resignation": 61,
+        "checkmate": 48,
+        "draw": 5,
+        "threefold repetition": 3
+      },
+      "numberGamesAnalyzedForRatings": 158
+    },
+    "KDRatioMetric": {
+      "maxKDRatio": 2.780821917808219,
+      "pieceWithHighestKDRatio": [
+        "Q"
+      ],
+      "KDRatios": {
+        "RA": 1.6029411764705883,
+        "NB": 0.8165137614678899,
+        "BC": 1.091743119266055,
+        "Q": 2.780821917808219,
+        "K": 2.4285714285714284,
+        "BF": 1.0714285714285714,
+        "NG": 1,
+        "RH": 1.4246575342465753,
+        "PA": 0.5813953488372093,
+        "PB": 0.7192982456140351,
+        "PC": 0.65,
+        "PD": 0.5670103092783505,
+        "PE": 0.5757575757575758,
+        "PF": 0.5161290322580645,
+        "PG": 0.5636363636363636,
+        "PH": 0.5454545454545454,
+        "ra": 1.640625,
+        "nb": 1.0084745762711864,
+        "bc": 0.9035087719298246,
+        "q": 2.68,
+        "k": 2.074074074074074,
+        "bf": 1.102803738317757,
+        "ng": 0.9026548672566371,
+        "rh": 1.5217391304347827,
+        "pa": 0.4489795918367347,
+        "pb": 0.45,
+        "pc": 0.5844155844155844,
+        "pd": 0.5670103092783505,
+        "pe": 0.7157894736842105,
+        "pf": 0.5806451612903226,
+        "pg": 0.5185185185185185,
+        "ph": 0.6346153846153846
+      },
+      "KDRatiosValues": {
+        "RA": 5.073529411764706,
+        "NB": 2.1559633027522938,
+        "BC": 3.018348623853211,
+        "Q": 9.054794520547945,
+        "K": 8.142857142857142,
+        "BF": 2.732142857142857,
+        "NG": 2.43801652892562,
+        "RH": 4.219178082191781,
+        "PA": 1.0465116279069768,
+        "PB": 1.631578947368421,
+        "PC": 1.1,
+        "PD": 1.0206185567010309,
+        "PE": 1.1616161616161615,
+        "PF": 1.064516129032258,
+        "PG": 1.4363636363636363,
+        "PH": 0.9545454545454546,
+        "ra": 4.453125,
+        "nb": 2.8728813559322033,
+        "bc": 2.5701754385964914,
+        "q": 8.68,
+        "k": 7.333333333333333,
+        "bf": 3.102803738317757,
+        "ng": 2.2831858407079646,
+        "rh": 4.855072463768116,
+        "pa": 0.8163265306122449,
+        "pb": 1.2166666666666666,
+        "pc": 0.948051948051948,
+        "pd": 0.9381443298969072,
+        "pe": 1.1368421052631579,
+        "pf": 1.2580645161290323,
+        "pg": 1.5185185185185186,
+        "ph": 1.0192307692307692
+      },
+      "pieceWithHighestKDRatioValues": [
+        "Q"
+      ],
+      "KDAssistsValuesMap": {
+        "RA": {
+          "valueKills": 345,
+          "deaths": 68
+        },
+        "NB": {
+          "valueKills": 235,
+          "deaths": 109
+        },
+        "BC": {
+          "valueKills": 329,
+          "deaths": 109
+        },
+        "Q": {
+          "valueKills": 661,
+          "deaths": 73
+        },
+        "K": {
+          "valueKills": 171,
+          "deaths": 21
+        },
+        "BF": {
+          "valueKills": 306,
+          "deaths": 112
+        },
+        "NG": {
+          "valueKills": 295,
+          "deaths": 121
+        },
+        "RH": {
+          "valueKills": 308,
+          "deaths": 73
+        },
+        "PA": {
+          "valueKills": 45,
+          "deaths": 43
+        },
+        "PB": {
+          "valueKills": 93,
+          "deaths": 57
+        },
+        "PC": {
+          "valueKills": 88,
+          "deaths": 80
+        },
+        "PD": {
+          "valueKills": 99,
+          "deaths": 97
+        },
+        "PE": {
+          "valueKills": 115,
+          "deaths": 99
+        },
+        "PF": {
+          "valueKills": 66,
+          "deaths": 62
+        },
+        "PG": {
+          "valueKills": 79,
+          "deaths": 55
+        },
+        "PH": {
+          "valueKills": 42,
+          "deaths": 44
+        },
+        "ra": {
+          "valueKills": 285,
+          "deaths": 64
+        },
+        "nb": {
+          "valueKills": 339,
+          "deaths": 118
+        },
+        "bc": {
+          "valueKills": 293,
+          "deaths": 114
+        },
+        "q": {
+          "valueKills": 651,
+          "deaths": 75
+        },
+        "k": {
+          "valueKills": 198,
+          "deaths": 27
+        },
+        "bf": {
+          "valueKills": 332,
+          "deaths": 107
+        },
+        "ng": {
+          "valueKills": 258,
+          "deaths": 113
+        },
+        "rh": {
+          "valueKills": 335,
+          "deaths": 69
+        },
+        "pa": {
+          "valueKills": 40,
+          "deaths": 49
+        },
+        "pb": {
+          "valueKills": 73,
+          "deaths": 60
+        },
+        "pc": {
+          "valueKills": 73,
+          "deaths": 77
+        },
+        "pd": {
+          "valueKills": 91,
+          "deaths": 97
+        },
+        "pe": {
+          "valueKills": 108,
+          "deaths": 95
+        },
+        "pf": {
+          "valueKills": 78,
+          "deaths": 62
+        },
+        "pg": {
+          "valueKills": 82,
+          "deaths": 54
+        },
+        "ph": {
+          "valueKills": 53,
+          "deaths": 52
+        }
+      },
+      "KDAssistsMap": {
+        "RA": {
+          "kills": 109,
+          "deaths": 68,
+          "revengeKills": 39
+        },
+        "NB": {
+          "kills": 89,
+          "deaths": 109,
+          "revengeKills": 31
+        },
+        "BC": {
+          "kills": 119,
+          "deaths": 109,
+          "revengeKills": 35
+        },
+        "Q": {
+          "kills": 203,
+          "deaths": 73,
+          "revengeKills": 90
+        },
+        "K": {
+          "kills": 51,
+          "deaths": 21,
+          "revengeKills": 35
+        },
+        "BF": {
+          "kills": 120,
+          "deaths": 112,
+          "revengeKills": 39
+        },
+        "NG": {
+          "kills": 121,
+          "deaths": 121,
+          "revengeKills": 55
+        },
+        "RH": {
+          "kills": 104,
+          "deaths": 73,
+          "revengeKills": 31
+        },
+        "PA": {
+          "kills": 25,
+          "deaths": 43,
+          "revengeKills": 7
+        },
+        "PB": {
+          "kills": 41,
+          "deaths": 57,
+          "revengeKills": 24
+        },
+        "PC": {
+          "kills": 52,
+          "deaths": 80,
+          "revengeKills": 24
+        },
+        "PD": {
+          "kills": 55,
+          "deaths": 97,
+          "revengeKills": 22
+        },
+        "PE": {
+          "kills": 57,
+          "deaths": 99,
+          "revengeKills": 15
+        },
+        "PF": {
+          "kills": 32,
+          "deaths": 62,
+          "revengeKills": 21
+        },
+        "PG": {
+          "kills": 31,
+          "deaths": 55,
+          "revengeKills": 17
+        },
+        "PH": {
+          "kills": 24,
+          "deaths": 44,
+          "revengeKills": 10
+        },
+        "ra": {
+          "kills": 105,
+          "deaths": 64,
+          "revengeKills": 25
+        },
+        "nb": {
+          "kills": 119,
+          "deaths": 118,
+          "revengeKills": 40
+        },
+        "bc": {
+          "kills": 103,
+          "deaths": 114,
+          "revengeKills": 19
+        },
+        "q": {
+          "kills": 201,
+          "deaths": 75,
+          "revengeKills": 90
+        },
+        "k": {
+          "kills": 56,
+          "deaths": 27,
+          "revengeKills": 36
+        },
+        "bf": {
+          "kills": 118,
+          "deaths": 107,
+          "revengeKills": 45
+        },
+        "ng": {
+          "kills": 102,
+          "deaths": 113,
+          "revengeKills": 25
+        },
+        "rh": {
+          "kills": 105,
+          "deaths": 69,
+          "revengeKills": 36
+        },
+        "pa": {
+          "kills": 22,
+          "deaths": 49,
+          "revengeKills": 14
+        },
+        "pb": {
+          "kills": 27,
+          "deaths": 60,
+          "revengeKills": 16
+        },
+        "pc": {
+          "kills": 45,
+          "deaths": 77,
+          "revengeKills": 19
+        },
+        "pd": {
+          "kills": 55,
+          "deaths": 97,
+          "revengeKills": 20
+        },
+        "pe": {
+          "kills": 68,
+          "deaths": 95,
+          "revengeKills": 26
+        },
+        "pf": {
+          "kills": 36,
+          "deaths": 62,
+          "revengeKills": 25
+        },
+        "pg": {
+          "kills": 28,
+          "deaths": 54,
+          "revengeKills": 16
+        },
+        "ph": {
+          "kills": 33,
+          "deaths": 52,
+          "revengeKills": 15
+        }
+      }
+    },
+    "KillStreakMetric": {
+      "killStreakMap": {
+        "RA": {
+          "killStreaks": 6
+        },
+        "NB": {
+          "killStreaks": 3
+        },
+        "BC": {
+          "killStreaks": 3
+        },
+        "Q": {
+          "killStreaks": 5
+        },
+        "K": {
+          "killStreaks": 3
+        },
+        "BF": {
+          "killStreaks": 4
+        },
+        "NG": {
+          "killStreaks": 3
+        },
+        "RH": {
+          "killStreaks": 4
+        },
+        "PA": {
+          "killStreaks": 1
+        },
+        "PB": {
+          "killStreaks": 2
+        },
+        "PC": {
+          "killStreaks": 1
+        },
+        "PD": {
+          "killStreaks": 3
+        },
+        "PE": {
+          "killStreaks": 2
+        },
+        "PF": {
+          "killStreaks": 2
+        },
+        "PG": {
+          "killStreaks": 3
+        },
+        "PH": {
+          "killStreaks": 1
+        },
+        "ra": {
+          "killStreaks": 4
+        },
+        "nb": {
+          "killStreaks": 2
+        },
+        "bc": {
+          "killStreaks": 3
+        },
+        "q": {
+          "killStreaks": 4
+        },
+        "k": {
+          "killStreaks": 2
+        },
+        "bf": {
+          "killStreaks": 4
+        },
+        "ng": {
+          "killStreaks": 3
+        },
+        "rh": {
+          "killStreaks": 5
+        },
+        "pa": {
+          "killStreaks": 2
+        },
+        "pb": {
+          "killStreaks": 2
+        },
+        "pc": {
+          "killStreaks": 2
+        },
+        "pd": {
+          "killStreaks": 1
+        },
+        "pe": {
+          "killStreaks": 3
+        },
+        "pf": {
+          "killStreaks": 1
+        },
+        "pg": {
+          "killStreaks": 2
+        },
+        "ph": {
+          "killStreaks": 2
+        }
+      }
+    },
+    "MateAndAssistMetric": {
+      "mateAndAssistMap": {
+        "RA": {
+          "mates": 2,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NB": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "Q": {
+          "mates": 15,
+          "assists": 2,
+          "hockeyAssists": 1
+        },
+        "K": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BF": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NG": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "RH": {
+          "mates": 4,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "PA": {
+          "mates": 2,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "PB": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PD": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PE": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PF": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "PG": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PH": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "ra": {
+          "mates": 3,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "nb": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "bc": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "q": {
+          "mates": 10,
+          "assists": 3,
+          "hockeyAssists": 4
+        },
+        "k": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "bf": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 1
+        },
+        "ng": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 1
+        },
+        "rh": {
+          "mates": 6,
+          "assists": 2,
+          "hockeyAssists": 0
+        },
+        "pa": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pb": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pc": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pd": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pe": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pf": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pg": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ph": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        }
+      },
+      "matedCounts": {
+        "k": 27,
+        "K": 21
+      }
+    },
+    "PromotionMetric": {
+      "promotedToTotals": {
+        "q": 24,
+        "r": 0,
+        "b": 0,
+        "n": 0
+      },
+      "uasPromotingPieces": {
+        "pa": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pb": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pc": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pd": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pe": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pf": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pg": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "ph": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PA": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PB": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PC": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PD": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PE": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PF": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PG": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PH": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        }
+      },
+      "maxNumQueens": 3,
+      "movesAndGamesWithMaxQueenCount": [
+        {
+          "game": "https://lichess.org/A2AjN96n",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/4HSYXwuO",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/BqiNCtQO",
+          "move": "b4"
+        },
+        {
+          "game": "https://lichess.org/wTDbjwDM",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/MwGq9kio",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kSASxGRp",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/I54NiU6Y",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/B61HjRkW",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/EkqVfzfv",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/E9GhsFR5",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/bxbdGtBa",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/d5f1Nw9c",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/XHxGDFEl",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/MJxY6XkQ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/xe5Rlc6S",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/UrLPVRIb",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/uWM0SMQp",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/x5RDAUIs",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/VWC0vRBX",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/lHBhzszz",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LUg4JgIA",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/bO4kp2sK",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/3XU3cbul",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ZsJTnRyo",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/F2Q62DZV",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/T24w2sjS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/qQnJpzoI",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LXgZCfCm",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/5Ir8sNgy",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/mL91oI9u",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/KT5hZY9E",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/Li6XN0dt",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/WIeT2hcZ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/sR4J04gS",
+          "move": "e3"
+        },
+        {
+          "game": "https://lichess.org/X7TzqaDW",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/1wPnQjYR",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/BojMTGqm",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/m9SETFUk",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/o3lIBslQ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/9FoN1cQf",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/pmwxTMsp",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/mkRFnsbl",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/m9WcQFhf",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/oh7JFgLB",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/9hYEMFXv",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/eokRKWqu",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/xrerFF9p",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/i2UTwVRr",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/R5uOCt9Z",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/NByeNs8z",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kLKqVm2U",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/0soyDIjv",
+          "move": "b3"
+        },
+        {
+          "game": "https://lichess.org/TQUmpn7z",
+          "move": "d3"
+        },
+        {
+          "game": "https://lichess.org/ItxVuUMr",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/mrowWi6j",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/8NCOBA5z",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/pEwB37BI",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/mYReuLJz",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/4IJo4DlS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/KEjC1GXH",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/OfeaPP0R",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/c4s57iS9",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/YduZAW54",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/tpp3XsNH",
+          "move": "Nc3"
+        },
+        {
+          "game": "https://lichess.org/eR0ALEcK",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/AKqgCDkH",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/drwaxXe4",
+          "move": "g3"
+        },
+        {
+          "game": "https://lichess.org/TykZTxuS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ClHiXlvN",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/MzpHmJ7G",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/vsHTMLbd",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/PKJ4XKyy",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kRSBgC0u",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LB6Lk2xY",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/DJNX88WG",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/DCws7Yr6",
+          "move": "d3"
+        },
+        {
+          "game": "https://lichess.org/LGyoyzB7",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/SCujHKnH",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/Wd0tlQjF",
+          "move": "c4"
+        },
+        {
+          "game": "https://lichess.org/KXPkGPLq",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kfHzWOhG",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/nkerfwVx",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/1bF9atkS",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/BXneV9qe",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/zCrobZ7P",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kpLjLA7F",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/6b8IDGjH",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/QGiYEwHX",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ZrQX4bnu",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/VHpl3CXA",
+          "move": "d4"
+        }
+      ]
+    },
+    "MoveDistanceMetric": {
+      "pieceWithHighestAvg": "q",
+      "maxAvgDistance": 8.044303797468354,
+      "pieceWithLowestAvg": "pf",
+      "minAvgDistance": 1.0126582278481013,
+      "pieceThatMovedTheFurthest": [
+        "RA"
+      ],
+      "gameInWhichPieceMovedTheFurthest": [
+        "https://lichess.org/2s5888qw"
+      ],
+      "distanceThatPieceMovedInTheGame": 60,
+      "totalCollectiveDistance": 18499,
+      "gameMaxCollectiveDistance": {
+        "distance": 236,
+        "linkArray": [
+          "https://lichess.org/2s5888qw"
+        ]
+      },
+      "totalDistancesByPiece": {
+        "RA": {
+          "distance": 1076
+        },
+        "NB": {
+          "distance": 848
+        },
+        "BC": {
+          "distance": 787
+        },
+        "Q": {
+          "distance": 1218
+        },
+        "K": {
+          "distance": 776
+        },
+        "BF": {
+          "distance": 804
+        },
+        "NG": {
+          "distance": 880
+        },
+        "RH": {
+          "distance": 1061
+        },
+        "PA": {
+          "distance": 186
+        },
+        "PB": {
+          "distance": 185
+        },
+        "PC": {
+          "distance": 227
+        },
+        "PD": {
+          "distance": 359
+        },
+        "PE": {
+          "distance": 380
+        },
+        "PF": {
+          "distance": 194
+        },
+        "PG": {
+          "distance": 191
+        },
+        "PH": {
+          "distance": 183
+        },
+        "ra": {
+          "distance": 1085
+        },
+        "nb": {
+          "distance": 932
+        },
+        "bc": {
+          "distance": 764
+        },
+        "q": {
+          "distance": 1271
+        },
+        "k": {
+          "distance": 734
+        },
+        "bf": {
+          "distance": 717
+        },
+        "ng": {
+          "distance": 886
+        },
+        "rh": {
+          "distance": 974
+        },
+        "pa": {
+          "distance": 198
+        },
+        "pb": {
+          "distance": 182
+        },
+        "pc": {
+          "distance": 207
+        },
+        "pd": {
+          "distance": 307
+        },
+        "pe": {
+          "distance": 335
+        },
+        "pf": {
+          "distance": 160
+        },
+        "pg": {
+          "distance": 175
+        },
+        "ph": {
+          "distance": 217
+        }
+      }
+    },
+    "GameWithMostMovesMetric": {
+      "gameWithMostMoves": [
+        "https://lichess.org/lHBhzszz"
+      ],
+      "gameWithMostMovesNumMoves": 135
+    },
+    "PieceLevelMoveInfoMetric": {
+      "totalMovesByPiece": {
+        "RA": {
+          "numMoves": 394
+        },
+        "NB": {
+          "numMoves": 424
+        },
+        "BC": {
+          "numMoves": 379
+        },
+        "Q": {
+          "numMoves": 612
+        },
+        "K": {
+          "numMoves": 659
+        },
+        "BF": {
+          "numMoves": 422
+        },
+        "NG": {
+          "numMoves": 440
+        },
+        "RH": {
+          "numMoves": 458
+        },
+        "PA": {
+          "numMoves": 148
+        },
+        "PB": {
+          "numMoves": 152
+        },
+        "PC": {
+          "numMoves": 178
+        },
+        "PD": {
+          "numMoves": 247
+        },
+        "PE": {
+          "numMoves": 269
+        },
+        "PF": {
+          "numMoves": 149
+        },
+        "PG": {
+          "numMoves": 155
+        },
+        "PH": {
+          "numMoves": 152
+        },
+        "ra": {
+          "numMoves": 405
+        },
+        "nb": {
+          "numMoves": 466
+        },
+        "bc": {
+          "numMoves": 370
+        },
+        "q": {
+          "numMoves": 623
+        },
+        "k": {
+          "numMoves": 630
+        },
+        "bf": {
+          "numMoves": 411
+        },
+        "ng": {
+          "numMoves": 443
+        },
+        "rh": {
+          "numMoves": 399
+        },
+        "pa": {
+          "numMoves": 155
+        },
+        "pb": {
+          "numMoves": 140
+        },
+        "pc": {
+          "numMoves": 164
+        },
+        "pd": {
+          "numMoves": 225
+        },
+        "pe": {
+          "numMoves": 264
+        },
+        "pf": {
+          "numMoves": 129
+        },
+        "pg": {
+          "numMoves": 141
+        },
+        "ph": {
+          "numMoves": 176
+        }
+      },
+      "averageNumMovesPerGameByPiece": {
+        "RA": {
+          "avgMoves": 2.4936708860759493
+        },
+        "NB": {
+          "avgMoves": 2.6835443037974684
+        },
+        "BC": {
+          "avgMoves": 2.3987341772151898
+        },
+        "Q": {
+          "avgMoves": 3.8734177215189876
+        },
+        "K": {
+          "avgMoves": 4.170886075949367
+        },
+        "BF": {
+          "avgMoves": 2.670886075949367
+        },
+        "NG": {
+          "avgMoves": 2.7848101265822787
+        },
+        "RH": {
+          "avgMoves": 2.8987341772151898
+        },
+        "PA": {
+          "avgMoves": 0.9367088607594937
+        },
+        "PB": {
+          "avgMoves": 0.9620253164556962
+        },
+        "PC": {
+          "avgMoves": 1.1265822784810127
+        },
+        "PD": {
+          "avgMoves": 1.5632911392405062
+        },
+        "PE": {
+          "avgMoves": 1.7025316455696202
+        },
+        "PF": {
+          "avgMoves": 0.9430379746835443
+        },
+        "PG": {
+          "avgMoves": 0.9810126582278481
+        },
+        "PH": {
+          "avgMoves": 0.9620253164556962
+        },
+        "ra": {
+          "avgMoves": 2.5632911392405062
+        },
+        "nb": {
+          "avgMoves": 2.949367088607595
+        },
+        "bc": {
+          "avgMoves": 2.3417721518987342
+        },
+        "q": {
+          "avgMoves": 3.9430379746835444
+        },
+        "k": {
+          "avgMoves": 3.9873417721518987
+        },
+        "bf": {
+          "avgMoves": 2.6012658227848102
+        },
+        "ng": {
+          "avgMoves": 2.8037974683544302
+        },
+        "rh": {
+          "avgMoves": 2.5253164556962027
+        },
+        "pa": {
+          "avgMoves": 0.9810126582278481
+        },
+        "pb": {
+          "avgMoves": 0.8860759493670886
+        },
+        "pc": {
+          "avgMoves": 1.0379746835443038
+        },
+        "pd": {
+          "avgMoves": 1.4240506329113924
+        },
+        "pe": {
+          "avgMoves": 1.6708860759493671
+        },
+        "pf": {
+          "avgMoves": 0.8164556962025317
+        },
+        "pg": {
+          "avgMoves": 0.8924050632911392
+        },
+        "ph": {
+          "avgMoves": 1.1139240506329113
+        }
+      },
+      "pieceHighestAverageMoves": [
+        "K"
+      ],
+      "highestAverageMoves": 4.170886075949367,
+      "uasWithMostMovesSingleGame": [
+        "k"
+      ],
+      "uasSingleGameMaxMoves": 33,
+      "gamesWithUasMostMoves": [
+        "https://lichess.org/jo73x9y8"
+      ],
+      "gamesWithNoCastling": 0,
+      "queenKingCastlingCounts": {
+        "blackKing": 80,
+        "blackQueen": 24,
+        "whiteKing": 97,
+        "whiteQueen": 20
+      },
+      "gameWithMostMovesPlayed": [
+        "https://lichess.org/lHBhzszz"
+      ],
+      "gameMostMovesNumMoves": 137
+    },
+    "MiscMoveFactMetric": {
+      "enPassantMovesCount": 4,
+      "totalNumPiecesKnightHopped": 2321
+    }
+  },
+  "analysis11_20_2023__7_41_27_PM": {
+    "Number of games analyzed": 158,
+    "MetadataMetric": {
+      "averagePlayerRating": 1598.753164556962,
+      "averageRatingDiff": 79.45569620253164,
+      "largestRatingDiff": 444,
+      "largestRatingDiffGame": [
+        "[Site \"https://lichess.org/mbr1sxue\"]"
+      ],
+      "mostGamesPlayed": 6,
+      "playerMostgames": [
+        "so_sad"
+      ],
+      "gameTypeStats": {
+        "numberBulletGames": 61,
+        "numberBlitzGames": 59,
+        "numberClassicalGames": 19,
+        "numberRapidGames": 16,
+        "numberUltraBulletGames": 2,
+        "numberOtherGames": 1
+      },
+      "gameTimeControlStats": {
+        "\"60+0\"]": 33,
+        "\"300+0\"]": 26,
+        "\"180+0\"]": 17,
+        "\"120+1\"]": 15,
+        "\"600+0\"]": 13,
+        "\"0+1\"]": 6,
+        "\"120+0\"]": 4,
+        "\"300+8\"]": 3,
+        "\"360+0\"]": 3,
+        "\"240+0\"]": 3,
+        "\"900+0\"]": 2,
+        "\"15+0\"]": 2,
+        "\"180+1\"]": 2,
+        "\"720+8\"]": 2,
+        "\"180+3\"]": 2,
+        "\"300+5\"]": 2,
+        "\"60+1\"]": 2,
+        "\"180+2\"]": 1,
+        "\"-\"]": 1,
+        "\"1500+0\"]": 1,
+        "\"600+5\"]": 1,
+        "\"420+0\"]": 1,
+        "\"1200+5\"]": 1,
+        "\"600+2\"]": 1,
+        "\"1200+0\"]": 1,
+        "\"300+2\"]": 1,
+        "\"420+1\"]": 1,
+        "\"660+11\"]": 1,
+        "\"60+2\"]": 1,
+        "\"600+8\"]": 1,
+        "\"480+2\"]": 1,
+        "\"420+17\"]": 1,
+        "\"300+3\"]": 1,
+        "\"1740+30\"]": 1,
+        "\"720+3\"]": 1,
+        "\"540+5\"]": 1,
+        "\"480+8\"]": 1,
+        "\"180+7\"]": 1
+      },
+      "whiteWinRatio": null,
+      "openings": {
+        "Polish Opening": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Ruy Lopez: Bird Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Englund Gambit": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Philidor Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Slav Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Sicilian Defense: Modern Variations": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Accepted: Schallopp Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Italian Game": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Semi-Slav Defense": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Old Indian Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Owen Defense": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Rat Defense: Antal Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Modern Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Van Geet Opening: Grünfeld Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Englund Gambit Declined: Reversed French": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Pirc Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Bishop's Opening: Berlin Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Mieses Opening: Reversed Rat": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Zukertort Opening: Black Mustang Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "English Opening: Symmetrical Variation, Two Knights Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Sicilian Defense: Bowdler Attack": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Three Knights Opening": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Italian Game: Giuoco Pianissimo, Lucchini Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Declined: Queen's Knight Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Krause Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Advance Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Scotch Game": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Chigorin Variation, Anti-Veresov": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Declined: Orthodox Defense, Main Line": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game: Double Spanish": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Scotch Game: Goering Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Normal Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Colle System, Anti-Colle": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Four Knights Game: Italian Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game: Chigorin Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Indian Game": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Center Game: Normal Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game #3": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Nimzowitsch Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Accepted: Showalter Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Baltic Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Albin Countergambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Franco-Hiva Gambit I": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Gambit Refused: Chigorin Defense, Main Line": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Alekhine Defense: Normal Variation": {
+          "appearances": 2,
+          "blackWins": 0,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Accepted, King's Knight Gambit": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Philidor Defense #3": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Queen's Pawn Game #2": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Center Game: Berger Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "King's Gambit Declined, Classical Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Van't Kruijs Opening": {
+          "appearances": 3,
+          "blackWins": 0.5,
+          "whiteWins": 2.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 5
+        },
+        "Nimzo-Larsen Attack": {
+          "appearances": 2,
+          "blackWins": 0.5,
+          "whiteWins": 1.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 3
+        },
+        "French Defense #2": {
+          "appearances": 3,
+          "blackWins": 1,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 2
+        },
+        "Center Game": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: French Variation": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Benoni Defense: Hromádka System": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Bishop's Opening": {
+          "appearances": 3,
+          "blackWins": 1.5,
+          "whiteWins": 1.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "Indian Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Ruy Lopez: Exchange Variation, Normal Variation": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Caro-Kann Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Hungarian Opening": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Italian Game: Anti-Fried Liver Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Modern Defense: Mongredien Defense": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        },
+        "English Opening: Caro-Kann Defensive System": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Sicilian Defense: Smith-Morra Gambit #2": {
+          "appearances": 2,
+          "blackWins": 1,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 1
+        },
+        "Horwitz Defense": {
+          "appearances": 5,
+          "blackWins": 3,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.6666666666666666
+        },
+        "Scandinavian Defense: Mieses-Kotroc Variation": {
+          "appearances": 5,
+          "blackWins": 3,
+          "whiteWins": 2,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.6666666666666666
+        },
+        "Scandinavian Defense: Main Line": {
+          "appearances": 3,
+          "blackWins": 2,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0.5
+        },
+        "Zukertort Opening: Sicilian Invitation": {
+          "appearances": 2,
+          "blackWins": 2,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Smith-Morra Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Kan Variation, Knight Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Declined: Baltic Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Indian Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Russian Game: Modern Attack, Symmetrical Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Two Knights Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: Queen's Knight": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: O'Kelly Variation, Yerevan System": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Pawn Game: Zukertort Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Pawn Game": {
+          "appearances": 4,
+          "blackWins": 4,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Benoni Defense: French Benoni": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "East Indian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Nimzowitsch Defense: Scandinavian Variation, Advance Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Pawn Game: Busch-Gass Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Gambit Accepted: Cunningham Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Zukertort Opening: Nimzo-Larsen Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Indian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Vienna Game: Vienna Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Old Sicilian": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Mieses Opening": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Scandinavian Defense: Blackburne Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Declined: Marshall Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Closed": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Russian Game: Stafford Gambit": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Alekhine Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Van Geet Opening: Battambang Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Ponziani Opening: Jaenisch Counterattack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Scotch Game: Göring Gambit, Double Pawn Sacrifice": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: Knight Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "King's Gambit Accepted: MacLeod Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense: Löwenthal Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Hillbilly Attack": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Italian Game: Classical Variation, Greco Gambit, Traditional Line": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Alekhine Defense: Maróczy Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Three Knights Opening: Steinitz Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Sicilian Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Nimzowitsch Defense: Williams Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Indian Game: Budapest Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Philidor Defense #2": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Caro-Kann Defense: Goldman Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "French Defense: La Bourdonnais Variation": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Italian Game: Classical Variation, Giuoco Pianissimo": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Englund Gambit Declined, Reversed French": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        },
+        "Queen's Gambit Refused: Marshall Defense": {
+          "appearances": 1,
+          "blackWins": 1,
+          "whiteWins": 0,
+          "ties": 0,
+          "whiteToBlackWinRatio": 0
+        }
+      },
+      "bongcloudAppearances": 0,
+      "gameEndings": {
+        "time out": 44,
+        "resignation": 61,
+        "checkmate": 48,
+        "draw": 5,
+        "threefold repetition": 3
+      },
+      "numberGamesAnalyzedForRatings": 158
+    },
+    "KDRatioMetric": {
+      "maxKDRatio": 2.780821917808219,
+      "pieceWithHighestKDRatio": [
+        "Q"
+      ],
+      "KDRatios": {
+        "RA": 1.6029411764705883,
+        "NB": 0.8165137614678899,
+        "BC": 1.091743119266055,
+        "Q": 2.780821917808219,
+        "K": 2.4285714285714284,
+        "BF": 1.0714285714285714,
+        "NG": 1,
+        "RH": 1.4246575342465753,
+        "PA": 0.5813953488372093,
+        "PB": 0.7192982456140351,
+        "PC": 0.65,
+        "PD": 0.5670103092783505,
+        "PE": 0.5757575757575758,
+        "PF": 0.5161290322580645,
+        "PG": 0.5636363636363636,
+        "PH": 0.5454545454545454,
+        "ra": 1.640625,
+        "nb": 1.0084745762711864,
+        "bc": 0.9035087719298246,
+        "q": 2.68,
+        "k": 2.074074074074074,
+        "bf": 1.102803738317757,
+        "ng": 0.9026548672566371,
+        "rh": 1.5217391304347827,
+        "pa": 0.4489795918367347,
+        "pb": 0.45,
+        "pc": 0.5844155844155844,
+        "pd": 0.5670103092783505,
+        "pe": 0.7157894736842105,
+        "pf": 0.5806451612903226,
+        "pg": 0.5185185185185185,
+        "ph": 0.6346153846153846
+      },
+      "KDRatiosValues": {
+        "RA": 5.073529411764706,
+        "NB": 2.1559633027522938,
+        "BC": 3.018348623853211,
+        "Q": 9.054794520547945,
+        "K": 8.142857142857142,
+        "BF": 2.732142857142857,
+        "NG": 2.43801652892562,
+        "RH": 4.219178082191781,
+        "PA": 1.0465116279069768,
+        "PB": 1.631578947368421,
+        "PC": 1.1,
+        "PD": 1.0206185567010309,
+        "PE": 1.1616161616161615,
+        "PF": 1.064516129032258,
+        "PG": 1.4363636363636363,
+        "PH": 0.9545454545454546,
+        "ra": 4.453125,
+        "nb": 2.8728813559322033,
+        "bc": 2.5701754385964914,
+        "q": 8.68,
+        "k": 7.333333333333333,
+        "bf": 3.102803738317757,
+        "ng": 2.2831858407079646,
+        "rh": 4.855072463768116,
+        "pa": 0.8163265306122449,
+        "pb": 1.2166666666666666,
+        "pc": 0.948051948051948,
+        "pd": 0.9381443298969072,
+        "pe": 1.1368421052631579,
+        "pf": 1.2580645161290323,
+        "pg": 1.5185185185185186,
+        "ph": 1.0192307692307692
+      },
+      "pieceWithHighestKDRatioValues": [
+        "Q"
+      ],
+      "KDAssistsValuesMap": {
+        "RA": {
+          "valueKills": 345,
+          "deaths": 68
+        },
+        "NB": {
+          "valueKills": 235,
+          "deaths": 109
+        },
+        "BC": {
+          "valueKills": 329,
+          "deaths": 109
+        },
+        "Q": {
+          "valueKills": 661,
+          "deaths": 73
+        },
+        "K": {
+          "valueKills": 171,
+          "deaths": 21
+        },
+        "BF": {
+          "valueKills": 306,
+          "deaths": 112
+        },
+        "NG": {
+          "valueKills": 295,
+          "deaths": 121
+        },
+        "RH": {
+          "valueKills": 308,
+          "deaths": 73
+        },
+        "PA": {
+          "valueKills": 45,
+          "deaths": 43
+        },
+        "PB": {
+          "valueKills": 93,
+          "deaths": 57
+        },
+        "PC": {
+          "valueKills": 88,
+          "deaths": 80
+        },
+        "PD": {
+          "valueKills": 99,
+          "deaths": 97
+        },
+        "PE": {
+          "valueKills": 115,
+          "deaths": 99
+        },
+        "PF": {
+          "valueKills": 66,
+          "deaths": 62
+        },
+        "PG": {
+          "valueKills": 79,
+          "deaths": 55
+        },
+        "PH": {
+          "valueKills": 42,
+          "deaths": 44
+        },
+        "ra": {
+          "valueKills": 285,
+          "deaths": 64
+        },
+        "nb": {
+          "valueKills": 339,
+          "deaths": 118
+        },
+        "bc": {
+          "valueKills": 293,
+          "deaths": 114
+        },
+        "q": {
+          "valueKills": 651,
+          "deaths": 75
+        },
+        "k": {
+          "valueKills": 198,
+          "deaths": 27
+        },
+        "bf": {
+          "valueKills": 332,
+          "deaths": 107
+        },
+        "ng": {
+          "valueKills": 258,
+          "deaths": 113
+        },
+        "rh": {
+          "valueKills": 335,
+          "deaths": 69
+        },
+        "pa": {
+          "valueKills": 40,
+          "deaths": 49
+        },
+        "pb": {
+          "valueKills": 73,
+          "deaths": 60
+        },
+        "pc": {
+          "valueKills": 73,
+          "deaths": 77
+        },
+        "pd": {
+          "valueKills": 91,
+          "deaths": 97
+        },
+        "pe": {
+          "valueKills": 108,
+          "deaths": 95
+        },
+        "pf": {
+          "valueKills": 78,
+          "deaths": 62
+        },
+        "pg": {
+          "valueKills": 82,
+          "deaths": 54
+        },
+        "ph": {
+          "valueKills": 53,
+          "deaths": 52
+        }
+      },
+      "KDAssistsMap": {
+        "RA": {
+          "kills": 109,
+          "deaths": 68,
+          "revengeKills": 39
+        },
+        "NB": {
+          "kills": 89,
+          "deaths": 109,
+          "revengeKills": 31
+        },
+        "BC": {
+          "kills": 119,
+          "deaths": 109,
+          "revengeKills": 35
+        },
+        "Q": {
+          "kills": 203,
+          "deaths": 73,
+          "revengeKills": 90
+        },
+        "K": {
+          "kills": 51,
+          "deaths": 21,
+          "revengeKills": 35
+        },
+        "BF": {
+          "kills": 120,
+          "deaths": 112,
+          "revengeKills": 39
+        },
+        "NG": {
+          "kills": 121,
+          "deaths": 121,
+          "revengeKills": 55
+        },
+        "RH": {
+          "kills": 104,
+          "deaths": 73,
+          "revengeKills": 31
+        },
+        "PA": {
+          "kills": 25,
+          "deaths": 43,
+          "revengeKills": 7
+        },
+        "PB": {
+          "kills": 41,
+          "deaths": 57,
+          "revengeKills": 24
+        },
+        "PC": {
+          "kills": 52,
+          "deaths": 80,
+          "revengeKills": 24
+        },
+        "PD": {
+          "kills": 55,
+          "deaths": 97,
+          "revengeKills": 22
+        },
+        "PE": {
+          "kills": 57,
+          "deaths": 99,
+          "revengeKills": 15
+        },
+        "PF": {
+          "kills": 32,
+          "deaths": 62,
+          "revengeKills": 21
+        },
+        "PG": {
+          "kills": 31,
+          "deaths": 55,
+          "revengeKills": 17
+        },
+        "PH": {
+          "kills": 24,
+          "deaths": 44,
+          "revengeKills": 10
+        },
+        "ra": {
+          "kills": 105,
+          "deaths": 64,
+          "revengeKills": 25
+        },
+        "nb": {
+          "kills": 119,
+          "deaths": 118,
+          "revengeKills": 40
+        },
+        "bc": {
+          "kills": 103,
+          "deaths": 114,
+          "revengeKills": 19
+        },
+        "q": {
+          "kills": 201,
+          "deaths": 75,
+          "revengeKills": 90
+        },
+        "k": {
+          "kills": 56,
+          "deaths": 27,
+          "revengeKills": 36
+        },
+        "bf": {
+          "kills": 118,
+          "deaths": 107,
+          "revengeKills": 45
+        },
+        "ng": {
+          "kills": 102,
+          "deaths": 113,
+          "revengeKills": 25
+        },
+        "rh": {
+          "kills": 105,
+          "deaths": 69,
+          "revengeKills": 36
+        },
+        "pa": {
+          "kills": 22,
+          "deaths": 49,
+          "revengeKills": 14
+        },
+        "pb": {
+          "kills": 27,
+          "deaths": 60,
+          "revengeKills": 16
+        },
+        "pc": {
+          "kills": 45,
+          "deaths": 77,
+          "revengeKills": 19
+        },
+        "pd": {
+          "kills": 55,
+          "deaths": 97,
+          "revengeKills": 20
+        },
+        "pe": {
+          "kills": 68,
+          "deaths": 95,
+          "revengeKills": 26
+        },
+        "pf": {
+          "kills": 36,
+          "deaths": 62,
+          "revengeKills": 25
+        },
+        "pg": {
+          "kills": 28,
+          "deaths": 54,
+          "revengeKills": 16
+        },
+        "ph": {
+          "kills": 33,
+          "deaths": 52,
+          "revengeKills": 15
+        }
+      }
+    },
+    "KillStreakMetric": {
+      "killStreakMap": {
+        "RA": {
+          "killStreaks": 6
+        },
+        "NB": {
+          "killStreaks": 3
+        },
+        "BC": {
+          "killStreaks": 3
+        },
+        "Q": {
+          "killStreaks": 5
+        },
+        "K": {
+          "killStreaks": 3
+        },
+        "BF": {
+          "killStreaks": 4
+        },
+        "NG": {
+          "killStreaks": 3
+        },
+        "RH": {
+          "killStreaks": 4
+        },
+        "PA": {
+          "killStreaks": 1
+        },
+        "PB": {
+          "killStreaks": 2
+        },
+        "PC": {
+          "killStreaks": 1
+        },
+        "PD": {
+          "killStreaks": 3
+        },
+        "PE": {
+          "killStreaks": 2
+        },
+        "PF": {
+          "killStreaks": 2
+        },
+        "PG": {
+          "killStreaks": 3
+        },
+        "PH": {
+          "killStreaks": 1
+        },
+        "ra": {
+          "killStreaks": 4
+        },
+        "nb": {
+          "killStreaks": 2
+        },
+        "bc": {
+          "killStreaks": 3
+        },
+        "q": {
+          "killStreaks": 4
+        },
+        "k": {
+          "killStreaks": 2
+        },
+        "bf": {
+          "killStreaks": 4
+        },
+        "ng": {
+          "killStreaks": 3
+        },
+        "rh": {
+          "killStreaks": 5
+        },
+        "pa": {
+          "killStreaks": 2
+        },
+        "pb": {
+          "killStreaks": 2
+        },
+        "pc": {
+          "killStreaks": 2
+        },
+        "pd": {
+          "killStreaks": 1
+        },
+        "pe": {
+          "killStreaks": 3
+        },
+        "pf": {
+          "killStreaks": 1
+        },
+        "pg": {
+          "killStreaks": 2
+        },
+        "ph": {
+          "killStreaks": 2
+        }
+      }
+    },
+    "MateAndAssistMetric": {
+      "mateAndAssistMap": {
+        "RA": {
+          "mates": 2,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NB": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "Q": {
+          "mates": 15,
+          "assists": 2,
+          "hockeyAssists": 1
+        },
+        "K": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BF": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NG": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "RH": {
+          "mates": 4,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "PA": {
+          "mates": 2,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "PB": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PD": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PE": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PF": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "PG": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PH": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "ra": {
+          "mates": 3,
+          "assists": 0,
+          "hockeyAssists": 1
+        },
+        "nb": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "bc": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 0
+        },
+        "q": {
+          "mates": 10,
+          "assists": 3,
+          "hockeyAssists": 4
+        },
+        "k": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "bf": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 1
+        },
+        "ng": {
+          "mates": 0,
+          "assists": 1,
+          "hockeyAssists": 1
+        },
+        "rh": {
+          "mates": 6,
+          "assists": 2,
+          "hockeyAssists": 0
+        },
+        "pa": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pb": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pc": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pd": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pe": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pf": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pg": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ph": {
+          "mates": 1,
+          "assists": 0,
+          "hockeyAssists": 0
+        }
+      },
+      "matedCounts": {
+        "k": 27,
+        "K": 21
+      }
+    },
+    "PromotionMetric": {
+      "promotedToTotals": {
+        "q": 24,
+        "r": 0,
+        "b": 0,
+        "n": 0
+      },
+      "uasPromotingPieces": {
+        "pa": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pb": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pc": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pd": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pe": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pf": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pg": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "ph": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PA": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PB": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PC": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PD": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PE": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PF": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PG": {
+          "q": 2,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PH": {
+          "q": 3,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        }
+      },
+      "maxNumQueens": 3,
+      "movesAndGamesWithMaxQueenCount": [
+        {
+          "game": "https://lichess.org/A2AjN96n",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/4HSYXwuO",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/BqiNCtQO",
+          "move": "b4"
+        },
+        {
+          "game": "https://lichess.org/wTDbjwDM",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/MwGq9kio",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kSASxGRp",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/I54NiU6Y",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/B61HjRkW",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/EkqVfzfv",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/E9GhsFR5",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/bxbdGtBa",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/d5f1Nw9c",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/XHxGDFEl",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/MJxY6XkQ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/xe5Rlc6S",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/UrLPVRIb",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/uWM0SMQp",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/x5RDAUIs",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/VWC0vRBX",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/lHBhzszz",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LUg4JgIA",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/bO4kp2sK",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/3XU3cbul",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ZsJTnRyo",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/F2Q62DZV",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/T24w2sjS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/qQnJpzoI",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LXgZCfCm",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/5Ir8sNgy",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/mL91oI9u",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/KT5hZY9E",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/Li6XN0dt",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/WIeT2hcZ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/sR4J04gS",
+          "move": "e3"
+        },
+        {
+          "game": "https://lichess.org/X7TzqaDW",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/1wPnQjYR",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/BojMTGqm",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/m9SETFUk",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/o3lIBslQ",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/9FoN1cQf",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/pmwxTMsp",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/mkRFnsbl",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/m9WcQFhf",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/oh7JFgLB",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/9hYEMFXv",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/eokRKWqu",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/xrerFF9p",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/i2UTwVRr",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/R5uOCt9Z",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/NByeNs8z",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kLKqVm2U",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/0soyDIjv",
+          "move": "b3"
+        },
+        {
+          "game": "https://lichess.org/TQUmpn7z",
+          "move": "d3"
+        },
+        {
+          "game": "https://lichess.org/ItxVuUMr",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/mrowWi6j",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/8NCOBA5z",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/pEwB37BI",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/mYReuLJz",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/4IJo4DlS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/KEjC1GXH",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/OfeaPP0R",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/c4s57iS9",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/YduZAW54",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/tpp3XsNH",
+          "move": "Nc3"
+        },
+        {
+          "game": "https://lichess.org/eR0ALEcK",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/AKqgCDkH",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/drwaxXe4",
+          "move": "g3"
+        },
+        {
+          "game": "https://lichess.org/TykZTxuS",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ClHiXlvN",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/MzpHmJ7G",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/vsHTMLbd",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/PKJ4XKyy",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kRSBgC0u",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/LB6Lk2xY",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/DJNX88WG",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/DCws7Yr6",
+          "move": "d3"
+        },
+        {
+          "game": "https://lichess.org/LGyoyzB7",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/SCujHKnH",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/Wd0tlQjF",
+          "move": "c4"
+        },
+        {
+          "game": "https://lichess.org/KXPkGPLq",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kfHzWOhG",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/nkerfwVx",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/1bF9atkS",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/BXneV9qe",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/zCrobZ7P",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/kpLjLA7F",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/6b8IDGjH",
+          "move": "Nf3"
+        },
+        {
+          "game": "https://lichess.org/QGiYEwHX",
+          "move": "d4"
+        },
+        {
+          "game": "https://lichess.org/ZrQX4bnu",
+          "move": "e4"
+        },
+        {
+          "game": "https://lichess.org/VHpl3CXA",
+          "move": "d4"
+        }
+      ]
+    },
+    "MoveDistanceMetric": {
+      "pieceWithHighestAvg": "q",
+      "maxAvgDistance": 8.044303797468354,
+      "pieceWithLowestAvg": "pf",
+      "minAvgDistance": 1.0126582278481013,
+      "pieceThatMovedTheFurthest": [
+        "RA"
+      ],
+      "gameInWhichPieceMovedTheFurthest": [
+        "https://lichess.org/2s5888qw"
+      ],
+      "distanceThatPieceMovedInTheGame": 60,
+      "totalCollectiveDistance": 18499,
+      "gameMaxCollectiveDistance": {
+        "distance": 236,
+        "linkArray": [
+          "https://lichess.org/2s5888qw"
+        ]
+      },
+      "totalDistancesByPiece": {
+        "RA": {
+          "distance": 1076
+        },
+        "NB": {
+          "distance": 848
+        },
+        "BC": {
+          "distance": 787
+        },
+        "Q": {
+          "distance": 1218
+        },
+        "K": {
+          "distance": 776
+        },
+        "BF": {
+          "distance": 804
+        },
+        "NG": {
+          "distance": 880
+        },
+        "RH": {
+          "distance": 1061
+        },
+        "PA": {
+          "distance": 186
+        },
+        "PB": {
+          "distance": 185
+        },
+        "PC": {
+          "distance": 227
+        },
+        "PD": {
+          "distance": 359
+        },
+        "PE": {
+          "distance": 380
+        },
+        "PF": {
+          "distance": 194
+        },
+        "PG": {
+          "distance": 191
+        },
+        "PH": {
+          "distance": 183
+        },
+        "ra": {
+          "distance": 1085
+        },
+        "nb": {
+          "distance": 932
+        },
+        "bc": {
+          "distance": 764
+        },
+        "q": {
+          "distance": 1271
+        },
+        "k": {
+          "distance": 734
+        },
+        "bf": {
+          "distance": 717
+        },
+        "ng": {
+          "distance": 886
+        },
+        "rh": {
+          "distance": 974
+        },
+        "pa": {
+          "distance": 198
+        },
+        "pb": {
+          "distance": 182
+        },
+        "pc": {
+          "distance": 207
+        },
+        "pd": {
+          "distance": 307
+        },
+        "pe": {
+          "distance": 335
+        },
+        "pf": {
+          "distance": 160
+        },
+        "pg": {
+          "distance": 175
+        },
+        "ph": {
+          "distance": 217
+        }
+      }
+    },
+    "GameWithMostMovesMetric": {
+      "gameWithMostMoves": [
+        "https://lichess.org/lHBhzszz"
+      ],
+      "gameWithMostMovesNumMoves": 135
+    },
+    "PieceLevelMoveInfoMetric": {
+      "totalMovesByPiece": {
+        "RA": {
+          "numMoves": 394
+        },
+        "NB": {
+          "numMoves": 424
+        },
+        "BC": {
+          "numMoves": 379
+        },
+        "Q": {
+          "numMoves": 612
+        },
+        "K": {
+          "numMoves": 659
+        },
+        "BF": {
+          "numMoves": 422
+        },
+        "NG": {
+          "numMoves": 440
+        },
+        "RH": {
+          "numMoves": 458
+        },
+        "PA": {
+          "numMoves": 148
+        },
+        "PB": {
+          "numMoves": 152
+        },
+        "PC": {
+          "numMoves": 178
+        },
+        "PD": {
+          "numMoves": 247
+        },
+        "PE": {
+          "numMoves": 269
+        },
+        "PF": {
+          "numMoves": 149
+        },
+        "PG": {
+          "numMoves": 155
+        },
+        "PH": {
+          "numMoves": 152
+        },
+        "ra": {
+          "numMoves": 405
+        },
+        "nb": {
+          "numMoves": 466
+        },
+        "bc": {
+          "numMoves": 370
+        },
+        "q": {
+          "numMoves": 623
+        },
+        "k": {
+          "numMoves": 630
+        },
+        "bf": {
+          "numMoves": 411
+        },
+        "ng": {
+          "numMoves": 443
+        },
+        "rh": {
+          "numMoves": 399
+        },
+        "pa": {
+          "numMoves": 155
+        },
+        "pb": {
+          "numMoves": 140
+        },
+        "pc": {
+          "numMoves": 164
+        },
+        "pd": {
+          "numMoves": 225
+        },
+        "pe": {
+          "numMoves": 264
+        },
+        "pf": {
+          "numMoves": 129
+        },
+        "pg": {
+          "numMoves": 141
+        },
+        "ph": {
+          "numMoves": 176
+        }
+      },
+      "averageNumMovesPerGameByPiece": {
+        "RA": {
+          "avgMoves": 2.4936708860759493
+        },
+        "NB": {
+          "avgMoves": 2.6835443037974684
+        },
+        "BC": {
+          "avgMoves": 2.3987341772151898
+        },
+        "Q": {
+          "avgMoves": 3.8734177215189876
+        },
+        "K": {
+          "avgMoves": 4.170886075949367
+        },
+        "BF": {
+          "avgMoves": 2.670886075949367
+        },
+        "NG": {
+          "avgMoves": 2.7848101265822787
+        },
+        "RH": {
+          "avgMoves": 2.8987341772151898
+        },
+        "PA": {
+          "avgMoves": 0.9367088607594937
+        },
+        "PB": {
+          "avgMoves": 0.9620253164556962
+        },
+        "PC": {
+          "avgMoves": 1.1265822784810127
+        },
+        "PD": {
+          "avgMoves": 1.5632911392405062
+        },
+        "PE": {
+          "avgMoves": 1.7025316455696202
+        },
+        "PF": {
+          "avgMoves": 0.9430379746835443
+        },
+        "PG": {
+          "avgMoves": 0.9810126582278481
+        },
+        "PH": {
+          "avgMoves": 0.9620253164556962
+        },
+        "ra": {
+          "avgMoves": 2.5632911392405062
+        },
+        "nb": {
+          "avgMoves": 2.949367088607595
+        },
+        "bc": {
+          "avgMoves": 2.3417721518987342
+        },
+        "q": {
+          "avgMoves": 3.9430379746835444
+        },
+        "k": {
+          "avgMoves": 3.9873417721518987
+        },
+        "bf": {
+          "avgMoves": 2.6012658227848102
+        },
+        "ng": {
+          "avgMoves": 2.8037974683544302
+        },
+        "rh": {
+          "avgMoves": 2.5253164556962027
+        },
+        "pa": {
+          "avgMoves": 0.9810126582278481
+        },
+        "pb": {
+          "avgMoves": 0.8860759493670886
+        },
+        "pc": {
+          "avgMoves": 1.0379746835443038
+        },
+        "pd": {
+          "avgMoves": 1.4240506329113924
+        },
+        "pe": {
+          "avgMoves": 1.6708860759493671
+        },
+        "pf": {
+          "avgMoves": 0.8164556962025317
+        },
+        "pg": {
+          "avgMoves": 0.8924050632911392
+        },
+        "ph": {
+          "avgMoves": 1.1139240506329113
+        }
+      },
+      "pieceHighestAverageMoves": [
+        "K"
+      ],
+      "highestAverageMoves": 4.170886075949367,
+      "uasWithMostMovesSingleGame": [
+        "k"
+      ],
+      "uasSingleGameMaxMoves": 33,
+      "gamesWithUasMostMoves": [
+        "https://lichess.org/jo73x9y8"
+      ],
+      "gamesWithNoCastling": 0,
+      "queenKingCastlingCounts": {
+        "blackKing": 80,
+        "blackQueen": 24,
+        "whiteKing": 97,
+        "whiteQueen": 20
+      },
+      "gameWithMostMovesPlayed": [
+        "https://lichess.org/lHBhzszz"
+      ],
+      "gameMostMovesNumMoves": 137
+    },
+    "MiscMoveFactMetric": {
+      "enPassantMovesCount": 4,
+      "totalNumPiecesKnightHopped": 2321
+    }
   }
 }

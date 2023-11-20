@@ -80,8 +80,8 @@ export class KillStreakMetric implements Metric {
       i += 2;
     }
 
-    // handle edge case where the game ends with a capture streak by the same piece
     if (streakPiece) {
+      // handle edge case where the game ends with a capture streak by the same piece
       if (!this.killStreakMap.hasOwnProperty(streakPiece)) {
         console.log('Unexpected streakPiece at end of game:', streakPiece);
         console.log('Current keys in killStreakMap:', Object.keys(this.killStreakMap));
@@ -90,17 +90,17 @@ export class KillStreakMetric implements Metric {
         this.killStreakMap[streakPiece].killStreaks,
         streakLength
       );
-    }
 
-    // update maxes
-    if (this.killStreakMap[streakPiece].killStreaks > this.maxKillStreak) {
-      this.maxKillStreak = this.killStreakMap[streakPiece].killStreaks;
-      this.maxKillStreakPiece = [streakPiece as UASymbol];
-      this.maxKillStreakGame = [gameLink];
-    }
-    else if (this.killStreakMap[streakPiece].killStreaks === this.maxKillStreak) {
-      this.maxKillStreakPiece.push(streakPiece as UASymbol)
-      this.maxKillStreakGame.push(gameLink);
+      // update maxes
+      if (this.killStreakMap[streakPiece].killStreaks > this.maxKillStreak) {
+        this.maxKillStreak = this.killStreakMap[streakPiece].killStreaks;
+        this.maxKillStreakPiece = [streakPiece as UASymbol];
+        this.maxKillStreakGame = [gameLink];
+      }
+      else if (this.killStreakMap[streakPiece].killStreaks === this.maxKillStreak) {
+        this.maxKillStreakPiece.push(streakPiece as UASymbol)
+        this.maxKillStreakGame.push(gameLink);
+      }
     }
   }
 
