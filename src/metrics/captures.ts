@@ -28,7 +28,9 @@ export class KillStreakMetric implements Metric {
     return this.killStreakMap;
   }
 
-  logResults(): void {}
+  logResults(): void {
+    console.log('Kill streak map', this.killStreakMap)
+  }
 
   getMaxKillStreak(
     game: { move: PrettyMove; board: Piece[] }[],
@@ -41,25 +43,41 @@ export class KillStreakMetric implements Metric {
     while (i < game.length) {
       const move = game[i].move;
       if (move.capture) {
+        // streak has been reset because new piece captures
         if (streakLength === 0) {
           streakPiece = move.uas;
           streakLength++;
+          // same piece captures again
         } else if (streakPiece === move.uas) {
           streakLength++;
+          // streak is not 0 but different piece captures, so
+          // take the previous kill streak piece and update its max kill streak
         } else {
+          if (!this.killStreakMap.hasOwnProperty(streakPiece)) {
+            console.log('Unexpected streakPiece:', streakPiece);
+            console.log('Current keys in killStreakMap:', Object.keys(this.killStreakMap));
+          }
           this.killStreakMap[streakPiece].killStreaks = Math.max(
             this.killStreakMap[streakPiece].killStreaks,
             streakLength
           );
-          streakLength = 0;
+          streakLength = 0; // reset streak
         }
       }
       i += 2;
     }
-    this.killStreakMap[streakPiece].killStreaks = Math.max(
-      this.killStreakMap[streakPiece].killStreaks,
-      streakLength
-    );
+
+    // handle edge case where the game ends with a capture streak by the same piece
+    if (streakPiece) {
+      if (!this.killStreakMap.hasOwnProperty(streakPiece)) {
+        console.log('Unexpected streakPiece at end of game:', streakPiece);
+        console.log('Current keys in killStreakMap:', Object.keys(this.killStreakMap));
+      }
+      this.killStreakMap[streakPiece].killStreaks = Math.max(
+        this.killStreakMap[streakPiece].killStreaks,
+        streakLength
+      );
+    }
   }
 
   processGame(game: { move: PrettyMove; board: Piece[] }[]) {

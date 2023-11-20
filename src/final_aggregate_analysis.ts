@@ -1,5 +1,6 @@
 const { getResults } = require('./index.ts');
 
+
 /**
  *
  * @param results.json

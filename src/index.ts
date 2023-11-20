@@ -1,3 +1,4 @@
+import { kill } from 'process';
 import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 import { KDRatioMetric, MateAndAssistMetric, KillStreakMetric } from './metrics/captures';
@@ -70,24 +71,23 @@ async function gameIterator(path) {
     }
   }
   results['Number of games analyzed'] = gameCounter;
-  // for (const metric of metrics) {
-  //   results[`${metric}`] = metric.aggregate()
-  // }
-  miscMoveFactMetric.aggregate();
-  miscMoveFactMetric.logResults();
+  for (const metric of metrics) {
+    results[`${metric}`] = metric.aggregate()
+  }
 }
 
 // for use with streaming_partial_decompresser.js
-// if (require.main === module) {
-//   const path = process.argv[2];
-//   main(path).then(async (results) => {
-//     const analysisKey = `analysis${Date.now()}`; // Use the current timestamp as the key
-//     const existingResults = JSON.parse(fs.readFileSync('./results.json', 'utf8') || '{}'); // read the contents of results.json as JSON and store in existingResults
-//     existingResults[analysisKey] = results;
-//     fs.writeFileSync('./results.json', JSON.stringify(existingResults, null, 2)); // convert existResults to JSON string and write to results.json
-//   });
-// }
-
 if (require.main === module) {
-  main(`data/11.11.23 3 Game Test Set`).then((a) => {});
+  const path = process.argv[2];
+  main(path).then(async (results) => {
+    const analysisKey = `analysis${Date.now()}`; // Use the current timestamp as the key
+    const existingResults = JSON.parse(fs.readFileSync('./results.json', 'utf8') || '{}'); // read the contents of results.json as JSON and store in existingResults
+    existingResults[analysisKey] = results;
+    fs.writeFileSync('./results.json', JSON.stringify(existingResults, null, 2)); // convert existResults to JSON string and write to results.json
+  });
 }
+
+// for use with index.ts
+// if (require.main === module) {
+//   main(`data/11.11.23 3 Game Test Set`).then((a) => {});
+// }
