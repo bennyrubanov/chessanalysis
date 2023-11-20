@@ -2,6 +2,7 @@ import { Piece, PrettyMove, Chess} from '../../cjsmin/src/chess';
 import { Metric } from './metric';
 
 // calculates how many games in the dataset
+// OBSOLETE helper function
 export function countGamesInDataset(datasetPath: string): number {
   const fs = require('fs');
   const path = require('path');
@@ -101,7 +102,6 @@ export class MetadataMetric implements Metric {
         .filter(([_, count]) => count / this.numberGamesAnalyzed > 0.05)
     );
     console.table(filteredTimeControlStats);
-  
     // Openings by number of times they appear and their win rates
     console.log('Openings by number of times they appear and their win rates:');
     const filteredOpenings = Object.fromEntries(
@@ -420,11 +420,18 @@ if(opening) {
     return {
       averagePlayerRating: this.averagePlayerRating,
       averageRatingDiff: this.averageRatingDiff,
+      largestRatingDiff: this.largestRatingDiff,
+      largestRatingDiffGame: this.largestRatingDiffGame,
       mostGamesPlayed: maxGames,
-      playerMostGames,
+      playerMostgames: playerMostGames,
+      gameTypeStats: this.gameTypeStats,
+      gameTimeControlStats: this.gameTimeControlStats,
       // This doesn't account for ties
       whiteWinRatio: this.whiteWins / (this.whiteWins + this.blackWins),
-      sortedOpeningsObj,
+      openings: this.openings,
+      bongcloudAppearances: this.bongcloud,
+      gameEndings: this.gameEndings,
+      numberGamesAnalyzedForRatings: this.numberGamesAnalyzedForRatings,
     };
   }
 }

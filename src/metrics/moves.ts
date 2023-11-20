@@ -33,7 +33,10 @@ export class GameWithMostMovesMetric implements Metric {
   }
 
   aggregate() {
-    
+    return {
+      gameWithMostMoves: this.link,
+      gameWithMostMovesNumMoves: this.numMoves,
+    }
   }
 
   logResults(): void {
@@ -52,9 +55,11 @@ export class GameWithMostMovesMetric implements Metric {
 
 export class PieceLevelMoveInfoMetric implements Metric {
   totalMovesByPiece: UAPMap<{ numMoves: number }>;
-  singleGameMaxMoves: number;
+  gameMaxMoves: string[];
+  maxNumMovesSingleGame: number;
+  uasSingleGameMaxMoves: number;
   uasWithMostMoves: UASymbol[];
-  gamesWithMostMoves: string[];
+  gamesWithUasMostMoves: string[];
   gamesProcessed: number; // this could be tracked externally also, in other metrics
   averagesMap: UAPMap<{ avgMoves: number }>;
   highestAverageMoves: number;
@@ -73,9 +78,11 @@ export class PieceLevelMoveInfoMetric implements Metric {
 
   clear(): void {
     this.totalMovesByPiece = createUAPMap({ numMoves: 0 });
-    this.singleGameMaxMoves = 0;
+    this.gameMaxMoves = [];
+    this.maxNumMovesSingleGame = 0;
+    this.uasSingleGameMaxMoves = 0;
     this.uasWithMostMoves = [];
-    this.gamesWithMostMoves = [];
+    this.gamesWithUasMostMoves = [];
     this.gamesProcessed = 0;
     this.highestAverageMoves = 0;
     this.pieceHighestAverageMoves = [];
@@ -90,6 +97,8 @@ export class PieceLevelMoveInfoMetric implements Metric {
 
   logResults(): void {
     console.log('PIECE LEVEL MOVE INFO FACTS:');
+    console.log(`The game with the most moves played: ${this.gameMaxMoves}`);
+    console.log(`The number of moves played in that game: ${this.maxNumMovesSingleGame}`);
     console.log('The total number of moves by piece in the set of games:');
     console.table(this.totalMovesByPiece);
     
@@ -99,8 +108,8 @@ export class PieceLevelMoveInfoMetric implements Metric {
     console.log(`The piece(s) with the highest average number moves and the number of moves: 
       ${this.pieceHighestAverageMoves}, ${this.highestAverageMoves}`);
     console.log(`The piece with the most moves in a single game: ${this.uasWithMostMoves}`);
-    console.log(`The number of most moves that piece made in a single game: ${this.singleGameMaxMoves}`);
-    console.log(`The game that piece made that many moves in: ${this.gamesWithMostMoves}`);
+    console.log(`The number of most moves that piece made in a single game: ${this.uasSingleGameMaxMoves}`);
+    console.log(`The game that piece made that many moves in: ${this.gamesWithUasMostMoves}`);
     console.log('\n');
 
     console.log(`The number of games with no castling: ${this.gamesWithNoCastling}`);
@@ -119,6 +128,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
   ) {
     // update move counts of each unambiguous piece
     const currentGameStats = createUAPMap({ numMoves: 0 });
+    let thisGameNumMoves = 0;
 
     // track if this game has no castling
     let gameCastling = 0;
@@ -154,27 +164,40 @@ export class PieceLevelMoveInfoMetric implements Metric {
       }
     }
 
+    const gameLink = metadata.find((item) => item.startsWith('[Site "'))
+    ?.replace('[Site "', '')
+    ?.replace('"]', '');
+
     // Calculate single game maxes & add to global totals
     for (const uas of Object.keys(currentGameStats)) {
       // increment global totals
       this.totalMovesByPiece[uas].numMoves += currentGameStats[uas].numMoves;
-      const gameLink = metadata.find((item) => item.startsWith('[Site "'))
-      ?.replace('[Site "', '')
-      ?.replace('"]', '');
+      thisGameNumMoves += currentGameStats[uas].numMoves;
 
-      if (currentGameStats[uas].numMoves > this.singleGameMaxMoves) {
-        this.singleGameMaxMoves = currentGameStats[uas].numMoves;
+      if (currentGameStats[uas].numMoves > this.uasSingleGameMaxMoves) {
+        this.uasSingleGameMaxMoves = currentGameStats[uas].numMoves;
         this.uasWithMostMoves = [uas as UASymbol]; // New highest moves, reset the array
-        this.gamesWithMostMoves = [gameLink]; // New highest moves, reset the array
-      } else if (currentGameStats[uas] === this.singleGameMaxMoves) {
+        this.gamesWithUasMostMoves = [gameLink]; // New highest moves, reset the array
+      } else if (currentGameStats[uas] === this.uasSingleGameMaxMoves) {
         this.uasWithMostMoves.push(uas as UASymbol); // Tie, add to the array
-        this.gamesWithMostMoves.push(gameLink);
+        this.gamesWithUasMostMoves.push(gameLink);
       }
+    }
+
+    // find the game in which the most moves were made
+    if (
+      thisGameNumMoves > this.maxNumMovesSingleGame) {
+      this.maxNumMovesSingleGame = thisGameNumMoves;
+      this.gameMaxMoves = [gameLink];
+    } else if (thisGameNumMoves > this.maxNumMovesSingleGame) {
+      this.gameMaxMoves.push(gameLink);
     }
 
     if (gameCastling = 0) {
       this.gamesWithNoCastling++;
     }
+
+
 
     this.gamesProcessed++;
   }
@@ -199,13 +222,26 @@ export class PieceLevelMoveInfoMetric implements Metric {
 
     this.averagesMap = averagesMap;
 
-    return averagesMap;
+    return {
+      totalMovesByPiece: this.totalMovesByPiece,
+      averageNumMovesPerGameByPiece: averagesMap,
+      pieceHighestAverageMoves: this.pieceHighestAverageMoves,
+      highestAverageMoves: this.highestAverageMoves,
+      uasWithMostMovesSingleGame: this.uasWithMostMoves,
+      uasSingleGameMaxMoves: this.uasSingleGameMaxMoves,
+      gamesWithUasMostMoves: this.gamesWithUasMostMoves,
+      gamesWithNoCastling: this.gamesWithNoCastling,
+      queenKingCastlingCounts: this.castlingCounts,
+      gameWithMostMovesPlayed: this.gameMaxMoves,
+      gameMostMovesNumMoves: this.maxNumMovesSingleGame,
+    }
   }
 }
 
 export class MiscMoveFactMetric implements Metric {
   enPassantMoves: number;
   knightHops: UAPMap<{ count: number }>; // the number of times a piece is hopped over by knights
+  totalNumKnightHops: number;
 
   constructor() {
     this.clear();
@@ -214,6 +250,7 @@ export class MiscMoveFactMetric implements Metric {
   clear(): void {
     this.enPassantMoves = 0;
     this.knightHops = createUAPMap({ count: 0 });
+    this.totalNumKnightHops = 0;
   }
 
   processGame(
@@ -298,10 +335,16 @@ export class MiscMoveFactMetric implements Metric {
     for (const uas of Object.keys(this.knightHops)) {
       totalHops += this.knightHops[uas].count;
     }
+    this.totalNumKnightHops = totalHops;
 
     return {
-      enPassantMoves: this.enPassantMoves,
-      knightHops: totalHops,
+      enPassantMovesCount: this.enPassantMoves,
+      totalNumPiecesKnightHopped: totalHops,
     };
+  }
+
+  logResults(): void {
+    console.log(`Number of enPassant moves: ${this.enPassantMoves}`);
+    console.log(`Number of pieces knights hopped over: ${this.totalNumKnightHops}`)
   }
 }

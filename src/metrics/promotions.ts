@@ -101,6 +101,13 @@ export class PromotionMetric implements Metric {
         this.totals[piece] += this.promotionMap[pawn][piece];
       }
     }
+
+    return {
+      promotedToTotals: this.totals,
+      uasPromotingPieces: this.promotionMap,
+      maxNumQueens: this.maxQueenCounts,
+      movesAndGamesWithMaxQueenCount: this.movesAndGamesWithMaxQueenCount,
+    }
   }
 
   logResults(): void {

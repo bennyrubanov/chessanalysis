@@ -6,8 +6,11 @@ import { MetadataMetric } from './metrics/misc';
 import {
   GameWithMostMovesMetric,
   PieceLevelMoveInfoMetric,
+  MiscMoveFactMetric,
 } from './metrics/moves';
 import { PromotionMetric } from './metrics/promotions';
+const fs = require('fs');
+
 
 /**
  *
@@ -20,6 +23,10 @@ export async function main(path: string) {
   console.timeEnd('Total Execution Time');
 }
 
+let results = {
+  'Number of games analyzed': 0,
+}
+
 /**
  * Metric functions will ingest a single game at a time
  * @param metricFunctions
@@ -29,22 +36,24 @@ async function gameIterator(path) {
 
   const gamesGenerator = gameChunks(path);
   const kdRatioMetric = new KDRatioMetric();
-  // const killStreakMetric = new KillStreakMetric();
+  const killStreakMetric = new KillStreakMetric();
   const mateAndAssistMetric = new MateAndAssistMetric();
   const promotionMetric = new PromotionMetric();
   const moveDistanceMetric = new MoveDistanceMetric();
   const gameWithMostMovesMetric = new GameWithMostMovesMetric();
   const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
   const metadataMetric = new MetadataMetric(cjsmin);
+  const miscMoveFactMetric = new MiscMoveFactMetric();
   const metrics = [
     metadataMetric,
     kdRatioMetric,
-    // killStreakMetric,
+    killStreakMetric,
     mateAndAssistMetric,
     promotionMetric,
     moveDistanceMetric,
     gameWithMostMovesMetric,
     pieceLevelMoveInfoMetric,
+    miscMoveFactMetric,
   ];
 
   let gameCounter = 0;
@@ -60,16 +69,25 @@ async function gameIterator(path) {
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
-  metadataMetric.aggregate();
-  metadataMetric.logResults();
+  results['Number of games analyzed'] = gameCounter;
+  // for (const metric of metrics) {
+  //   results[`${metric}`] = metric.aggregate()
+  // }
+  miscMoveFactMetric.aggregate();
+  miscMoveFactMetric.logResults();
 }
 
 // for use with streaming_partial_decompresser.js
-if (require.main === module) {
-  const path = process.argv[2];
-  main(path).then((a) => {});
-}
-
 // if (require.main === module) {
-//   main(`data/10.10.23_test_set`).then((a) => {});
+//   const path = process.argv[2];
+//   main(path).then(async (results) => {
+//     const analysisKey = `analysis${Date.now()}`; // Use the current timestamp as the key
+//     const existingResults = JSON.parse(fs.readFileSync('./results.json', 'utf8') || '{}'); // read the contents of results.json as JSON and store in existingResults
+//     existingResults[analysisKey] = results;
+//     fs.writeFileSync('./results.json', JSON.stringify(existingResults, null, 2)); // convert existResults to JSON string and write to results.json
+//   });
 // }
+
+if (require.main === module) {
+  main(`data/11.11.23 3 Game Test Set`).then((a) => {});
+}

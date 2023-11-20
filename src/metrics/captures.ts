@@ -1,4 +1,3 @@
-import { includes } from 'lodash';
 import {
   ALL_SQUARES,
   Piece,
@@ -25,11 +24,11 @@ export class KillStreakMetric implements Metric {
     this.killStreakMap = createUAPMap({ killStreaks: 0 });
   }
 
-  aggregate() {}
-
-  logResults(): void {
-    
+  aggregate() {
+    return this.killStreakMap;
   }
+
+  logResults(): void {}
 
   getMaxKillStreak(
     game: { move: PrettyMove; board: Piece[] }[],
@@ -178,6 +177,8 @@ export class KDRatioMetric implements Metric {
       KDRatios: KDRatios,
       KDRatiosValues,
       pieceWithHighestKDRatioValues,
+      KDAssistsValuesMap: this.KDAssistsValuesMap,
+      KDAssistsMap: this.KDAssistsMap,
     };
   }
 
@@ -286,7 +287,10 @@ export class MateAndAssistMetric implements Metric {
   }
 
   aggregate() {
-
+    return {
+      mateAndAssistMap: this.mateAndAssistMap,
+      matedCounts: this.matedCounts
+    };
   }
 
   logResults() {
@@ -374,14 +378,13 @@ export class CaptureLocationMetric implements Metric {
         captureTotals[square] += this.captureLocationMap[square][uas].captured;
       }
     }
+    return captureTotals;
   }
 }
 
 export class MatingSquareMetric implements Metric {
   matingSquareMap: BoardMap<{
     mates: number;
-    assists: number;
-    hockeyAssists: number;
   }>;
 
   // these are initialized as undefined
@@ -393,9 +396,18 @@ export class MatingSquareMetric implements Metric {
   clear(): void {
     this.matingSquareMap = createBoardMap({
       mates: 0,
-      assists: 0,
-      hockeyAssists: 0,
     });
+  }
+
+  aggregate() {
+    // Gets a mate total for each square
+    const mateTotals = createUAPMap({ captures: 0, captured: 0 });
+    for (const square of Object.keys(this.matingSquareMap)) {
+      for (const uas of Object.keys(this.matingSquareMap[square])) {
+        mateTotals[square] += this.matingSquareMap[square][uas].mates;
+      }
+    }
+    return mateTotals;
   }
 
   // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery
@@ -407,14 +419,14 @@ export class MatingSquareMetric implements Metric {
     }
 
     const lastMove = game[game.length - 1].move;
-    // TODO: this is not properly tracking which pieces are delivering mates or asssits, because discovery checks can be delivered
+    // TODO: this is not properly tracking which pieces are delivering mates or assists, because discovery checks can be delivered
     // by pieces other than the last piece to move
     this.matingSquareMap[lastMove.to][lastMove.uas].mates++;
   }
 }
 
 /**
- * When determining discovery checks, we need to look at the ray that was revealed. That measn tracking the index of the king
+ * When determining discovery checks, we need to look at the ray that was revealed. That means tracking the index of the king
  * and the index of the moving piece, tracing that line back and seeing if a piece is now threatening.
  * We also need to track the new piece and see if its movement has created a new threat ray
  */
