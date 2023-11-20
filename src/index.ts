@@ -10,8 +10,8 @@ import {
   MiscMoveFactMetric,
 } from './metrics/moves';
 import { PromotionMetric } from './metrics/promotions';
-const fs = require('fs');
-
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
  *
@@ -22,6 +22,7 @@ export async function main(path: string) {
   console.time('Total Execution Time');
   await gameIterator(path);
   console.timeEnd('Total Execution Time');
+  return results;
 }
 
 let results = {
@@ -71,23 +72,55 @@ async function gameIterator(path) {
     }
   }
   results['Number of games analyzed'] = gameCounter;
+  let metricCallsCount = 0;
   for (const metric of metrics) {
-    results[`${metric}`] = metric.aggregate()
+    metricCallsCount++;
+    results[metric.constructor.name] = metric.aggregate()
   }
 }
 
 // for use with streaming_partial_decompresser.js
 if (require.main === module) {
-  const path = process.argv[2];
-  main(path).then(async (results) => {
-    const analysisKey = `analysis${Date.now()}`; // Use the current timestamp as the key
-    const existingResults = JSON.parse(fs.readFileSync('./results.json', 'utf8') || '{}'); // read the contents of results.json as JSON and store in existingResults
+  const pathToAnalyze = process.argv[2];
+  main(pathToAnalyze).then(async (results) => {
+    const analysisKey = `analysis${Date.now()}`;
+    const resultsPath = path.join(__dirname, 'results.json');
+
+    let existingResults = {};
+    if (fs.existsSync(resultsPath)) {
+      const fileContent = fs.readFileSync(resultsPath, 'utf8');
+      if (fileContent !== '') {
+        existingResults = JSON.parse(fileContent);
+      }
+    }
+
     existingResults[analysisKey] = results;
-    fs.writeFileSync('./results.json', JSON.stringify(existingResults, null, 2)); // convert existResults to JSON string and write to results.json
+    
+    fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
   });
 }
 
 // for use with index.ts
 // if (require.main === module) {
 //   main(`data/11.11.23 3 Game Test Set`).then((a) => {});
+// }
+
+// for use with index.ts
+// if (require.main === module) {
+//   main(`data/10.10.23_test_set`).then(async (results) => {
+//     const analysisKey = `analysis${Date.now()}`;
+//     const resultsPath = path.join(__dirname, 'results.json');
+    
+//     let existingResults = {};
+//     if (fs.existsSync(resultsPath)) {
+//       const fileContent = fs.readFileSync(resultsPath, 'utf8');
+//       if (fileContent !== '') {
+//         existingResults = JSON.parse(fileContent);
+//       }
+//     }
+
+//     existingResults[analysisKey] = results;
+    
+//     fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
+//   });
 // }

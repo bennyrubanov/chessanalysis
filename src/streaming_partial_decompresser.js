@@ -56,7 +56,7 @@ const runAnalysis = (filePath) => {
 
 const decompressAndAnalyze = async (file, start = 0) => {
     let these_chunks_counter = 0; // Initialize the chunk counter
-    let file_counter = 0; // Initialize the file counter
+    let file_counter = 1; // Initialize the file counter
     let total_chunk_counter = 0;
 
     const base_path = `/Users/bennyrubanov/chessanalysis/data/${file.replace('.zst', '')}`;

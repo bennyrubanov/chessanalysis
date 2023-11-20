@@ -15,6 +15,9 @@ export class KillStreakMetric implements Metric {
       killStreaks: number;
     };
   };
+  maxKillStreakGame: string[]
+  maxKillStreak: number;
+  maxKillStreakPiece: UASymbol[];
 
   constructor() {
     this.killStreakMap = createUAPMap({ killStreaks: 0 });
@@ -22,19 +25,29 @@ export class KillStreakMetric implements Metric {
 
   clear(): void {
     this.killStreakMap = createUAPMap({ killStreaks: 0 });
+    this.maxKillStreakGame = [];
+    this.maxKillStreak = 0;
+    this.maxKillStreakPiece = [];
   }
 
   aggregate() {
-    return this.killStreakMap;
+    return {
+      killStreakMap: this.killStreakMap,
+      maxKillStreak: this.maxKillStreak,
+      maxKillStreakPiece: this.maxKillStreakPiece,
+      maxKillStreakGame: this.maxKillStreakGame,
+    }
   }
 
   logResults(): void {
     console.log('Kill streak map', this.killStreakMap)
+    console.log(`Game(s) with max kill streak(s): ${this.maxKillStreakGame}`)
   }
 
   getMaxKillStreak(
     game: { move: PrettyMove; board: Piece[] }[],
-    startingIndex: 0 | 1 // assume games have at least 2 moves
+    startingIndex: 0 | 1, // assume games have at least 2 moves
+    gameLink: string
   ) {
     let i = startingIndex;
     let streakLength = 0;
@@ -78,11 +91,29 @@ export class KillStreakMetric implements Metric {
         streakLength
       );
     }
+
+    // update maxes
+    if (this.killStreakMap[streakPiece].killStreaks > this.maxKillStreak) {
+      this.maxKillStreak = this.killStreakMap[streakPiece].killStreaks;
+      this.maxKillStreakPiece = [streakPiece as UASymbol];
+      this.maxKillStreakGame = [gameLink];
+    }
+    else if (this.killStreakMap[streakPiece].killStreaks === this.maxKillStreak) {
+      this.maxKillStreakPiece.push(streakPiece as UASymbol)
+      this.maxKillStreakGame.push(gameLink);
+    }
   }
 
-  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
-    this.getMaxKillStreak(game, 0);
-    this.getMaxKillStreak(game, 1);
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata?: string[]
+  ) {
+    const gameLink = metadata.find((item) => item.startsWith('[Site "'))
+    ?.replace('[Site "', '')
+    ?.replace('"]', '');
+
+    this.getMaxKillStreak(game, 0, gameLink);
+    this.getMaxKillStreak(game, 1, gameLink);
   }
 }
 
