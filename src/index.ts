@@ -80,11 +80,20 @@ async function gameIterator(path) {
 }
 
 // for use with streaming_partial_decompresser.js
+// counter introduce to avoid overwriting existing data in results.json
 if (require.main === module) {
   const pathToAnalyze = process.argv[2];
   main(pathToAnalyze).then(async (results) => {
     const now = new Date();
-    const analysisKey = `analysis${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}`;
+    const counterPath = path.join(__dirname, 'counter.txt');
+    let counter = 1;
+
+    // Read the counter from the file
+    if (fs.existsSync(counterPath)) {
+      counter = parseInt(fs.readFileSync(counterPath, 'utf8'));
+    }
+
+    const analysisKey = `analysis_${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}_${counter}`;
     const resultsPath = path.join(__dirname, 'results.json');
 
     let existingResults = {};
@@ -98,10 +107,16 @@ if (require.main === module) {
     existingResults[analysisKey] = results;
     
     fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
+
+    // Increment the counter and write it back to the file
+    counter++;
+    fs.writeFileSync(counterPath, counter.toString());
+
+    console.log(`Analysis ${analysisKey} written to ${resultsPath}.`)
   });
 }
 
-// for use with index.ts
+// for use with running index.ts alone
 // if (require.main === module) {
 //   main(`data/11.11.23 3 Game Test Set`).then((a) => {});
 // }

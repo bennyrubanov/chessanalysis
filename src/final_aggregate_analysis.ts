@@ -1,5 +1,12 @@
 import * as fs from 'fs';
 import * as util from 'util';
+import {
+  ALL_SQUARES,
+  Piece,
+  PrettyMove,
+  Square,
+  UASymbol,
+} from '../cjsmin/src/chess';
 // const processFiles = require('./streaming_partial_decompresser.js');
 
 const readFile = util.promisify(fs.readFile);
@@ -29,13 +36,15 @@ async function aggregateResults(filePath: string) {
   let totalGamesAnalyzedForRatings = 0; // accounting for some missing rating data
 
   // capture metrics
-  let maxKDRatio = 0;
-  let pieceWithHighestKDRatio = [];
-  let KDRatios = {};
   let KDMap = {};
-  let pieceWithHighestKDRatioValues = [];
-  let kDRatiosValues = {}
   let KDValuesMap = {};
+  let KDRatios = {};
+  let KDRatiosValues = {}
+  let maxKDRatio = 0;
+  let maxKDRatioValues = 0;
+  let pieceWithHighestKDRatio = [];
+  let pieceWithHighestKDRatioValues = [];
+  let KillStreakMap = {};
   
   // helper variables
   let weightedTotalPlayerRating = 0;
@@ -138,10 +147,28 @@ async function aggregateResults(filePath: string) {
     const thisKDValuesMap = analysis['KDRatioMetric']['KDValuesMap']
 
     for (const uas in thisKDMap) {
-
+      if (!KDMap[uas]) {
+        KDMap[uas] = {
+          kills: 0,
+          deaths: 0,
+          revengeKills: 0
+        };
+      }
+      if (!KDValuesMap[uas]) {
+        KDValuesMap[uas] = {
+          valueKills: 0,
+          deaths: 0
+        };
+      }
+      KDMap[uas].kills += thisKDMap[uas].kills;
+      KDMap[uas].deaths += thisKDMap[uas].deaths;
+      KDMap[uas].revengeKills += thisKDMap[uas].revengeKills;
+      KDValuesMap[uas].valueKills += thisKDValuesMap[uas].valueKills;
+      KDValuesMap[uas].deaths += thisKDValuesMap[uas].deaths;
     }
 
-
+    // kill streaks
+    const thisKillStreakMap = analysis['Kd']
 
     // final increments
     totalGamesAnalyzed += thisAnalysisGamesAnalyzed;
@@ -151,7 +178,38 @@ async function aggregateResults(filePath: string) {
   const weightedAveragePlayerRating = weightedTotalPlayerRating / totalGamesAnalyzedForRatings;
   const weightedAverageRatingDiff = weightedTotalRatingDiff / totalGamesAnalyzedForRatings
 
-  // weighted averages for KD ratios
+  // calculating KD Ratios and maxes for final maps
+  for (const uas of Object.keys(KDMap)) {
+    const kills = KDMap[uas].kills;
+    const deaths = KDMap[uas].deaths || 0;
+    if (deaths !== 0) {
+      KDRatios[uas] = kills / deaths;
+    }
+  }
+  for (const uas of Object.keys(KDValuesMap)) {
+    const valueKills = KDValuesMap[uas].valueKills;
+    const deaths = KDValuesMap[uas].deaths || 0;
+    if (deaths !== 0) {
+      KDRatiosValues[uas] = valueKills / deaths;
+    }
+  }
+  for (const uas of Object.keys(KDRatios)) {
+    if (KDRatios[uas] > maxKDRatio) {
+      maxKDRatio = KDRatios[uas];
+      pieceWithHighestKDRatio = [uas as UASymbol];
+    } else if (KDRatios[uas] === maxKDRatio) {
+      pieceWithHighestKDRatio.push(uas as UASymbol); // tie, add to the array
+    }
+  }
+  for (const uas of Object.keys(KDRatiosValues)) {
+    if (KDRatiosValues[uas] > maxKDRatioValues) {
+      maxKDRatioValues = KDRatiosValues[uas];
+      pieceWithHighestKDRatioValues = [uas as UASymbol];
+    } else if (KDRatiosValues[uas] === maxKDRatio) {
+      pieceWithHighestKDRatioValues.push(uas as UASymbol); // tie, add to the array
+    }
+  }
+
 
   // LOGS FOR THE ENTIRE SET
   // metadata logs
@@ -198,9 +256,32 @@ async function aggregateResults(filePath: string) {
 
   // captures logs
   console.log('CAPTURES STATS: ----------------------------');
+  console.log('Kills, deaths, and revenge kills for each unambiguous piece:'),
+  console.table(KDMap);
+  console.log(
+    'Kill Death Ratios for each unambiguous piece: ' +
+      JSON.stringify(KDRatios, null, 2)
+  );
+  console.log(
+    `Piece with the highest KD ratio was ${pieceWithHighestKDRatio} with a ratio of ${maxKDRatio}`
+  );
 
+  console.log('\n');
+  console.log("Piece values for kills: Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points. ")
+  console.log('Value kills and deaths for each unambiguous piece:'),
+  console.table(KDValuesMap);
+  console.log(
+    'Kill Death Ratios for each unambiguous piece: ' +
+      JSON.stringify(KDRatiosValues, null, 2)
+  );
+  console.log(
+    `Piece with the highest KD ratio (taking into account piece values) was ${pieceWithHighestKDRatioValues} with a ratio of ${maxKDRatioValues}`
+  );
 
-  // analysis final logs
+  console.log('\n');
+
+  // final analysis logs
+  console.log('\n');
   console.log('ANALYSIS STATS: ----------------------------')
   console.log(`Total games analyzed: ${totalGamesAnalyzed}`);
   console.log(`Number of separate analyses: ${analysisCounter}`)

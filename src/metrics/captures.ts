@@ -146,7 +146,7 @@ export class KDRatioMetric implements Metric {
     console.log(
       `Piece with the highest KD ratio: ${this.pieceWithHighestKDRatio}`
     );
-    console.log('Kills, Deaths, and  for each unambiguous piece:'),
+    console.log('Kills, deaths, and revenge kills  for each unambiguous piece:'),
       console.table(this.KDMap);
     console.log(
       'Kill Death Ratios for each unambiguous piece: ' +
