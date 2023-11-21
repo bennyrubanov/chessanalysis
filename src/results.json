@@ -18418,7 +18418,7 @@
     "MetadataMetric": {
       "averagePlayerRating": 1608.2430388072792,
       "averageRatingDiff": 158.0841189797559,
-      "largestRatingDiff": 1223,
+      "largestRatingDiff": 5,
       "largestRatingDiffGame": [
         "[Site \"https://lichess.org/s3m81v82\"]",
         "[Site \"https://lichess.org/uweti8vt\"]"
@@ -65978,10 +65978,8 @@
     "MetadataMetric": {
       "averagePlayerRating": 1590.9076409767545,
       "averageRatingDiff": 154.9851873579233,
-      "largestRatingDiff": 1257,
+      "largestRatingDiff": 5,
       "largestRatingDiffGame": [
-        "[Site \"https://lichess.org/0uj0273k\"]",
-        "[Site \"https://lichess.org/ttxunl9i\"]"
       ],
       "mostGamesPlayed": 611,
       "playerMostgames": [

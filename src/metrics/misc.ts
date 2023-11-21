@@ -423,11 +423,9 @@ if(opening) {
       largestRatingDiff: this.largestRatingDiff,
       largestRatingDiffGame: this.largestRatingDiffGame,
       mostGamesPlayed: maxGames,
-      playerMostgames: playerMostGames,
+      playerMostGames: playerMostGames,
       gameTypeStats: this.gameTypeStats,
       gameTimeControlStats: this.gameTimeControlStats,
-      // This doesn't account for ties
-      whiteWinRatio: this.whiteWins / (this.whiteWins + this.blackWins),
       openings: this.openings,
       bongcloudAppearances: this.bongcloud,
       gameEndings: this.gameEndings,

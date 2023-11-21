@@ -1,6 +1,5 @@
 const fs = require('fs');
 const zstd = require('node-zstandard');
-const exec = require('child_process').exec;
 const { spawn } = require('child_process');
 
 // List of all the database files you want to analyze (these need to be downloaded and in data folder)
@@ -193,3 +192,5 @@ const formatDuration = (duration) => {
 
     return `${hours}h ${minutes}m ${seconds}s ${milliseconds}ms`;
 }
+
+module.exports = processFiles;

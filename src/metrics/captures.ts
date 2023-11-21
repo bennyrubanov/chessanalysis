@@ -118,9 +118,9 @@ export class KillStreakMetric implements Metric {
 }
 
 export class KDRatioMetric implements Metric {
-  // create an object to track kills, deaths, and assists of each piece
-  // The kDAssistsMap is an object where each key is a piece and the value is another object with kills, deaths, and assists properties.
-  KDAssistsMap: UAPMap<{
+  // create an object to track kills and deaths of each piece
+  // The KDMap is an object where each key is a piece and the value is another object with kills and deaths properties.
+  KDMap: UAPMap<{
     kills: number;
     deaths: number;
     revengeKills: number;
@@ -129,7 +129,7 @@ export class KDRatioMetric implements Metric {
   // KDRatios is a convenience object for aggregation
   kdRatios: UAPMap<number>;
 
-  KDAssistsValuesMap: UAPMap<{
+  KDValuesMap: UAPMap<{
     valueKills: number;
     deaths: number;
   }>;
@@ -146,8 +146,8 @@ export class KDRatioMetric implements Metric {
     console.log(
       `Piece with the highest KD ratio: ${this.pieceWithHighestKDRatio}`
     );
-    console.log('Kills, Deaths, and Assists for each unambiguous piece:'),
-      console.table(this.KDAssistsMap);
+    console.log('Kills, Deaths, and  for each unambiguous piece:'),
+      console.table(this.KDMap);
     console.log(
       'Kill Death Ratios for each unambiguous piece: ' +
         JSON.stringify(this.kdRatios, null, 2)
@@ -157,8 +157,8 @@ export class KDRatioMetric implements Metric {
     console.log(
       `Piece with the highest KD ratio (taking into account piece values): ${this.pieceWithHighestKDRatioValues}`
     );
-    console.log('Kills, Deaths, and Assists for each unambiguous piece (taking into account piece values):'),
-      console.table(this.KDAssistsValuesMap);
+    console.log('Kills, Deaths, and for each unambiguous piece (taking into account piece values):'),
+      console.table(this.KDValuesMap);
     console.log(
       'Kill Death Ratios for each unambiguous piece (taking into account piece values): ' +
         JSON.stringify(this.kdRatiosValues, null, 2)
@@ -170,18 +170,18 @@ export class KDRatioMetric implements Metric {
     const KDRatiosValues = createUAPMap(0);
 
     // calculate the KD ratios of each piece
-    for (const uas of Object.keys(this.KDAssistsMap)) {
-      const kills = this.KDAssistsMap[uas].kills;
-      const deaths = this.KDAssistsMap[uas].deaths || 0;
+    for (const uas of Object.keys(this.KDMap)) {
+      const kills = this.KDMap[uas].kills;
+      const deaths = this.KDMap[uas].deaths || 0;
       if (deaths !== 0) {
         KDRatios[uas] = kills / deaths;
       }
     }
 
     // calculate the KD ratios of each piece depending on piece value
-    for (const uas of Object.keys(this.KDAssistsValuesMap)) {
-      const valueKills = this.KDAssistsValuesMap[uas].valueKills;
-      const deaths = this.KDAssistsValuesMap[uas].deaths || 0;
+    for (const uas of Object.keys(this.KDValuesMap)) {
+      const valueKills = this.KDValuesMap[uas].valueKills;
+      const deaths = this.KDValuesMap[uas].deaths || 0;
       if (deaths !== 0) {
         KDRatiosValues[uas] = valueKills / deaths;
       }
@@ -226,27 +226,27 @@ export class KDRatioMetric implements Metric {
       KDRatios: KDRatios,
       KDRatiosValues,
       pieceWithHighestKDRatioValues,
-      KDAssistsValuesMap: this.KDAssistsValuesMap,
-      KDAssistsMap: this.KDAssistsMap,
+      KDValuesMap: this.KDValuesMap,
+      KDMap: this.KDMap,
     };
   }
 
   clear(): void {
     // KDRatios is reset JIT since it is only used in aggregation
-    this.KDAssistsMap = createUAPMap({
+    this.KDMap = createUAPMap({
       kills: 0,
       deaths: 0,
       revengeKills: 0,
     });
     this.kdRatios = undefined;
-    this.KDAssistsValuesMap = createUAPMap({
+    this.KDValuesMap = createUAPMap({
       valueKills: 0,
       deaths: 0,
     });
     this.kdRatiosValues = undefined;
   }
 
-  // calculates piece with highest K/D ratio and also contains assists by that piece
+  // calculates piece with highest K/D ratio and also contains  by that piece
   processGame(
     game: { move: PrettyMove; board: Piece[] }[],
     metadata?: string[]
@@ -255,27 +255,27 @@ export class KDRatioMetric implements Metric {
     let previousMove: PrettyMove = {};
     for (const { move } of game) {
       if (move.capture) {
-        this.KDAssistsMap[move.uas].kills++;
-        this.KDAssistsMap[move.capture.uas].deaths++;
+        this.KDMap[move.uas].kills++;
+        this.KDMap[move.capture.uas].deaths++;
 
-        this.KDAssistsValuesMap[move.capture.uas].deaths++;
+        this.KDValuesMap[move.capture.uas].deaths++;
 
         // identify kill values based on captured piece type
         if (move.capture.type === 'p') {
-          this.KDAssistsValuesMap[move.uas].valueKills++;
+          this.KDValuesMap[move.uas].valueKills++;
         } else if (move.capture.type === 'n' || move.capture.type === 'b') {
-          this.KDAssistsValuesMap[move.uas].valueKills += 3;
+          this.KDValuesMap[move.uas].valueKills += 3;
         } else if (move.capture.type === 'k') {
-          this.KDAssistsValuesMap[move.uas].valueKills += 4; // king's fighting value valued around 4 points in https://en.wikipedia.org/wiki/Chess_piece_relative_value
+          this.KDValuesMap[move.uas].valueKills += 4; // king's fighting value valued around 4 points in https://en.wikipedia.org/wiki/Chess_piece_relative_value
         } else if (move.capture.type === 'r') {
-          this.KDAssistsValuesMap[move.uas].valueKills += 5;
+          this.KDValuesMap[move.uas].valueKills += 5;
         } else if (move.capture.type === 'q') {
-          this.KDAssistsValuesMap[move.uas].valueKills += 9;
+          this.KDValuesMap[move.uas].valueKills += 9;
         } 
 
         // identify a revenge kill if the previous move and the current move contained a capture, and the square moved to in the previous move is the same as the square moved to in this move
         if (previousMove.capture && move.to === previousMove.to) {
-          this.KDAssistsMap[move.uas].revengeKills++;
+          this.KDMap[move.uas].revengeKills++;
         }
         previousMove = move;
       }
@@ -285,18 +285,18 @@ export class KDRatioMetric implements Metric {
     // Check if the game is in checkmate after the last move
     if (lastMove.originalString.includes('#')) {
       const unambigMatingPiece = lastMove.uas;
-      this.KDAssistsMap[unambigMatingPiece].kills++;
-      this.KDAssistsValuesMap[unambigMatingPiece].valueKills++; // king kill counts as 1 point
+      this.KDMap[unambigMatingPiece].kills++;
+      this.KDValuesMap[unambigMatingPiece].valueKills++; // king kill counts as 1 point
 
       // only kings can get mated, and we know whose move it is
       const matedKing = lastMove.color === 'w' ? 'k' : 'K';
-      this.KDAssistsMap[matedKing].deaths++;
-      this.KDAssistsValuesMap[matedKing].deaths++;
+      this.KDMap[matedKing].deaths++;
+      this.KDValuesMap[matedKing].deaths++;
 
       // A revenge kill can occur by checkmate too
       const secondToLastMove = game[game.length - 2].move;
       if (secondToLastMove.capture && secondToLastMove.uas === matedKing) {
-        this.KDAssistsMap[lastMove.uas].revengeKills++;
+        this.KDMap[lastMove.uas].revengeKills++;
       }
     }
   }
