@@ -13,7 +13,7 @@ Data is sourced from the public [Lichess games database](https://database.liches
 We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little time.
 
 ## Definitions
-- UAP (Unambiguous Piece): pawn that started on a2
+- Unambiguous Piece (UAP): e.g. pawn that started on a2
 - Ambiguous pieces: pawn, bishop, knight, rook, queen, king
 
 ## Edge Cases
