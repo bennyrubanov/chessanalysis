@@ -1,3 +1,4 @@
+import { max } from 'd3';
 import {
   ALL_SQUARES,
   Piece,
@@ -21,6 +22,9 @@ export class KillStreakMetric implements Metric {
 
   constructor() {
     this.killStreakMap = createUAPMap({ killStreaks: 0 });
+    this.maxKillStreakGame = [];
+    this.maxKillStreak = 0;
+    this.maxKillStreakPiece = [];
   }
 
   clear(): void {
@@ -40,7 +44,9 @@ export class KillStreakMetric implements Metric {
   }
 
   logResults(): void {
-    console.log('Kill streak map', this.killStreakMap)
+    console.log('Kill streak map', this.killStreakMap);
+    console.log(`Max Kill Streak: ${this.maxKillStreak}`);
+    console.log(`Max Kill Streak Piece: ${this.maxKillStreakPiece}`);
     console.log(`Game(s) with max kill streak(s): ${this.maxKillStreakGame}`)
   }
 

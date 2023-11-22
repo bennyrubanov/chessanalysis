@@ -45,6 +45,27 @@ async function aggregateResults(filePath: string) {
   let pieceWithHighestKDRatio = [];
   let pieceWithHighestKDRatioValues = [];
   let KillStreakMap = {};
+  let maxKillStreak = 0;
+  let maxKillStreakPiece = [];
+  let maxKillStreakGame = [];
+
+  // mates and assists metrics
+  let mateAndAssistMap = {};
+  let matedCountsMap = {
+    k: 0,
+    K: 0
+  };
+
+  // promotions metrics
+  let promotedToTotals = {
+    q: 0,
+    r: 0,
+    b: 0,
+    n: 0,
+  }
+  let uasPromotingPieces = {};
+  let maxNumQueens = 0;
+  let movesAndGamesMaxQueens = [];
   
   // helper variables
   let weightedTotalPlayerRating = 0;
@@ -168,7 +189,80 @@ async function aggregateResults(filePath: string) {
     }
 
     // kill streaks
-    const thisKillStreakMap = analysis['Kd']
+    const thisKillStreakMap = analysis['KillStreakMetric']['killStreakMap']
+    const thisMaxKillStreak = analysis['KillStreakMetric']['maxKillStreak']
+    const thisMaxKillStreakPiece = analysis['KillStreakMetric']['maxKillStreakPiece']
+    const thisMaxKillStreakGame = analysis['KillStreakMetric']['maxKillStreakGame']
+    for (const uas in thisKillStreakMap) {
+      if (!KillStreakMap[uas]) {
+        KillStreakMap[uas] = 0;
+      }
+      if (thisKillStreakMap[uas].killStreaks > KillStreakMap[uas]) {
+        KillStreakMap[uas] += thisKillStreakMap[uas].killStreaks;
+      }
+    }
+    // find maxes
+    if (thisMaxKillStreak > maxKillStreak) {
+      maxKillStreak = thisMaxKillStreak;
+      maxKillStreakPiece = thisMaxKillStreakPiece;
+      maxKillStreakGame = thisMaxKillStreakGame;
+    } else if (thisMaxKillStreak === maxKillStreak) {
+      maxKillStreakPiece.push(thisMaxKillStreakPiece);
+      maxKillStreakGame.push(thisMaxKillStreakGame);
+    }
+
+    // mates and assists
+    const thisMateAndAssistMap = analysis['MateAndAssistMetric']['mateAndAssistMap']
+    for (const uas in thisMateAndAssistMap) {
+      if (!mateAndAssistMap[uas]) {
+        mateAndAssistMap[uas] = {
+          mates: 0,
+          assists: 0,
+          hockeyAssists: 0
+        };
+      }
+      mateAndAssistMap[uas].mates += thisMateAndAssistMap[uas].mates;
+      mateAndAssistMap[uas].assists += thisMateAndAssistMap[uas].assists;
+      mateAndAssistMap[uas].hockeyAssists += thisMateAndAssistMap[uas].hockeyAssists;
+    }
+
+    const thisMatedCountsMap = analysis['MateAndAssistMetric']['matedCounts']
+    matedCountsMap.k += thisMatedCountsMap.k;
+    matedCountsMap.K += thisMatedCountsMap.K;
+
+    // promotions metrics
+    const thisPromotedToTotals = analysis['PromotionMetric']['promotedToTotals']
+    promotedToTotals.q += thisPromotedToTotals.q
+    promotedToTotals.r += thisPromotedToTotals.r
+    promotedToTotals.b += thisPromotedToTotals.b
+    promotedToTotals.n += thisPromotedToTotals.n
+
+    const thisUASPromotiongPieces = analysis['PromotionMetric']['uasPromotingPieces']
+    for (const uas in thisUASPromotiongPieces) {
+      if (!uasPromotingPieces[uas]) {
+        uasPromotingPieces[uas] = {
+          q: 0,
+          r: 0,
+          b: 0,
+          n: 0,
+        };
+      }
+      uasPromotingPieces[uas].q += thisUASPromotiongPieces[uas].q
+      uasPromotingPieces[uas].r += thisUASPromotiongPieces[uas].r
+      uasPromotingPieces[uas].b += thisUASPromotiongPieces[uas].b
+      uasPromotingPieces[uas].n += thisUASPromotiongPieces[uas].n
+    }
+    const thisMaxNumQueens = analysis['PromotionMetric']['maxNumQueens']
+    const thisMovesAndGamesMaxQueens = analysis['PromotionMetric']['movesAndGamesWithMaxQueenCount']
+
+    // find maxes
+    if (thisMaxNumQueens > maxNumQueens) {
+      maxNumQueens = thisMaxNumQueens;
+      movesAndGamesMaxQueens = thisMovesAndGamesMaxQueens;
+    } else if (thisMaxNumQueens > maxNumQueens) {
+      movesAndGamesMaxQueens.push(thisMovesAndGamesMaxQueens);
+    }
+
 
     // final increments
     totalGamesAnalyzed += thisAnalysisGamesAnalyzed;
@@ -279,6 +373,33 @@ async function aggregateResults(filePath: string) {
   );
 
   console.log('\n');
+  console.log(
+    'Max Kill Streaks achieved for each piece: ');
+  console.table(KillStreakMap)
+  console.log(`Max Kill Streak achieved by any piece: ${maxKillStreak} by the piece(s) ${maxKillStreakPiece}. This was done in the game(s): `);
+  console.table(maxKillStreakGame)
+
+  // mates and assists logs
+  console.log('\n');
+  console.log(
+    'Mates, assists, and hockey assists for each piece: ');
+  console.table(mateAndAssistMap)
+  console.log(
+    'Number of times each king was mated: ');
+  console.table(matedCountsMap)
+
+  // promotions logs
+  console.log('\n');
+  console.log(
+    'Pieces promoted to most often: ');
+  console.table(promotedToTotals)
+  console.log(
+    'The pieces each unambiguous piece promotes to most often: ');
+  console.table(uasPromotingPieces);
+  console.log(`The maximum number of queens to appear in a given move in a game: ${maxNumQueens}`);
+  console.log(`The games(s) and first move(s) in that game in which that number of queens appeared: 
+    ${movesAndGamesMaxQueens.map(move => 
+      JSON.stringify(move, null, 2)).join(", ")}`);
 
   // final analysis logs
   console.log('\n');
