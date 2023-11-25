@@ -7,6 +7,9 @@ export class MoveDistanceMetric implements Metric {
   distanceMap: UAPMap<{ 
     distance: number;
   }>;
+  avgDistanceMap: UAPMap<{ 
+    avgDistance: number;
+  }>;
   pieceWithHighestAvg: UASymbol;
   pieceWithLowestAvg: UASymbol;
   maxAvgDistance: number;
@@ -32,6 +35,9 @@ export class MoveDistanceMetric implements Metric {
     this.distanceMap = createUAPMap({
       distance: 0,
     });
+    this.avgDistanceMap = createUAPMap({
+      avgDistance: 0,
+    });
     this.pieceWithHighestAvg = undefined;
     this.pieceWithLowestAvg = undefined;
     this.maxAvgDistance = 0;
@@ -55,6 +61,7 @@ export class MoveDistanceMetric implements Metric {
       this.totalCollectiveDistance += this.distanceMap[uas].distance;
 
       const avgDistance = this.distanceMap[uas].distance / this.gamesProcessed;
+      this.avgDistanceMap[uas].avgDistance = avgDistance;
       if (avgDistance > this.maxAvgDistance) {
         this.maxAvgDistance = avgDistance;
         this.pieceWithHighestAvg = uas as UASymbol;
@@ -64,6 +71,7 @@ export class MoveDistanceMetric implements Metric {
         this.pieceWithLowestAvg = uas as UASymbol;
       }
     }
+
     return {
       pieceWithHighestAvg: this.pieceWithHighestAvg,
       maxAvgDistance: this.maxAvgDistance,
@@ -75,6 +83,7 @@ export class MoveDistanceMetric implements Metric {
       totalCollectiveDistance: this.totalCollectiveDistance,
       gameMaxCollectiveDistance: this.gameCollectiveDistance,
       totalDistancesByPiece: this.distanceMap,
+      avgDistancesByPiece: this.avgDistanceMap,
     }
   }
 

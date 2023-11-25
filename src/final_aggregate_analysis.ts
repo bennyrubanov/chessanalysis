@@ -66,6 +66,29 @@ async function aggregateResults(filePath: string) {
   let uasPromotingPieces = {};
   let maxNumQueens = 0;
   let movesAndGamesMaxQueens = [];
+
+  // distance metrics
+  let pieceMaxAvgDist = [];
+  let maxAvgDistance = 0;
+  let pieceMinAvgDist = [];
+  let minAvgDistance = Infinity;
+  let pieceMaxDistSingleGame = [];
+  let gamePieceMaxDist = [];
+  let distPieceMaxDist = 0;
+  let totalCollectiveDistGames = 0;
+  let gameMaxCollectiveDist = {
+    distance: 0,
+    games: [],
+  };
+  let totalDistByPiece = {};
+  let avgDistByPiece = {};
+
+  // moves metrics
+  let gameMostMoves = [];
+  let gameMostMovesNumMoves = 0;
+  let totalMovesByPiece = {};
+  let averageNumMovesByPiece = {};
+
   
   // helper variables
   let weightedTotalPlayerRating = 0;
@@ -263,6 +286,82 @@ async function aggregateResults(filePath: string) {
       movesAndGamesMaxQueens.push(thisMovesAndGamesMaxQueens);
     }
 
+    // distance metrics
+    const thisMaxAvgDistance = analysis['MoveDistanceMetric']['maxAvgDistance']
+    const thisPieceMaxAvgDistance = analysis['MoveDistanceMetric']['pieceWithHighestAvg']
+    if (thisMaxAvgDistance > maxAvgDistance) {
+      maxAvgDistance = thisMaxAvgDistance
+      pieceMaxAvgDist = thisPieceMaxAvgDistance
+    } else if (thisMaxAvgDistance === maxAvgDistance) {
+      pieceMaxAvgDist.push(thisPieceMaxAvgDistance)
+    }
+  
+    const thisMinAvgDistance = analysis['MoveDistanceMetric']['minAvgDistance']
+    const thisPieceMinAvgDistance = analysis['MoveDistanceMetric']['pieceWithLowestAvg']
+    if (thisMinAvgDistance < minAvgDistance) {
+      minAvgDistance = thisMinAvgDistance
+      pieceMinAvgDist = thisPieceMinAvgDistance
+    } else if (thisMinAvgDistance === minAvgDistance) {
+      pieceMinAvgDist.push(thisPieceMinAvgDistance)
+    }
+
+    const thisDistPieceMaxDist = analysis['MoveDistanceMetric']['distanceThatPieceMovedInTheGame'] 
+    const thisPieceMaxDistSingleGame = analysis['MoveDistanceMetric']['pieceThatMovedTheFurthest'] 
+    const thisGamePieceMaxDist = analysis['MoveDistanceMetric']['gameInWhichPieceMovedTheFurthest']
+    if (thisDistPieceMaxDist > distPieceMaxDist) {
+      distPieceMaxDist = thisDistPieceMaxDist;
+      pieceMaxDistSingleGame = thisPieceMaxDistSingleGame;
+      gamePieceMaxDist = thisGamePieceMaxDist;
+    } else if (thisDistPieceMaxDist === distPieceMaxDist) {
+      pieceMaxDistSingleGame.push(thisPieceMaxDistSingleGame);
+      gamePieceMaxDist.push(thisGamePieceMaxDist);
+    }
+
+    const thisTotalCollectiveDistance = analysis['MoveDistanceMetric']['totalCollectiveDistance']
+    totalCollectiveDistGames += thisTotalCollectiveDistance;
+
+    const thisGameMaxCollectiveDistance = analysis['MoveDistanceMetric']['gameMaxCollectiveDistance']
+    if (thisGameMaxCollectiveDistance.distance > gameMaxCollectiveDist.distance) {
+      gameMaxCollectiveDist = {
+        distance: thisGameMaxCollectiveDistance.distance,
+        games: [thisGameMaxCollectiveDistance.linkArray],
+      };
+    } else if (thisGameMaxCollectiveDistance.distance === gameMaxCollectiveDist.distance) {
+      gameMaxCollectiveDist.games.push(thisGameMaxCollectiveDistance.linkArray);
+    }
+
+    const thisTotalDistByPiece = analysis['MoveDistanceMetric']['totalDistancesByPiece']
+    for (const uas in thisTotalDistByPiece) {
+      if (!totalDistByPiece[uas]) {
+        totalDistByPiece[uas] = {
+          distance: thisTotalDistByPiece[uas].distance
+        }
+      }
+      totalDistByPiece[uas].distance += thisTotalDistByPiece[uas].distance;
+    }
+
+    const thisAvgDistByPiece = analysis['MoveDistanceMetric']['avgDistancesByPiece']
+    for (const uas in thisAvgDistByPiece) {
+      if (!avgDistByPiece[uas]) {
+        avgDistByPiece[uas] = {
+          avgDistance: thisAvgDistByPiece[uas].avgDistance
+        }
+      }
+      avgDistByPiece[uas].avgDistance += thisAvgDistByPiece[uas].avgDistance;
+    }
+
+    // moves metrics
+    const thisGameMostMoves = analysis['GameWithMostMovesMetric']['gameWithMostMoves'];
+    const thisGameMostMovesNumMoves = analysis['GameWithMostMovesMetric']['gameWithMostMovesNumMoves'];
+    if (thisGameMostMovesNumMoves > gameMostMovesNumMoves) {
+      gameMostMovesNumMoves = thisGameMostMovesNumMoves;
+      gameMostMoves = [thisGameMostMoves];
+    } else if (thisGameMostMovesNumMoves === gameMostMovesNumMoves) {
+      gameMostMoves.push(thisGameMostMoves);
+    }
+
+    // piece level moves metrics
+    
 
     // final increments
     totalGamesAnalyzed += thisAnalysisGamesAnalyzed;
@@ -381,6 +480,7 @@ async function aggregateResults(filePath: string) {
 
   // mates and assists logs
   console.log('\n');
+  console.log('MATES AND ASSISTS STATS: ----------------------------');
   console.log(
     'Mates, assists, and hockey assists for each piece: ');
   console.table(mateAndAssistMap)
@@ -390,6 +490,7 @@ async function aggregateResults(filePath: string) {
 
   // promotions logs
   console.log('\n');
+  console.log('PROMOTIONS STATS: ----------------------------');
   console.log(
     'Pieces promoted to most often: ');
   console.table(promotedToTotals)
@@ -400,6 +501,26 @@ async function aggregateResults(filePath: string) {
   console.log(`The games(s) and first move(s) in that game in which that number of queens appeared: 
     ${movesAndGamesMaxQueens.map(move => 
       JSON.stringify(move, null, 2)).join(", ")}`);
+
+  // distance logs
+  console.log('\n');
+  console.log('DISTANCE STATS: ----------------------------');
+  console.log(`Piece(s) with highest average distance: ${pieceMaxAvgDist}. That/those piece(s) average distance: ${maxAvgDistance}`);
+  console.log(`Piece(s) with lowest average distance: ${pieceMinAvgDist}. That/those piece(s) average distance: ${minAvgDistance}`);
+  console.log(`Piece that covered the most ground in a single game: ${pieceMaxDistSingleGame}. Distance covered: ${distPieceMaxDist}. Game in which that distance was covered by that piece: ${gamePieceMaxDist}.`);
+  console.log(`Total collective distance of all pieces in games analyzed: ${totalCollectiveDistGames}`);
+  console.log(`Game(s) with the furthest collective distance moved: ${gameMaxCollectiveDist.games}`);
+  console.log(`Distance moved: ${gameMaxCollectiveDist.distance}`);
+  console.log(`Total distance moved by piece:`);
+  console.table(totalDistByPiece);
+  console.log(`Average distance moved by piece:`);
+  console.table(avgDistByPiece);
+
+  //
+  console.log('\n');
+  console.log('MOVES STATS: ----------------------------');
+  console.log(`Game(s) with most moves made (1 move = one white or one black move): ${gameMostMoves}`);
+  console.log(`Number of moves made: ${gameMostMovesNumMoves}`);
 
   // final analysis logs
   console.log('\n');
