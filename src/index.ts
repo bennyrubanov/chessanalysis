@@ -12,6 +12,7 @@ import {
 import { PromotionMetric } from './metrics/promotions';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as lockfile from 'proper-lockfile';
 
 /**
  *
@@ -71,57 +72,51 @@ async function gameIterator(path) {
       metric.processGame(Array.from(historyGenerator), metadata);
     }
   }
-  killStreakMetric.aggregate()
-  killStreakMetric.logResults()
   results['Number of games analyzed'] = gameCounter;
   let metricCallsCount = 0;
-  // for (const metric of metrics) {
-  //   metricCallsCount++;
-  //   results[metric.constructor.name] = metric.aggregate()
-  // }
+  for (const metric of metrics) {
+    metricCallsCount++;
+    results[metric.constructor.name] = metric.aggregate()
+  }
 }
 
 // for use with streaming_partial_decompresser.js
 // counter introduce to avoid overwriting existing data in results.json
-// if (require.main === module) {
-//   const pathToAnalyze = process.argv[2];
-//   main(pathToAnalyze).then(async (results) => {
-//     const now = new Date();
-//     const counterPath = path.join(__dirname, 'counter.txt');
-//     let counter = 1;
+if (require.main === module) {
+  const pathToAnalyze = process.argv[2];
+  main(pathToAnalyze).then(async (results) => {
+    const now = new Date();
+    const milliseconds = now.getMilliseconds();
 
-//     // Read the counter from the file
-//     if (fs.existsSync(counterPath)) {
-//       counter = parseInt(fs.readFileSync(counterPath, 'utf8'));
-//     }
+    const analysisKey = `analysis_${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}_${milliseconds}`;
+    const resultsPath = path.join(__dirname, 'results.json');
 
-//     const analysisKey = `analysis_${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}_${counter}`;
-//     const resultsPath = path.join(__dirname, 'results.json');
+    let existingResults = {};
+    if (fs.existsSync(resultsPath)) {
+      const fileContent = fs.readFileSync(resultsPath, 'utf8');
+      if (fileContent !== '') {
+        existingResults = JSON.parse(fileContent);
+      }
+    }
 
-//     let existingResults = {};
-//     if (fs.existsSync(resultsPath)) {
-//       const fileContent = fs.readFileSync(resultsPath, 'utf8');
-//       if (fileContent !== '') {
-//         existingResults = JSON.parse(fileContent);
-//       }
-//     }
+    existingResults[analysisKey] = results;
 
-//     existingResults[analysisKey] = results;
-    
-//     fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
+    // Use lockfile to prevent concurrent writes
+    const release = await lockfile.lock(resultsPath);
+    try {
+      fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
+    } finally {
+      release();
+    }
 
-//     // Increment the counter and write it back to the file
-//     counter++;
-//     fs.writeFileSync(counterPath, counter.toString());
-
-//     console.log(`Analysis ${analysisKey} written to ${resultsPath}.`)
-//   });
-// }
+    console.log(`Analysis ${analysisKey} written to ${resultsPath}.`)
+  });
+}
 
 // for use with running index.ts alone
-if (require.main === module) {
-  main(`data/11.11.23 3 Game Test Set`).then((a) => {});
-}
+// if (require.main === module) {
+//   main(`data/11.11.23 3 Game Test Set`).then((a) => {});
+// }
 
 // for use with index.ts
 // if (require.main === module) {

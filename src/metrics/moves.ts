@@ -55,8 +55,6 @@ export class GameWithMostMovesMetric implements Metric {
 
 export class PieceLevelMoveInfoMetric implements Metric {
   totalMovesByPiece: UAPMap<{ numMoves: number }>;
-  gameMaxMoves: string[];
-  maxNumMovesSingleGame: number;
   uasSingleGameMaxMoves: number;
   uasWithMostMoves: UASymbol[];
   gamesWithUasMostMoves: string[];
@@ -78,8 +76,6 @@ export class PieceLevelMoveInfoMetric implements Metric {
 
   clear(): void {
     this.totalMovesByPiece = createUAPMap({ numMoves: 0 });
-    this.gameMaxMoves = [];
-    this.maxNumMovesSingleGame = 0;
     this.uasSingleGameMaxMoves = 0;
     this.uasWithMostMoves = [];
     this.gamesWithUasMostMoves = [];
@@ -97,8 +93,6 @@ export class PieceLevelMoveInfoMetric implements Metric {
 
   logResults(): void {
     console.log('PIECE LEVEL MOVE INFO FACTS:');
-    console.log(`The game with the most moves played: ${this.gameMaxMoves}`);
-    console.log(`The number of moves played in that game: ${this.maxNumMovesSingleGame}`);
     console.log('The total number of moves by piece in the set of games:');
     console.table(this.totalMovesByPiece);
     
@@ -184,20 +178,9 @@ export class PieceLevelMoveInfoMetric implements Metric {
       }
     }
 
-    // find the game in which the most moves were made
-    if (
-      thisGameNumMoves > this.maxNumMovesSingleGame) {
-      this.maxNumMovesSingleGame = thisGameNumMoves;
-      this.gameMaxMoves = [gameLink];
-    } else if (thisGameNumMoves > this.maxNumMovesSingleGame) {
-      this.gameMaxMoves.push(gameLink);
-    }
-
     if (gameCastling = 0) {
       this.gamesWithNoCastling++;
     }
-
-
 
     this.gamesProcessed++;
   }
@@ -232,8 +215,6 @@ export class PieceLevelMoveInfoMetric implements Metric {
       gamesWithUasMostMoves: this.gamesWithUasMostMoves,
       gamesWithNoCastling: this.gamesWithNoCastling,
       queenKingCastlingCounts: this.castlingCounts,
-      gameWithMostMovesPlayed: this.gameMaxMoves,
-      gameMostMovesNumMoves: this.maxNumMovesSingleGame,
     }
   }
 }

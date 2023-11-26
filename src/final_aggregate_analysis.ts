@@ -88,6 +88,20 @@ async function aggregateResults(filePath: string) {
   let gameMostMovesNumMoves = 0;
   let totalMovesByPiece = {};
   let averageNumMovesByPiece = {};
+  let pieceHighestAverageMoves = [];
+  let highestAverageMoves = 0;
+  let singleGameMaxMoves = 0;
+  let pieceSingleGameMaxMoves = [];
+  let gameSingleGameMaxMoves = [];
+  let gamesNoCastling = 0;
+  let queenKingCastlingCounts = {
+    blackKing: 0,
+    blackQueen: 0,
+    whiteKing: 0,
+    whiteQueen: 0,
+  };
+  let enPassantMovesCount = 0;
+  let totalNumPiecesKnightHopped = 0;
 
   
   // helper variables
@@ -221,7 +235,7 @@ async function aggregateResults(filePath: string) {
         KillStreakMap[uas] = 0;
       }
       if (thisKillStreakMap[uas].killStreaks > KillStreakMap[uas]) {
-        KillStreakMap[uas] += thisKillStreakMap[uas].killStreaks;
+        KillStreakMap[uas] = thisKillStreakMap[uas].killStreaks;
       }
     }
     // find maxes
@@ -361,7 +375,43 @@ async function aggregateResults(filePath: string) {
     }
 
     // piece level moves metrics
-    
+    const thisTotalMovesByPiece = analysis['PieceLevelMoveInfoMetric']['totalMovesByPiece']
+    for (const uas in thisTotalMovesByPiece) {
+      if (!totalMovesByPiece[uas]) {
+        totalMovesByPiece[uas] = {
+          numMoves: thisTotalMovesByPiece[uas].numMoves
+        }
+      }
+      totalMovesByPiece[uas].numMoves += thisTotalMovesByPiece[uas].numMoves;
+    }
+
+    const thisSingleGameMaxMoves = analysis['PieceLevelMoveInfoMetric']['uasSingleGameMaxMoves']
+    const thisPieceSingleGameMaxMoves = analysis['PieceLevelMoveInfoMetric']['uasWithMostMovesSingleGame']
+    const thisGameSingleGameMaxMoves = analysis['PieceLevelMoveInfoMetric']['gamesWithUasMostMoves']
+    if (thisSingleGameMaxMoves > singleGameMaxMoves) {
+      singleGameMaxMoves = thisSingleGameMaxMoves;
+      pieceSingleGameMaxMoves = [thisPieceSingleGameMaxMoves as UASymbol]
+      gameSingleGameMaxMoves = [thisGameSingleGameMaxMoves]
+    } else if (thisSingleGameMaxMoves === singleGameMaxMoves) {
+      pieceSingleGameMaxMoves.push(thisPieceSingleGameMaxMoves as UASymbol)
+      gameSingleGameMaxMoves.push(thisGameSingleGameMaxMoves)
+    }
+
+    const thisGamesNoCastling = analysis['PieceLevelMoveInfoMetric']['gamesWithNoCastling']
+    gamesNoCastling += thisGamesNoCastling;
+
+    const thisQueenKingCastlingCounts = analysis['PieceLevelMoveInfoMetric']['queenKingCastlingCounts'];
+    for (const count in thisQueenKingCastlingCounts) {
+      queenKingCastlingCounts[count] += thisQueenKingCastlingCounts[count];
+    }
+
+    // misc move fact metrics
+    const thisEnPassantMovesCount = analysis['MiscMoveFactMetric']['enPassantMovesCount'];
+    enPassantMovesCount += thisEnPassantMovesCount;
+
+    const thisTotalNumPiecesKnightHopped = analysis['MiscMoveFactMetric']['totalNumPiecesKnightHopped'];
+    totalNumPiecesKnightHopped += thisTotalNumPiecesKnightHopped;
+
 
     // final increments
     totalGamesAnalyzed += thisAnalysisGamesAnalyzed;
@@ -403,6 +453,23 @@ async function aggregateResults(filePath: string) {
     }
   }
 
+  // calculating averageNumMovesByPiece (without doing weighted averages) and related maxes
+  for (const uas in totalMovesByPiece) {
+    if (!averageNumMovesByPiece[uas]) {
+      averageNumMovesByPiece[uas] = {
+        avgNumMoves: totalMovesByPiece[uas].numMoves / totalGamesAnalyzed
+      }
+    }
+  }
+
+  for (const uas in averageNumMovesByPiece) {
+    if (averageNumMovesByPiece[uas].avgNumMoves > highestAverageMoves) {
+      highestAverageMoves = averageNumMovesByPiece[uas].avgNumMoves;
+      pieceHighestAverageMoves = [uas as UASymbol];
+    } else if (averageNumMovesByPiece[uas].avgNumMoves === highestAverageMoves) {
+      pieceHighestAverageMoves.push(uas as UASymbol)
+    }
+  }
 
   // LOGS FOR THE ENTIRE SET
   // metadata logs
@@ -521,6 +588,17 @@ async function aggregateResults(filePath: string) {
   console.log('MOVES STATS: ----------------------------');
   console.log(`Game(s) with most moves made (1 move = one white or one black move): ${gameMostMoves}`);
   console.log(`Number of moves made: ${gameMostMovesNumMoves}`);
+  console.log('Total number of moves made by each piece: ')
+  console.table(totalMovesByPiece)
+  console.log('Average number of moves made by each piece: ')
+  console.table(averageNumMovesByPiece)
+  console.log(`Piece(s) with the highest average number of moves: ${pieceHighestAverageMoves}. The average number of moves that/those pieces made per game: ${highestAverageMoves}`)
+  console.log(`The piece with the most moves played in a single game: ${pieceSingleGameMaxMoves}. The number of moves played in that game: ${singleGameMaxMoves}. The game it played that number of moves in: ${gameSingleGameMaxMoves}`)
+  console.log(`The number of games with no castling: ${gamesNoCastling}`)
+  console.log('The number of times each kind of castling happened: ')
+  console.table(queenKingCastlingCounts);
+  console.log(`The number of En passants that occured: ${enPassantMovesCount}`)
+  console.log(`The number of pieces that were hopped over by a knight: ${totalNumPiecesKnightHopped}`)
 
   // final analysis logs
   console.log('\n');
