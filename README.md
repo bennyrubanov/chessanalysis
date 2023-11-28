@@ -58,7 +58,6 @@ thesis: beginners get forked by knights and lose a lot of high level pieces. Wil
   - KD ratio by number of pieces taken
 - revenge kills (i.e. take back a piece immediately after it was taken)
 - best kill streaks (i.e. one piece is the only one taking others for some time)
-  - how many pieces on average does a Queen take before it gets taken down
 - which piece delivers checkmate most/least often, has the most checkmate assists, and the most hockey assists
 - where do checkmates happen most/least often (what squares specifically)
 - heat map of which squares are "battleground", i.e. have the most captures
@@ -113,6 +112,7 @@ Miscellaneous
   - how many moves until a piece is captured on average
   - how much clock time until a piece is captured on average
 - has a single piece ever covered the entire board in one game?
+- how many pieces on average does a Queen take before it gets taken down
 
 # Planned Roadmap Items
 - Segment by ELO rating ranges
