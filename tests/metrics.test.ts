@@ -68,7 +68,7 @@ describe('All Tests', () => {
       expect(killStreakMetric.killStreakMap['Q'].killStreaks).toEqual(6);
     });
 
-    it.only('should return the correct kill streaks', () => {
+    it('should return the correct kill streaks', () => {
       // https://lichess.org/m61n65x0
       const game = '1. d4 d5 2. Nc3 e6 3. a3 a6 4. e4 c6 5. exd5 cxd5 6. h4 h6 7. g4 Be7 8. Nf3 Nc6 9. Bf4 Bd7 10. Bg3 Bf6 11. Ne2 Nge7 12. c3 Nc8 13. Bg2 Be7 14. g5 hxg5 15. hxg5 Rxh1+ 16. Bxh1 Bxg5 17. Nxg5 Qxg5 18. Bf4 Qg6 19. Ng3 N8e7 20. Qb1 Qxb1+ 21. Rxb1 O-O-O 22. Nh5 g6 23. Nf6 Nf5 24. Bg5 Rh8 25. Ke2 Na5 26. b3 Bb5+ 27. Kd2 Bc6 28. Ng4 Nxb3+ 29. Rxb3 Rxh1 30. Ne5 Rh7 31. Rb6 Kc7 32. Rb1 Nd6 33. f3 Rh5 34. f4 Be8 35. Ng4 Ne4+ 36. Kc2 Ba4+ 37. Kd3 Rh3+ 38. Ke2 Nxc3+ 39. Kf2 Nxb1 40. Kg2 Rxa3 41. Ne5 Be8 42. Be7 Ra2+ 43. Kf3 Na3 44. Bg5 Nc4 45. Ng4 Ra3+ 46. Kf2 Rd3 47. Ne5 Rxd4 48. Nf3 Re4 49. Kg3 1-0'
       killStreakMetric.processGame(Array.from(cjsmin.historyGeneratorArr(game)),
@@ -283,7 +283,7 @@ describe('All Tests', () => {
     });
   });
 
-  xdescribe('getMoveDistanceSingleGame', () => {
+  describe('getMoveDistanceSingleGame', () => {
     const moveDistanceMetric = new MoveDistanceMetric();
     it('should return the correct max distance and piece for a game', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
@@ -575,6 +575,17 @@ describe('All Tests', () => {
       }
 
       expect(promoTotal).toEqual(0);
+    });
+
+    it('should identify the correct maxnumqueens on the correct move', () => {
+      // https://lichess.org/m45sueue
+      const game = '1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Ne7 5. f4 Nbc6 6. Nf3 cxd4 7. cxd4 Nf5 8. g4 Nfe7 9. Nc3 Bd7 10. Bd3 Nb4 11. O-O Ng6 12. a3 Nxd3 13. Qxd3 Be7 14. f5 exf5 15. gxf5 Nf8 16. Nxd5 g5 17. f6 g4 18. fxe7 Qa5 19. exf8=Q+ Kxf8 20. Bh6+ Ke8 21. Nf6+ Ke7 22. Nd2 Be6 23. Bg5 Kf8 24. Nfe4 h6 25. Bh4 Qb6 26. Nc5 Bd5 27. b4 Rc8 28. Nd7+ 1-0'
+      promotionMetric.processGame(Array.from(cjsmin.historyGeneratorArr(game)),
+      ['m', 'et']);
+
+      let result = promotionMetric.aggregate();
+      expect(result.maxNumQueens).toEqual(3);
+      expect(result.movesAndGamesWithMaxQueenCount[0].move).toEqual('exf8=Q+');
     });
   });
 

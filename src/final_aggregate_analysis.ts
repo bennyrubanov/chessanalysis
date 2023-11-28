@@ -543,7 +543,7 @@ async function aggregateResults(filePath: string) {
     'Max Kill Streaks achieved for each piece: ');
   console.table(KillStreakMap)
   console.log(`Max Kill Streak achieved by any piece (the number of captures without any other piece on its team capturing. doesn't have to be consecutive move captures): ${maxKillStreak} by the piece(s) ${maxKillStreakPiece}. This was done in the game(s): `);
-  console.table(maxKillStreakGame)
+  console.log(maxKillStreakGame.join('\n'));
 
   // mates and assists logs
   console.log('\n');
@@ -551,6 +551,7 @@ async function aggregateResults(filePath: string) {
   console.log(
     'Mates, assists, and hockey assists for each piece: ');
   console.table(mateAndAssistMap)
+  console.log('Note: any "mates" attributed to kings are a result of a king moving to reveal a discovered mate.')
   console.log(
     'Number of times each king was mated: ');
   console.table(matedCountsMap)

@@ -17,7 +17,7 @@ export class PromotionMetric implements Metric {
   // property for the totals
   totals: { [key in PromotablePiece]: number };
   movesAndGamesWithMaxQueenCount = [];
-  maxQueenCounts = 0;
+  maxQueenCounts = 2;
 
 
   constructor() {
@@ -47,6 +47,10 @@ export class PromotionMetric implements Metric {
     // 2 queens to start with
     let thisGameQueenCount = 2;
 
+    const gameSite = metadata.find((item) => item.startsWith('[Site "'))
+    ?.replace('[Site "', '')
+    ?.replace('"]', '');
+
     for (const { move } of game) {
       // TODO: we can use flags instead of includes('=)
 
@@ -70,19 +74,11 @@ export class PromotionMetric implements Metric {
       // only add one move entry for each game maxQueenCount (rather than one entry for each move that the maxQueenCount appears in)
       if (thisGameQueenCount > this.maxQueenCounts) {
         this.maxQueenCounts = thisGameQueenCount;
-        const gameSite = metadata.find((item) => item.startsWith('[Site "'))
-          ?.replace('[Site "', '')
-          ?.replace('"]', '');
-        if (!this.movesAndGamesWithMaxQueenCount.some((item) => item.game === gameSite)) {
-          this.movesAndGamesWithMaxQueenCount = [{
-            game: gameSite,
-            move: move.originalString
-          }];
-        }
+        this.movesAndGamesWithMaxQueenCount = [{
+          game: gameSite,
+          move: move.originalString,
+        }];
       } else if (thisGameQueenCount === this.maxQueenCounts) {
-        const gameSite = metadata.find((item) => item.startsWith('[Site "'))
-          ?.replace('[Site "', '')
-          ?.replace('"]', '');
         if (!this.movesAndGamesWithMaxQueenCount.some((item) => item.game === gameSite)) {
           this.movesAndGamesWithMaxQueenCount.push({
             game: gameSite,

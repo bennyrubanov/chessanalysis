@@ -358,7 +358,11 @@ export class MateAndAssistMetric implements Metric {
 
   // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery
   // checks (currently we disregard this by just saying the last piece to move is the "mating piece")
-  processGame(game: { move: PrettyMove; board: Piece[] }[]) {
+  processGame(
+    game: { move: PrettyMove; board: Piece[] }[],
+    metadata?: string[]
+    ) {
+
     // Take no action if the game didn't end in checkmate
     if (!game[game.length - 1].move.originalString.includes('#')) {
       return;
@@ -368,6 +372,14 @@ export class MateAndAssistMetric implements Metric {
 
     // increment the mate count of the mating piece
     this.mateAndAssistMap[lastMove.uas].mates++;
+    if (lastMove.uas === 'k' || lastMove.uas === 'K') {
+      console.log(`code identified a king as having a mate (caused by discovered check). move: ${lastMove.originalString}`)
+      const gameLink = metadata.find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', '');
+      console.log(`game: ${gameLink}`)
+    }
+
     // increment the mated (death) count of the mated king
     this.matedCounts[lastMove.color === 'w' ? 'k' : 'K']++;
 

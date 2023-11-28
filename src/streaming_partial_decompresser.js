@@ -176,6 +176,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
 // Function to process all files
 const processFiles = async () => {
+    console.log(`Initiating decompression and analysis of ${files}...`);
     for (const file of files) {
         await decompressAndAnalyze(file);
     }
