@@ -79,20 +79,17 @@ async function gameIterator(path) {
   }
 }
 
-// for use with running index.ts with test sets and print to console
-// if (require.main === module) {
-//   main(`data/11.11.23 3 Game Test Set`).then((a) => {});
-// }
-
-// for use with running index.ts with test sets & writing to results.json
+// for use with streaming_partial_decompresser.js
+// counter introduce to avoid overwriting existing data in results.json
 if (require.main === module) {
-  main(`data/10.10.23_test_set`).then(async (results) => {
+  const pathToAnalyze = process.argv[2];
+  main(pathToAnalyze).then(async (results) => {
     const now = new Date();
     const milliseconds = now.getMilliseconds();
 
     const analysisKey = `analysis_${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}_${milliseconds}`;
     const resultsPath = path.join(__dirname, 'results.json');
-    
+
     let existingResults = {};
     if (fs.existsSync(resultsPath)) {
       const fileContent = fs.readFileSync(resultsPath, 'utf8');
@@ -102,7 +99,7 @@ if (require.main === module) {
     }
 
     existingResults[analysisKey] = results;
-    
+
     // Use lockfile to prevent concurrent writes
     const release = await lockfile.lock(resultsPath);
     try {

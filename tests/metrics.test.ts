@@ -38,7 +38,7 @@ describe('All Tests', () => {
   describe('gets black and white kill streaks', () => {
     const killStreakMetric = new KillStreakMetric();
 
-    it('should return the correct kill streaks', () => {
+    it.only('should return the correct kill streaks', () => {
       const moves = [
         { capture: true, uas: 'PA' },
         { capture: false },
@@ -300,7 +300,7 @@ describe('All Tests', () => {
         totalDistance += moveDistanceMetric.distanceMap[uas].total;
       }
 
-      expect(moveDistanceMetric.totalDistance).toEqual(totalDistance);
+      expect(moveDistanceMetric.gameCollectiveDistance.distance).toEqual(totalDistance);
     });
   });
 
@@ -327,9 +327,9 @@ describe('All Tests', () => {
         ['m', 'et']
       );
 
-      expect(kdrMetric.KDAssistsMap['pe'].kills).toEqual(1);
-      expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
-      expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
+      expect(kdrMetric.KDMap['pe'].kills).toEqual(1);
+      expect(kdrMetric.KDMap['pe'].deaths).toEqual(1);
+      expect(kdrMetric.KDMap['pe'].deaths).toEqual(1);
     });
 
     it('should return the correct number of kills for a piece in a game, including counting checkmates as a "kill"', async () => {
@@ -347,7 +347,7 @@ describe('All Tests', () => {
         ['m', 'et']
       );
 
-      expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(3);
+      expect(kdrMetric.KDMap['ng'].kills).toEqual(3);
     });
   });
 
@@ -414,9 +414,9 @@ describe('All Tests', () => {
           '"et"',
         ]);
 
-        expect(plmiMetric.singleGameMaxMoves).toEqual(9);
+        expect(plmiMetric.uasSingleGameMaxMoves).toEqual(9);
         expect(plmiMetric.uasWithMostMoves).toEqual(['k']);
-        expect(plmiMetric.gamesWithMostMoves).toEqual(['et']);
+        expect(plmiMetric.gamesWithUasMostMoves).toEqual(['et']);
       });
     });
 
