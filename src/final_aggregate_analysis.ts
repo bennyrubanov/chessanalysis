@@ -542,7 +542,7 @@ async function aggregateResults(filePath: string) {
   console.log(
     'Max Kill Streaks achieved for each piece: ');
   console.table(KillStreakMap)
-  console.log(`Max Kill Streak achieved by any piece: ${maxKillStreak} by the piece(s) ${maxKillStreakPiece}. This was done in the game(s): `);
+  console.log(`Max Kill Streak achieved by any piece (the number of captures without any other piece on its team capturing. doesn't have to be consecutive move captures): ${maxKillStreak} by the piece(s) ${maxKillStreakPiece}. This was done in the game(s): `);
   console.table(maxKillStreakGame)
 
   // mates and assists logs

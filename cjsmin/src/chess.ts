@@ -1694,6 +1694,7 @@ export class Chess {
     }
   }
 
+  // generator function that returns results using yield (one at a time)
   *historyGenerator(
     pgnMoveLine: string,
     { strict = false }: { strict?: boolean; newlineChar?: string } = {}
@@ -1743,6 +1744,7 @@ export class Chess {
     }
   }
 
+  // generator function that returns results as an array of objects
   historyGeneratorArr(
     pgnMoveLine: string,
     { strict = false }: { strict?: boolean; newlineChar?: string } = {}

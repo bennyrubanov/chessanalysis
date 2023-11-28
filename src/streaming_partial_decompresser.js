@@ -23,7 +23,7 @@ const runAnalysis = (filePath) => {
         // Run the analysis script
         console.log(`Running analysis script on ${filePath}...`);
 
-        const child = spawn('ts-node', ['/Users/bennyrubanov/chessanalysis/src/index.ts', filePath]);
+        const child = spawn('ts-node', ['/Users/bennyrubanov/chessanalysis/src/index_with_decompressor.ts', filePath]);
 
         // only log complete lines of output (no insertion of "stdout: " in the middle of a line)
         // do this by accumulating the data until a newline character, and then logging the accumulated data
@@ -63,7 +63,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
     // Create a new file path
     let newFilePath = `${base_path}_${file_counter}`;
 
-    // Create a new writable stream
+    // Create a new writable strxeam
     let decompressedStream = fs.createWriteStream(newFilePath, { flags: 'a' });
 
     // Check if file already exists

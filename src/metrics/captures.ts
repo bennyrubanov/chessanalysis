@@ -61,7 +61,8 @@ export class KillStreakMetric implements Metric {
 
     while (i < game.length) {
       const move = game[i].move;
-      if (move.capture) {
+      // if the move is a capture or a mate, it counts towards kill streaks
+      if (move.capture || move.originalString.includes('#')) {
         // streak has been reset because new piece captures
         if (streakLength === 0) {
           streakPiece = move.uas;
@@ -69,17 +70,16 @@ export class KillStreakMetric implements Metric {
           // same piece captures again
         } else if (streakPiece === move.uas) {
           streakLength++;
+
           // streak is not 0 but different piece captures, so
           // take the previous kill streak piece and update its max kill streak
         } else {
-          if (!this.killStreakMap.hasOwnProperty(streakPiece)) {
-            console.log('Unexpected streakPiece:', streakPiece);
-            console.log('Current keys in killStreakMap:', Object.keys(this.killStreakMap));
-          }
           this.killStreakMap[streakPiece].killStreaks = Math.max(
             this.killStreakMap[streakPiece].killStreaks,
             streakLength
           );
+          this.checkMaxes(streakPiece, gameLink, streakLength);
+
           streakLength = 0; // reset streak
         }
       }
@@ -88,25 +88,29 @@ export class KillStreakMetric implements Metric {
 
     if (streakPiece) {
       // handle edge case where the game ends with a capture streak by the same piece
-      if (!this.killStreakMap.hasOwnProperty(streakPiece)) {
-        console.log('Unexpected streakPiece at end of game:', streakPiece);
-        console.log('Current keys in killStreakMap:', Object.keys(this.killStreakMap));
-      }
       this.killStreakMap[streakPiece].killStreaks = Math.max(
         this.killStreakMap[streakPiece].killStreaks,
         streakLength
       );
+      this.checkMaxes(streakPiece, gameLink, streakLength);
 
-      // update maxes
-      if (this.killStreakMap[streakPiece].killStreaks > this.maxKillStreak) {
-        this.maxKillStreak = this.killStreakMap[streakPiece].killStreaks;
-        this.maxKillStreakPiece = [streakPiece as UASymbol];
-        this.maxKillStreakGame = [gameLink];
-      }
-      else if (this.killStreakMap[streakPiece].killStreaks === this.maxKillStreak) {
-        this.maxKillStreakPiece.push(streakPiece as UASymbol)
-        this.maxKillStreakGame.push(gameLink);
-      }
+    }
+  }
+  
+  checkMaxes(
+    streakPiece: UASymbol,
+    gameLink: string,
+    streakLength: number,
+  ) {
+    // update maxes
+    if (streakLength > this.maxKillStreak) {
+      this.maxKillStreak = streakLength;
+      this.maxKillStreakPiece = [streakPiece as UASymbol];
+      this.maxKillStreakGame = [gameLink];
+    }
+    else if (streakLength === this.maxKillStreak) {
+      this.maxKillStreakPiece.push(streakPiece as UASymbol)
+      this.maxKillStreakGame.push(gameLink);
     }
   }
 
