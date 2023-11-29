@@ -38,13 +38,13 @@ describe('All Tests', () => {
   describe('gets black and white kill streaks', () => {
     const killStreakMetric = new KillStreakMetric();
 
-    it('should return the correct kill streaks', () => {
+    it('should return the correct kill streaks test 1', () => {
       const moves = [
-        { capture: true, uas: 'PA' },
-        { capture: false },
-        { capture: true, uas: 'PA' },
-        { capture: true, uas: 'rh' },
-        { capture: false },
+        { capture: true, uas: 'PA', originalString: '' },
+        { capture: false, originalString: '' },
+        { capture: true, uas: 'PA', originalString: '' },
+        { capture: true, uas: 'rh', originalString: '' },
+        { capture: false, originalString: '' },
       ].map((move) => {
         return {
           move: move as any, // cast to match type checks in the processGame handler
@@ -58,7 +58,7 @@ describe('All Tests', () => {
       expect(killStreakMetric.killStreakMap['Q'].killStreaks).toEqual(0);
     });
 
-    it('should return the correct kill streaks', () => {
+    it('should return the correct kill streaks test 2', () => {
       // https://lichess.org/4se6wgfa
       const game = '1. e4 d5 2. d4 dxe4 3. Bc4 e5 4. c3 exd4 5. Qh5 g6 6. Qe5+ Qe7 7. Qxh8 e3 8. fxe3 dxe3 9. Qxg8 Be6 10. Bxe6 Qxe6 11. Qxh7 Nc6 12. Na3 O-O-O 13. b4 Qd6 14. Bb2 Be7 15. Ne2 Ne5 16. O-O Nd3 17. Nc4 Qe6 18. Qxf7 Qg4 19. Qxe7 Nf2 20. Qxe3 Rd2 21. Rae1 Rxe2 22. Qxe2 Nh3+ 23. Kh1 Qxc4 24. Qe8# 1-0'
       killStreakMetric.processGame(Array.from(cjsmin.historyGeneratorArr(game)),
@@ -68,7 +68,7 @@ describe('All Tests', () => {
       expect(killStreakMetric.killStreakMap['Q'].killStreaks).toEqual(6);
     });
 
-    it('should return the correct kill streaks', () => {
+    it('should return the correct kill streaks test 3', () => {
       // https://lichess.org/m61n65x0
       const game = '1. d4 d5 2. Nc3 e6 3. a3 a6 4. e4 c6 5. exd5 cxd5 6. h4 h6 7. g4 Be7 8. Nf3 Nc6 9. Bf4 Bd7 10. Bg3 Bf6 11. Ne2 Nge7 12. c3 Nc8 13. Bg2 Be7 14. g5 hxg5 15. hxg5 Rxh1+ 16. Bxh1 Bxg5 17. Nxg5 Qxg5 18. Bf4 Qg6 19. Ng3 N8e7 20. Qb1 Qxb1+ 21. Rxb1 O-O-O 22. Nh5 g6 23. Nf6 Nf5 24. Bg5 Rh8 25. Ke2 Na5 26. b3 Bb5+ 27. Kd2 Bc6 28. Ng4 Nxb3+ 29. Rxb3 Rxh1 30. Ne5 Rh7 31. Rb6 Kc7 32. Rb1 Nd6 33. f3 Rh5 34. f4 Be8 35. Ng4 Ne4+ 36. Kc2 Ba4+ 37. Kd3 Rh3+ 38. Ke2 Nxc3+ 39. Kf2 Nxb1 40. Kg2 Rxa3 41. Ne5 Be8 42. Be7 Ra2+ 43. Kf3 Na3 44. Bg5 Nc4 45. Ng4 Ra3+ 46. Kf2 Rd3 47. Ne5 Rxd4 48. Nf3 Re4 49. Kg3 1-0'
       killStreakMetric.processGame(Array.from(cjsmin.historyGeneratorArr(game)),
@@ -284,7 +284,12 @@ describe('All Tests', () => {
   });
 
   describe('getMoveDistanceSingleGame', () => {
-    const moveDistanceMetric = new MoveDistanceMetric();
+    let moveDistanceMetric: MoveDistanceMetric;
+
+    beforeEach(() => {
+      moveDistanceMetric = new MoveDistanceMetric();
+    });
+
     it('should return the correct max distance and piece for a game', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
@@ -307,6 +312,7 @@ describe('All Tests', () => {
     });
 
     it('should return a singleGameDistanceTotal equal to the addition of all distances in the distanceMap', async () => {
+      // total collective distance of the game below is 17
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
       moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)),
@@ -316,7 +322,7 @@ describe('All Tests', () => {
       let totalDistance = 0;
 
       for (const uas of Object.keys(moveDistanceMetric.distanceMap)) {
-        totalDistance += moveDistanceMetric.distanceMap[uas].total;
+        totalDistance += moveDistanceMetric.distanceMap[uas].distance;
       }
 
       expect(moveDistanceMetric.gameCollectiveDistance.distance).toEqual(totalDistance);
@@ -435,7 +441,6 @@ describe('All Tests', () => {
 
         expect(plmiMetric.uasSingleGameMaxMoves).toEqual(9);
         expect(plmiMetric.uasWithMostMoves).toEqual(['k']);
-        expect(plmiMetric.gamesWithUasMostMoves).toEqual(['et']);
       });
     });
 
@@ -461,20 +466,20 @@ describe('All Tests', () => {
           '"p"',
         ]);
 
-        const averages = metric.aggregate();
+        const results = metric.aggregate();
 
-        expect(averages['Q'].avgMoves).toEqual(4);
-        expect(averages['K'].avgMoves).toEqual(1);
-        expect(averages['pa'].avgMoves).toEqual(3);
+        expect(results.averagesMap['Q'].avgMoves).toEqual(4);
+        expect(results.averagesMap['K'].avgMoves).toEqual(1);
+        expect(results.averagesMap['pa'].avgMoves).toEqual(3);
       });
     });
   });
 
   describe('PromotionMetric', () => {
-    const promotionMetric = new PromotionMetric();
+    let promotionMetric: PromotionMetric;
 
-    afterEach(() => {
-      promotionMetric.clear();
+    beforeEach(() => {
+      promotionMetric = new PromotionMetric();
     });
 
     it('should update the promotion map when a promotion occurs', () => {

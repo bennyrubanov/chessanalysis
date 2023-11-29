@@ -81885,5 +81885,2543 @@
       "enPassantMovesCount": 398,
       "totalNumPiecesKnightHopped": 199104
     }
+  },
+  "analysis_11_29_2023__9_12_10_AM_356": {
+    "Number of games analyzed": 3,
+    "MetadataMetric": {
+      "averagePlayerRating": 1604.8333333333333,
+      "averageRatingDiff": 127.66666666666667,
+      "largestRatingDiff": 274,
+      "largestRatingDiffGame": [
+        "[Site \"https://lichess.org/obzb2exd\"]"
+      ],
+      "mostGamesPlayed": 1,
+      "playerMostGames": [
+        "joalbert",
+        "oualidwashington77",
+        "jorespi",
+        "Marzinkus",
+        "Cliff_Burton",
+        "ThePersianGulf"
+      ],
+      "gameTypeStats": {
+        "numberBulletGames": 2,
+        "numberRapidGames": 1,
+        "numberUltraBulletGames": 0,
+        "numberBlitzGames": 0,
+        "numberClassicalGames": 0,
+        "numberOtherGames": 0
+      },
+      "gameTimeControlStats": {
+        "\"120+1\"]": 1,
+        "\"360+6\"]": 1,
+        "\"120+0\"]": 1
+      },
+      "openings": {
+        "Horwitz Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Advance Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        }
+      },
+      "bongcloudAppearances": 0,
+      "gameEndings": {
+        "time out": 1,
+        "resignation": 1,
+        "draw": 1,
+        "threefold repetition": 1
+      },
+      "numberGamesAnalyzedForRatings": 3
+    },
+    "KDRatioMetric": {
+      "maxKDRatio": 3,
+      "pieceWithHighestKDRatio": [
+        "PG"
+      ],
+      "KDRatios": {
+        "RA": 1,
+        "NB": 1,
+        "BC": 1,
+        "Q": {},
+        "K": {},
+        "BF": 0.6666666666666666,
+        "NG": 1,
+        "RH": 1,
+        "PA": 0,
+        "PB": 0.5,
+        "PC": 1.5,
+        "PD": 0.3333333333333333,
+        "PE": {},
+        "PF": 0,
+        "PG": 3,
+        "PH": {},
+        "ra": 0.5,
+        "nb": 1,
+        "bc": 0.5,
+        "q": {},
+        "k": {},
+        "bf": 0.3333333333333333,
+        "ng": 0.6666666666666666,
+        "rh": 1,
+        "pa": 0,
+        "pb": 1,
+        "pc": 1,
+        "pd": 0,
+        "pe": 1,
+        "pf": {},
+        "pg": {},
+        "ph": {}
+      },
+      "KDRatiosValues": {
+        "RA": 5,
+        "NB": 2,
+        "BC": 3,
+        "Q": {},
+        "K": {},
+        "BF": 2,
+        "NG": 2,
+        "RH": 1,
+        "PA": 0,
+        "PB": 0.5,
+        "PC": 2.5,
+        "PD": 0.3333333333333333,
+        "PE": {},
+        "PF": 0,
+        "PG": 7,
+        "PH": {},
+        "ra": 0.5,
+        "nb": 3,
+        "bc": 1.5,
+        "q": {},
+        "k": {},
+        "bf": 0.3333333333333333,
+        "ng": 2,
+        "rh": 3,
+        "pa": 0,
+        "pb": 2,
+        "pc": 1,
+        "pd": 0,
+        "pe": 1,
+        "pf": {},
+        "pg": {},
+        "ph": {}
+      },
+      "pieceWithHighestKDRatioValues": [
+        "PG",
+        "nb",
+        "rh"
+      ],
+      "KDValuesMap": {
+        "RA": {
+          "valueKills": 10,
+          "deaths": 2
+        },
+        "NB": {
+          "valueKills": 4,
+          "deaths": 2
+        },
+        "BC": {
+          "valueKills": 6,
+          "deaths": 2
+        },
+        "Q": {
+          "valueKills": 17,
+          "deaths": 0
+        },
+        "K": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "BF": {
+          "valueKills": 6,
+          "deaths": 3
+        },
+        "NG": {
+          "valueKills": 4,
+          "deaths": 2
+        },
+        "RH": {
+          "valueKills": 1,
+          "deaths": 1
+        },
+        "PA": {
+          "valueKills": 0,
+          "deaths": 1
+        },
+        "PB": {
+          "valueKills": 1,
+          "deaths": 2
+        },
+        "PC": {
+          "valueKills": 5,
+          "deaths": 2
+        },
+        "PD": {
+          "valueKills": 1,
+          "deaths": 3
+        },
+        "PE": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "PF": {
+          "valueKills": 0,
+          "deaths": 2
+        },
+        "PG": {
+          "valueKills": 7,
+          "deaths": 1
+        },
+        "PH": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "ra": {
+          "valueKills": 1,
+          "deaths": 2
+        },
+        "nb": {
+          "valueKills": 9,
+          "deaths": 3
+        },
+        "bc": {
+          "valueKills": 3,
+          "deaths": 2
+        },
+        "q": {
+          "valueKills": 18,
+          "deaths": 0
+        },
+        "k": {
+          "valueKills": 9,
+          "deaths": 0
+        },
+        "bf": {
+          "valueKills": 1,
+          "deaths": 3
+        },
+        "ng": {
+          "valueKills": 6,
+          "deaths": 3
+        },
+        "rh": {
+          "valueKills": 6,
+          "deaths": 2
+        },
+        "pa": {
+          "valueKills": 0,
+          "deaths": 1
+        },
+        "pb": {
+          "valueKills": 4,
+          "deaths": 2
+        },
+        "pc": {
+          "valueKills": 3,
+          "deaths": 3
+        },
+        "pd": {
+          "valueKills": 0,
+          "deaths": 2
+        },
+        "pe": {
+          "valueKills": 1,
+          "deaths": 1
+        },
+        "pf": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "pg": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "ph": {
+          "valueKills": 0,
+          "deaths": 0
+        }
+      },
+      "KDMap": {
+        "RA": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 1
+        },
+        "NB": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "BC": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 1
+        },
+        "Q": {
+          "kills": 5,
+          "deaths": 0,
+          "revengeKills": 3
+        },
+        "K": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "BF": {
+          "kills": 2,
+          "deaths": 3,
+          "revengeKills": 0
+        },
+        "NG": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 2
+        },
+        "RH": {
+          "kills": 1,
+          "deaths": 1,
+          "revengeKills": 0
+        },
+        "PA": {
+          "kills": 0,
+          "deaths": 1,
+          "revengeKills": 0
+        },
+        "PB": {
+          "kills": 1,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "PC": {
+          "kills": 3,
+          "deaths": 2,
+          "revengeKills": 3
+        },
+        "PD": {
+          "kills": 1,
+          "deaths": 3,
+          "revengeKills": 1
+        },
+        "PE": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "PF": {
+          "kills": 0,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "PG": {
+          "kills": 3,
+          "deaths": 1,
+          "revengeKills": 1
+        },
+        "PH": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "ra": {
+          "kills": 1,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "nb": {
+          "kills": 3,
+          "deaths": 3,
+          "revengeKills": 1
+        },
+        "bc": {
+          "kills": 1,
+          "deaths": 2,
+          "revengeKills": 1
+        },
+        "q": {
+          "kills": 6,
+          "deaths": 0,
+          "revengeKills": 4
+        },
+        "k": {
+          "kills": 1,
+          "deaths": 0,
+          "revengeKills": 1
+        },
+        "bf": {
+          "kills": 1,
+          "deaths": 3,
+          "revengeKills": 1
+        },
+        "ng": {
+          "kills": 2,
+          "deaths": 3,
+          "revengeKills": 1
+        },
+        "rh": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "pa": {
+          "kills": 0,
+          "deaths": 1,
+          "revengeKills": 0
+        },
+        "pb": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 2
+        },
+        "pc": {
+          "kills": 3,
+          "deaths": 3,
+          "revengeKills": 0
+        },
+        "pd": {
+          "kills": 0,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "pe": {
+          "kills": 1,
+          "deaths": 1,
+          "revengeKills": 0
+        },
+        "pf": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "pg": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "ph": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        }
+      }
+    },
+    "KillStreakMetric": {
+      "killStreakMap": {
+        "RA": {
+          "killStreaks": 1
+        },
+        "NB": {
+          "killStreaks": 0
+        },
+        "BC": {
+          "killStreaks": 1
+        },
+        "Q": {
+          "killStreaks": 2
+        },
+        "K": {
+          "killStreaks": 0
+        },
+        "BF": {
+          "killStreaks": 1
+        },
+        "NG": {
+          "killStreaks": 1
+        },
+        "RH": {
+          "killStreaks": 1
+        },
+        "PA": {
+          "killStreaks": 0
+        },
+        "PB": {
+          "killStreaks": 0
+        },
+        "PC": {
+          "killStreaks": 1
+        },
+        "PD": {
+          "killStreaks": 0
+        },
+        "PE": {
+          "killStreaks": 0
+        },
+        "PF": {
+          "killStreaks": 0
+        },
+        "PG": {
+          "killStreaks": 2
+        },
+        "PH": {
+          "killStreaks": 0
+        },
+        "ra": {
+          "killStreaks": 1
+        },
+        "nb": {
+          "killStreaks": 1
+        },
+        "bc": {
+          "killStreaks": 0
+        },
+        "q": {
+          "killStreaks": 2
+        },
+        "k": {
+          "killStreaks": 0
+        },
+        "bf": {
+          "killStreaks": 1
+        },
+        "ng": {
+          "killStreaks": 1
+        },
+        "rh": {
+          "killStreaks": 0
+        },
+        "pa": {
+          "killStreaks": 0
+        },
+        "pb": {
+          "killStreaks": 1
+        },
+        "pc": {
+          "killStreaks": 1
+        },
+        "pd": {
+          "killStreaks": 0
+        },
+        "pe": {
+          "killStreaks": 1
+        },
+        "pf": {
+          "killStreaks": 0
+        },
+        "pg": {
+          "killStreaks": 0
+        },
+        "ph": {
+          "killStreaks": 0
+        }
+      },
+      "maxKillStreak": 2,
+      "maxKillStreakPiece": [
+        "Q",
+        "PG",
+        "q"
+      ],
+      "maxKillStreakGame": [
+        "https://lichess.org/A2AjN96n",
+        "https://lichess.org/m45sueue",
+        "https://lichess.org/obzb2exd"
+      ]
+    },
+    "MateAndAssistMetric": {
+      "mateAndAssistMap": {
+        "RA": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NB": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "Q": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "K": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BF": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NG": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "RH": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PA": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PB": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PD": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PE": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PF": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PG": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PH": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ra": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "nb": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "bc": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "q": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "k": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "bf": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ng": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "rh": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pa": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pb": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pc": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pd": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pe": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pf": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pg": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ph": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        }
+      },
+      "matedCounts": {
+        "k": 0,
+        "K": 0
+      }
+    },
+    "PromotionMetric": {
+      "promotedToTotals": {
+        "q": 1,
+        "r": 0,
+        "b": 0,
+        "n": 0
+      },
+      "uasPromotingPieces": {
+        "pa": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pb": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pc": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pd": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pe": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pf": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pg": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "ph": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PA": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PB": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PC": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PD": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PE": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PF": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PG": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PH": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        }
+      },
+      "maxNumQueens": 3,
+      "movesAndGamesWithMaxQueenCount": [
+        {
+          "game": "https://lichess.org/m45sueue",
+          "move": "exf8=Q+"
+        }
+      ]
+    },
+    "MoveDistanceMetric": {
+      "pieceWithHighestAvg": "q",
+      "maxAvgDistance": 19.333333333333332,
+      "pieceWithLowestAvg": "pf",
+      "minAvgDistance": 0.3333333333333333,
+      "pieceThatMovedTheFurthest": [
+        "q"
+      ],
+      "gameInWhichPieceMovedTheFurthest": [
+        "https://lichess.org/A2AjN96n"
+      ],
+      "distanceThatPieceMovedInTheGame": 28,
+      "totalCollectiveDistance": 387,
+      "gameMaxCollectiveDistance": {
+        "distance": 164,
+        "linkArray": [
+          "https://lichess.org/obzb2exd"
+        ]
+      },
+      "totalDistancesByPiece": {
+        "RA": {
+          "distance": 19
+        },
+        "NB": {
+          "distance": 26
+        },
+        "BC": {
+          "distance": 22
+        },
+        "Q": {
+          "distance": 27
+        },
+        "K": {
+          "distance": 14
+        },
+        "BF": {
+          "distance": 13
+        },
+        "NG": {
+          "distance": 14
+        },
+        "RH": {
+          "distance": 17
+        },
+        "PA": {
+          "distance": 6
+        },
+        "PB": {
+          "distance": 7
+        },
+        "PC": {
+          "distance": 7
+        },
+        "PD": {
+          "distance": 7
+        },
+        "PE": {
+          "distance": 6
+        },
+        "PF": {
+          "distance": 3
+        },
+        "PG": {
+          "distance": 7
+        },
+        "PH": {
+          "distance": 2
+        },
+        "ra": {
+          "distance": 12
+        },
+        "nb": {
+          "distance": 12
+        },
+        "bc": {
+          "distance": 6
+        },
+        "q": {
+          "distance": 58
+        },
+        "k": {
+          "distance": 9
+        },
+        "bf": {
+          "distance": 8
+        },
+        "ng": {
+          "distance": 24
+        },
+        "rh": {
+          "distance": 28
+        },
+        "pa": {
+          "distance": 2
+        },
+        "pb": {
+          "distance": 3
+        },
+        "pc": {
+          "distance": 9
+        },
+        "pd": {
+          "distance": 5
+        },
+        "pe": {
+          "distance": 5
+        },
+        "pf": {
+          "distance": 1
+        },
+        "pg": {
+          "distance": 3
+        },
+        "ph": {
+          "distance": 5
+        }
+      },
+      "avgDistancesByPiece": {
+        "RA": {
+          "avgDistance": 6.333333333333333
+        },
+        "NB": {
+          "avgDistance": 8.666666666666666
+        },
+        "BC": {
+          "avgDistance": 7.333333333333333
+        },
+        "Q": {
+          "avgDistance": 9
+        },
+        "K": {
+          "avgDistance": 4.666666666666667
+        },
+        "BF": {
+          "avgDistance": 4.333333333333333
+        },
+        "NG": {
+          "avgDistance": 4.666666666666667
+        },
+        "RH": {
+          "avgDistance": 5.666666666666667
+        },
+        "PA": {
+          "avgDistance": 2
+        },
+        "PB": {
+          "avgDistance": 2.3333333333333335
+        },
+        "PC": {
+          "avgDistance": 2.3333333333333335
+        },
+        "PD": {
+          "avgDistance": 2.3333333333333335
+        },
+        "PE": {
+          "avgDistance": 2
+        },
+        "PF": {
+          "avgDistance": 1
+        },
+        "PG": {
+          "avgDistance": 2.3333333333333335
+        },
+        "PH": {
+          "avgDistance": 0.6666666666666666
+        },
+        "ra": {
+          "avgDistance": 4
+        },
+        "nb": {
+          "avgDistance": 4
+        },
+        "bc": {
+          "avgDistance": 2
+        },
+        "q": {
+          "avgDistance": 19.333333333333332
+        },
+        "k": {
+          "avgDistance": 3
+        },
+        "bf": {
+          "avgDistance": 2.6666666666666665
+        },
+        "ng": {
+          "avgDistance": 8
+        },
+        "rh": {
+          "avgDistance": 9.333333333333334
+        },
+        "pa": {
+          "avgDistance": 0.6666666666666666
+        },
+        "pb": {
+          "avgDistance": 1
+        },
+        "pc": {
+          "avgDistance": 3
+        },
+        "pd": {
+          "avgDistance": 1.6666666666666667
+        },
+        "pe": {
+          "avgDistance": 1.6666666666666667
+        },
+        "pf": {
+          "avgDistance": 0.3333333333333333
+        },
+        "pg": {
+          "avgDistance": 1
+        },
+        "ph": {
+          "avgDistance": 1.6666666666666667
+        }
+      }
+    },
+    "GameWithMostMovesMetric": {
+      "gameWithMostMoves": [
+        "https://lichess.org/obzb2exd"
+      ],
+      "gameWithMostMovesNumMoves": 91
+    },
+    "PieceLevelMoveInfoMetric": {
+      "totalMovesByPiece": {
+        "RA": {
+          "numMoves": 7
+        },
+        "NB": {
+          "numMoves": 13
+        },
+        "BC": {
+          "numMoves": 13
+        },
+        "Q": {
+          "numMoves": 14
+        },
+        "K": {
+          "numMoves": 11
+        },
+        "BF": {
+          "numMoves": 5
+        },
+        "NG": {
+          "numMoves": 7
+        },
+        "RH": {
+          "numMoves": 7
+        },
+        "PA": {
+          "numMoves": 6
+        },
+        "PB": {
+          "numMoves": 4
+        },
+        "PC": {
+          "numMoves": 6
+        },
+        "PD": {
+          "numMoves": 4
+        },
+        "PE": {
+          "numMoves": 4
+        },
+        "PF": {
+          "numMoves": 2
+        },
+        "PG": {
+          "numMoves": 6
+        },
+        "PH": {
+          "numMoves": 2
+        },
+        "ra": {
+          "numMoves": 6
+        },
+        "nb": {
+          "numMoves": 6
+        },
+        "bc": {
+          "numMoves": 6
+        },
+        "q": {
+          "numMoves": 27
+        },
+        "k": {
+          "numMoves": 7
+        },
+        "bf": {
+          "numMoves": 6
+        },
+        "ng": {
+          "numMoves": 12
+        },
+        "rh": {
+          "numMoves": 11
+        },
+        "pa": {
+          "numMoves": 1
+        },
+        "pb": {
+          "numMoves": 3
+        },
+        "pc": {
+          "numMoves": 6
+        },
+        "pd": {
+          "numMoves": 3
+        },
+        "pe": {
+          "numMoves": 5
+        },
+        "pf": {
+          "numMoves": 1
+        },
+        "pg": {
+          "numMoves": 2
+        },
+        "ph": {
+          "numMoves": 5
+        }
+      },
+      "averageNumMovesPerGameByPiece": {
+        "RA": {
+          "avgMoves": 2.3333333333333335
+        },
+        "NB": {
+          "avgMoves": 4.333333333333333
+        },
+        "BC": {
+          "avgMoves": 4.333333333333333
+        },
+        "Q": {
+          "avgMoves": 4.666666666666667
+        },
+        "K": {
+          "avgMoves": 3.6666666666666665
+        },
+        "BF": {
+          "avgMoves": 1.6666666666666667
+        },
+        "NG": {
+          "avgMoves": 2.3333333333333335
+        },
+        "RH": {
+          "avgMoves": 2.3333333333333335
+        },
+        "PA": {
+          "avgMoves": 2
+        },
+        "PB": {
+          "avgMoves": 1.3333333333333333
+        },
+        "PC": {
+          "avgMoves": 2
+        },
+        "PD": {
+          "avgMoves": 1.3333333333333333
+        },
+        "PE": {
+          "avgMoves": 1.3333333333333333
+        },
+        "PF": {
+          "avgMoves": 0.6666666666666666
+        },
+        "PG": {
+          "avgMoves": 2
+        },
+        "PH": {
+          "avgMoves": 0.6666666666666666
+        },
+        "ra": {
+          "avgMoves": 2
+        },
+        "nb": {
+          "avgMoves": 2
+        },
+        "bc": {
+          "avgMoves": 2
+        },
+        "q": {
+          "avgMoves": 9
+        },
+        "k": {
+          "avgMoves": 2.3333333333333335
+        },
+        "bf": {
+          "avgMoves": 2
+        },
+        "ng": {
+          "avgMoves": 4
+        },
+        "rh": {
+          "avgMoves": 3.6666666666666665
+        },
+        "pa": {
+          "avgMoves": 0.3333333333333333
+        },
+        "pb": {
+          "avgMoves": 1
+        },
+        "pc": {
+          "avgMoves": 2
+        },
+        "pd": {
+          "avgMoves": 1
+        },
+        "pe": {
+          "avgMoves": 1.6666666666666667
+        },
+        "pf": {
+          "avgMoves": 0.3333333333333333
+        },
+        "pg": {
+          "avgMoves": 0.6666666666666666
+        },
+        "ph": {
+          "avgMoves": 1.6666666666666667
+        }
+      },
+      "pieceHighestAverageMoves": [
+        "q"
+      ],
+      "highestAverageMoves": 9,
+      "uasWithMostMovesSingleGame": [
+        "q"
+      ],
+      "uasSingleGameMaxMoves": 16,
+      "gamesWithUasMostMoves": [
+        "https://lichess.org/obzb2exd"
+      ],
+      "gamesWithNoCastling": 0,
+      "queenKingCastlingCounts": {
+        "blackKing": 2,
+        "blackQueen": 0,
+        "whiteKing": 3,
+        "whiteQueen": 0
+      }
+    },
+    "MiscMoveFactMetric": {
+      "enPassantMovesCount": 0,
+      "totalNumPiecesKnightHopped": 54
+    }
+  },
+  "analysis_11_29_2023__9_14_22_AM_638": {
+    "Number of games analyzed": 3,
+    "MetadataMetric": {
+      "averagePlayerRating": 1604.8333333333333,
+      "averageRatingDiff": 127.66666666666667,
+      "largestRatingDiff": 274,
+      "largestRatingDiffGame": [
+        "[Site \"https://lichess.org/obzb2exd\"]"
+      ],
+      "mostGamesPlayed": 1,
+      "playerMostGames": [
+        "joalbert",
+        "oualidwashington77",
+        "jorespi",
+        "Marzinkus",
+        "Cliff_Burton",
+        "ThePersianGulf"
+      ],
+      "gameTypeStats": {
+        "numberBulletGames": 2,
+        "numberRapidGames": 1,
+        "numberUltraBulletGames": 0,
+        "numberBlitzGames": 0,
+        "numberClassicalGames": 0,
+        "numberOtherGames": 0
+      },
+      "gameTimeControlStats": {
+        "\"120+1\"]": 1,
+        "\"360+6\"]": 1,
+        "\"120+0\"]": 1
+      },
+      "openings": {
+        "Horwitz Defense": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "French Defense: Advance Variation": {
+          "appearances": 1,
+          "blackWins": 0,
+          "whiteWins": 1,
+          "ties": 0,
+          "whiteToBlackWinRatio": null
+        },
+        "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack": {
+          "appearances": 1,
+          "blackWins": 0.5,
+          "whiteWins": 0.5,
+          "ties": 1,
+          "whiteToBlackWinRatio": 1
+        }
+      },
+      "bongcloudAppearances": 0,
+      "gameEndings": {
+        "time out": 1,
+        "resignation": 1,
+        "draw": 1,
+        "threefold repetition": 1
+      },
+      "numberGamesAnalyzedForRatings": 3
+    },
+    "KDRatioMetric": {
+      "maxKDRatio": 3,
+      "pieceWithHighestKDRatio": [
+        "PG"
+      ],
+      "KDRatios": {
+        "RA": 1,
+        "NB": 1,
+        "BC": 1,
+        "Q": {},
+        "K": {},
+        "BF": 0.6666666666666666,
+        "NG": 1,
+        "RH": 1,
+        "PA": 0,
+        "PB": 0.5,
+        "PC": 1.5,
+        "PD": 0.3333333333333333,
+        "PE": {},
+        "PF": 0,
+        "PG": 3,
+        "PH": {},
+        "ra": 0.5,
+        "nb": 1,
+        "bc": 0.5,
+        "q": {},
+        "k": {},
+        "bf": 0.3333333333333333,
+        "ng": 0.6666666666666666,
+        "rh": 1,
+        "pa": 0,
+        "pb": 1,
+        "pc": 1,
+        "pd": 0,
+        "pe": 1,
+        "pf": {},
+        "pg": {},
+        "ph": {}
+      },
+      "KDRatiosValues": {
+        "RA": 5,
+        "NB": 2,
+        "BC": 3,
+        "Q": {},
+        "K": {},
+        "BF": 2,
+        "NG": 2,
+        "RH": 1,
+        "PA": 0,
+        "PB": 0.5,
+        "PC": 2.5,
+        "PD": 0.3333333333333333,
+        "PE": {},
+        "PF": 0,
+        "PG": 7,
+        "PH": {},
+        "ra": 0.5,
+        "nb": 3,
+        "bc": 1.5,
+        "q": {},
+        "k": {},
+        "bf": 0.3333333333333333,
+        "ng": 2,
+        "rh": 3,
+        "pa": 0,
+        "pb": 2,
+        "pc": 1,
+        "pd": 0,
+        "pe": 1,
+        "pf": {},
+        "pg": {},
+        "ph": {}
+      },
+      "pieceWithHighestKDRatioValues": [
+        "PG",
+        "nb",
+        "rh"
+      ],
+      "KDValuesMap": {
+        "RA": {
+          "valueKills": 10,
+          "deaths": 2
+        },
+        "NB": {
+          "valueKills": 4,
+          "deaths": 2
+        },
+        "BC": {
+          "valueKills": 6,
+          "deaths": 2
+        },
+        "Q": {
+          "valueKills": 17,
+          "deaths": 0
+        },
+        "K": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "BF": {
+          "valueKills": 6,
+          "deaths": 3
+        },
+        "NG": {
+          "valueKills": 4,
+          "deaths": 2
+        },
+        "RH": {
+          "valueKills": 1,
+          "deaths": 1
+        },
+        "PA": {
+          "valueKills": 0,
+          "deaths": 1
+        },
+        "PB": {
+          "valueKills": 1,
+          "deaths": 2
+        },
+        "PC": {
+          "valueKills": 5,
+          "deaths": 2
+        },
+        "PD": {
+          "valueKills": 1,
+          "deaths": 3
+        },
+        "PE": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "PF": {
+          "valueKills": 0,
+          "deaths": 2
+        },
+        "PG": {
+          "valueKills": 7,
+          "deaths": 1
+        },
+        "PH": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "ra": {
+          "valueKills": 1,
+          "deaths": 2
+        },
+        "nb": {
+          "valueKills": 9,
+          "deaths": 3
+        },
+        "bc": {
+          "valueKills": 3,
+          "deaths": 2
+        },
+        "q": {
+          "valueKills": 18,
+          "deaths": 0
+        },
+        "k": {
+          "valueKills": 9,
+          "deaths": 0
+        },
+        "bf": {
+          "valueKills": 1,
+          "deaths": 3
+        },
+        "ng": {
+          "valueKills": 6,
+          "deaths": 3
+        },
+        "rh": {
+          "valueKills": 6,
+          "deaths": 2
+        },
+        "pa": {
+          "valueKills": 0,
+          "deaths": 1
+        },
+        "pb": {
+          "valueKills": 4,
+          "deaths": 2
+        },
+        "pc": {
+          "valueKills": 3,
+          "deaths": 3
+        },
+        "pd": {
+          "valueKills": 0,
+          "deaths": 2
+        },
+        "pe": {
+          "valueKills": 1,
+          "deaths": 1
+        },
+        "pf": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "pg": {
+          "valueKills": 0,
+          "deaths": 0
+        },
+        "ph": {
+          "valueKills": 0,
+          "deaths": 0
+        }
+      },
+      "KDMap": {
+        "RA": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 1
+        },
+        "NB": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "BC": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 1
+        },
+        "Q": {
+          "kills": 5,
+          "deaths": 0,
+          "revengeKills": 3
+        },
+        "K": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "BF": {
+          "kills": 2,
+          "deaths": 3,
+          "revengeKills": 0
+        },
+        "NG": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 2
+        },
+        "RH": {
+          "kills": 1,
+          "deaths": 1,
+          "revengeKills": 0
+        },
+        "PA": {
+          "kills": 0,
+          "deaths": 1,
+          "revengeKills": 0
+        },
+        "PB": {
+          "kills": 1,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "PC": {
+          "kills": 3,
+          "deaths": 2,
+          "revengeKills": 3
+        },
+        "PD": {
+          "kills": 1,
+          "deaths": 3,
+          "revengeKills": 1
+        },
+        "PE": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "PF": {
+          "kills": 0,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "PG": {
+          "kills": 3,
+          "deaths": 1,
+          "revengeKills": 1
+        },
+        "PH": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "ra": {
+          "kills": 1,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "nb": {
+          "kills": 3,
+          "deaths": 3,
+          "revengeKills": 1
+        },
+        "bc": {
+          "kills": 1,
+          "deaths": 2,
+          "revengeKills": 1
+        },
+        "q": {
+          "kills": 6,
+          "deaths": 0,
+          "revengeKills": 4
+        },
+        "k": {
+          "kills": 1,
+          "deaths": 0,
+          "revengeKills": 1
+        },
+        "bf": {
+          "kills": 1,
+          "deaths": 3,
+          "revengeKills": 1
+        },
+        "ng": {
+          "kills": 2,
+          "deaths": 3,
+          "revengeKills": 1
+        },
+        "rh": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "pa": {
+          "kills": 0,
+          "deaths": 1,
+          "revengeKills": 0
+        },
+        "pb": {
+          "kills": 2,
+          "deaths": 2,
+          "revengeKills": 2
+        },
+        "pc": {
+          "kills": 3,
+          "deaths": 3,
+          "revengeKills": 0
+        },
+        "pd": {
+          "kills": 0,
+          "deaths": 2,
+          "revengeKills": 0
+        },
+        "pe": {
+          "kills": 1,
+          "deaths": 1,
+          "revengeKills": 0
+        },
+        "pf": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "pg": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        },
+        "ph": {
+          "kills": 0,
+          "deaths": 0,
+          "revengeKills": 0
+        }
+      }
+    },
+    "KillStreakMetric": {
+      "killStreakMap": {
+        "RA": {
+          "killStreaks": 1
+        },
+        "NB": {
+          "killStreaks": 0
+        },
+        "BC": {
+          "killStreaks": 1
+        },
+        "Q": {
+          "killStreaks": 2
+        },
+        "K": {
+          "killStreaks": 0
+        },
+        "BF": {
+          "killStreaks": 1
+        },
+        "NG": {
+          "killStreaks": 1
+        },
+        "RH": {
+          "killStreaks": 1
+        },
+        "PA": {
+          "killStreaks": 0
+        },
+        "PB": {
+          "killStreaks": 0
+        },
+        "PC": {
+          "killStreaks": 1
+        },
+        "PD": {
+          "killStreaks": 0
+        },
+        "PE": {
+          "killStreaks": 0
+        },
+        "PF": {
+          "killStreaks": 0
+        },
+        "PG": {
+          "killStreaks": 2
+        },
+        "PH": {
+          "killStreaks": 0
+        },
+        "ra": {
+          "killStreaks": 1
+        },
+        "nb": {
+          "killStreaks": 1
+        },
+        "bc": {
+          "killStreaks": 0
+        },
+        "q": {
+          "killStreaks": 2
+        },
+        "k": {
+          "killStreaks": 0
+        },
+        "bf": {
+          "killStreaks": 1
+        },
+        "ng": {
+          "killStreaks": 1
+        },
+        "rh": {
+          "killStreaks": 0
+        },
+        "pa": {
+          "killStreaks": 0
+        },
+        "pb": {
+          "killStreaks": 1
+        },
+        "pc": {
+          "killStreaks": 1
+        },
+        "pd": {
+          "killStreaks": 0
+        },
+        "pe": {
+          "killStreaks": 1
+        },
+        "pf": {
+          "killStreaks": 0
+        },
+        "pg": {
+          "killStreaks": 0
+        },
+        "ph": {
+          "killStreaks": 0
+        }
+      },
+      "maxKillStreak": 2,
+      "maxKillStreakPiece": [
+        "Q",
+        "PG",
+        "q"
+      ],
+      "maxKillStreakGame": [
+        "https://lichess.org/A2AjN96n",
+        "https://lichess.org/m45sueue",
+        "https://lichess.org/obzb2exd"
+      ]
+    },
+    "MateAndAssistMetric": {
+      "mateAndAssistMap": {
+        "RA": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NB": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "Q": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "K": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "BF": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "NG": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "RH": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PA": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PB": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PC": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PD": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PE": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PF": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PG": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "PH": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ra": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "nb": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "bc": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "q": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "k": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "bf": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ng": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "rh": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pa": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pb": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pc": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pd": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pe": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pf": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "pg": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        },
+        "ph": {
+          "mates": 0,
+          "assists": 0,
+          "hockeyAssists": 0
+        }
+      },
+      "matedCounts": {
+        "k": 0,
+        "K": 0
+      }
+    },
+    "PromotionMetric": {
+      "promotedToTotals": {
+        "q": 1,
+        "r": 0,
+        "b": 0,
+        "n": 0
+      },
+      "uasPromotingPieces": {
+        "pa": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pb": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pc": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pd": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pe": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pf": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "pg": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "ph": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PA": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PB": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PC": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PD": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PE": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PF": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PG": {
+          "q": 1,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        },
+        "PH": {
+          "q": 0,
+          "r": 0,
+          "b": 0,
+          "n": 0
+        }
+      },
+      "maxNumQueens": 3,
+      "movesAndGamesWithMaxQueenCount": [
+        {
+          "game": "https://lichess.org/m45sueue",
+          "move": "exf8=Q+"
+        }
+      ]
+    },
+    "MoveDistanceMetric": {
+      "pieceWithHighestAvg": "q",
+      "maxAvgDistance": 19.333333333333332,
+      "pieceWithLowestAvg": "pf",
+      "minAvgDistance": 0.3333333333333333,
+      "pieceThatMovedTheFurthest": [
+        "q"
+      ],
+      "gameInWhichPieceMovedTheFurthest": [
+        "https://lichess.org/A2AjN96n"
+      ],
+      "distanceThatPieceMovedInTheGame": 28,
+      "totalCollectiveDistance": 387,
+      "gameMaxCollectiveDistance": {
+        "distance": 164,
+        "linkArray": [
+          "https://lichess.org/obzb2exd"
+        ]
+      },
+      "totalDistancesByPiece": {
+        "RA": {
+          "distance": 19
+        },
+        "NB": {
+          "distance": 26
+        },
+        "BC": {
+          "distance": 22
+        },
+        "Q": {
+          "distance": 27
+        },
+        "K": {
+          "distance": 14
+        },
+        "BF": {
+          "distance": 13
+        },
+        "NG": {
+          "distance": 14
+        },
+        "RH": {
+          "distance": 17
+        },
+        "PA": {
+          "distance": 6
+        },
+        "PB": {
+          "distance": 7
+        },
+        "PC": {
+          "distance": 7
+        },
+        "PD": {
+          "distance": 7
+        },
+        "PE": {
+          "distance": 6
+        },
+        "PF": {
+          "distance": 3
+        },
+        "PG": {
+          "distance": 7
+        },
+        "PH": {
+          "distance": 2
+        },
+        "ra": {
+          "distance": 12
+        },
+        "nb": {
+          "distance": 12
+        },
+        "bc": {
+          "distance": 6
+        },
+        "q": {
+          "distance": 58
+        },
+        "k": {
+          "distance": 9
+        },
+        "bf": {
+          "distance": 8
+        },
+        "ng": {
+          "distance": 24
+        },
+        "rh": {
+          "distance": 28
+        },
+        "pa": {
+          "distance": 2
+        },
+        "pb": {
+          "distance": 3
+        },
+        "pc": {
+          "distance": 9
+        },
+        "pd": {
+          "distance": 5
+        },
+        "pe": {
+          "distance": 5
+        },
+        "pf": {
+          "distance": 1
+        },
+        "pg": {
+          "distance": 3
+        },
+        "ph": {
+          "distance": 5
+        }
+      },
+      "avgDistancesByPiece": {
+        "RA": {
+          "avgDistance": 6.333333333333333
+        },
+        "NB": {
+          "avgDistance": 8.666666666666666
+        },
+        "BC": {
+          "avgDistance": 7.333333333333333
+        },
+        "Q": {
+          "avgDistance": 9
+        },
+        "K": {
+          "avgDistance": 4.666666666666667
+        },
+        "BF": {
+          "avgDistance": 4.333333333333333
+        },
+        "NG": {
+          "avgDistance": 4.666666666666667
+        },
+        "RH": {
+          "avgDistance": 5.666666666666667
+        },
+        "PA": {
+          "avgDistance": 2
+        },
+        "PB": {
+          "avgDistance": 2.3333333333333335
+        },
+        "PC": {
+          "avgDistance": 2.3333333333333335
+        },
+        "PD": {
+          "avgDistance": 2.3333333333333335
+        },
+        "PE": {
+          "avgDistance": 2
+        },
+        "PF": {
+          "avgDistance": 1
+        },
+        "PG": {
+          "avgDistance": 2.3333333333333335
+        },
+        "PH": {
+          "avgDistance": 0.6666666666666666
+        },
+        "ra": {
+          "avgDistance": 4
+        },
+        "nb": {
+          "avgDistance": 4
+        },
+        "bc": {
+          "avgDistance": 2
+        },
+        "q": {
+          "avgDistance": 19.333333333333332
+        },
+        "k": {
+          "avgDistance": 3
+        },
+        "bf": {
+          "avgDistance": 2.6666666666666665
+        },
+        "ng": {
+          "avgDistance": 8
+        },
+        "rh": {
+          "avgDistance": 9.333333333333334
+        },
+        "pa": {
+          "avgDistance": 0.6666666666666666
+        },
+        "pb": {
+          "avgDistance": 1
+        },
+        "pc": {
+          "avgDistance": 3
+        },
+        "pd": {
+          "avgDistance": 1.6666666666666667
+        },
+        "pe": {
+          "avgDistance": 1.6666666666666667
+        },
+        "pf": {
+          "avgDistance": 0.3333333333333333
+        },
+        "pg": {
+          "avgDistance": 1
+        },
+        "ph": {
+          "avgDistance": 1.6666666666666667
+        }
+      }
+    },
+    "GameWithMostMovesMetric": {
+      "gameWithMostMoves": [
+        "https://lichess.org/obzb2exd"
+      ],
+      "gameWithMostMovesNumMoves": 91
+    },
+    "PieceLevelMoveInfoMetric": {
+      "totalMovesByPiece": {
+        "RA": {
+          "numMoves": 7
+        },
+        "NB": {
+          "numMoves": 13
+        },
+        "BC": {
+          "numMoves": 13
+        },
+        "Q": {
+          "numMoves": 14
+        },
+        "K": {
+          "numMoves": 11
+        },
+        "BF": {
+          "numMoves": 5
+        },
+        "NG": {
+          "numMoves": 7
+        },
+        "RH": {
+          "numMoves": 7
+        },
+        "PA": {
+          "numMoves": 6
+        },
+        "PB": {
+          "numMoves": 4
+        },
+        "PC": {
+          "numMoves": 6
+        },
+        "PD": {
+          "numMoves": 4
+        },
+        "PE": {
+          "numMoves": 4
+        },
+        "PF": {
+          "numMoves": 2
+        },
+        "PG": {
+          "numMoves": 6
+        },
+        "PH": {
+          "numMoves": 2
+        },
+        "ra": {
+          "numMoves": 6
+        },
+        "nb": {
+          "numMoves": 6
+        },
+        "bc": {
+          "numMoves": 6
+        },
+        "q": {
+          "numMoves": 27
+        },
+        "k": {
+          "numMoves": 7
+        },
+        "bf": {
+          "numMoves": 6
+        },
+        "ng": {
+          "numMoves": 12
+        },
+        "rh": {
+          "numMoves": 11
+        },
+        "pa": {
+          "numMoves": 1
+        },
+        "pb": {
+          "numMoves": 3
+        },
+        "pc": {
+          "numMoves": 6
+        },
+        "pd": {
+          "numMoves": 3
+        },
+        "pe": {
+          "numMoves": 5
+        },
+        "pf": {
+          "numMoves": 1
+        },
+        "pg": {
+          "numMoves": 2
+        },
+        "ph": {
+          "numMoves": 5
+        }
+      },
+      "averageNumMovesPerGameByPiece": {
+        "RA": {
+          "avgMoves": 2.3333333333333335
+        },
+        "NB": {
+          "avgMoves": 4.333333333333333
+        },
+        "BC": {
+          "avgMoves": 4.333333333333333
+        },
+        "Q": {
+          "avgMoves": 4.666666666666667
+        },
+        "K": {
+          "avgMoves": 3.6666666666666665
+        },
+        "BF": {
+          "avgMoves": 1.6666666666666667
+        },
+        "NG": {
+          "avgMoves": 2.3333333333333335
+        },
+        "RH": {
+          "avgMoves": 2.3333333333333335
+        },
+        "PA": {
+          "avgMoves": 2
+        },
+        "PB": {
+          "avgMoves": 1.3333333333333333
+        },
+        "PC": {
+          "avgMoves": 2
+        },
+        "PD": {
+          "avgMoves": 1.3333333333333333
+        },
+        "PE": {
+          "avgMoves": 1.3333333333333333
+        },
+        "PF": {
+          "avgMoves": 0.6666666666666666
+        },
+        "PG": {
+          "avgMoves": 2
+        },
+        "PH": {
+          "avgMoves": 0.6666666666666666
+        },
+        "ra": {
+          "avgMoves": 2
+        },
+        "nb": {
+          "avgMoves": 2
+        },
+        "bc": {
+          "avgMoves": 2
+        },
+        "q": {
+          "avgMoves": 9
+        },
+        "k": {
+          "avgMoves": 2.3333333333333335
+        },
+        "bf": {
+          "avgMoves": 2
+        },
+        "ng": {
+          "avgMoves": 4
+        },
+        "rh": {
+          "avgMoves": 3.6666666666666665
+        },
+        "pa": {
+          "avgMoves": 0.3333333333333333
+        },
+        "pb": {
+          "avgMoves": 1
+        },
+        "pc": {
+          "avgMoves": 2
+        },
+        "pd": {
+          "avgMoves": 1
+        },
+        "pe": {
+          "avgMoves": 1.6666666666666667
+        },
+        "pf": {
+          "avgMoves": 0.3333333333333333
+        },
+        "pg": {
+          "avgMoves": 0.6666666666666666
+        },
+        "ph": {
+          "avgMoves": 1.6666666666666667
+        }
+      },
+      "pieceHighestAverageMoves": [
+        "q"
+      ],
+      "highestAverageMoves": 9,
+      "uasWithMostMovesSingleGame": [
+        "q"
+      ],
+      "uasSingleGameMaxMoves": 16,
+      "gamesWithUasMostMoves": [
+        "https://lichess.org/obzb2exd"
+      ],
+      "gamesWithNoCastling": 0,
+      "queenKingCastlingCounts": {
+        "blackKing": 2,
+        "blackQueen": 0,
+        "whiteKing": 3,
+        "whiteQueen": 0
+      }
+    },
+    "MiscMoveFactMetric": {
+      "enPassantMovesCount": 0,
+      "totalNumPiecesKnightHopped": 54
+    }
   }
 }

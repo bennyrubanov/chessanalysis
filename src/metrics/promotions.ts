@@ -47,9 +47,12 @@ export class PromotionMetric implements Metric {
     // 2 queens to start with
     let thisGameQueenCount = 2;
 
-    const gameSite = metadata.find((item) => item.startsWith('[Site "'))
-    ?.replace('[Site "', '')
-    ?.replace('"]', '');
+    let gameSite = '';
+    if (metadata) {
+      gameSite = metadata.find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', '');
+    }
 
     for (const { move } of game) {
       // TODO: we can use flags instead of includes('=)

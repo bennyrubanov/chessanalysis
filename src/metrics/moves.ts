@@ -215,6 +215,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
       gamesWithUasMostMoves: this.gamesWithUasMostMoves,
       gamesWithNoCastling: this.gamesWithNoCastling,
       queenKingCastlingCounts: this.castlingCounts,
+      averagesMap,
     }
   }
 }

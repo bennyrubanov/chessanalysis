@@ -86,7 +86,7 @@ async function gameIterator(path) {
 
 // for use with running index.ts with test sets & writing to results.json
 if (require.main === module) {
-  main(`data/10.10.23_test_set`).then(async (results) => {
+  main(`data/11.11.23 3 Game Test Set`).then(async (results) => {
     const now = new Date();
     const milliseconds = now.getMilliseconds();
 
