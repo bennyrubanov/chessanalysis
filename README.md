@@ -2,6 +2,11 @@
 
 Welcome! We (@EllAchE and @bennyrubanov) are chess amateurs who also have interests in statistics, programming and sillyness. This repo brings those interests together. Here, we find and visualize some of the sillier (and perhaps less useful) chess statistics no one has bothered to calculate before. This project is open source, so we encourage contributions and suggestions! 😊
 
+## Preliminary Results
+These results have yet to be visualized, and the quantity of games analyzed will be increased, but here is a result on 450k games from November 2013!
+
+[Results](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4)
+
 # Methodology
 
 ## Data
