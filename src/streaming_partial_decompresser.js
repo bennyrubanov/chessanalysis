@@ -13,12 +13,24 @@ const SIZE_LIMIT = 10 * 1024 * 1024 // 10MB
 // set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
 const decompressedSizeLimit = 500 * 1024 * 1024 * 1024 // 500 GB represented in bytes
 
-// // Create a queue with concurrency 1
-// const writeQueue = async.queue((task, callback) => {
-//     fs.appendFile(__dirname + '/results.json', task.data, callback);
-// }, 1);
+// Create an analysis queue with a concurrency of 10
+const analysisQueue = async.queue((task, callback) => {
+    const { filePath } = task;
+    runAnalysis(filePath).then(() => callback()).catch(callback);
+  }, 10);
+  
+// Create a write queue with a concurrency of 1
+const writeQueue = async.queue((task, callback) => {
+    const { filePath } = task;
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log(`File ${filePath} has been deleted.`);
+    }
+    callback();
+}, 1);
 
-// module.exports.writeQueue = writeQueue;
+module.exports.writeQueue = writeQueue;
+
 
 // function to check file size
 const getFileSize = (filePath) => {
@@ -111,7 +123,6 @@ const decompressAndAnalyze = async (file, start = 0) => {
                 let fileLength = 0;
                 let all_files_lengths = 0;
                 let batch_files_total_decompressed_size = 0;
-                let analysisPromises = [];
                 let filesBeingAnalyzed = new Set();
 
                 result.on('error', (err) => {
@@ -160,7 +171,6 @@ const decompressAndAnalyze = async (file, start = 0) => {
                             console.log(`Decompressed size limit met. Ending decompression and finalizing analyses...`);
                             console.log(`Temp files being analyzed: ${filesBeingAnalyzed}`)
                             stopDecompression = true; // Set the flag to true to stop decompression
-                            await Promise.allSettled(analysisPromises);
                             batch_files_total_decompressed_size = 0;
                         }
                                         
@@ -169,16 +179,19 @@ const decompressAndAnalyze = async (file, start = 0) => {
                         decompressedStream = fs.createWriteStream(newFilePath, { flags: 'a' });
                         // write a function that adds two numbers
 
-                        // Start the analysis on the old file, then add the promise to the queue
+                        // Start the analysis on the old file, then add the promise to the write and analysis queues
                         // delete the old file when finished
                         if (fs.existsSync(oldPath) && !filesBeingAnalyzed.has(oldPath)) {
-                            let analysisPromise = runAnalysis(oldPath).then(() => {
-                                if (fs.existsSync(oldPath)) {
-                                    fs.unlinkSync(oldPath);
-                                    console.log(`File ${oldPath} has been deleted.`);
+                            console.log(`adding ${oldPath} to analysis queue`)
+                            analysisQueue.push({ filePath: oldPath }, (err) => {
+                                if (err) {
+                                    console.error(`Error analyzing file ${oldPath}:`, err);
+                                } else {
+                                    console.log(`Analysis of file ${oldPath} completed.`);
+                                    console.log(`adding ${oldPath} to write queue`)
+                                    writeQueue.push({ filePath: oldPath });
                                 }
-                            }).catch(console.error);
-                            analysisPromises.push(analysisPromise);
+                            });
                             filesBeingAnalyzed.add(oldPath);
                         }
                     
@@ -189,28 +202,20 @@ const decompressAndAnalyze = async (file, start = 0) => {
                 });
 
                 result.on('end', () => {
-                    if (stopDecompression) {
-                        console.log("Decompression stopped due to decompressed size limit being met.")
-                    } else {
-                        // When all data is decompressed, run the analysis on the last file
-                        let lastAnalysisPromise = runAnalysis(newFilePath).then(() => {
-                            if (fs.existsSync(newFilePath)) {
-                                fs.unlinkSync(newFilePath);
-                                console.log(`File ${newFilePath} has been deleted.`);
-                            }
-                        }).catch(console.error);
-                        analysisPromises.push(lastAnalysisPromise);
-                        filesBeingAnalyzed.add(newFilePath);
-    
-                        // When all analyses are done, delete the files
-                        Promise.allSettled(analysisPromises).then(() => {
-                            console.log("All analyses completed");
-                            filesBeingAnalyzed.clear();
-                        }).catch(console.error);
-    
-                        resolve();       
-                    }
-      
+                    // Add the last file to the queues when all data is decompressed
+                    console.log(`adding ${newFilePath} to analysis queue`)
+                    analysisQueue.push({ filePath: newFilePath }, (err) => {
+                        if (err) {
+                        console.error(`Error analyzing file ${newFilePath}:`, err);
+                        } else {
+                        console.log(`Analysis of file ${newFilePath} completed.`);
+                        console.log(`adding ${newFilePath} to write queue`)
+                        writeQueue.push({ filePath: newFilePath });
+                        }
+                    });
+                    filesBeingAnalyzed.add(newFilePath);
+
+                    resolve();       
                 });
             });
         });
@@ -226,6 +231,9 @@ const processFiles = async () => {
     for (const file of files) {
         await decompressAndAnalyze(file);
     }
+    writeQueue.drain(() => {
+        console.log("All analyses completed");
+    });
 };
 
 // Start the process

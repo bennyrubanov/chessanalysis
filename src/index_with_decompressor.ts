@@ -12,6 +12,7 @@ import { PromotionMetric } from './metrics/promotions';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as lockfile from 'proper-lockfile';
+const { writeQueue } = require('./streaming_partial_decompresser');
 
 /**
  *
@@ -100,13 +101,14 @@ if (require.main === module) {
 
     existingResults[analysisKey] = results;
 
-    // Use lockfile to prevent concurrent writes
-    const release = await lockfile.lock(resultsPath);
-    try {
-      fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
-    } finally {
-      release();
-    }
+    // Add the write task to the writeQueue
+    writeQueue.push({ results: existingResults, analysisKey, resultsPath }, (err) => {
+      if (err) {
+        console.error(`Error writing analysis ${analysisKey} to ${resultsPath}:`, err);
+      } else {
+        console.log(`Analysis ${analysisKey} written to ${resultsPath}.`);
+      }
+    });
 
     console.log(`Analysis ${analysisKey} written to ${resultsPath}.`)
   });
