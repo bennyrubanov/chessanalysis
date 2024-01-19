@@ -94,7 +94,7 @@ const queue = async.queue((task) => {
 }, 1);
 
 // for use with streaming_partial_decompresser.js
-// counter introduce to avoid overwriting existing data in results.json
+// counter introduced to avoid overwriting existing data in results.json
 if (require.main === module) {
   const pathToAnalyze = process.argv[2];
   main(pathToAnalyze).then(async (results) => {
