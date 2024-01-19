@@ -1,7 +1,6 @@
 const fs = require('fs');
 const zstd = require('node-zstandard');
 const { spawn } = require('child_process');
-const async = require('async');
 
 // List of all the database files you want to analyze (these need to be downloaded and in data folder)
 const files = ["lichess_db_standard_rated_2013-01.pgn.zst", /*...*/];
@@ -165,13 +164,16 @@ const decompressAndAnalyze = async (file, start = 0) => {
                         // Start the analysis on the old file, then add the promise to the queue
                         // delete the old file when finished
                         if (fs.existsSync(oldPath) && !filesBeingAnalyzed.has(oldPath)) {
-                            let analysisPromise = runAnalysis(oldPath).then(() => {
-                                if (fs.existsSync(oldPath)) {
-                                    fs.unlinkSync(oldPath);
-                                    console.log(`File ${oldPath} has been deleted.`);
+                            console.log(`adding ${oldPath} to analysis queue`)
+                            analysisQueue.push({ filePath: oldPath }, (err) => {
+                                if (err) {
+                                    console.error(`Error analyzing file ${oldPath}:`, err);
+                                } else {
+                                    console.log(`Analysis of file ${oldPath} completed.`);
+                                    console.log(`adding ${oldPath} to write queue`)
+                                    writeQueue.push({ filePath: oldPath });
                                 }
-                            }).catch(console.error);
-                            analysisPromises.push(analysisPromise);
+                            });
                             filesBeingAnalyzed.add(oldPath);
                         }
                     
@@ -182,23 +184,20 @@ const decompressAndAnalyze = async (file, start = 0) => {
                 });
 
                 result.on('end', () => {
-                    // When all data is decompressed, run the analysis on the last file
-                    let lastAnalysisPromise = runAnalysis(newFilePath).then(() => {
-                        if (fs.existsSync(newFilePath)) {
-                            fs.unlinkSync(newFilePath);
-                            console.log(`File ${newFilePath} has been deleted.`);
+                    // Add the last file to the queues when all data is decompressed
+                    console.log(`adding ${newFilePath} to analysis queue`)
+                    analysisQueue.push({ filePath: newFilePath }, (err) => {
+                        if (err) {
+                        console.error(`Error analyzing file ${newFilePath}:`, err);
+                        } else {
+                        console.log(`Analysis of file ${newFilePath} completed.`);
+                        console.log(`adding ${newFilePath} to write queue`)
+                        writeQueue.push({ filePath: newFilePath });
                         }
-                    }).catch(console.error);
-                    analysisPromises.push(lastAnalysisPromise);
+                    });
                     filesBeingAnalyzed.add(newFilePath);
 
-                    // When all analyses are done, delete the files
-                    Promise.allSettled(analysisPromises).then(() => {
-                        console.log("All analyses completed");
-                        filesBeingAnalyzed.clear();
-                    }).catch(console.error);
-
-                    resolve();             
+                    resolve();       
                 });
             });
         });
@@ -214,6 +213,9 @@ const processFiles = async () => {
     for (const file of files) {
         await decompressAndAnalyze(file);
     }
+    writeQueue.drain(() => {
+        console.log("All analyses completed");
+    });
 };
 
 // Start the process
