@@ -1,0 +1,52 @@
+"filename", "language", "TypeScript", "JavaScript", "Markdown", "JSON", "JSON with Comments", "YAML", "HTML", "comment", "blank", "total"
+"/Users/bennyrubanov/chessanalysis/.github/workflows/node.js.yml", "YAML", 0, 0, 0, 0, 0, 19, 0, 0, 7, 26
+"/Users/bennyrubanov/chessanalysis/README.md", "Markdown", 0, 0, 95, 0, 0, 0, 0, 0, 29, 124
+"/Users/bennyrubanov/chessanalysis/cdv/README.md", "Markdown", 0, 0, 16, 0, 0, 0, 0, 0, 9, 25
+"/Users/bennyrubanov/chessanalysis/cdv/package-lock.json", "JSON", 0, 0, 0, 466, 0, 0, 0, 0, 1, 467
+"/Users/bennyrubanov/chessanalysis/cdv/package.json", "JSON", 0, 0, 0, 20, 0, 0, 0, 0, 1, 21
+"/Users/bennyrubanov/chessanalysis/cdv/src/js/EvalAndTime.ts", "TypeScript", 323, 0, 0, 0, 0, 0, 0, 45, 64, 432
+"/Users/bennyrubanov/chessanalysis/cdv/src/js/HeatMap.ts", "TypeScript", 135, 0, 0, 0, 0, 0, 0, 13, 29, 177
+"/Users/bennyrubanov/chessanalysis/cdv/src/js/MovePaths.ts", "TypeScript", 127, 0, 0, 0, 0, 0, 0, 17, 34, 178
+"/Users/bennyrubanov/chessanalysis/cdv/src/js/Openings.ts", "TypeScript", 159, 0, 0, 0, 0, 0, 0, 2, 38, 199
+"/Users/bennyrubanov/chessanalysis/cdv/src/js/index.ts", "TypeScript", 5, 0, 0, 0, 0, 0, 0, 0, 1, 6
+"/Users/bennyrubanov/chessanalysis/cdv/src/js/util.ts", "TypeScript", 84, 0, 0, 0, 0, 0, 0, 9, 22, 115
+"/Users/bennyrubanov/chessanalysis/cdv/test/index.html", "HTML", 0, 0, 0, 0, 0, 0, 109, 0, 18, 127
+"/Users/bennyrubanov/chessanalysis/cdv/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 13, 0, 0, 0, 1, 14
+"/Users/bennyrubanov/chessanalysis/cjsmin/README.md", "Markdown", 0, 0, 691, 0, 0, 0, 0, 0, 211, 902
+"/Users/bennyrubanov/chessanalysis/cjsmin/package-lock.json", "JSON", 0, 0, 0, 10279, 0, 0, 0, 0, 1, 10280
+"/Users/bennyrubanov/chessanalysis/cjsmin/package.json", "JSON", 0, 0, 0, 30, 0, 0, 0, 0, 1, 31
+"/Users/bennyrubanov/chessanalysis/cjsmin/src/chess.ts", "TypeScript", 1516, 0, 0, 0, 0, 0, 0, 269, 278, 2063
+"/Users/bennyrubanov/chessanalysis/cjsmin/tsconfig.cjs.json", "JSON", 0, 0, 0, 7, 0, 0, 0, 0, 1, 8
+"/Users/bennyrubanov/chessanalysis/cjsmin/tsconfig.esm.json", "JSON", 0, 0, 0, 7, 0, 0, 0, 0, 1, 8
+"/Users/bennyrubanov/chessanalysis/cjsmin/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 12, 0, 0, 0, 1, 13
+"/Users/bennyrubanov/chessanalysis/cjsmin/tsconfig.types.json", "JSON", 0, 0, 0, 8, 0, 0, 0, 0, 1, 9
+"/Users/bennyrubanov/chessanalysis/data/README.md", "Markdown", 0, 0, 1, 0, 0, 0, 0, 0, 1, 2
+"/Users/bennyrubanov/chessanalysis/historiesShort.json", "JSON", 0, 0, 0, 2616, 0, 0, 0, 0, 1, 2617
+"/Users/bennyrubanov/chessanalysis/package-lock.json", "JSON", 0, 0, 0, 4628, 0, 0, 0, 0, 1, 4629
+"/Users/bennyrubanov/chessanalysis/package.json", "JSON", 0, 0, 0, 28, 0, 0, 0, 0, 1, 29
+"/Users/bennyrubanov/chessanalysis/src/constants.ts", "TypeScript", 130, 0, 0, 0, 0, 0, 0, 0, 1, 131
+"/Users/bennyrubanov/chessanalysis/src/fileReader.ts", "TypeScript", 45, 0, 0, 0, 0, 0, 0, 8, 3, 56
+"/Users/bennyrubanov/chessanalysis/src/final_aggregate_analysis.ts", "TypeScript", 492, 0, 0, 0, 0, 0, 0, 59, 74, 625
+"/Users/bennyrubanov/chessanalysis/src/index.ts", "TypeScript", 88, 0, 0, 0, 0, 0, 0, 16, 13, 117
+"/Users/bennyrubanov/chessanalysis/src/index_with_decompressor.ts", "TypeScript", 94, 0, 0, 0, 0, 0, 0, 14, 12, 120
+"/Users/bennyrubanov/chessanalysis/src/metrics/captures.ts", "TypeScript", 389, 0, 0, 0, 0, 0, 0, 50, 65, 504
+"/Users/bennyrubanov/chessanalysis/src/metrics/distances.ts", "TypeScript", 160, 0, 0, 0, 0, 0, 0, 12, 21, 193
+"/Users/bennyrubanov/chessanalysis/src/metrics/metric.ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 2, 5, 17
+"/Users/bennyrubanov/chessanalysis/src/metrics/misc.ts", "TypeScript", 354, 0, 0, 0, 0, 0, 0, 41, 41, 436
+"/Users/bennyrubanov/chessanalysis/src/metrics/moves.ts", "TypeScript", 275, 0, 0, 0, 0, 0, 0, 17, 40, 332
+"/Users/bennyrubanov/chessanalysis/src/metrics/promotions.ts", "TypeScript", 101, 0, 0, 0, 0, 0, 0, 14, 22, 137
+"/Users/bennyrubanov/chessanalysis/src/scratch.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 16, 3, 19
+"/Users/bennyrubanov/chessanalysis/src/streaming_partial_decompresser.js", "JavaScript", 0, 156, 0, 0, 0, 0, 0, 40, 45, 241
+"/Users/bennyrubanov/chessanalysis/src/types.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"/Users/bennyrubanov/chessanalysis/src/utils.ts", "TypeScript", 56, 0, 0, 0, 0, 0, 0, 12, 8, 76
+"/Users/bennyrubanov/chessanalysis/src/visuals/boardHeatmap.ts", "TypeScript", 56, 0, 0, 0, 0, 0, 0, 3, 10, 69
+"/Users/bennyrubanov/chessanalysis/src/visuals/sampleVisualConfigs.json", "JSON", 0, 0, 0, 18459, 0, 0, 0, 0, 1, 18460
+"/Users/bennyrubanov/chessanalysis/src/visuals/visualTypesRaw.ts", "TypeScript", 22, 0, 0, 0, 0, 0, 0, 0, 4, 26
+"/Users/bennyrubanov/chessanalysis/src/visuals/visualTypesShort.ts", "TypeScript", 61, 0, 0, 0, 0, 0, 0, 1, 6, 68
+"/Users/bennyrubanov/chessanalysis/tests/enPassant.test.ts", "TypeScript", 20, 0, 0, 0, 0, 0, 0, 0, 5, 25
+"/Users/bennyrubanov/chessanalysis/tests/historyGenerator.test.ts", "TypeScript", 18, 0, 0, 0, 0, 0, 0, 5, 3, 26
+"/Users/bennyrubanov/chessanalysis/tests/metrics.test.ts", "TypeScript", 549, 0, 0, 0, 0, 0, 0, 17, 92, 658
+"/Users/bennyrubanov/chessanalysis/tests/queensidecastle.test.ts", "TypeScript", 11, 0, 0, 0, 0, 0, 0, 1, 3, 15
+"/Users/bennyrubanov/chessanalysis/tests/shortPgn.test.ts", "TypeScript", 23, 0, 0, 0, 0, 0, 0, 3, 6, 32
+"/Users/bennyrubanov/chessanalysis/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 18, 0, 0, 2, 1, 21
+"Total", "-", 5316, 156, 803, 36548, 43, 19, 109, 688, 1240, 44922

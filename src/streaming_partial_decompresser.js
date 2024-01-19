@@ -3,11 +3,11 @@ const zstd = require('node-zstandard');
 const { spawn } = require('child_process');
 
 // List of all the database files you want to analyze (these need to be downloaded and in data folder)
-const files = ["lichess_db_standard_rated_2018-05.pgn.zst", /*...*/];
+const files = ["lichess_db_standard_rated_2013-11.pgn.zst", /*...*/];
 
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = around 15 million games
-const SIZE_LIMIT = 30 * 1024 * 1024 // 80MB
+const SIZE_LIMIT = 10 * 1024 * 1024 // 10MB
 
 // set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
 const decompressedSizeLimit = 500 * 1024 * 1024 * 1024 // 500 GB represented in bytes
@@ -32,7 +32,7 @@ const runAnalysis = (filePath) => {
         // Run the analysis script
         console.log(`Running analysis script on ${filePath}...`);
 
-        const child = spawn('ts-node', ['/Users/bennyrubanov/chessanalysis/src/index_with_decompressor.ts', filePath]);
+        const child = spawn('ts-node', ['/Users/bennyrubanov/Coding_Projects/chessanalysis/src/index_with_decompressor.ts', filePath]);
 
         // only log complete lines of output (no insertion of "stdout: " in the middle of a line)
         // do this by accumulating the data until a newline character, and then logging the accumulated data
@@ -76,7 +76,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
     let file_counter = 1; // Initialize the file counter
     let total_chunk_counter = 0;
 
-    const base_path = `/Users/bennyrubanov/chessanalysis/data/${file.replace('.zst', '')}`;
+    const base_path = `/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file.replace('.zst', '')}`;
 
     // Create a new file path
     let newFilePath = `${base_path}_${file_counter}`;
@@ -98,7 +98,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
             let startTime = Date.now();
 
             // https://www.npmjs.com/package/node-zstandard#decompressionstreamfromfile-inputfile-callback
-            zstd.decompressionStreamFromFile(`/Users/bennyrubanov/chessanalysis/data/${file}`, (err, result) => {
+            zstd.decompressionStreamFromFile(`/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file}`, (err, result) => {
                 if (err) return reject(err);
 
                 let lastChunkLength = 0;
