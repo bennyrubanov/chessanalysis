@@ -11,7 +11,7 @@ import {
 import { PromotionMetric } from './metrics/promotions';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as lockfile from 'proper-lockfile';
+import * as async from 'async';
 
 /**
  *
@@ -79,6 +79,12 @@ async function gameIterator(path) {
   }
 }
 
+// Create a queue with a concurrency of 1
+const queue = async.queue((task, callback) => {
+  const { results, analysisKey, resultsPath } = task;
+  fs.writeFile(resultsPath, JSON.stringify(results, null, 2), callback);
+}, 1);
+
 // for use with streaming_partial_decompresser.js
 // counter introduce to avoid overwriting existing data in results.json
 if (require.main === module) {
@@ -100,13 +106,14 @@ if (require.main === module) {
 
     existingResults[analysisKey] = results;
 
-    // Use lockfile to prevent concurrent writes
-    const release = await lockfile.lock(resultsPath);
-    try {
-      fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
-    } finally {
-      release();
-    }
+    // Add the write task to the queue
+    queue.push({ results: existingResults, analysisKey, resultsPath }, (err) => {
+      if (err) {
+        console.error(`Error writing analysis ${analysisKey} to ${resultsPath}:`, err);
+      } else {
+        console.log(`Analysis ${analysisKey} written to ${resultsPath}.`);
+      }
+    });
 
     console.log(`Analysis ${analysisKey} written to ${resultsPath}.`)
   });

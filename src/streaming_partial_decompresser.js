@@ -1,13 +1,17 @@
 const fs = require('fs');
 const zstd = require('node-zstandard');
 const { spawn } = require('child_process');
+const async = require('async');
 
 // List of all the database files you want to analyze (these need to be downloaded and in data folder)
 const files = ["lichess_db_standard_rated_2013-01.pgn.zst", /*...*/];
 
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = 15 million games?
-const SIZE_LIMIT = 10 * 1024 * 1024
+const SIZE_LIMIT = 10 * 1024 * 1024 // 10MB
+
+// set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
+const decompressedSizeLimit = 500 * 1024 * 1024 * 1024 // 500 GB represented in bytes
 
 // function to check file size
 const getFileSize = (filePath) => {
@@ -18,6 +22,12 @@ const getFileSize = (filePath) => {
     return stats.size;
 };
 
+/**
+ * Runs the analysis script on a given file path.
+ *
+ * @param {string} filePath - The path of the file to run the analysis on.
+ * @return {Promise} A promise that resolves when the analysis is complete.
+ */
 const runAnalysis = (filePath) => {
     return new Promise((resolve, reject) => {
         // Run the analysis script
@@ -53,7 +63,15 @@ const runAnalysis = (filePath) => {
     });
 };
 
+/**
+ * Decompresses and analyzes a file.
+ *
+ * @param {string} file - The name of the file to decompress and analyze.
+ * @param {number} [start=0] - The starting index for decompression.
+ * @returns {Promise} A promise that resolves when the decompression and analysis is complete.
+ */
 const decompressAndAnalyze = async (file, start = 0) => {
+    let stopDecompression = false;
     let these_chunks_counter = 0; // Initialize the chunk counter
     let file_counter = 1; // Initialize the file counter
     let total_chunk_counter = 0;
@@ -85,6 +103,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
                 let lastChunkLength = 0;
                 let fileLength = 0;
                 let all_files_lengths = 0;
+                let batch_files_total_decompressed_size = 0;
                 let analysisPromises = [];
                 let filesBeingAnalyzed = new Set();
 
@@ -93,6 +112,10 @@ const decompressAndAnalyze = async (file, start = 0) => {
                 });
 
                 result.on('data', async (data) => {
+                    if (stopDecompression) {
+                        return; // Skip writing and updating counters if stopDecompression is true
+                    }
+
                     decompressedStream.write(data);
                     lastChunkLength = data.length;
 
@@ -100,6 +123,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
                     const durationFormatted = formatDuration(duration);
                     fileLength += data.length;
                     all_files_lengths += data.length;
+                    batch_files_total_decompressed_size += data.length;
 
                     // Increment the chunk counter
                     total_chunk_counter++;
@@ -123,11 +147,21 @@ const decompressAndAnalyze = async (file, start = 0) => {
                     
                         // Create a new file path
                         newFilePath = `${base_path}_${file_counter}`;
+
+                        // Stop decompression if the size of the combined decompressed files exceeds the decompressed total combined files size limit
+                        if (batch_files_total_decompressed_size >= decompressedSizeLimit) {
+                            console.log(`Decompressed size limit met. Ending decompression and finalizing analyses...`);
+                            console.log(`Temp files being analyzed: ${filesBeingAnalyzed}`)
+                            stopDecompression = true; // Set the flag to true to stop decompression
+                            await Promise.allSettled(analysisPromises);
+                            batch_files_total_decompressed_size = 0;
+                        }
                                         
                         // Switch to a new file
                         console.log(`Creating file number ${file_counter}`);
                         decompressedStream = fs.createWriteStream(newFilePath, { flags: 'a' });
-                                        
+                        // write a function that adds two numbers
+
                         // Start the analysis on the old file, then add the promise to the queue
                         // delete the old file when finished
                         if (fs.existsSync(oldPath) && !filesBeingAnalyzed.has(oldPath)) {
