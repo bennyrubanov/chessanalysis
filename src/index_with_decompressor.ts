@@ -80,9 +80,17 @@ async function gameIterator(path) {
 }
 
 // Create a queue with a concurrency of 1
-const queue = async.queue((task, callback) => {
-  const { results, analysisKey, resultsPath } = task;
-  fs.writeFile(resultsPath, JSON.stringify(results, null, 2), callback);
+const queue = async.queue((task) => {
+  return new Promise<void>((resolve, reject) => {
+    const { results, analysisKey, resultsPath } = task;
+    try {
+      fs.writeFileSync(resultsPath, JSON.stringify(results, null, 2));
+      console.log(`Analysis "${analysisKey}" has been written to ${resultsPath}`);
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  });
 }, 1);
 
 // for use with streaming_partial_decompresser.js
@@ -106,15 +114,7 @@ if (require.main === module) {
 
     existingResults[analysisKey] = results;
 
-    // Add the write task to the queue
-    queue.push({ results: existingResults, analysisKey, resultsPath }, (err) => {
-      if (err) {
-        console.error(`Error writing analysis ${analysisKey} to ${resultsPath}:`, err);
-      } else {
-        console.log(`Analysis ${analysisKey} written to ${resultsPath}.`);
-      }
-    });
-
-    console.log(`Analysis ${analysisKey} written to ${resultsPath}.`)
+    // Add the write task to the queue and wait for it to complete
+    await queue.push({ results: existingResults, analysisKey, resultsPath });
   });
 }
