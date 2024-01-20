@@ -183,6 +183,12 @@ const decompressAndAnalyze = async (file, start = 0) => {
                     analysisPromises.push(lastAnalysisPromise);
                     filesBeingAnalyzed.add(newFilePath);
 
+                    // When all analyses are done, delete the files
+                    Promise.allSettled(analysisPromises).then(() => {
+                        console.log("All analyses completed");
+                        filesBeingAnalyzed.clear();
+                    }).catch(console.error);
+
                     // Start the analysis on the old files, then add the promise to the queue
                     // delete the old file when finished
                     for (let oldPath of filesBeingAnalyzed) {
