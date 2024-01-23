@@ -124,5 +124,6 @@ Miscellaneous
 - Segment all relevant questions by ambiguous pieces and unambiguous pieces (e.g. pawn, bishop, knight, rook, queen, king) vs unambiguous pieces (e.g. pawn that started on a2)
 - Segment by wins and losses
 - Answer: which openings are most effective to learn by ELO rating? (find out which openings are most effective by ELO rating ranges)
+- Opening popularities seem to shift over time. Create animation/flow diagram showing popularity shifts on lichess. Segment by rating ranges
 
 Thanks for reading!
