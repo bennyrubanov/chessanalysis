@@ -3,11 +3,11 @@ const zstd = require('node-zstandard');
 const { spawn } = require('child_process');
 
 // List of all the database files you want to analyze (these need to be downloaded and in data folder)
-const files = ["lichess_db_standard_rated_2013-11.pgn.zst", /*...*/];
+const files = ["lichess_db_standard_rated_2018-05.pgn.zst", /*...*/];
 
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = around 15 million games
-const SIZE_LIMIT = 10 * 1024 * 1024 // 10MB
+const SIZE_LIMIT = 30 * 1024 * 1024 // 30MB
 
 // set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
 const decompressedSizeLimit = 500 * 1024 * 1024 * 1024 // 500 GB represented in bytes
