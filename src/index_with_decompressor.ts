@@ -79,7 +79,7 @@ async function gameIterator(path) {
   }
 }
 
-// Create a queue with a concurrency of 1
+// Create a write to result.json queue with a concurrency of 1
 const queue = async.queue((task) => {
   return new Promise<void>((resolve, reject) => {
     const { results, analysisKey, resultsPath } = task;

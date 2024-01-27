@@ -108,7 +108,7 @@ async function aggregateResults(filePath: string) {
   let weightedTotalPlayerRating = 0;
   let weightedTotalRatingDiff = 0;
 
-
+  // ANALYSIS-BY-ANALYSIS CALCULATIONS
   for (const analysis of Object.values(data)) {
     analysisCounter++;
 
@@ -417,6 +417,7 @@ async function aggregateResults(filePath: string) {
     totalGamesAnalyzed += thisAnalysisGamesAnalyzed;
   }
 
+  // AGGREGATE CALCULATIONS
   // ratings weighted average calculations
   const weightedAveragePlayerRating = weightedTotalPlayerRating / totalGamesAnalyzedForRatings;
   const weightedAverageRatingDiff = weightedTotalRatingDiff / totalGamesAnalyzedForRatings
