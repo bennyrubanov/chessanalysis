@@ -28,6 +28,8 @@ Current implementation is **bolded** where multiple options exist:
 ### Kills/Deaths/Assists
 - If two pieces simultaneously checkmate a king each is credited with 0.5 kills/mates (not currently implemented)
 - A checkmate is considered a "death" for the king and a "kill" for the mating piece
+- An "assist" is counted for a piece if: the move before the checkmate is that piece's move, and it is a "check"
+  - A "hockey assist": same as "assist", but the move looked at is the one two moves before the checkmate
 
 ### Distances
 
