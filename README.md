@@ -30,6 +30,7 @@ Current implementation is **bolded** where multiple options exist:
 - A checkmate is considered a "death" for the king and a "kill" for the mating piece
 - An "assist" is counted for a piece if: the move before the checkmate is that piece's move, and it is a "check"
   - A "hockey assist": same as "assist", but the move looked at is the one two moves before the checkmate
+  - HOWEVER: a piece cannot assist itself, so it is not counted if the piece checks and then mates the next move
 
 ### Distances
 
