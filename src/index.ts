@@ -110,6 +110,7 @@ if (require.main === module) {
     } finally {
       release();
     }
+    
 
     console.log(`Analysis ${analysisKey} written to ${resultsPath}.`)
   });
