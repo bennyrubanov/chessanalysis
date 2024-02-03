@@ -217,7 +217,7 @@ export type Move = {
   capture?: Capture;
   promotion?: PieceType;
   flags: string;
-  umabiguousSymbol: UASymbol;
+  unambiguousSymbol: UASymbol;
   // san: string;
   // lan: string;
   // before: string;
@@ -2006,7 +2006,7 @@ export class Chess {
       to: toAlgebraic,
       flags: prettyFlags,
       piece,
-      umabiguousSymbol: uglyMove.uas,
+      unambiguousSymbol: uglyMove.uas,
     };
 
     if (capture) {
