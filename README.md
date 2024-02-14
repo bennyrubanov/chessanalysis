@@ -1,6 +1,11 @@
 # Overview
 
-Welcome! Myself (@EllAchE) and @bennyrubanov are chess amateurs who also have interests in statistics, programming and sillyness. All of those things are coming together in this repo where we find and visualize some of the sillier (though perhaps less useful) chess statistics no one has bothered to calculate before! This project is open source, so we encourage contributions and suggestions!
+Welcome! We (@EllAchE and @bennyrubanov) are chess amateurs who also have interests in statistics, programming and sillyness. This repo brings those interests together. Here, we find and visualize some of the sillier (and perhaps less useful) chess statistics no one has bothered to calculate before. This project is open source, so we encourage contributions and suggestions! 😊
+
+## Preliminary Results
+These results have yet to be visualized, and the quantity of games analyzed will be increased, but here is a result on 450k games from November 2013!
+
+[Results](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4)
 
 # Methodology
 
@@ -13,7 +18,7 @@ Data is sourced from the public [Lichess games database](https://database.liches
 We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little time.
 
 ## Definitions
-- UAP (Unambiguous Piece): pawn that started on a2
+- Unambiguous Piece (UAP): e.g. pawn that started on a2
 - Ambiguous pieces: pawn, bishop, knight, rook, queen, king
 
 ## Edge Cases
@@ -23,6 +28,9 @@ Current implementation is **bolded** where multiple options exist:
 ### Kills/Deaths/Assists
 - If two pieces simultaneously checkmate a king each is credited with 0.5 kills/mates (not currently implemented)
 - A checkmate is considered a "death" for the king and a "kill" for the mating piece
+- An "assist" is counted for a piece if: the move before the checkmate is that piece's move, and it is a "check"
+  - A "hockey assist": same as "assist", but the move looked at is the one two moves before the checkmate
+  - HOWEVER: a piece cannot assist itself, so it is not counted if the piece checks and then mates the next move
 
 ### Distances
 
@@ -58,7 +66,6 @@ thesis: beginners get forked by knights and lose a lot of high level pieces. Wil
   - KD ratio by number of pieces taken
 - revenge kills (i.e. take back a piece immediately after it was taken)
 - best kill streaks (i.e. one piece is the only one taking others for some time)
-  - how many pieces on average does a Queen take before it gets taken down
 - which piece delivers checkmate most/least often, has the most checkmate assists, and the most hockey assists
 - where do checkmates happen most/least often (what squares specifically)
 - heat map of which squares are "battleground", i.e. have the most captures
@@ -113,11 +120,13 @@ Miscellaneous
   - how many moves until a piece is captured on average
   - how much clock time until a piece is captured on average
 - has a single piece ever covered the entire board in one game?
+- how many pieces on average does a Queen take before it gets taken down
 
 # Planned Roadmap Items
 - Segment by ELO rating ranges
 - Segment all relevant questions by ambiguous pieces and unambiguous pieces (e.g. pawn, bishop, knight, rook, queen, king) vs unambiguous pieces (e.g. pawn that started on a2)
 - Segment by wins and losses
 - Answer: which openings are most effective to learn by ELO rating? (find out which openings are most effective by ELO rating ranges)
+- Opening popularities seem to shift over time. Create animation/flow diagram showing popularity shifts on lichess. Segment by rating ranges
 
 Thanks for reading!

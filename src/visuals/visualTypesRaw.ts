@@ -9,7 +9,7 @@ interface Heatmaps {
   checkSquares: SquareUtilization[];
 }
 
-interface SquareUtilization {
+export interface SquareUtilization {
   p: P;
   n: P;
   b: P;

@@ -529,7 +529,6 @@ describe('All Tests', () => {
       });
       const metadata = [];
 
-
       promotionMetric.processGame(moves, metadata);
 
       expect(promotionMetric.promotionMap.pe.q).toEqual(1);
@@ -618,8 +617,6 @@ describe('All Tests', () => {
       );
 
       miscMoveFactsMetric.processGame(moves);
-
-      console.log(miscMoveFactsMetric.knightHops);
 
       // TODO: this needs a better suite of tests
       expect(miscMoveFactsMetric.knightHops['PF'].count).toEqual(2);
