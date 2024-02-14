@@ -189,30 +189,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
                         filesBeingAnalyzed.clear();
                     }).catch(console.error);
 
-                    // Start the analysis on the old files, then add the promise to the queue
-                    // delete the old file when finished
-                    for (let oldPath of filesBeingAnalyzed) {
-                        if (fs.existsSync(oldPath)) {
-                            let analysisPromise = runAnalysis(oldPath).then(() => {
-                                if (fs.existsSync(oldPath)) {
-                                    fs.unlinkSync(oldPath);
-                                    console.log(`File ${oldPath} has been deleted.`);
-                                }
-                            }).catch(console.error);
-                            analysisPromises.push(analysisPromise);
-
-                            // If we've reached the maximum number of concurrent analyses, wait for all to finish
-                            if (analysisPromises.length >= MAX_CONCURRENT_ANALYSES) {
-                                await Promise.allSettled(analysisPromises);
-                                analysisPromises = []; // Clear the array for the next batch
-                            }
-                        }
-                    }
-
-                    // wrap up any remaining analyses
-                    await Promise.allSettled(analysisPromises);
-                    console.log("All analyses completed");
-                    filesBeingAnalyzed.clear();
+                    resolve();      
                 });
             });
         });
