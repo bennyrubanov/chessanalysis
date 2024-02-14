@@ -182,23 +182,28 @@ const decompressAndAnalyze = async (file, start = 0) => {
                 });
 
                 result.on('end', () => {
-                    // When all data is decompressed, run the analysis on the last file
-                    let lastAnalysisPromise = runAnalysis(newFilePath).then(() => {
-                        if (fs.existsSync(newFilePath)) {
-                            fs.unlinkSync(newFilePath);
-                            console.log(`File ${newFilePath} has been deleted.`);
-                        }
-                    }).catch(console.error);
-                    analysisPromises.push(lastAnalysisPromise);
-                    filesBeingAnalyzed.add(newFilePath);
-
-                    // When all analyses are done, delete the files
-                    Promise.allSettled(analysisPromises).then(() => {
-                        console.log("All analyses completed");
-                        filesBeingAnalyzed.clear();
-                    }).catch(console.error);
-
-                    resolve();             
+                    if (stopDecompression) {
+                        console.log("Decompression stopped due to decompressed size limit being met.")
+                    } else {
+                        // When all data is decompressed, run the analysis on the last file
+                        let lastAnalysisPromise = runAnalysis(newFilePath).then(() => {
+                            if (fs.existsSync(newFilePath)) {
+                                fs.unlinkSync(newFilePath);
+                                console.log(`File ${newFilePath} has been deleted.`);
+                            }
+                        }).catch(console.error);
+                        analysisPromises.push(lastAnalysisPromise);
+                        filesBeingAnalyzed.add(newFilePath);
+    
+                        // When all analyses are done, delete the files
+                        Promise.allSettled(analysisPromises).then(() => {
+                            console.log("All analyses completed");
+                            filesBeingAnalyzed.clear();
+                        }).catch(console.error);
+    
+                        resolve();       
+                    }
+      
                 });
             });
         });
