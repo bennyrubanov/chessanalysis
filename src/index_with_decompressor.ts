@@ -11,7 +11,7 @@ import {
 import { PromotionMetric } from './metrics/promotions';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as async from 'async';
+import * as asyncLib from 'async';
 
 /**
  *
@@ -80,7 +80,7 @@ async function gameIterator(path) {
 }
 
 // Create a write to result.json queue with a concurrency of 1
-const queue = async.queue((task) => {
+const queue = asyncLib.queue((task) => {
   return new Promise<void>((resolve, reject) => {
     const { results, analysisKey, resultsPath } = task;
     try {
@@ -94,7 +94,6 @@ const queue = async.queue((task) => {
 }, 1);
 
 // for use with streaming_partial_decompresser.js
-// counter introduced to avoid overwriting existing data in results.json
 if (require.main === module) {
   const pathToAnalyze = process.argv[2];
   main(pathToAnalyze).then(async (results) => {

@@ -48,7 +48,6 @@ async function gameIterator(path) {
   const pieceLevelMoveInfoMetric = new PieceLevelMoveInfoMetric();
   const metadataMetric = new MetadataMetric(cjsmin);
   const miscMoveFactMetric = new MiscMoveFactMetric();
-  const captureLocationMetric = new CaptureLocationMetric();
   const metrics = [
     metadataMetric,
     kdRatioMetric,
@@ -59,7 +58,6 @@ async function gameIterator(path) {
     gameWithMostMovesMetric,
     pieceLevelMoveInfoMetric,
     miscMoveFactMetric,
-    captureLocationMetric,
   ];
 
   let gameCounter = 0;
@@ -81,21 +79,6 @@ async function gameIterator(path) {
     metricCallsCount++;
     results[metric.constructor.name] = metric.aggregate()
   }
-
-  const boardMap = captureLocationMetric.aggregate();
-  const capturedMap = convertToVisual(
-    boardMap,
-    (boardInput) => boardInput.captured
-  );
-  const captureMap = convertToVisual(
-    boardMap,
-    (boardInput) => boardInput.captures
-  );
-
-  // To create the visuals we need to copy metric results into the visualization libary
-  require('fs').writeFileSync('boardMap.json', JSON.stringify(boardMap));
-  require('fs').writeFileSync('capturedMap.json', JSON.stringify(capturedMap));
-  require('fs').writeFileSync('captureMap.json', JSON.stringify(captureMap));
 }
 
 // for use with running index.ts with test sets and print to console

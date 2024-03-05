@@ -24,23 +24,21 @@ export async function* gameChunks(
       if (!ignoreGame) {
         metadata.push(line);
       }
-    } else if (line.startsWith('1.')) {
-      if (!ignoreGame) {
-        moves = line;
-        // Check if the moves line contains the game result
-        if (moves.includes('1-0') || moves.includes('0-1') || moves.includes('1/2-1/2')) {
-          // Check if both the metadata and moves are not empty before yielding the game
-          if (metadata.length > 0 && moves.trim() !== '') {
-            yield {
-              metadata,
-              moves,
-            };
-          }
-          // Reset metadata, moves, and ignoreGame for the next game
-          metadata = [];
-          moves = '';
-          ignoreGame = false;
+    } else if (line.startsWith('1.') && !ignoreGame) {
+      moves = line;
+      // Check if the moves line contains the game result
+      if (moves.includes('1-0') || moves.includes('0-1') || moves.includes('1/2-1/2')) {
+        // Check if both the metadata and moves are not empty before yielding the game
+        if (metadata.length > 0 && moves.trim() !== '') {
+          yield {
+            metadata,
+            moves,
+          };
         }
+        // Reset metadata, moves, and ignoreGame for the next game
+        metadata = [];
+        moves = '';
+        ignoreGame = false;
       }
     } else if (line.trim() === '') {
       // Empty line, do nothing
