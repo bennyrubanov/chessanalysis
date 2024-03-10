@@ -1,7 +1,5 @@
 import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { CaptureLocationMetric } from './metrics/captures';
-import { convertToVisual } from './visuals/convertToVisual';
 import { KDRatioMetric, MateAndAssistMetric, KillStreakMetric } from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
 import { MetadataMetric } from './metrics/misc';
@@ -13,7 +11,7 @@ import {
 import { PromotionMetric } from './metrics/promotions';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as lockfile from 'proper-lockfile';
+import * as asyncLib from 'async';
 
 /**
  *
@@ -81,20 +79,30 @@ async function gameIterator(path) {
   }
 }
 
-// for use with running index.ts with test sets and print to console
-// if (require.main === module) {
-//   main(`data/11.11.23 3 Game Test Set`).then((a) => {});
-// }
+// Create a write to result.json queue with a concurrency of 1
+const queue = asyncLib.queue((task) => {
+  return new Promise<void>((resolve, reject) => {
+    const { results, analysisKey, resultsPath } = task;
+    try {
+      fs.writeFileSync(resultsPath, JSON.stringify(results, null, 2));
+      console.log(`Analysis "${analysisKey}" has been written to ${resultsPath}`);
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  });
+}, 1);
 
-// for use with running index.ts with test sets & writing to results.json
+// for use with streaming_partial_decompresser.js
 if (require.main === module) {
-  main(`data/11.11.23 3 Game Test Set`).then(async (results) => {
+  const pathToAnalyze = process.argv[2];
+  main(pathToAnalyze).then(async (results) => {
     const now = new Date();
     const milliseconds = now.getMilliseconds();
 
     const analysisKey = `analysis_${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}_${milliseconds}`;
     const resultsPath = path.join(__dirname, 'results.json');
-    
+
     let existingResults = {};
     if (fs.existsSync(resultsPath)) {
       const fileContent = fs.readFileSync(resultsPath, 'utf8');
@@ -104,16 +112,8 @@ if (require.main === module) {
     }
 
     existingResults[analysisKey] = results;
-    
-    // Use lockfile to prevent concurrent writes
-    const release = await lockfile.lock(resultsPath);
-    try {
-      fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
-    } finally {
-      release();
-    }
-    
 
-    console.log(`Analysis ${analysisKey} written to ${resultsPath}.`)
+    // Add the write task to the queue and wait for it to complete
+    await queue.push({ results: existingResults, analysisKey, resultsPath });
   });
 }

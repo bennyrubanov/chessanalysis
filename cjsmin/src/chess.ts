@@ -217,7 +217,7 @@ export type Move = {
   capture?: Capture;
   promotion?: PieceType;
   flags: string;
-  umabiguousSymbol: UASymbol;
+  unambiguousSymbol: UASymbol;
   // san: string;
   // lan: string;
   // before: string;
@@ -1694,6 +1694,7 @@ export class Chess {
     }
   }
 
+  // generator function that returns results using yield (one at a time)
   *historyGenerator(
     pgnMoveLine: string,
     { strict = false }: { strict?: boolean; newlineChar?: string } = {}
@@ -1737,12 +1738,13 @@ export class Chess {
         };
         yield {
           move: prettyMove,
-          board: this._board,
+          board: [...this._board],
         };
       }
     }
   }
 
+  // generator function that returns results as an array of objects
   historyGeneratorArr(
     pgnMoveLine: string,
     { strict = false }: { strict?: boolean; newlineChar?: string } = {}
@@ -1792,7 +1794,7 @@ export class Chess {
       }
     }
 
-    return result;
+    return result.length ? result : [];
   }
 
   /*
@@ -2004,7 +2006,7 @@ export class Chess {
       to: toAlgebraic,
       flags: prettyFlags,
       piece,
-      umabiguousSymbol: uglyMove.uas,
+      unambiguousSymbol: uglyMove.uas,
     };
 
     if (capture) {

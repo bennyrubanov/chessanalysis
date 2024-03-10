@@ -2,7 +2,7 @@ import { createReadStream } from 'fs';
 import { createInterface } from 'readline';
 import { FileReaderGame } from './types';
 
-// this should yield/stream a single game at a time
+// this should yield/stream a single game at a time as long as the game is complete
 export async function* gameChunks(
   path: string
 ): AsyncGenerator<FileReaderGame> {
@@ -13,23 +13,41 @@ export async function* gameChunks(
   });
 
   let metadata: string[] = [];
+  let moves: string = '';
+  let ignoreGame: boolean = false;
   for await (const line of reader) {
-    // metadata & move lines chunked as a single game
-    if (line.startsWith('[')) {
-      metadata.push(line);
-    } else if (!line) {
-      // empty line, do nothing
-    } else if (line.startsWith('1.')) {
-      // move line, yield the game
-      yield {
-        metadata,
-        moves: line,
-      };
-      metadata = [];
+    if (line.startsWith('[Event')) {
+      // Start of a new game
+      ignoreGame = false;
+      metadata = [line];
+    } else if (line.startsWith('[')) {
+      if (!ignoreGame) {
+        metadata.push(line);
+      }
+    } else if (line.startsWith('1.') && !ignoreGame) {
+      moves = line;
+      // Check if the moves line contains the game result
+      if (moves.includes('1-0') || moves.includes('0-1') || moves.includes('1/2-1/2')) {
+        // Check if both the metadata and moves are not empty before yielding the game
+        if (metadata.length > 0 && moves.trim() !== '') {
+          yield {
+            metadata,
+            moves,
+          };
+        }
+        // Reset metadata, moves, and ignoreGame for the next game
+        metadata = [];
+        moves = '';
+        ignoreGame = false;
+      }
+    } else if (line.trim() === '') {
+      // Empty line, do nothing
     } else {
-      // AFAIK this should never happen
-      console.log(`Unknown line: ${line}`);
-      throw new Error(`Unknown line: ${line}`);
+      // Unknown line, ignore the current game
+      console.log(`Unknown line: ${line}, game will be ignored.`);
+      ignoreGame = true;
+      // Clear the metadata for the current game so that the game is not yielded
+      metadata = [];
     }
   }
 }

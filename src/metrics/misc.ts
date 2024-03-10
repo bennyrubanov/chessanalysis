@@ -1,7 +1,8 @@
-import { Piece, PrettyMove } from '../../cjsmin/src/chess';
+import { Piece, PrettyMove, Chess} from '../../cjsmin/src/chess';
 import { Metric } from './metric';
 
 // calculates how many games in the dataset
+// OBSOLETE helper function
 export function countGamesInDataset(datasetPath: string): number {
   const fs = require('fs');
   const path = require('path');
@@ -23,13 +24,14 @@ export function countGamesInDataset(datasetPath: string): number {
 
 export class MetadataMetric implements Metric {
   // priority stats
+  chess: Chess;
   numberGamesAnalyzed: number;
   averagePlayerRating: number;
   averageRatingDiff: number;
   largestRatingDiff: number;
-  largestRatingDiffGame: string;
+  largestRatingDiffGame: string[];
   mostGamesPlayed: number;
-  playerMostGames: string;
+  playerMostGames: string[];
   blackWins: number;
   whiteWins: number;
   ties: number;
@@ -54,6 +56,9 @@ export class MetadataMetric implements Metric {
   gameTimeControlStats: {
     [timeControl: string]: number;
   };
+  gameEndings: {
+    [gameEnding: string]: number;
+  };
 
   // helping variables
   totalPlayerRating: number;
@@ -61,9 +66,11 @@ export class MetadataMetric implements Metric {
   playerGameStats: {
     [player: string]: number;
   };
+  numberGamesAnalyzedForRatings: number; // some games have missing rating data, so will decrement this number when calculating average ratings when ratings are missing
 
-  constructor() {
+  constructor(chess) {
     this.clear();
+    this.chess = chess;
   }
 
   logResults?(): void {
@@ -86,11 +93,33 @@ export class MetadataMetric implements Metric {
     console.log(`Player with most games played: ${this.playerMostGames}`);
     console.log('Number of games played by time control type: '),
       console.table(this.gameTypeStats);
-    console.log('Number of games played by time control quantity: '),
-      console.table(this.gameTimeControlStats);
-    console.log('Openings by number of times they appear and their win rates: '),
-      console.table(this.openings);
+
+    // only log gameTimeControlStats and openings tables if the object as appeared more than 5% of the total games analyzed (otherwise the tables are massive)
+    // Number of games played by time control type
+    console.log('Number of games played by time control type:');
+    const filteredTimeControlStats = Object.fromEntries(
+      Object.entries(this.gameTimeControlStats)
+        .filter(([_, count]) => count / this.numberGamesAnalyzed > 0.05)
+    );
+    console.table(filteredTimeControlStats);
+    // Openings by number of times they appear and their win rates
+    console.log('Openings by number of times they appear and their win rates:');
+    const filteredOpenings = Object.fromEntries(
+      Object.entries(this.openings)
+        .filter(([_, data]) => data.appearances / this.numberGamesAnalyzed > 0.05)
+    );
+    console.table(filteredOpenings);
+
+    // console.log('Number of games played by time control quantity: '),
+    // console.table(this.gameTimeControlStats);
+    // console.log('Openings by number of times they appear and their win rates: '),
+    // console.table(this.openings);
+
     console.log('Number of times bongcloud appeared: ', this.bongcloud)
+    console.log('\n')
+
+    console.log('Game Endings: '),
+      console.table(this.gameEndings);
   }
 
   // Reset the maps used to track metrics
@@ -99,9 +128,9 @@ export class MetadataMetric implements Metric {
     this.averagePlayerRating = 0;
     this.averageRatingDiff = 0;
     this.largestRatingDiff = 0;
-    this.largestRatingDiffGame = '';
+    this.largestRatingDiffGame = [];
     this.mostGamesPlayed = 0;
-    this.playerMostGames = '';
+    this.playerMostGames = [];
     this.gameTypeStats = {
       numberUltraBulletGames: 0,
       numberBulletGames: 0,
@@ -113,16 +142,18 @@ export class MetadataMetric implements Metric {
     this.gameTimeControlStats = {};
     this.openings = {};
     this.bongcloud = 0;
+    this.gameEndings = {};
 
     // helping variables
     this.totalPlayerRating = 0;
     this.totalPlayerRatingDiff = 0;
     this.playerGameStats = {};
+    this.numberGamesAnalyzedForRatings = 0;
   }
 
   processGame(
     game: { move: PrettyMove; board: Piece[] }[],
-    metadata?: string[]
+    metadata?: string[],
   ) {
     // Update the gameTimeControlStats based on the time control of the game
     const timeControl = metadata?.find((data) =>
@@ -168,17 +199,24 @@ export class MetadataMetric implements Metric {
         ?.replace(/"/g, '')
         .split(' ')[1]
     );
-    this.totalPlayerRating += whiteRating + blackRating;
+    // only add data if data is not NaN
+    if (!isNaN(whiteRating) && !isNaN(blackRating)) {
+      this.totalPlayerRating += whiteRating + blackRating;
+      this.numberGamesAnalyzedForRatings++;
 
-    // Calculate the player rating diffs
-    const ratingDiff = Math.abs(whiteRating - blackRating);
-    this.totalPlayerRatingDiff += ratingDiff;
+      // Calculate the player rating diffs
+      let ratingDiff = Math.abs(whiteRating - blackRating);
+      this.totalPlayerRatingDiff += ratingDiff;
 
-    // Check if this game has the largest rating differential
-    if (ratingDiff > this.largestRatingDiff) {
-      this.largestRatingDiff = ratingDiff;
-      this.largestRatingDiffGame =
-        metadata?.find((data) => data.startsWith('[Site')) || '';
+      // Check if this game has the largest rating differential
+      if (ratingDiff > this.largestRatingDiff) {
+        this.largestRatingDiff = ratingDiff;
+        this.largestRatingDiffGame = [
+          metadata?.find((data) => data.startsWith('[Site')) || ''];
+      } else if (ratingDiff === this.largestRatingDiff) {
+        this.largestRatingDiffGame.push(
+          metadata?.find((data) => data.startsWith('[Site')) || ''); // tie, add to array
+      }
     }
 
     // helping variables to identify the player with the most games played in the data set
@@ -207,39 +245,125 @@ export class MetadataMetric implements Metric {
     } else if (result === '[Result "1/2-1/2"]') {
       this.ties++;
     } else {
-      throw new Error('Invalid result');
+      console.log('Invalid result');
     }
 
-    // extract openings from metadata
-    const opening = metadata?.find((item) => item.startsWith('[Opening "'))
-    ?.replace('[Opening "', '')
-    ?.replace('"]', '');
+// extract openings from metadata
+const opening = metadata?.find((item) => item.startsWith('[Opening "'))
+?.replace('[Opening "', '')
+?.replace('"]', '');
 
-    if (opening.toLowerCase() == "bongcloud") {
-      this.bongcloud++;
-    }
+if(opening) {
+  if (opening.toLowerCase() == "bongcloud") {
+    this.bongcloud++;
+  }
 
-    // add opening to openings object
-    if (this.openings[opening]) {
-      this.openings[opening].appearances++;
-      if (result === '[Result "1-0"]') {
+  // add opening to openings object
+  if (this.openings[opening]) {
+    this.openings[opening].appearances++;
+    switch(result) {
+      case '[Result "1-0"]':
         this.openings[opening].whiteWins++;
-      } else if (result === '[Result "0-1"]') {
+        break;
+      case '[Result "0-1"]':
         this.openings[opening].blackWins++;
-      } else if (result === '[Result "1/2-1/2"]') {
+        break;
+      case '[Result "1/2-1/2"]':
         this.openings[opening].whiteWins += 0.5;
         this.openings[opening].blackWins += 0.5;
         this.openings[opening].ties++;
+        break;
+    }
+    this.openings[opening].whiteToBlackWinRatio = this.openings[opening].whiteWins / this.openings[opening].blackWins;
+  } else {
+    let blackWins, whiteWins, ties, whiteToBlackWinRatio;
+
+    switch(result) {
+      case '[Result "0-1"]':
+        blackWins = 1;
+        whiteWins = 0;
+        ties = 0;
+        whiteToBlackWinRatio = 0;
+        break;
+      case '[Result "1-0"]':
+        blackWins = 0;
+        whiteWins = 1;
+        ties = 0;
+        whiteToBlackWinRatio = Infinity;
+        break;
+      case '[Result "1/2-1/2"]':
+        blackWins = 0.5;
+        whiteWins = 0.5;
+        ties = 1;
+        whiteToBlackWinRatio = 1;
+        break;
+      default:
+        blackWins = 0;
+        whiteWins = 0;
+        ties = 0;
+        whiteToBlackWinRatio = 0;
+    }
+
+    this.openings[opening] = {
+      appearances: 1,
+      blackWins: blackWins,
+      whiteWins: whiteWins,
+      ties: ties,
+      whiteToBlackWinRatio: whiteToBlackWinRatio,
+    };
+  }
+}
+
+
+    // identify game endings
+    let gameEnd = metadata.find(item => item.startsWith('[Termination'));
+    const lastMove = game[game.length - 1].move;
+
+    if (gameEnd === '[Termination "Normal"]') {
+      if (lastMove.originalString.includes('#')) {
+        this.gameEndings['checkmate'] = (this.gameEndings['checkmate'] || 0) + 1;
+      } else if (result === '[Result "1/2-1/2"]') {
+        this.gameEndings['draw'] = (this.gameEndings['draw'] || 0) + 1;
+        if (this.chess.isStalemate()) {
+          this.gameEndings['stalemate'] = (this.gameEndings['stalemate'] || 0) + 1;
+        } else if (this.chess.isInsufficientMaterial()) {
+          this.gameEndings['insufficient material'] = (this.gameEndings['insufficient material'] || 0) + 1;
+        } 
+      } else {
+        this.gameEndings['resignation'] = (this.gameEndings['resignation'] || 0) + 1;
       }
-      this.openings[opening].whiteToBlackWinRatio = this.openings[opening].whiteWins / this.openings[opening].blackWins;
-    } else {
-      this.openings[opening] = {
-        appearances: 1,
-        blackWins: result === '[Result "0-1"]' ? 1 : (result === '[Result "1/2-1/2"]' ? 0.5 : 0),
-        whiteWins: result === '[Result "1-0"]' ? 1 : (result === '[Result "1/2-1/2"]' ? 0.5 : 0),
-        ties: result === '[Result "1/2-1/2"]' ? 1 : 0,
-        whiteToBlackWinRatio: result === '[Result "1-0"]' ? 1 : 0,
-      };
+    } else if (gameEnd === '[Termination "Time forfeit"]') {
+      this.gameEndings['time out'] = (this.gameEndings['time out'] || 0) + 1;
+    } 
+
+    // check for threefold repetition (currently not checking if remaining castling rights and the possibility to capture en passant are the same per https://en.wikipedia.org/wiki/Threefold_repetition)
+    // check for 50-moves rule
+    let fiftyMovesCount = 0;
+    let threefoldRepetitionCount = 0;
+    let threefoldRepetitionFound = false; // check if threeFoldRepetition has been found
+    const lastBoardString = JSON.stringify(game[game.length - 1].board) + this.chess.turn();
+    for (const { move, board } of game.reverse()) {
+      const boardString = JSON.stringify(board) + this.chess.turn(); // check if the same player has the move
+      if (boardString === lastBoardString) {
+        threefoldRepetitionCount++;
+      }
+      // only count as threefold repetition if the last board position is included in the repetition and 
+      // the last board position has appeared 3 times (including the last time)
+      if (!threefoldRepetitionFound && threefoldRepetitionCount === 3 && boardString === lastBoardString) {
+        this.gameEndings['threefold repetition'] = 
+          (this.gameEndings['threefold repetition'] || 0) + 1;
+        threefoldRepetitionFound = true;
+      }
+      
+      // check for fifty game rule
+      if (move.capture || move.piece === 'p') {
+        fiftyMovesCount = 0;
+      } else {
+        fiftyMovesCount++
+      }
+      if (fiftyMovesCount === 50) {
+        this.gameEndings['fifty-move rule'] = (this.gameEndings['fifty-move rule'] || 0) + 1;
+      }
     }
 
     // Increment the number of games analyzed
@@ -251,19 +375,21 @@ export class MetadataMetric implements Metric {
     // Calculate the average player rating after each game
     // 2 players per game, so need to divide by two given that the totalPlayerRating adds all ratings up from both players
     this.averagePlayerRating =
-      this.totalPlayerRating / (this.numberGamesAnalyzed * 2);
+      this.totalPlayerRating / (this.numberGamesAnalyzedForRatings * 2);
 
     // Calculate the average player rating diff
     this.averageRatingDiff =
-      this.totalPlayerRatingDiff / this.numberGamesAnalyzed;
+      this.totalPlayerRatingDiff / this.numberGamesAnalyzedForRatings;
 
     // Calculate the player with the most games played
     let maxGames = 0;
-    let playerMostGames = '';
+    let playerMostGames = [];
     for (const player in this.playerGameStats) {
       if (this.playerGameStats[player] > maxGames) {
         maxGames = this.playerGameStats[player];
-        playerMostGames = player;
+        playerMostGames = [player];
+      } else if (this.playerGameStats[player] === maxGames) {
+        playerMostGames.push(player);
       }
     }
     this.mostGamesPlayed = maxGames;
@@ -287,18 +413,23 @@ export class MetadataMetric implements Metric {
     this.gameTimeControlStats = sortedGameTimeControlStatsObj;
 
     // sort the openings from greatest to least by number of times they appear
-    const sortedOpenings = Object.entries(this.openings).sort((a, b) => b[1].appearances - a[1].appearances);
+    const sortedOpenings = Object.entries(this.openings).sort((a, b) => b[1].whiteToBlackWinRatio - a[1].whiteToBlackWinRatio);
     const sortedOpeningsObj = Object.fromEntries(sortedOpenings);
     this.openings = sortedOpeningsObj;
 
     return {
       averagePlayerRating: this.averagePlayerRating,
       averageRatingDiff: this.averageRatingDiff,
+      largestRatingDiff: this.largestRatingDiff,
+      largestRatingDiffGame: this.largestRatingDiffGame,
       mostGamesPlayed: maxGames,
-      playerMostGames,
-      // This doesn't account for ties
-      whiteWinRatio: this.whiteWins / (this.whiteWins + this.blackWins),
-      sortedOpeningsObj,
+      playerMostGames: playerMostGames,
+      gameTypeStats: this.gameTypeStats,
+      gameTimeControlStats: this.gameTimeControlStats,
+      openings: this.openings,
+      bongcloudAppearances: this.bongcloud,
+      gameEndings: this.gameEndings,
+      numberGamesAnalyzedForRatings: this.numberGamesAnalyzedForRatings,
     };
   }
 }

@@ -6,3 +6,5 @@ dist
 *.git
 !short.pgn
 !lichess_db_standard_rated_2013-01_TEST_SET.pgn
+src/results.json
+.VSCodeCounter/

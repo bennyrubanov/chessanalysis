@@ -62,7 +62,7 @@ Kills/Deaths/Assists
 thesis: beginners get forked by knights and lose a lot of high level pieces. Will be answered by KD ratio by piece value
 
 - K/D ratios for each piece
-  - KD ratio by piece value (where piece values are defined as: Pawn 1 point, Knight 3 points, Bishop 3 points, King 4 points, Rook 5 points, Queen 9 points)
+  - KD ratio by piece value (where piece values are defined as: Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points per standard valuations in https://en.wikipedia.org/wiki/Chess_piece_relative_value)
   - KD ratio by number of pieces taken
 - revenge kills (i.e. take back a piece immediately after it was taken)
 - best kill streaks (i.e. one piece is the only one taking others for some time)

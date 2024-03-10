@@ -12,6 +12,7 @@ import {
   PieceLevelMoveInfoMetric,
 } from '../src/metrics/moves';
 import { PromotionMetric } from '../src/metrics/promotions';
+import { MetadataMetric } from '../src/metrics/misc';
 
 // convert PGN string to GameHistoryObject
 export function pgnToGameHistory(pgn: string) {
@@ -37,13 +38,13 @@ describe('All Tests', () => {
   describe('gets black and white kill streaks', () => {
     const killStreakMetric = new KillStreakMetric();
 
-    it('should return the correct kill streaks', () => {
+    it('should return the correct kill streaks test 1', () => {
       const moves = [
-        { capture: true, uas: 'PA' },
-        { capture: false },
-        { capture: true, uas: 'PA' },
-        { capture: true, uas: 'rh' },
-        { capture: false },
+        { capture: true, uas: 'PA', originalString: '' },
+        { capture: false, originalString: '' },
+        { capture: true, uas: 'PA', originalString: '' },
+        { capture: true, uas: 'rh', originalString: '' },
+        { capture: false, originalString: '' },
       ].map((move) => {
         return {
           move: move as any, // cast to match type checks in the processGame handler
@@ -51,10 +52,29 @@ describe('All Tests', () => {
         };
       });
 
-      killStreakMetric.processGame(moves);
+      killStreakMetric.processGame(moves,['m', 'et']);
       expect(killStreakMetric.killStreakMap['PA'].killStreaks).toEqual(2);
       expect(killStreakMetric.killStreakMap['rh'].killStreaks).toEqual(1);
       expect(killStreakMetric.killStreakMap['Q'].killStreaks).toEqual(0);
+    });
+
+    it('should return the correct kill streaks test 2', () => {
+      // https://lichess.org/4se6wgfa
+      const game = '1. e4 d5 2. d4 dxe4 3. Bc4 e5 4. c3 exd4 5. Qh5 g6 6. Qe5+ Qe7 7. Qxh8 e3 8. fxe3 dxe3 9. Qxg8 Be6 10. Bxe6 Qxe6 11. Qxh7 Nc6 12. Na3 O-O-O 13. b4 Qd6 14. Bb2 Be7 15. Ne2 Ne5 16. O-O Nd3 17. Nc4 Qe6 18. Qxf7 Qg4 19. Qxe7 Nf2 20. Qxe3 Rd2 21. Rae1 Rxe2 22. Qxe2 Nh3+ 23. Kh1 Qxc4 24. Qe8# 1-0'
+      killStreakMetric.processGame(Array.from(cjsmin.historyGeneratorArr(game)),
+      ['m', 'et']);
+
+      // 6 with checkmate, 5 without
+      expect(killStreakMetric.killStreakMap['Q'].killStreaks).toEqual(6);
+    });
+
+    it('should return the correct kill streaks test 3', () => {
+      // https://lichess.org/m61n65x0
+      const game = '1. d4 d5 2. Nc3 e6 3. a3 a6 4. e4 c6 5. exd5 cxd5 6. h4 h6 7. g4 Be7 8. Nf3 Nc6 9. Bf4 Bd7 10. Bg3 Bf6 11. Ne2 Nge7 12. c3 Nc8 13. Bg2 Be7 14. g5 hxg5 15. hxg5 Rxh1+ 16. Bxh1 Bxg5 17. Nxg5 Qxg5 18. Bf4 Qg6 19. Ng3 N8e7 20. Qb1 Qxb1+ 21. Rxb1 O-O-O 22. Nh5 g6 23. Nf6 Nf5 24. Bg5 Rh8 25. Ke2 Na5 26. b3 Bb5+ 27. Kd2 Bc6 28. Ng4 Nxb3+ 29. Rxb3 Rxh1 30. Ne5 Rh7 31. Rb6 Kc7 32. Rb1 Nd6 33. f3 Rh5 34. f4 Be8 35. Ng4 Ne4+ 36. Kc2 Ba4+ 37. Kd3 Rh3+ 38. Ke2 Nxc3+ 39. Kf2 Nxb1 40. Kg2 Rxa3 41. Ne5 Be8 42. Be7 Ra2+ 43. Kf3 Na3 44. Bg5 Nc4 45. Ng4 Ra3+ 46. Kf2 Rd3 47. Ne5 Rxd4 48. Nf3 Re4 49. Kg3 1-0'
+      killStreakMetric.processGame(Array.from(cjsmin.historyGeneratorArr(game)),
+      ['m', 'et']);
+
+      expect(killStreakMetric.killStreakMap['RA'].killStreaks).toEqual(2);
     });
   });
 
@@ -264,11 +284,17 @@ describe('All Tests', () => {
   });
 
   describe('getMoveDistanceSingleGame', () => {
-    const moveDistanceMetric = new MoveDistanceMetric();
+    let moveDistanceMetric: MoveDistanceMetric;
+
+    beforeEach(() => {
+      moveDistanceMetric = new MoveDistanceMetric();
+    });
+
     it('should return the correct max distance and piece for a game', async () => {
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
-      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)),
+      ['m', 'et']);
 
       expect(moveDistanceMetric.pieceMaxes.distance).toEqual(6);
       expect(moveDistanceMetric.pieceMaxes.uasArray[0]).toEqual('Q');
@@ -278,25 +304,28 @@ describe('All Tests', () => {
       const game = '1. e4 e5';
 
       moveDistanceMetric.clear();
-      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)),
+      ['m', 'et']);
 
       expect(moveDistanceMetric.pieceMaxes.distance).toEqual(2);
       expect(moveDistanceMetric.pieceMaxes.uasArray).toEqual(['PE', 'pe']);
     });
 
     it('should return a singleGameDistanceTotal equal to the addition of all distances in the distanceMap', async () => {
+      // total collective distance of the game below is 17
       const game = '1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7#';
 
-      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)));
+      moveDistanceMetric.processGame(Array.from(cjsmin.historyGenerator(game)),
+      ['m', 'et']);
       moveDistanceMetric.aggregate();
 
       let totalDistance = 0;
 
       for (const uas of Object.keys(moveDistanceMetric.distanceMap)) {
-        totalDistance += moveDistanceMetric.distanceMap[uas].total;
+        totalDistance += moveDistanceMetric.distanceMap[uas].distance;
       }
 
-      expect(moveDistanceMetric.totalDistance).toEqual(totalDistance);
+      expect(moveDistanceMetric.gameCollectiveDistance.distance).toEqual(totalDistance);
     });
   });
 
@@ -323,9 +352,9 @@ describe('All Tests', () => {
         ['m', 'et']
       );
 
-      expect(kdrMetric.KDAssistsMap['pe'].kills).toEqual(1);
-      expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
-      expect(kdrMetric.KDAssistsMap['pe'].deaths).toEqual(1);
+      expect(kdrMetric.KDMap['pe'].kills).toEqual(1);
+      expect(kdrMetric.KDMap['pe'].deaths).toEqual(1);
+      expect(kdrMetric.KDMap['pe'].deaths).toEqual(1);
     });
 
     it('should return the correct number of kills for a piece in a game, including counting checkmates as a "kill"', async () => {
@@ -343,7 +372,7 @@ describe('All Tests', () => {
         ['m', 'et']
       );
 
-      expect(kdrMetric.KDAssistsMap['ng'].kills).toEqual(3);
+      expect(kdrMetric.KDMap['ng'].kills).toEqual(3);
     });
   });
 
@@ -410,9 +439,8 @@ describe('All Tests', () => {
           '"et"',
         ]);
 
-        expect(plmiMetric.singleGameMaxMoves).toEqual(9);
+        expect(plmiMetric.uasSingleGameMaxMoves).toEqual(9);
         expect(plmiMetric.uasWithMostMoves).toEqual(['k']);
-        expect(plmiMetric.gamesWithMostMoves).toEqual(['et']);
       });
     });
 
@@ -438,20 +466,20 @@ describe('All Tests', () => {
           '"p"',
         ]);
 
-        const averages = metric.aggregate();
+        const results = metric.aggregate();
 
-        expect(averages['Q'].avgMoves).toEqual(4);
-        expect(averages['K'].avgMoves).toEqual(1);
-        expect(averages['pa'].avgMoves).toEqual(3);
+        expect(results.averagesMap['Q'].avgMoves).toEqual(4);
+        expect(results.averagesMap['K'].avgMoves).toEqual(1);
+        expect(results.averagesMap['pa'].avgMoves).toEqual(3);
       });
     });
   });
 
   describe('PromotionMetric', () => {
-    const promotionMetric = new PromotionMetric();
+    let promotionMetric: PromotionMetric;
 
-    afterEach(() => {
-      promotionMetric.clear();
+    beforeEach(() => {
+      promotionMetric = new PromotionMetric();
     });
 
     it('should update the promotion map when a promotion occurs', () => {
@@ -552,6 +580,17 @@ describe('All Tests', () => {
 
       expect(promoTotal).toEqual(0);
     });
+
+    it('should identify the correct maxnumqueens on the correct move', () => {
+      // https://lichess.org/m45sueue
+      const game = '1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Ne7 5. f4 Nbc6 6. Nf3 cxd4 7. cxd4 Nf5 8. g4 Nfe7 9. Nc3 Bd7 10. Bd3 Nb4 11. O-O Ng6 12. a3 Nxd3 13. Qxd3 Be7 14. f5 exf5 15. gxf5 Nf8 16. Nxd5 g5 17. f6 g4 18. fxe7 Qa5 19. exf8=Q+ Kxf8 20. Bh6+ Ke8 21. Nf6+ Ke7 22. Nd2 Be6 23. Bg5 Kf8 24. Nfe4 h6 25. Bh4 Qb6 26. Nc5 Bd5 27. b4 Rc8 28. Nd7+ 1-0'
+      promotionMetric.processGame(Array.from(cjsmin.historyGeneratorArr(game)),
+      ['m', 'et']);
+
+      let result = promotionMetric.aggregate();
+      expect(result.maxNumQueens).toEqual(3);
+      expect(result.movesAndGamesWithMaxQueenCount[0].move).toEqual('exf8=Q+');
+    });
   });
 
   describe('MiscMoveFactsMetric', () => {
@@ -584,6 +623,32 @@ describe('All Tests', () => {
       expect(miscMoveFactsMetric.knightHops['pc'].count).toEqual(2);
       expect(miscMoveFactsMetric.knightHops['PG'].count).toEqual(2);
       expect(miscMoveFactsMetric.knightHops['pb'].count).toEqual(2);
+    });
+  });
+
+  describe('MetadataMetric', () => {
+    const chess = new Chess();
+    const metadataMetric = new MetadataMetric(chess);
+    
+    // https://www.chessgames.com/perl/chessgame?gid=1972221
+    const game50MovesRule = [
+      {
+        metadata: [],
+        moves:
+          '1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Na6 8. Be3 Qe8 9. dxe5 dxe5 10. h3 b6 11. a3 Nc5 12. Qc2 Nfd7 13. Nd5 Qd8 14. b4 Ne6 15. b5 Bb7 16. Rad1 c6 17. bxc6 Bxc6 18. Qb1 Rc8 19. Bd3 Ndc5 20. Bc2 Qe8 21. g3 Kh8 22. h4 h5 23. Kh2 Bd7 24. Rd2 Nd8 25. Kg1 Ndb7 26. Re1 Bg4 27. Nh2 Be6 28. Nf3 Na5 29. Qa2 Ncb7 30. Bd3 Qa4 31. Ng5 Bxd5 32. cxd5 Nd6 33. Rc2 Rxc2 34. Bxc2 Qb5 35. a4 Qb4 36. Rb1 Qc4 37. Qxc4 Naxc4 38. Bc1 Rc8 39. Bd3 Kg8 40. Kf1 Nb7 41. Ke2 Bf8 42. f4 Bd6 43. f5 gxf5 44. exf5 Be7 45. Ne4 Ncd6 46. f6 Bd8 47. Ba3 Nxe4 48. Bxe4 Bxf6 49. d6 Nd8 50. Rc1 Rxc1 51. Bxc1 Ne6 52. Be3 Kf8 53. Kd3 Nd4 54. Kc4 Ke8 55. Kd5 Ne2 56. Kc6 Nxg3 57. d7+ Kd8 58. a5 bxa5 59. Bxa7 Ke7 60. Bd5 Kf8 61. Be3 Bd8 62. Bc5+ Kg7 63. Bb6 Be7 64. Bxa5 Nf5 65. d8=Q Bxd8 66. Bxd8 f6 67. Kd7 Nxh4 68. Ke6 Ng6 69. Bxf6+ Kh6 70. Kf5 h4 71. Bg5+ Kg7 72. Be4 Kf7 73. Bf6 Ne7+ 74. Kxe5 Ng6+ 75. Kf5 Ne7+ 76. Kg5 Ke6 77. Bd4 h3 78. Bg1 Ke5 79. Bb1 Nd5 80. Bf5 h2 81. Bxh2+ Kd4 82. Bh7 Nb4 83. Kf5 Nd3 84. Bg1+ Kd5 85. Bg8+ Kd6 86. Ke4 Nc5+ 87. Kd4 Ne6+ 88. Kc4 Ke5 89. Bh2+ Kf5 90. Bh7+ Kf6 91. Kd5 Ng7 92. Be5+ Kf7 93. Bc2 Ne8 94. Bb2 Ng7 95. Ke5 Ne8 96. Bc1 Ng7 97. Bb3+ Kg6 98. Ba4 Kf7 99. Bd7 Ke7 100. Bg4 Kf7 101. Be2 Kg6 102. Bd1 Kf7 103. Bd2 Kg6 104. Bc2+ Kf7 105. Kd6 Ne8+ 106. Kd7 Nf6+ 107. Kc6 Ne8 108. Kd5 Nf6+ 109. Ke5 Ne8 110. Bb3+ Kg6 111. Ba5 Ng7 112. Bd8 Nh5 113. Bh4 Ng7 114. Bc2+ Kf7 115. Kd6 Ne8+ 116. Kd7 Nf6+ 117. Kd8 Ke6 118. Bb3+ Ke5 119. Bg3+ Kd4 120. Ke7 Ne4 121. Bh2 Nd2 122. Bd1 Ne4 123. Ke6 Nc5+ 124. Kd6 Nd3 125. Bg3 Kc4 126. Be2 Kd4 127. Bh4 Kc3 128. Bg5 Nb2 129. Kd5 Kb3 130. Bf6 Kc2 131. Bh5 Kb3 132. Bg6 1/2-1/2',
+      },
+    ];
+
+    afterEach(() => {
+      metadataMetric.clear();
+    });
+
+    it('should correctly identify that 50-moves have occured without capture or pawn movement', () => {
+      
+      metadataMetric.processGame(Array.from(cjsmin.historyGenerator(game50MovesRule[0].moves)),
+      ['m', 'et']);
+
+      expect(metadataMetric.gameEndings['fifty-move rule']).toEqual(1);
     });
   });
 });
