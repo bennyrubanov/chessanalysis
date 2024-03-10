@@ -16,9 +16,10 @@ export class PromotionMetric implements Metric {
   };
   // property for the totals
   totals: { [key in PromotablePiece]: number };
-  movesAndGamesWithMaxQueenCount = [];
-  maxQueenCounts = 2;
-
+  movesAndGamesWithMaxQueensOnBoard = [];
+  maxQueensOnBoard = 2;
+  maxQueens = 2;
+  movesAndGamesWithMaxQueens: { game: string; move: string }[] = [];
 
   constructor() {
     this.clear();
@@ -33,61 +34,93 @@ export class PromotionMetric implements Metric {
     }
 
     this.totals = { q: 0, r: 0, b: 0, n: 0 };
-
     this.promotionMap = promotionMap as any;
-
-    this.movesAndGamesWithMaxQueenCount = [];
+    this.movesAndGamesWithMaxQueensOnBoard = [];
+    this.movesAndGamesWithMaxQueens = [];
+    this.maxQueensOnBoard = 2;
+    this.maxQueens = 2;
   }
 
   processGame(
     game: { move: PrettyMove; board: Piece[] }[],
     metadata?: string[]
   ) {
-
     // 2 queens to start with
-    let thisGameQueenCount = 2;
+    let currentQueens,
+      totalQueens = 2;
 
     let gameSite = '';
     if (metadata) {
-      gameSite = metadata.find((item) => item.startsWith('[Site "'))
-      ?.replace('[Site "', '')
-      ?.replace('"]', '');
+      gameSite = metadata
+        .find((item) => item.startsWith('[Site "'))
+        ?.replace('[Site "', '')
+        ?.replace('"]', '');
     }
 
     for (const { move } of game) {
       // TODO: we can use flags instead of includes('=)
-
       if (move.originalString.includes('=')) {
         // update maps
         this.promotionMap[move.uas][move.promotion]++;
-        
+
         // increment queen count if a promotion occurs
-        if (move.promotion === "q") {
-          thisGameQueenCount++;
+        if (move.promotion === 'q') {
+          currentQueens++;
+          totalQueens++;
         }
       }
 
       // decrement queen count if queen is captured
-      if (move.capture && (move.capture.uas === "q" || move.capture.uas === "Q")) {
-        thisGameQueenCount--;
+      if (
+        move.capture &&
+        (move.capture.uas === 'q' || move.capture.uas === 'Q')
+      ) {
+        currentQueens--;
       }
 
       // identify the maxQueenCount in a particular move, and the games and moves that the maxQueenCount occured in
       // push to array of games and moves if tie, otherwise wipe the array and add new game
       // only add one move entry for each game maxQueenCount (rather than one entry for each move that the maxQueenCount appears in)
-      if (thisGameQueenCount > this.maxQueenCounts) {
-        this.maxQueenCounts = thisGameQueenCount;
-        this.movesAndGamesWithMaxQueenCount = [{
-          game: gameSite,
-          move: move.originalString,
-        }];
-      } else if (thisGameQueenCount === this.maxQueenCounts) {
-        if (!this.movesAndGamesWithMaxQueenCount.some((item) => item.game === gameSite)) {
-          this.movesAndGamesWithMaxQueenCount.push({
+      if (currentQueens > this.maxQueensOnBoard) {
+        this.maxQueensOnBoard = currentQueens;
+        this.movesAndGamesWithMaxQueensOnBoard = [
+          {
             game: gameSite,
-            move: move.originalString
+            move: move.originalString,
+          },
+        ];
+      } else if (currentQueens === this.maxQueensOnBoard) {
+        if (
+          !this.movesAndGamesWithMaxQueensOnBoard.some(
+            (item) => item.game === gameSite
+          )
+        ) {
+          this.movesAndGamesWithMaxQueensOnBoard.push({
+            game: gameSite,
+            move: move.originalString,
           });
         }
+      }
+    }
+
+    // after the game is done, update the maxQueens property and store the game it occured in
+    if (totalQueens > this.maxQueens) {
+      this.maxQueens = totalQueens;
+      this.movesAndGamesWithMaxQueens = [
+        {
+          game: gameSite,
+          move: game[0].move.originalString,
+        },
+      ];
+    } else if (totalQueens === this.maxQueens) {
+      // this search could be slow. We shouldn't need this check
+      if (
+        !this.movesAndGamesWithMaxQueens.some((item) => item.game === gameSite)
+      ) {
+        this.movesAndGamesWithMaxQueens.push({
+          game: gameSite,
+          move: game[0].move.originalString,
+        });
       }
     }
   }
@@ -104,9 +137,9 @@ export class PromotionMetric implements Metric {
     return {
       promotedToTotals: this.totals,
       uasPromotingPieces: this.promotionMap,
-      maxNumQueens: this.maxQueenCounts,
-      movesAndGamesWithMaxQueenCount: this.movesAndGamesWithMaxQueenCount,
-    }
+      maxNumQueens: this.maxQueensOnBoard,
+      movesAndGamesWithMaxQueenCount: this.movesAndGamesWithMaxQueensOnBoard,
+    };
   }
 
   logResults(): void {
@@ -124,13 +157,17 @@ export class PromotionMetric implements Metric {
     console.log('\n');
 
     // number of pieces to appear on board facts
-    console.log("NUMBER OF PIECES TO APPEAR ON BOARD FACTS:")
-    console.log(`The maximum number of queens to appear in a given move in a game: ${this.maxQueenCounts}`);
-    console.log(`The games(s) and first move(s) in that game in which that number of queens appeared: 
-      ${this.movesAndGamesWithMaxQueenCount.map(move => 
-        JSON.stringify(move, null, 2)).join(", ")}`
+    console.log('NUMBER OF PIECES TO APPEAR ON BOARD FACTS:');
+    console.log(
+      `The maximum number of queens to appear in a given move in a game: ${this.maxQueensOnBoard}`
     );
-    console.log("==============================================================");
-    console.log("\n");
+    console.log(`The games(s) and first move(s) in that game in which that number of queens appeared: 
+      ${this.movesAndGamesWithMaxQueensOnBoard
+        .map((move) => JSON.stringify(move, null, 2))
+        .join(', ')}`);
+    console.log(
+      '=============================================================='
+    );
+    console.log('\n');
   }
 }
