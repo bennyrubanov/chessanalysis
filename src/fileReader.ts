@@ -2,7 +2,10 @@ import { createReadStream } from 'fs';
 import { createInterface } from 'readline';
 import { FileReaderGame } from './types';
 
-// this should yield/stream a single game at a time as long as the game is complete
+/**
+ * this should yield/stream a single game at a time as long as the game is complete
+ * @param path
+ */
 export async function* gameChunks(
   path: string
 ): AsyncGenerator<FileReaderGame> {
@@ -27,7 +30,11 @@ export async function* gameChunks(
     } else if (line.startsWith('1.') && !ignoreGame) {
       moves = line;
       // Check if the moves line contains the game result
-      if (moves.includes('1-0') || moves.includes('0-1') || moves.includes('1/2-1/2')) {
+      if (
+        moves.includes('1-0') ||
+        moves.includes('0-1') ||
+        moves.includes('1/2-1/2')
+      ) {
         // Check if both the metadata and moves are not empty before yielding the game
         if (metadata.length > 0 && moves.trim() !== '') {
           yield {
