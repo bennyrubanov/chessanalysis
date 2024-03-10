@@ -1,4 +1,5 @@
-//@ts-nocheck - this was written as a js file to start...
+import { randomUUID } from 'crypto';
+
 // TODO: This should use type checking
 const fs = require('fs');
 const zstd = require('node-zstandard');
@@ -14,7 +15,6 @@ const SIZE_LIMIT = 30 * 1024 * 1024; // 30MB
 // set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
 const decompressedSizeLimit = 500 * 1024 * 1024 * 1024; // 500 GB represented in bytes
 
-// function to check file size
 const getFileSize = (filePath) => {
   if (!fs.existsSync(filePath)) {
     return 0;
@@ -25,17 +25,17 @@ const getFileSize = (filePath) => {
 
 /**
  * Runs the analysis script on a given file path.
- *
  * @param {string} filePath - The path of the file to run the analysis on.
  * @return {Promise} A promise that resolves when the analysis is complete.
  */
-const runAnalysis = (filePath) => {
+async function runAnalysis(filePath) {
   return new Promise((resolve, reject) => {
     // Run the analysis script
     console.log(`Running analysis script on ${filePath}...`);
 
     const child = spawn('ts-node', [
-      '/Users/bennyrubanov/Coding_Projects/chessanalysis/src/index_with_decompressor.ts',
+      //   '/Users/bennyrubanov/Coding_Projects/chessanalysis/src/index_with_decompressor.ts',
+      `${__dirname}/../index_with_decompressor.ts`,
       filePath,
     ]);
 
@@ -62,10 +62,11 @@ const runAnalysis = (filePath) => {
 
     child.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
+      //@ts-ignore
       resolve();
     });
   });
-};
+}
 
 /**
  * Decompresses and analyzes a file.
@@ -79,17 +80,17 @@ const decompressAndAnalyze = async (file, start = 0) => {
   let these_chunks_counter = 0; // Initialize the chunk counter
   let file_counter = 1; // Initialize the file counter
   let total_chunk_counter = 0;
+  const filesProduced = new Set();
 
-  const base_path = `/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file.replace(
-    '.zst',
-    ''
-  )}`;
+  //   const base_path = `/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file.replace(
+  const base_path = `${__dirname}/../data/${file.replace('.zst', '')}`;
 
   // Create a new file path
-  let newFilePath = `${base_path}_${file_counter}`;
+  const newFilePath = `${base_path}_${randomUUID()}`;
+  filesProduced.add(newFilePath);
 
   // Create a new writable strxeam
-  console.log(`Creating file number ${file_counter}`);
+  console.log(`Creating file #${file_counter} at ${newFilePath}`);
   let decompressedStream = fs.createWriteStream(newFilePath, { flags: 'a' });
 
   // Check if file already exists
@@ -112,7 +113,6 @@ const decompressAndAnalyze = async (file, start = 0) => {
         (err, result) => {
           if (err) return reject(err);
 
-          let lastChunkLength = 0;
           let fileLength = 0;
           let all_files_lengths = 0;
           let batch_files_total_decompressed_size = 0;
@@ -130,6 +130,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
             }
 
             decompressedStream.write(data);
+            //@ts-ignore
             lastChunkLength = data.length;
 
             const duration = Date.now() - startTime;
@@ -166,14 +167,12 @@ const decompressAndAnalyze = async (file, start = 0) => {
                 } MB`
               );
 
-              // Save the old path for analysis
-              let oldPath = newFilePath;
-
               // Increment the file counter
               file_counter++;
 
               // Create a new file path
-              newFilePath = `${base_path}_${file_counter}`;
+              const newFilePath = `${base_path}_${file_counter}`;
+              filesProduced.add(newFilePath);
 
               // Stop decompression if the size of the combined decompressed files exceeds the decompressed total combined files size limit
               if (
@@ -184,6 +183,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
                 );
                 console.log(`Temp files being analyzed: ${filesBeingAnalyzed}`);
                 stopDecompression = true; // Set the flag to true to stop decompression
+                //@ts-ignore
                 resolve(); // Resolve the promise to allow the 'end' event to handle the analysis
               }
 
@@ -192,9 +192,6 @@ const decompressAndAnalyze = async (file, start = 0) => {
               decompressedStream = fs.createWriteStream(newFilePath, {
                 flags: 'a',
               });
-
-              // Add the old file to the set for analysis
-              filesBeingAnalyzed.add(oldPath);
 
               start += fileLength;
               fileLength = 0;
@@ -224,6 +221,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
               })
               .catch(console.error);
 
+            //@ts-ignore
             resolve();
           });
         }
