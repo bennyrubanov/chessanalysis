@@ -343,10 +343,6 @@ async function aggregateResults(filePath: string) {
   );
 }
 
-console.time('Total Final Analysis Execution Time');
-aggregateResults('src/results.json');
-console.timeEnd('Total Final Analysis Execution Time');
-
 function logResults(
   weightedAveragePlayerRating: number,
   weightedAverageRatingDiff: number,
@@ -1050,3 +1046,9 @@ function aggregateGameTypeStats(analysis: unknown, gameTypeStats: {}) {
 // processAndAggregate();
 
 // export default aggregateResults;
+
+if (require.main === module) {
+  console.time('Total Final Analysis Execution Time');
+  aggregateResults('src/results.json');
+  console.timeEnd('Total Final Analysis Execution Time');
+}
