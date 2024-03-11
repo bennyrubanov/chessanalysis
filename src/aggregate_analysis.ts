@@ -117,16 +117,11 @@ async function aggregateResults(filePath: string) {
     ));
 
     // ratings largest diff
-    const thisLargestRatingDiff =
-      analysis['MetadataMetric']['largestRatingDiff'];
-    const thisLargestRatingDiffGame =
-      analysis['MetadataMetric']['largestRatingDiffGame'];
-    if (thisLargestRatingDiff > largestRatingDiff) {
-      largestRatingDiff = thisLargestRatingDiff;
-      largestRatingDiffGame = thisLargestRatingDiffGame;
-    } else if (thisLargestRatingDiff === largestRatingDiff) {
-      largestRatingDiffGame.push(thisLargestRatingDiffGame);
-    }
+    ({ largestRatingDiff, largestRatingDiffGame } = aggregateRatingDiff(
+      analysis,
+      largestRatingDiff,
+      largestRatingDiffGame
+    ));
 
     // games played
     // currently this stat is inaccurately tracked across analyses
@@ -226,41 +221,20 @@ async function aggregateResults(filePath: string) {
     }
 
     // piece level moves metrics
-    const thisTotalMovesByPiece =
-      analysis['PieceLevelMoveInfoMetric']['totalMovesByPiece'];
-    for (const uas in thisTotalMovesByPiece) {
-      if (!totalMovesByPiece[uas]) {
-        totalMovesByPiece[uas] = {
-          numMoves: thisTotalMovesByPiece[uas].numMoves,
-        };
-      }
-      totalMovesByPiece[uas].numMoves += thisTotalMovesByPiece[uas].numMoves;
-    }
-
-    const thisSingleGameMaxMoves =
-      analysis['PieceLevelMoveInfoMetric']['uasSingleGameMaxMoves'];
-    const thisPieceSingleGameMaxMoves =
-      analysis['PieceLevelMoveInfoMetric']['uasWithMostMovesSingleGame'];
-    const thisGameSingleGameMaxMoves =
-      analysis['PieceLevelMoveInfoMetric']['gamesWithUasMostMoves'];
-    if (thisSingleGameMaxMoves > singleGameMaxMoves) {
-      singleGameMaxMoves = thisSingleGameMaxMoves;
-      pieceSingleGameMaxMoves = [thisPieceSingleGameMaxMoves as UASymbol];
-      gameSingleGameMaxMoves = [thisGameSingleGameMaxMoves];
-    } else if (thisSingleGameMaxMoves === singleGameMaxMoves) {
-      pieceSingleGameMaxMoves.push(thisPieceSingleGameMaxMoves as UASymbol);
-      gameSingleGameMaxMoves.push(thisGameSingleGameMaxMoves);
-    }
-
-    const thisGamesNoCastling =
-      analysis['PieceLevelMoveInfoMetric']['gamesWithNoCastling'];
-    gamesNoCastling += thisGamesNoCastling;
-
-    const thisQueenKingCastlingCounts =
-      analysis['PieceLevelMoveInfoMetric']['queenKingCastlingCounts'];
-    for (const count in thisQueenKingCastlingCounts) {
-      queenKingCastlingCounts[count] += thisQueenKingCastlingCounts[count];
-    }
+    ({
+      singleGameMaxMoves,
+      pieceSingleGameMaxMoves,
+      gameSingleGameMaxMoves,
+      gamesNoCastling,
+    } = newFunction(
+      analysis,
+      totalMovesByPiece,
+      singleGameMaxMoves,
+      pieceSingleGameMaxMoves,
+      gameSingleGameMaxMoves,
+      gamesNoCastling,
+      queenKingCastlingCounts
+    ));
 
     // misc move fact metrics
     const thisEnPassantMovesCount =
@@ -283,59 +257,158 @@ async function aggregateResults(filePath: string) {
     weightedTotalRatingDiff / totalGamesAnalyzedForRatings;
 
   // calculating KD Ratios and maxes for final maps
-  for (const uas of Object.keys(KDMap)) {
-    const kills = KDMap[uas].kills;
-    const deaths = KDMap[uas].deaths || 0;
-    if (deaths !== 0) {
-      KDRatios[uas] = kills / deaths;
-    }
-  }
-  for (const uas of Object.keys(KDValuesMap)) {
-    const valueKills = KDValuesMap[uas].valueKills;
-    const deaths = KDValuesMap[uas].deaths || 0;
-    if (deaths !== 0) {
-      KDRatiosValues[uas] = valueKills / deaths;
-    }
-  }
-  for (const uas of Object.keys(KDRatios)) {
-    if (KDRatios[uas] > maxKDRatio) {
-      maxKDRatio = KDRatios[uas];
-      pieceWithHighestKDRatio = [uas as UASymbol];
-    } else if (KDRatios[uas] === maxKDRatio) {
-      pieceWithHighestKDRatio.push(uas as UASymbol); // tie, add to the array
-    }
-  }
-  for (const uas of Object.keys(KDRatiosValues)) {
-    if (KDRatiosValues[uas] > maxKDRatioValues) {
-      maxKDRatioValues = KDRatiosValues[uas];
-      pieceWithHighestKDRatioValues = [uas as UASymbol];
-    } else if (KDRatiosValues[uas] === maxKDRatio) {
-      pieceWithHighestKDRatioValues.push(uas as UASymbol); // tie, add to the array
-    }
-  }
+  ({
+    maxKDRatio,
+    pieceWithHighestKDRatio,
+    maxKDRatioValues,
+    pieceWithHighestKDRatioValues,
+  } = kdRatioMetrics(
+    KDMap,
+    KDRatios,
+    KDValuesMap,
+    KDRatiosValues,
+    maxKDRatio,
+    pieceWithHighestKDRatio,
+    maxKDRatioValues,
+    pieceWithHighestKDRatioValues
+  ));
 
   // calculating averageNumMovesByPiece (without doing weighted averages) and related maxes
-  for (const uas in totalMovesByPiece) {
-    if (!averageNumMovesByPiece[uas]) {
-      averageNumMovesByPiece[uas] = {
-        avgNumMoves: totalMovesByPiece[uas].numMoves / totalGamesAnalyzed,
-      };
-    }
-  }
-
-  for (const uas in averageNumMovesByPiece) {
-    if (averageNumMovesByPiece[uas].avgNumMoves > highestAverageMoves) {
-      highestAverageMoves = averageNumMovesByPiece[uas].avgNumMoves;
-      pieceHighestAverageMoves = [uas as UASymbol];
-    } else if (
-      averageNumMovesByPiece[uas].avgNumMoves === highestAverageMoves
-    ) {
-      pieceHighestAverageMoves.push(uas as UASymbol);
-    }
-  }
+  ({ highestAverageMoves, pieceHighestAverageMoves } = avgNumMoves(
+    totalMovesByPiece,
+    averageNumMovesByPiece,
+    totalGamesAnalyzed,
+    highestAverageMoves,
+    pieceHighestAverageMoves
+  ));
 
   // LOGS FOR THE ENTIRE SET
   // metadata logs
+  logResults(
+    weightedAveragePlayerRating,
+    weightedAverageRatingDiff,
+    largestRatingDiff,
+    largestRatingDiffGame,
+    playerMostGames,
+    mostGamesPlayedByPlayer,
+    gameTypeStats,
+    gameTimeControlStats,
+    totalGamesAnalyzed,
+    openings,
+    bongcloudAppearances,
+    gameEndings,
+    KDMap,
+    KDRatios,
+    pieceWithHighestKDRatio,
+    maxKDRatio,
+    KDValuesMap,
+    KDRatiosValues,
+    pieceWithHighestKDRatioValues,
+    maxKDRatioValues,
+    KillStreakMap,
+    maxKillStreak,
+    maxKillStreakPiece,
+    maxKillStreakGame,
+    mateAndAssistMap,
+    matedCountsMap,
+    promotedToTotals,
+    uasPromotingPieces,
+    maxNumQueens,
+    movesAndGamesMaxQueens,
+    pieceMaxAvgDist,
+    maxAvgDistance,
+    pieceMinAvgDist,
+    minAvgDistance,
+    pieceMaxDistSingleGame,
+    distPieceMaxDist,
+    gamePieceMaxDist,
+    totalCollectiveDistGames,
+    gameMaxCollectiveDist,
+    totalDistByPiece,
+    avgDistByPiece,
+    gameMostMoves,
+    gameMostMovesNumMoves,
+    totalMovesByPiece,
+    averageNumMovesByPiece,
+    pieceHighestAverageMoves,
+    highestAverageMoves,
+    pieceSingleGameMaxMoves,
+    singleGameMaxMoves,
+    gameSingleGameMaxMoves,
+    gamesNoCastling,
+    queenKingCastlingCounts,
+    enPassantMovesCount,
+    totalNumPiecesKnightHopped,
+    analysisCounter
+  );
+}
+
+console.time('Total Final Analysis Execution Time');
+aggregateResults('src/results.json');
+console.timeEnd('Total Final Analysis Execution Time');
+
+function logResults(
+  weightedAveragePlayerRating: number,
+  weightedAverageRatingDiff: number,
+  largestRatingDiff: number,
+  largestRatingDiffGame: any[],
+  playerMostGames: any[],
+  mostGamesPlayedByPlayer: number,
+  gameTypeStats: {},
+  gameTimeControlStats: {},
+  totalGamesAnalyzed: number,
+  openings: {},
+  bongcloudAppearances: number,
+  gameEndings: {},
+  KDMap: {},
+  KDRatios: {},
+  pieceWithHighestKDRatio: any[],
+  maxKDRatio: number,
+  KDValuesMap: {},
+  KDRatiosValues: {},
+  pieceWithHighestKDRatioValues: any[],
+  maxKDRatioValues: number,
+  KillStreakMap: {},
+  maxKillStreak: number,
+  maxKillStreakPiece: any[],
+  maxKillStreakGame: any[],
+  mateAndAssistMap: {},
+  matedCountsMap: { k: number; K: number },
+  promotedToTotals: { q: number; r: number; b: number; n: number },
+  uasPromotingPieces: {},
+  maxNumQueens: number,
+  movesAndGamesMaxQueens: any[],
+  pieceMaxAvgDist: any[],
+  maxAvgDistance: number,
+  pieceMinAvgDist: any[],
+  minAvgDistance: number,
+  pieceMaxDistSingleGame: any[],
+  distPieceMaxDist: number,
+  gamePieceMaxDist: any[],
+  totalCollectiveDistGames: number,
+  gameMaxCollectiveDist: { distance: number; games: any[] },
+  totalDistByPiece: {},
+  avgDistByPiece: {},
+  gameMostMoves: any[],
+  gameMostMovesNumMoves: number,
+  totalMovesByPiece: {},
+  averageNumMovesByPiece: {},
+  pieceHighestAverageMoves: any[],
+  highestAverageMoves: number,
+  pieceSingleGameMaxMoves: any[],
+  singleGameMaxMoves: number,
+  gameSingleGameMaxMoves: any[],
+  gamesNoCastling: number,
+  queenKingCastlingCounts: {
+    blackKing: number;
+    blackQueen: number;
+    whiteKing: number;
+    whiteQueen: number;
+  },
+  enPassantMovesCount: number,
+  totalNumPiecesKnightHopped: number,
+  analysisCounter: number
+) {
   console.log('GAME SET STATS (METADATA) ----------------------------');
   console.log(`Average Player Rating: ${weightedAveragePlayerRating}`);
   console.log(`Average Rating Difference: ${weightedAverageRatingDiff}`);
@@ -512,9 +585,155 @@ async function aggregateResults(filePath: string) {
   console.log(`Number of separate analyses: ${analysisCounter}`);
 }
 
-console.time('Total Final Analysis Execution Time');
-aggregateResults('src/results.json');
-console.timeEnd('Total Final Analysis Execution Time');
+function avgNumMoves(
+  totalMovesByPiece: {},
+  averageNumMovesByPiece: {},
+  totalGamesAnalyzed: number,
+  highestAverageMoves: number,
+  pieceHighestAverageMoves: any[]
+) {
+  for (const uas in totalMovesByPiece) {
+    if (!averageNumMovesByPiece[uas]) {
+      averageNumMovesByPiece[uas] = {
+        avgNumMoves: totalMovesByPiece[uas].numMoves / totalGamesAnalyzed,
+      };
+    }
+  }
+
+  for (const uas in averageNumMovesByPiece) {
+    if (averageNumMovesByPiece[uas].avgNumMoves > highestAverageMoves) {
+      highestAverageMoves = averageNumMovesByPiece[uas].avgNumMoves;
+      pieceHighestAverageMoves = [uas as UASymbol];
+    } else if (
+      averageNumMovesByPiece[uas].avgNumMoves === highestAverageMoves
+    ) {
+      pieceHighestAverageMoves.push(uas as UASymbol);
+    }
+  }
+  return { highestAverageMoves, pieceHighestAverageMoves };
+}
+
+function kdRatioMetrics(
+  KDMap: {},
+  KDRatios: {},
+  KDValuesMap: {},
+  KDRatiosValues: {},
+  maxKDRatio: number,
+  pieceWithHighestKDRatio: any[],
+  maxKDRatioValues: number,
+  pieceWithHighestKDRatioValues: any[]
+) {
+  for (const uas of Object.keys(KDMap)) {
+    const kills = KDMap[uas].kills;
+    const deaths = KDMap[uas].deaths || 0;
+    if (deaths !== 0) {
+      KDRatios[uas] = kills / deaths;
+    }
+  }
+  for (const uas of Object.keys(KDValuesMap)) {
+    const valueKills = KDValuesMap[uas].valueKills;
+    const deaths = KDValuesMap[uas].deaths || 0;
+    if (deaths !== 0) {
+      KDRatiosValues[uas] = valueKills / deaths;
+    }
+  }
+  for (const uas of Object.keys(KDRatios)) {
+    if (KDRatios[uas] > maxKDRatio) {
+      maxKDRatio = KDRatios[uas];
+      pieceWithHighestKDRatio = [uas as UASymbol];
+    } else if (KDRatios[uas] === maxKDRatio) {
+      pieceWithHighestKDRatio.push(uas as UASymbol); // tie, add to the array
+    }
+  }
+  for (const uas of Object.keys(KDRatiosValues)) {
+    if (KDRatiosValues[uas] > maxKDRatioValues) {
+      maxKDRatioValues = KDRatiosValues[uas];
+      pieceWithHighestKDRatioValues = [uas as UASymbol];
+    } else if (KDRatiosValues[uas] === maxKDRatio) {
+      pieceWithHighestKDRatioValues.push(uas as UASymbol); // tie, add to the array
+    }
+  }
+  return {
+    maxKDRatio,
+    pieceWithHighestKDRatio,
+    maxKDRatioValues,
+    pieceWithHighestKDRatioValues,
+  };
+}
+
+function newFunction(
+  analysis: unknown,
+  totalMovesByPiece: {},
+  singleGameMaxMoves: number,
+  pieceSingleGameMaxMoves: any[],
+  gameSingleGameMaxMoves: any[],
+  gamesNoCastling: number,
+  queenKingCastlingCounts: {
+    blackKing: number;
+    blackQueen: number;
+    whiteKing: number;
+    whiteQueen: number;
+  }
+) {
+  const thisTotalMovesByPiece =
+    analysis['PieceLevelMoveInfoMetric']['totalMovesByPiece'];
+  for (const uas in thisTotalMovesByPiece) {
+    if (!totalMovesByPiece[uas]) {
+      totalMovesByPiece[uas] = {
+        numMoves: thisTotalMovesByPiece[uas].numMoves,
+      };
+    }
+    totalMovesByPiece[uas].numMoves += thisTotalMovesByPiece[uas].numMoves;
+  }
+
+  const thisSingleGameMaxMoves =
+    analysis['PieceLevelMoveInfoMetric']['uasSingleGameMaxMoves'];
+  const thisPieceSingleGameMaxMoves =
+    analysis['PieceLevelMoveInfoMetric']['uasWithMostMovesSingleGame'];
+  const thisGameSingleGameMaxMoves =
+    analysis['PieceLevelMoveInfoMetric']['gamesWithUasMostMoves'];
+  if (thisSingleGameMaxMoves > singleGameMaxMoves) {
+    singleGameMaxMoves = thisSingleGameMaxMoves;
+    pieceSingleGameMaxMoves = [thisPieceSingleGameMaxMoves as UASymbol];
+    gameSingleGameMaxMoves = [thisGameSingleGameMaxMoves];
+  } else if (thisSingleGameMaxMoves === singleGameMaxMoves) {
+    pieceSingleGameMaxMoves.push(thisPieceSingleGameMaxMoves as UASymbol);
+    gameSingleGameMaxMoves.push(thisGameSingleGameMaxMoves);
+  }
+
+  const thisGamesNoCastling =
+    analysis['PieceLevelMoveInfoMetric']['gamesWithNoCastling'];
+  gamesNoCastling += thisGamesNoCastling;
+
+  const thisQueenKingCastlingCounts =
+    analysis['PieceLevelMoveInfoMetric']['queenKingCastlingCounts'];
+  for (const count in thisQueenKingCastlingCounts) {
+    queenKingCastlingCounts[count] += thisQueenKingCastlingCounts[count];
+  }
+  return {
+    singleGameMaxMoves,
+    pieceSingleGameMaxMoves,
+    gameSingleGameMaxMoves,
+    gamesNoCastling,
+  };
+}
+
+function aggregateRatingDiff(
+  analysis: unknown,
+  largestRatingDiff: number,
+  largestRatingDiffGame: any[]
+) {
+  const thisLargestRatingDiff = analysis['MetadataMetric']['largestRatingDiff'];
+  const thisLargestRatingDiffGame =
+    analysis['MetadataMetric']['largestRatingDiffGame'];
+  if (thisLargestRatingDiff > largestRatingDiff) {
+    largestRatingDiff = thisLargestRatingDiff;
+    largestRatingDiffGame = thisLargestRatingDiffGame;
+  } else if (thisLargestRatingDiff === largestRatingDiff) {
+    largestRatingDiffGame.push(thisLargestRatingDiffGame);
+  }
+  return { largestRatingDiff, largestRatingDiffGame };
+}
 
 function aggregateDistanceMetrics(
   analysis: unknown,

@@ -5,18 +5,15 @@ const fs = require('fs');
 const zstd = require('node-zstandard');
 const { spawn } = require('child_process');
 
-// List of all the database files you want to analyze (these need to be downloaded and in data folder)
-const files = ['lichess_db_standard_rated_2018-05.pgn.zst' /*...*/];
-
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = around 15 million games
 // const SIZE_LIMIT = 30 * 1024 * 1024; // 30MB
-const SIZE_LIMIT = 0.5 * 1024 * 1024; // 0.5MB, for testing
+const SIZE_LIMIT = 30 * 1024 * 1024; // 0.5MB, for testing
 
 // set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
 const decompressedSizeLimit = 500 * 1024 * 1024 * 1024; // 500 GB represented in bytes
 
-const getFileSize = (filePath) => {
+const getFileSize = (filePath: string) => {
   if (!fs.existsSync(filePath)) {
     return 0;
   }
@@ -29,14 +26,14 @@ const getFileSize = (filePath) => {
  * @param {string} filePath - The path of the file to run the analysis on.
  * @return {Promise} A promise that resolves when the analysis is complete.
  */
-async function runAnalysis(filePath) {
+async function runAnalysis(filePath: string) {
   return new Promise<void>((resolve, reject) => {
     // Run the analysis script
     console.log(`Running analysis script on ${filePath}...`);
 
     const child = spawn('ts-node', [
       //   '/Users/bennyrubanov/Coding_Projects/chessanalysis/src/index_with_decompressor.ts',
-      `${__dirname}/../run_metrics_on_input.ts`,
+      `${__dirname}/../../run_metrics_on_input.ts`,
       filePath,
     ]);
 
@@ -85,7 +82,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
   const filesProduced = new Set();
 
   //   const base_path = `/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file.replace(
-  const base_path = `${__dirname}/../data/${file.replace('.zst', '')}`;
+  const base_path = `${__dirname}/../../data/${file.replace('.zst', '')}`;
 
   // Create a new file path
   const newFilePath = `${base_path}_${randomUUID()}`;
@@ -111,7 +108,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
       // https://www.npmjs.com/package/node-zstandard#decompressionstreamfromfile-inputfile-callback
       zstd.decompressionStreamFromFile(
-        `${__dirname}/../data/${file}`,
+        `${__dirname}/../../data/${file}`,
         (err, result) => {
           if (err) return reject(err);
 
@@ -212,7 +209,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
 };
 
 // Function to process all files
-const processFiles = async () => {
+const processFiles = async (files: string[]) => {
   console.log(`Initiating decompression and analysis of ${files}...`);
   console.time('Final Total Compressed File Analysis Execution Time');
   for (const file of files) {
@@ -220,9 +217,6 @@ const processFiles = async () => {
   }
   console.timeEnd('Final Total Compressed File Analysis Execution Time');
 };
-
-// Start the process
-processFiles();
 
 const formatDuration = (duration) => {
   const hours = Math.floor(duration / 3600000);
@@ -234,3 +228,10 @@ const formatDuration = (duration) => {
 };
 
 module.exports = processFiles;
+
+// run if main
+if (require.main === module) {
+  // List of all the database files you want to analyze (these need to be downloaded and in data folder)
+  const files = ['lichess_db_standard_rated_2013-02.pgn.zst' /*...*/];
+  processFiles(files);
+}
