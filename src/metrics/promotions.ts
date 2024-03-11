@@ -46,8 +46,8 @@ export class PromotionMetric implements Metric {
     metadata?: string[]
   ) {
     // 2 queens to start with
-    let currentQueens,
-      totalQueens = 2;
+    let currentQueens = 2;
+    let totalQueens = 2;
 
     let gameSite = '';
     if (metadata) {
@@ -67,6 +67,31 @@ export class PromotionMetric implements Metric {
         if (move.promotion === 'q') {
           currentQueens++;
           totalQueens++;
+          // the check below is only necessary on promotions, when queen count might have increased beyond the max
+
+          // identify the maxQueenCount in a particular move, and the games and moves that the maxQueenCount occured in
+          // push to array of games and moves if tie, otherwise wipe the array and add new game
+          // only add one move entry for each game maxQueenCount (rather than one entry for each move that the maxQueenCount appears in)
+          if (currentQueens > this.maxQueensOnBoard) {
+            this.maxQueensOnBoard = currentQueens;
+            this.movesAndGamesWithMaxQueensOnBoard = [
+              {
+                game: gameSite,
+                move: move.originalString,
+              },
+            ];
+          } else if (currentQueens === this.maxQueensOnBoard) {
+            if (
+              !this.movesAndGamesWithMaxQueensOnBoard.some(
+                (item) => item.game === gameSite
+              )
+            ) {
+              this.movesAndGamesWithMaxQueensOnBoard.push({
+                game: gameSite,
+                move: move.originalString,
+              });
+            }
+          }
         }
       }
 
@@ -76,30 +101,6 @@ export class PromotionMetric implements Metric {
         (move.capture.uas === 'q' || move.capture.uas === 'Q')
       ) {
         currentQueens--;
-      }
-
-      // identify the maxQueenCount in a particular move, and the games and moves that the maxQueenCount occured in
-      // push to array of games and moves if tie, otherwise wipe the array and add new game
-      // only add one move entry for each game maxQueenCount (rather than one entry for each move that the maxQueenCount appears in)
-      if (currentQueens > this.maxQueensOnBoard) {
-        this.maxQueensOnBoard = currentQueens;
-        this.movesAndGamesWithMaxQueensOnBoard = [
-          {
-            game: gameSite,
-            move: move.originalString,
-          },
-        ];
-      } else if (currentQueens === this.maxQueensOnBoard) {
-        if (
-          !this.movesAndGamesWithMaxQueensOnBoard.some(
-            (item) => item.game === gameSite
-          )
-        ) {
-          this.movesAndGamesWithMaxQueensOnBoard.push({
-            game: gameSite,
-            move: move.originalString,
-          });
-        }
       }
     }
 

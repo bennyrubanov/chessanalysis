@@ -1,17 +1,21 @@
+import * as asyncLib from 'async';
+import * as fs from 'fs';
+import * as path from 'path';
 import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
-import { KDRatioMetric, MateAndAssistMetric, KillStreakMetric } from './metrics/captures';
+import {
+  KDRatioMetric,
+  KillStreakMetric,
+  MateAndAssistMetric,
+} from './metrics/captures';
 import { MoveDistanceMetric } from './metrics/distances';
 import { MetadataMetric } from './metrics/misc';
 import {
   GameWithMostMovesMetric,
-  PieceLevelMoveInfoMetric,
   MiscMoveFactMetric,
+  PieceLevelMoveInfoMetric,
 } from './metrics/moves';
 import { PromotionMetric } from './metrics/promotions';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as asyncLib from 'async';
 
 /**
  *
@@ -27,7 +31,7 @@ export async function main(path: string) {
 
 let results = {
   'Number of games analyzed': 0,
-}
+};
 
 /**
  * Metric functions will ingest a single game at a time
@@ -75,17 +79,20 @@ async function gameIterator(path) {
   let metricCallsCount = 0;
   for (const metric of metrics) {
     metricCallsCount++;
-    results[metric.constructor.name] = metric.aggregate()
+    results[metric.constructor.name] = metric.aggregate();
   }
 }
 
 // Create a write to result.json queue with a concurrency of 1
 const queue = asyncLib.queue((task) => {
   return new Promise<void>((resolve, reject) => {
+    //@ts-ignore
     const { results, analysisKey, resultsPath } = task;
     try {
       fs.writeFileSync(resultsPath, JSON.stringify(results, null, 2));
-      console.log(`Analysis "${analysisKey}" has been written to ${resultsPath}`);
+      console.log(
+        `Analysis "${analysisKey}" has been written to ${resultsPath}`
+      );
       resolve();
     } catch (err) {
       reject(err);
@@ -100,7 +107,9 @@ if (require.main === module) {
     const now = new Date();
     const milliseconds = now.getMilliseconds();
 
-    const analysisKey = `analysis_${now.toLocaleString().replace(/\/|,|:|\s/g, '_')}_${milliseconds}`;
+    const analysisKey = `analysis_${now
+      .toLocaleString()
+      .replace(/\/|,|:|\s/g, '_')}_${milliseconds}`;
     const resultsPath = path.join(__dirname, 'results.json');
 
     let existingResults = {};
