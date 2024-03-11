@@ -10,7 +10,8 @@ const files = ['lichess_db_standard_rated_2018-05.pgn.zst' /*...*/];
 
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = around 15 million games
-const SIZE_LIMIT = 30 * 1024 * 1024; // 30MB
+// const SIZE_LIMIT = 30 * 1024 * 1024; // 30MB
+const SIZE_LIMIT = 0.5 * 1024 * 1024; // 0.5MB, for testing
 
 // set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
 const decompressedSizeLimit = 500 * 1024 * 1024 * 1024; // 500 GB represented in bytes
@@ -29,13 +30,13 @@ const getFileSize = (filePath) => {
  * @return {Promise} A promise that resolves when the analysis is complete.
  */
 async function runAnalysis(filePath) {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     // Run the analysis script
     console.log(`Running analysis script on ${filePath}...`);
 
     const child = spawn('ts-node', [
       //   '/Users/bennyrubanov/Coding_Projects/chessanalysis/src/index_with_decompressor.ts',
-      `${__dirname}/../index_with_decompressor.ts`,
+      `${__dirname}/../run_metrics_on_input.ts`,
       filePath,
     ]);
 
@@ -44,7 +45,10 @@ async function runAnalysis(filePath) {
     let accumulatedData = '';
     child.stdout.on('data', (data) => {
       accumulatedData += data;
+
       let newlineIndex;
+
+      // this loop slices data while theere is a newline chanracter in the accumulated data
       while ((newlineIndex = accumulatedData.indexOf('\n')) >= 0) {
         console.log(`stdout: ${accumulatedData.slice(0, newlineIndex)}`);
         accumulatedData = accumulatedData.slice(newlineIndex + 1);
@@ -62,7 +66,6 @@ async function runAnalysis(filePath) {
 
     child.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
-      //@ts-ignore
       resolve();
     });
   });
@@ -76,7 +79,6 @@ async function runAnalysis(filePath) {
  * @returns {Promise} A promise that resolves when the decompression and analysis is complete.
  */
 const decompressAndAnalyze = async (file, start = 0) => {
-  let stopDecompression = false;
   let these_chunks_counter = 0; // Initialize the chunk counter
   let file_counter = 1; // Initialize the file counter
   let total_chunk_counter = 0;
@@ -100,7 +102,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
   }
 
   try {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       console.log(
         `Starting decompression of chunk number ${total_chunk_counter}.`
       );
@@ -109,15 +111,13 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
       // https://www.npmjs.com/package/node-zstandard#decompressionstreamfromfile-inputfile-callback
       zstd.decompressionStreamFromFile(
-        `/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file}`,
+        `${__dirname}/../data/${file}`,
         (err, result) => {
           if (err) return reject(err);
 
           let fileLength = 0;
-          let all_files_lengths = 0;
           let batch_files_total_decompressed_size = 0;
           let analysisPromises = [];
-          const MAX_CONCURRENT_ANALYSES = 13;
           let filesBeingAnalyzed = new Set();
 
           result.on('error', (err) => {
@@ -125,33 +125,15 @@ const decompressAndAnalyze = async (file, start = 0) => {
           });
 
           result.on('data', async (data) => {
-            if (stopDecompression) {
-              return; // Skip writing and updating counters if stopDecompression is true
-            }
-
             decompressedStream.write(data);
-            //@ts-ignore
-            lastChunkLength = data.length;
 
             const duration = Date.now() - startTime;
             const durationFormatted = formatDuration(duration);
             fileLength += data.length;
-            all_files_lengths += data.length;
             batch_files_total_decompressed_size += data.length;
-
-            // Increment the chunk counter
-            total_chunk_counter++;
             these_chunks_counter++;
 
-            if (total_chunk_counter % 200 === 0) {
-              console.log(
-                `${these_chunks_counter} chunks decompressed with decompressed size ${
-                  fileLength / 1024 / 1024
-                } MB`
-              );
-            }
-
-            // Check if the file size exceeds the limit
+            // Check if the file size exceeds the limit, if so we need to make a new file
             if (getFileSize(newFilePath) >= SIZE_LIMIT) {
               console.log(
                 `Finished decompression of data starting from byte ${start} and ending on byte ${
@@ -161,31 +143,12 @@ const decompressAndAnalyze = async (file, start = 0) => {
               console.log(
                 `Total number of chunks decompressed so far: ${total_chunk_counter}`
               );
-              console.log(
-                `Total decompressed size of files decompressed ${
-                  all_files_lengths / 1024 / 1024
-                } MB`
-              );
-
               // Increment the file counter
               file_counter++;
 
               // Create a new file path
-              const newFilePath = `${base_path}_${file_counter}`;
+              const newFilePath = `${base_path}_${randomUUID()}`;
               filesProduced.add(newFilePath);
-
-              // Stop decompression if the size of the combined decompressed files exceeds the decompressed total combined files size limit
-              if (
-                batch_files_total_decompressed_size >= decompressedSizeLimit
-              ) {
-                console.log(
-                  `Decompressed size limit met. Ending decompression and finalizing analyses...`
-                );
-                console.log(`Temp files being analyzed: ${filesBeingAnalyzed}`);
-                stopDecompression = true; // Set the flag to true to stop decompression
-                //@ts-ignore
-                resolve(); // Resolve the promise to allow the 'end' event to handle the analysis
-              }
 
               // Switch to a new file
               console.log(`Creating file number ${file_counter}`);
@@ -195,7 +158,24 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
               start += fileLength;
               fileLength = 0;
+              total_chunk_counter += these_chunks_counter;
               these_chunks_counter = 0;
+
+              console.log(
+                `${these_chunks_counter} chunks decompressed with decompressed size ${
+                  fileLength / 1024 / 1024
+                } MB`
+              );
+            }
+
+            // Stop decompression if the size of the combined decompressed files exceeds the decompressed total combined files size limit
+            if (batch_files_total_decompressed_size >= decompressedSizeLimit) {
+              console.log(`Decompression limit met. Ending decompression...`);
+              console.log(`Temp files being analyzed: ${filesBeingAnalyzed}`);
+              result.removeAllListeners('data');
+              result.removeAllListeners('error');
+              result.end();
+              resolve(); // Resolve the promise to allow the 'end' event to handle the analysis
             }
           });
 
@@ -221,7 +201,6 @@ const decompressAndAnalyze = async (file, start = 0) => {
               })
               .catch(console.error);
 
-            //@ts-ignore
             resolve();
           });
         }
