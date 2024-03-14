@@ -4,7 +4,7 @@ import { UASymbol } from '../cjsmin/src/chess';
 /**
  *
  * @param results.json
- * @returns final analysis results of all files created and deleted in streaming_partial_decompresser
+ * @returns final analysis results of all files created and deleted in zst_decompressor.ts
  */
 async function aggregateResults(filePath: string) {
   const data = JSON.parse(readFileSync(filePath, 'utf-8'));

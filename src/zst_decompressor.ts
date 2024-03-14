@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import * as path from 'path';
 
 // TODO: This should use type checking
 const fs = require('fs');
@@ -31,9 +32,11 @@ async function runAnalysis(filePath: string) {
     // Run the analysis script
     console.log(`Running analysis script on ${filePath}...`);
 
+    const analysisFileBasePath = path.resolve(__dirname, '..', 'src');
+
     const child = spawn('ts-node', [
       //   '/Users/bennyrubanov/Coding_Projects/chessanalysis/src/index_with_decompressor.ts',
-      `${__dirname}/../../run_metrics_on_input.ts`,
+      `${analysisFileBasePath}/run_metrics_on_input.ts`,
       filePath,
     ]);
 
@@ -82,7 +85,10 @@ const decompressAndAnalyze = async (file, start = 0) => {
   const filesProduced = new Set();
 
   //   const base_path = `/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file.replace(
-  const base_path = `${__dirname}/../../data/${file.replace('.zst', '')}`;
+  // base_path used to enumerate where new files should go
+  const base_path = path.resolve(__dirname, '..', 'data', file.replace('.zst', ''));
+  // for use in decompressionStreamFromFile
+  const compressedFilePath = path.resolve(__dirname, '..', 'data');
 
   // Create a new file path
   const newFilePath = `${base_path}_${randomUUID()}`;
@@ -108,9 +114,10 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
       // https://www.npmjs.com/package/node-zstandard#decompressionstreamfromfile-inputfile-callback
       zstd.decompressionStreamFromFile(
-        `${__dirname}/../../data/${file}`,
+        `${compressedFilePath}/${file}`,
         (err, result) => {
           if (err) return reject(err);
+          console.log(`Decompressing file located at ${compressedFilePath}/${file}`);
 
           let fileLength = 0;
           let batch_files_total_decompressed_size = 0;
@@ -140,6 +147,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
               console.log(
                 `Total number of chunks decompressed so far: ${total_chunk_counter}`
               );
+              
               // Increment the file counter
               file_counter++;
 
@@ -210,7 +218,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
 // Function to process all files
 const processFiles = async (files: string[]) => {
-  console.log(`Initiating decompression and analysis of ${files}...`);
+  console.log(`Initiating decompression and analysis of files: ${files}...`);
   console.time('Final Total Compressed File Analysis Execution Time');
   for (const file of files) {
     await decompressAndAnalyze(file);
@@ -232,6 +240,6 @@ module.exports = processFiles;
 // run if main
 if (require.main === module) {
   // List of all the database files you want to analyze (these need to be downloaded and in data folder)
-  const files = ['lichess_db_standard_rated_2013-02.pgn.zst' /*...*/];
+  const files = ['lichess_db_standard_rated_2013-01.pgn.zst' /*...*/];
   processFiles(files);
 }
