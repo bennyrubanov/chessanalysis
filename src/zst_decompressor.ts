@@ -86,12 +86,18 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
   //   const base_path = `/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file.replace(
   // base_path used to enumerate where new files should go
-  const base_path = path.resolve(__dirname, '..', 'data', file.replace('.zst', ''));
+  const base_path = path.resolve(
+    __dirname,
+    '..',
+    '..',
+    'data',
+    file.replace('.zst', '')
+  );
   // for use in decompressionStreamFromFile
-  const compressedFilePath = path.resolve(__dirname, '..', 'data');
+  const compressedFilePath = path.resolve(__dirname, '..', '..', 'data');
 
   // Create a new file path
-  const newFilePath = `${base_path}_${randomUUID()}`;
+  let newFilePath = `${base_path}_${randomUUID()}`;
   filesProduced.add(newFilePath);
 
   // Create a new writable strxeam
@@ -117,7 +123,9 @@ const decompressAndAnalyze = async (file, start = 0) => {
         `${compressedFilePath}/${file}`,
         (err, result) => {
           if (err) return reject(err);
-          console.log(`Decompressing file located at ${compressedFilePath}/${file}`);
+          console.log(
+            `Decompressing file located at ${compressedFilePath}/${file}`
+          );
 
           let fileLength = 0;
           let batch_files_total_decompressed_size = 0;
@@ -147,12 +155,12 @@ const decompressAndAnalyze = async (file, start = 0) => {
               console.log(
                 `Total number of chunks decompressed so far: ${total_chunk_counter}`
               );
-              
+
               // Increment the file counter
               file_counter++;
 
               // Create a new file path
-              const newFilePath = `${base_path}_${randomUUID()}`;
+              newFilePath = `${base_path}_${randomUUID()}`;
               filesProduced.add(newFilePath);
 
               // Switch to a new file
@@ -240,6 +248,6 @@ module.exports = processFiles;
 // run if main
 if (require.main === module) {
   // List of all the database files you want to analyze (these need to be downloaded and in data folder)
-  const files = ['lichess_db_standard_rated_2013-01.pgn.zst' /*...*/];
+  const files = ['lichess_db_standard_rated_2013-02.pgn.zst' /*...*/];
   processFiles(files);
 }
