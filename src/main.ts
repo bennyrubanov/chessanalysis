@@ -1,6 +1,6 @@
-import * as asyncLib from 'async';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as lockfile from 'proper-lockfile';
 import { Chess } from '../cjsmin/src/chess';
 import { gameChunks } from './fileReader';
 import {
@@ -83,26 +83,14 @@ async function gameIterator(path) {
   }
 }
 
-// Create a write to result.json queue with a concurrency of 1
-const queue = asyncLib.queue((task: any) => {
-  return new Promise<void>((resolve, reject) => {
-    const { results, analysisKey, resultsPath } = task;
-    try {
-      fs.writeFileSync(resultsPath, JSON.stringify(results, null, 2));
-      console.log(
-        `Analysis "${analysisKey}" has been written to ${resultsPath}`
-      );
-      resolve();
-    } catch (err) {
-      reject(err);
-    }
-  });
-}, 1);
+// for use with running index.ts with test sets and print to console
+// if (require.main === module) {
+//   main(`data/11.11.23 3 Game Test Set`).then((a) => {});
+// }
 
-// for use with streaming_partial_decompresser.js
+// for use with running index.ts with test sets & writing to results.json
 if (require.main === module) {
-  const pathToAnalyze = process.argv[2];
-  main(pathToAnalyze).then(async (results) => {
+  main(`data/11.11.23 3 Game Test Set`).then(async (results) => {
     const now = new Date();
     const milliseconds = now.getMilliseconds();
 
@@ -121,7 +109,14 @@ if (require.main === module) {
 
     existingResults[analysisKey] = results;
 
-    // Add the write task to the queue and wait for it to complete
-    await queue.push({ results: existingResults, analysisKey, resultsPath });
+    // Use lockfile to prevent concurrent writes
+    const release = await lockfile.lock(resultsPath);
+    try {
+      fs.writeFileSync(resultsPath, JSON.stringify(existingResults, null, 2));
+    } finally {
+      release();
+    }
+
+    console.log(`Analysis ${analysisKey} written to ${resultsPath}.`);
   });
 }
