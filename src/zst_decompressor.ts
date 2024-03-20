@@ -9,7 +9,7 @@ const { spawn } = require('child_process');
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = around 15 million games
 // const SIZE_LIMIT = 30 * 1024 * 1024; // 30MB
-const SIZE_LIMIT = 30 * 1024 * 1024; // 0.5MB, for testing
+const SIZE_LIMIT = 0.1 * 1024 * 1024; // 0.5MB, for testing
 
 // set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
 const decompressedSizeLimit = 500 * 1024 * 1024 * 1024; // 500 GB represented in bytes
@@ -32,11 +32,10 @@ async function runAnalysis(filePath: string) {
     // Run the analysis script
     console.log(`Running analysis script on ${filePath}...`);
 
-    const analysisFileBasePath = path.resolve(__dirname, '..', 'src');
+    const analysisFileBasePath = path.resolve(__dirname, '..', '..', 'src');
 
     const child = spawn('ts-node', [
-      //   '/Users/bennyrubanov/Coding_Projects/chessanalysis/src/index_with_decompressor.ts',
-      `${analysisFileBasePath}/run_metrics_on_input.ts`,
+      `${analysisFileBasePath}/run_metrics_on_file.ts`,
       filePath,
     ]);
 
@@ -82,7 +81,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
   let these_chunks_counter = 0; // Initialize the chunk counter
   let file_counter = 1; // Initialize the file counter
   let total_chunk_counter = 0;
-  const filesProduced = new Set();
+  const filesProduced = new Set<string>();
 
   //   const base_path = `/Users/bennyrubanov/Coding_Projects/chessanalysis/data/${file.replace(
   // base_path used to enumerate where new files should go
@@ -193,23 +192,25 @@ const decompressAndAnalyze = async (file, start = 0) => {
           });
 
           result.on('end', async () => {
-            // When all data is decompressed, run the analysis on the last file
-            let lastAnalysisPromise = runAnalysis(newFilePath)
-              .then(() => {
-                if (fs.existsSync(newFilePath)) {
-                  fs.unlinkSync(newFilePath);
-                  console.log(`File ${newFilePath} has been deleted.`);
-                }
-              })
-              .catch(console.error);
+            // When all data is decompressed, run the analysis on the produced files concurrently
+            for (const file of Array.from(filesProduced).slice(0, 5)) {
+              // TODO: this won't work out of the box for a large number of files as there is no max concurrency. But the sample only produces 4 decompressed files
+              // I'm slicing to test this with a smaller number of files
 
-            analysisPromises.push(lastAnalysisPromise);
-            filesBeingAnalyzed.add(newFilePath);
+              analysisPromises.push(runAnalysis(file));
+              filesBeingAnalyzed.add(newFilePath);
+            }
 
-            // When all analyses are done, delete the files
+            // When all analyses are done, delete the files from the set
             Promise.allSettled(analysisPromises)
               .then(() => {
                 console.log('All analyses completed');
+                for (const file of filesBeingAnalyzed) {
+                  if (fs.existsSync(file)) {
+                    fs.unlinkSync(file);
+                    console.log(`File ${file} has been deleted.`);
+                  }
+                }
                 filesBeingAnalyzed.clear();
               })
               .catch(console.error);

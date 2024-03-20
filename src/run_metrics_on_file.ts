@@ -24,20 +24,47 @@ import { RESULTS_PATH } from './queue';
  */
 export async function main(path: string) {
   console.time('Total Execution Time');
-  await gameIterator(path);
+  await gameIterator(path, { 'Number of games analyzed': 0 });
   console.timeEnd('Total Execution Time');
-  return results;
-}
 
-let results = {
-  'Number of games analyzed': 0,
-};
+  const now = new Date();
+  const milliseconds = now.getMilliseconds();
+
+  const analysisKey = `analysis_${now
+    .toLocaleString()
+    .replace(/\/|,|:|\s/g, '_')}_${milliseconds}`;
+
+  let existingResults = {};
+  if (fs.existsSync(RESULTS_PATH)) {
+    const fileContent = fs.readFileSync(RESULTS_PATH, 'utf8');
+    if (fileContent !== '') {
+      existingResults = JSON.parse(fileContent);
+    }
+  }
+
+  console.log('sending results');
+
+  // TODO: Probably we need to read in the existing results in the queue server and merge them, as when there are multiple items in the queue
+  // this is going to be out of date
+  existingResults[analysisKey] = {
+    'Number of games analyzed': 0,
+  };
+
+  const client = net.createConnection({ port: 8000 });
+
+  console.log('connected to queue server');
+
+  // Send the task to the queue server
+  client.write(JSON.stringify({ results: existingResults, analysisKey }));
+
+  console.log('results sent');
+}
 
 /**
  * Metric functions will ingest a single game at a time
  * @param metricFunctions
  */
-async function gameIterator(path) {
+async function gameIterator(path, results) {
   const cjsmin = new Chess();
 
   const gamesGenerator = gameChunks(path);
@@ -74,27 +101,5 @@ async function gameIterator(path) {
 
 // for use with zst_decompresser.js
 if (require.main === module) {
-  main(process.argv[2]).then((results) => {
-    const now = new Date();
-    const milliseconds = now.getMilliseconds();
-
-    const analysisKey = `analysis_${now
-      .toLocaleString()
-      .replace(/\/|,|:|\s/g, '_')}_${milliseconds}`;
-
-    let existingResults = {};
-    if (fs.existsSync(RESULTS_PATH)) {
-      const fileContent = fs.readFileSync(RESULTS_PATH, 'utf8');
-      if (fileContent !== '') {
-        existingResults = JSON.parse(fileContent);
-      }
-    }
-
-    existingResults[analysisKey] = results;
-
-    const client = net.createConnection({ port: 8000 });
-
-    // Send the task to the queue server
-    client.write(JSON.stringify({ results: existingResults, analysisKey }));
-  });
+  main(process.argv[2]).then((results) => {});
 }

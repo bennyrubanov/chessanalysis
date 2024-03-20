@@ -7,21 +7,24 @@ export const RESULTS_PATH = `${__dirname}/results.json`;
 function launchQueueServer() {
   // Create a write to result.json queue with a concurrency of 1
   // Possibly the simplest fix would be to run this as a separate process, then we can enforce messages sent to this queue are processed in order
-  const queue = asyncLib.queue<any>((task) => {
+  const queue = asyncLib.queue<any>((task, callback) => {
     console.log('received task', task.analysisKey);
-    return new Promise<void>((resolve, reject) => {
-      const { results, analysisKey } = task;
-      try {
-        fs.writeFileSync(RESULTS_PATH, JSON.stringify(results, null, 2));
-        console.log(
-          `Analysis "${analysisKey}" has been written to ${RESULTS_PATH}`
-        );
-        resolve();
-      } catch (err) {
-        reject(err);
-      }
-    });
+    // return new Promise<void>((resolve, reject) => {
+    const { results, analysisKey } = task;
+    try {
+      fs.writeFileSync(RESULTS_PATH, JSON.stringify(results, null, 2));
+      console.log(
+        `Analysis "${analysisKey}" has been written to ${RESULTS_PATH}`
+      );
+    } catch (err) {
+      console.error('Error writing to results.json', err);
+    }
+    // });
   }, 1);
+
+  queue.drain(function () {
+    console.log('all items have been processed');
+  });
 
   // this event listener receives tasks from the parallel processes
   const server = net.createServer((socket) => {
