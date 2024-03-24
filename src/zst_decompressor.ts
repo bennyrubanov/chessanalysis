@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import * as path from 'path';
+import * as readline from 'readline';
 
 // TODO: This should use type checking
 const fs = require('fs');
@@ -9,7 +10,46 @@ const { spawn } = require('child_process');
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = around 15 million games
 // const SIZE_LIMIT = 30 * 1024 * 1024; // 30MB
-const SIZE_LIMIT = 0.1 * 1024 * 1024; // 0.5MB, for testing
+let SIZE_LIMIT = 10 * 1024 * 1024; // Default 10MB
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+// Function to prompt for SIZE_LIMIT
+const promptForSizeLimit = () => {
+  return new Promise<void>((resolve) => {
+    rl.question('Enter the SIZE_LIMIT in MB (default is 10MB): ', (input) => {
+      const inputSizeMB = parseInt(input, 10);
+      if (!isNaN(inputSizeMB) && inputSizeMB > 0) {
+        SIZE_LIMIT = inputSizeMB * 1024 * 1024; // Convert MB to bytes
+        console.log(`Using SIZE_LIMIT of ${SIZE_LIMIT} bytes.`);
+      } else {
+        console.log(`Invalid input. Using default SIZE_LIMIT of ${SIZE_LIMIT} bytes.`);
+      }
+      resolve();
+    });
+  });
+};
+
+let concurrentFilesLimit = 10; // How many files are analyzed at one time (batch size)
+
+// Function to prompt for concurrent files limit
+const promptForConcurrentFilesLimit = () => {
+  return new Promise<void>((resolve) => {
+    rl.question('Enter the number of files to analyze concurrently (default is 10): ', (input) => {
+      const inputLimit = parseInt(input, 10);
+      if (!isNaN(inputLimit) && inputLimit > 0) {
+        concurrentFilesLimit = inputLimit;
+        console.log(`Using concurrent files limit of ${concurrentFilesLimit}.`);
+      } else {
+        console.log(`Invalid input. Using default concurrent files limit of ${concurrentFilesLimit}.`);
+      }
+      resolve();
+    });
+  });
+};
 
 // set the total size limit of the combined decompressed files (this is how much space you need to have available on your PC prior to running node src/streaming_partial_decompresser.js)
 const decompressedSizeLimit = 500 * 1024 * 1024 * 1024; // 500 GB represented in bytes
@@ -193,7 +233,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
           result.on('end', async () => {
             // When all data is decompressed, run the analysis on the produced files concurrently
-            for (const file of Array.from(filesProduced).slice(0, 5)) {
+            for (const file of Array.from(filesProduced).slice(0, 10)) {
               // TODO: this won't work out of the box for a large number of files as there is no max concurrency. But the sample only produces 4 decompressed files
               // I'm slicing to test this with a smaller number of files
 
@@ -230,7 +270,17 @@ const processFiles = async (files: string[]) => {
   console.log(`Initiating decompression and analysis of files: ${files}...`);
   console.time('Final Total Compressed File Analysis Execution Time');
   for (const file of files) {
-    await decompressAndAnalyze(file);
+    try {
+      // Check if the file exists before proceeding
+      const filePath = path.resolve(__dirname, '..', '..', 'data', file);
+      if (!fs.existsSync(filePath)) {
+        throw new Error(`File does not exist: ${filePath}`);
+      }
+      await decompressAndAnalyze(file);
+    } catch (error) {
+      console.error(`Error processing file ${file}: ${error.message}`);
+      // Optionally, continue with the next file or handle the error as needed
+    }
   }
   console.timeEnd('Final Total Compressed File Analysis Execution Time');
 };
@@ -248,7 +298,11 @@ module.exports = processFiles;
 
 // run if main
 if (require.main === module) {
-  // List of all the database files you want to analyze (these need to be downloaded and in data folder)
-  const files = ['lichess_db_standard_rated_2013-02.pgn.zst' /*...*/];
-  processFiles(files);
+  promptForSizeLimit().then(() => {
+    promptForConcurrentFilesLimit().then(() => {
+      rl.close(); // Close the readline interface after all prompts
+      const files = ['lichess_db_standard_rated_2013-01.pgn.zst' /*...*/];
+      processFiles(files);
+    });
+  });
 }
