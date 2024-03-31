@@ -1,16 +1,12 @@
 # Overview
 
-Welcome! We (@EllAchE and @bennyrubanov) are chess amateurs who also have interests in statistics, programming and sillyness. This repo brings those interests together. Here, we find and visualize some of the sillier (and perhaps less useful) chess statistics no one has bothered to calculate before. This project is open source, so we encourage contributions and suggestions! 😊
+Welcome! We (@EllAchE and @bennyrubanov) are chess amateurs who also have interests in statistics, programming and sillyness. This repo brings those interests together. Here, we find and visualize some of the sillier (and perhaps less useful) chess statistics no one has bothered to calculate before. This project is open source (MIT License), so we encourage contributions and suggestions! 😊
 
 ## Preliminary Results
 
-The project is under development, with the goal to one day look at the entirety of the Lichess games database. However, we have already analyzed a subset of the data. Here's a deep dive into those!
+The project is under development, with the goal to one day look at the entirety of the Lichess games database. However, we have already analyzed a subset of the data. Here's a deep dive into those: [Analyzing 5 billion chess games](https://elehche.com/Analyzing-5-billion-chess-games-f10f3f6125144f6f9978a431f16b3e70)
 
-[Analyzin 5 billion chess games](https://elehche.com/Analyzing-5-billion-chess-games-f10f3f6125144f6f9978a431f16b3e70)
-
-and if that's not enough, here is a result on 450k games from November 2013!
-
-[Results](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4)
+and if that's not enough, here is a result on 450k games from November 2013! [Results](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4)
 
 # Methodology
 
