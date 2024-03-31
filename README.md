@@ -3,7 +3,12 @@
 Welcome! We (@EllAchE and @bennyrubanov) are chess amateurs who also have interests in statistics, programming and sillyness. This repo brings those interests together. Here, we find and visualize some of the sillier (and perhaps less useful) chess statistics no one has bothered to calculate before. This project is open source, so we encourage contributions and suggestions! 😊
 
 ## Preliminary Results
-These results have yet to be visualized, and the quantity of games analyzed will be increased, but here is a result on 450k games from November 2013!
+
+The project is under development, with the goal to one day look at the entirety of the Lichess games database. However, we have already analyzed a subset of the data. Here's a deep dive into those!
+
+[Analyzin 5 billion chess games](https://elehche.com/Analyzing-5-billion-chess-games-f10f3f6125144f6f9978a431f16b3e70)
+
+and if that's not enough, here is a result on 450k games from November 2013!
 
 [Results](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4)
 
@@ -15,9 +20,10 @@ Data is sourced from the public [Lichess games database](https://database.liches
 
 ## Credits
 
-We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little time.
+We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little dev time.
 
 ## Definitions
+
 - Unambiguous Piece (UAP): e.g. pawn that started on a2
 - Ambiguous pieces: pawn, bishop, knight, rook, queen, king
 
@@ -26,6 +32,7 @@ We have taken advantage of some of the helpful methods in [chess.js](https://git
 Current implementation is **bolded** where multiple options exist:
 
 ### Kills/Deaths/Assists
+
 - If two pieces simultaneously checkmate a king each is credited with 0.5 kills/mates (not currently implemented)
 - A checkmate is considered a "death" for the king and a "kill" for the mating piece
 - An "assist" is counted for a piece if: the move before the checkmate is that piece's move, and it is a "check"
@@ -35,29 +42,33 @@ Current implementation is **bolded** where multiple options exist:
 ### Distances
 
 #### Knight
+
 - **knight move counts as 2: one diagonal and one hor/vert**. An alternative would be to count as 3: 2 horizontal/vertical + 1 hor/vert
-- To calculate when a knight "hops" a piece we do the following. 
+- To calculate when a knight "hops" a piece we do the following.
   - A knight can take 2 paths to its destination, if either of those paths is clear we assume it takes the "easier path" and does not hop a piece.
   - If there is no clear path we count ALL pieces blocking both paths, then divide the aggregate by 2. There are two reasons for this:
     - We want deterministic outputs from processing games
     - We want to avoid selection bias.
-    It would be possible to use a deterministic rule (i.e. short distance first when odd moves) to determine the knight's path, however that or similar decisions could introduce bias when considering common opening patterns. A randomness rule (i.e. generate a random number to choose the path) would avoid this but would lead to nondeterminisic results.
+      It would be possible to use a deterministic rule (i.e. short distance first when odd moves) to determine the knight's path, however that or similar decisions could introduce bias when considering common opening patterns. A randomness rule (i.e. generate a random number to choose the path) would avoid this but would lead to nondeterminisic results.
 
 #### Bishop
+
 - **Diagonal moves count as 1**. An alternative would be diagonal moves count as 2: 1 horizontal + 1 vertical
 
 #### Castling
+
 - Castling counts as a move for a rook as well as the king
 - The distance a rook covers during a castle move is also tracked
 
 ### Promotions
+
 - After an unambiguous piece is promoted:
   - It is treated as the new piece
   - **It is treated as the original piece (i.e. if the pawn that started the game on a2 is promoted to a Queen, it is still treated as the pawn on a2 for the purposes of calculating distance functions, etc)**
 
 # Priority (& Silly) Questions to answer
 
-Kills/Deaths/Assists 
+Kills/Deaths/Assists
 
 thesis: beginners get forked by knights and lose a lot of high level pieces. Will be answered by KD ratio by piece value
 
@@ -71,6 +82,7 @@ thesis: beginners get forked by knights and lose a lot of high level pieces. Wil
 - heat map of which squares are "battleground", i.e. have the most captures
 
 Distances/Moves
+
 - average distance each piece has traveled
   - furthest distance a piece has traveled in a single game
 - average number of moves by piece
@@ -78,10 +90,12 @@ Distances/Moves
 - the game with the most moves played
 
 Promotions
+
 - how often a piece is promoted to different pieces (q, n, b, r)
 - how often each unambiguous pawn promotes
 
 Openings/Endings/Wins/Losses
+
 - how often do games end with 3 fold repetition? Stalemate? Ties in general? Insufficient material? Loss on time? Lack of pawn advancement?
 - top 5 most used/popular openings
   - number of times various openings (e.g. bongcloud 😁) are played ♙
@@ -90,6 +104,7 @@ Openings/Endings/Wins/Losses
 - which side wins more often for each of the top 5 most used/popular openings
 
 Dataset facts
+
 - number of games analyzed
 - average rating of players
 - quantity of games played by time control category (e.g. bullet/blitz/rapid/classical)
@@ -100,6 +115,7 @@ Dataset facts
 - largest rating diff between players in games played
 
 Miscellaneous
+
 - most queens to appear in a game
 - en passant count
 - most pieces hopped over by a knight
@@ -123,6 +139,7 @@ Miscellaneous
 - how many pieces on average does a Queen take before it gets taken down
 
 # Planned Roadmap Items
+
 - Segment by ELO rating ranges
 - Segment all relevant questions by ambiguous pieces and unambiguous pieces (e.g. pawn, bishop, knight, rook, queen, king) vs unambiguous pieces (e.g. pawn that started on a2)
 - Segment by wins and losses

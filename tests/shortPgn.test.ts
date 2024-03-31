@@ -13,7 +13,7 @@ async function* getHistoriesFromFilePath(path: string) {
 describe('Using modified cjsmin returns expected results', () => {
   it('should not throw an error', async () => {
     const histShort = JSON.parse(
-      require('fs').readFileSync('historiesShort.json').toString().trim()
+      require('fs').readFileSync('data/historiesShort.json').toString().trim()
     );
 
     const historiesGenerator = getHistoriesFromFilePath(`data/short.pgn`);

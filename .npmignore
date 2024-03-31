@@ -1,0 +1,9 @@
+.github
+.vscode
+cdv
+data
+tests
+src/visuals
+tsconfig.json
+package-lock.json
+src
