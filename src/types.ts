@@ -1,4 +1,4 @@
-import { Square, UASymbol } from './cjsmin/src/chess';
+import { Square, UASymbol } from './cjsmin/chess';
 
 export interface FileReaderGame {
   moves: string;

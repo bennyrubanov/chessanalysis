@@ -1,4 +1,4 @@
-import { Piece, PrettyMove, UASymbol } from '../cjsmin/src/chess';
+import { Piece, PrettyMove, UASymbol } from '../cjsmin/chess';
 import { UAPMap } from '../types';
 import { createUAPMap } from '../utils';
 import { Metric } from './metric';

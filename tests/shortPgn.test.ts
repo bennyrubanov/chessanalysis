@@ -1,4 +1,4 @@
-import { Chess } from '../src/cjsmin/src/chess';
+import { Chess } from '../src/cjsmin/chess';
 import { gameChunks } from '../src/fileReader';
 
 async function* getHistoriesFromFilePath(path: string) {

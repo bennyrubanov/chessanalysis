@@ -3,7 +3,7 @@ import {
   ALL_UNAMBIGUOUS_PIECE_SYMBOLS,
   Chess,
   UASymbol,
-} from './cjsmin/src/chess';
+} from './cjsmin/chess';
 import { gameChunks } from './fileReader';
 import { BoardAndPieceMap, BoardMap, UAPMap } from './types';
 

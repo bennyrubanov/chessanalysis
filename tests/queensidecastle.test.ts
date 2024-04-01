@@ -1,4 +1,4 @@
-import { Chess } from '../src/cjsmin/src/chess';
+import { Chess } from '../src/cjsmin/chess';
 
 describe('Queenside castling is detected', () => {
   const chess = new Chess();

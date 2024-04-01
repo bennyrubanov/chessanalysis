@@ -1,4 +1,4 @@
-import { ALL_SQUARES, Piece, PrettyMove, UASymbol } from '../cjsmin/src/chess';
+import { ALL_SQUARES, Piece, PrettyMove, UASymbol } from '../cjsmin/chess';
 import { BoardAndPieceMap, UAPMap } from '../types';
 import { createBoardAndPieceMap, createBoardMap, createUAPMap } from '../utils';
 import { Metric } from './metric';

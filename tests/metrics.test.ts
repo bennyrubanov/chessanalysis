@@ -1,5 +1,5 @@
 import { Chess as ChessOG } from 'chess.js';
-import { Chess } from '../src/cjsmin/src/chess';
+import { Chess } from '../src/cjsmin/chess';
 import {
   KDRatioMetric,
   KillStreakMetric,

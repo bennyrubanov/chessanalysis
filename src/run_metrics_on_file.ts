@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import * as net from 'net';
-import { Chess } from './cjsmin/src/chess';
+import { Chess } from './cjsmin/chess';
 import { gameChunks } from './fileReader';
 import {
   KDRatioMetric,
