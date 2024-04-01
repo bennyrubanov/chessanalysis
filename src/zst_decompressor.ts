@@ -3,9 +3,9 @@ import * as path from 'path';
 import * as readline from 'readline';
 
 // TODO: This should use type checking
-const fs = require('fs');
-const zstd = require('node-zstandard');
-const { spawn } = require('child_process');
+import { spawn } from 'child_process';
+import * as fs from 'fs';
+import * as zstd from 'node-zstandard';
 
 // 30 games = 10*1024 bytes, 1 game = 350 bytes, 1000 games = 330KB, 100K games = 33MB
 // 10MB yields around 30k games, 5GB = around 15 million games
@@ -14,7 +14,7 @@ let SIZE_LIMIT = 10 * 1024 * 1024; // Default 10MB
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 // Function to prompt for SIZE_LIMIT
@@ -26,7 +26,9 @@ const promptForSizeLimit = () => {
         SIZE_LIMIT = inputSizeMB * 1024 * 1024; // Convert MB to bytes
         console.log(`Using SIZE_LIMIT of ${SIZE_LIMIT} bytes.`);
       } else {
-        console.log(`Invalid input. Using default SIZE_LIMIT of ${SIZE_LIMIT} bytes.`);
+        console.log(
+          `Invalid input. Using default SIZE_LIMIT of ${SIZE_LIMIT} bytes.`
+        );
       }
       resolve();
     });
@@ -38,16 +40,23 @@ let concurrentFilesLimit = 10; // How many files are analyzed at one time (batch
 // Function to prompt for concurrent files limit
 const promptForConcurrentFilesLimit = () => {
   return new Promise<void>((resolve) => {
-    rl.question('Enter the number of files to analyze concurrently (default is 10): ', (input) => {
-      const inputLimit = parseInt(input, 10);
-      if (!isNaN(inputLimit) && inputLimit > 0) {
-        concurrentFilesLimit = inputLimit;
-        console.log(`Using concurrent files limit of ${concurrentFilesLimit}.`);
-      } else {
-        console.log(`Invalid input. Using default concurrent files limit of ${concurrentFilesLimit}.`);
+    rl.question(
+      'Enter the number of files to analyze concurrently (default is 10): ',
+      (input) => {
+        const inputLimit = parseInt(input, 10);
+        if (!isNaN(inputLimit) && inputLimit > 0) {
+          concurrentFilesLimit = inputLimit;
+          console.log(
+            `Using concurrent files limit of ${concurrentFilesLimit}.`
+          );
+        } else {
+          console.log(
+            `Invalid input. Using default concurrent files limit of ${concurrentFilesLimit}.`
+          );
+        }
+        resolve();
       }
-      resolve();
-    });
+    );
   });
 };
 
@@ -169,7 +178,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
           let fileLength = 0;
           let batch_files_total_decompressed_size = 0;
           let analysisPromises = [];
-          let filesBeingAnalyzed = new Set();
+          let filesBeingAnalyzed = new Set<fs.PathLike>();
 
           result.on('error', (err) => {
             return reject(err);
