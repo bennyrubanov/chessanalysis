@@ -1,4 +1,4 @@
-import { Chess, Piece, PrettyMove } from '../../cjsmin/src/chess';
+import { Chess, Piece, PrettyMove } from '../cjsmin/src/chess';
 import { Metric } from './metric';
 
 // calculates how many games in the dataset

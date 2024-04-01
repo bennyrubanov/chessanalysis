@@ -1,4 +1,4 @@
-import { Piece, PrettyMove } from '../../cjsmin/src/chess';
+import { Piece, PrettyMove } from '../cjsmin/src/chess';
 
 export interface Metric {
   processGame(

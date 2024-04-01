@@ -1,9 +1,4 @@
-import {
-  Pawns,
-  Piece,
-  PrettyMove,
-  PromotablePiece,
-} from '../../cjsmin/src/chess';
+import { Pawns, Piece, PrettyMove, PromotablePiece } from '../cjsmin/src/chess';
 import { Metric } from './metric';
 
 export class PromotionMetric implements Metric {

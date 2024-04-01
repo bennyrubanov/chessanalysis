@@ -27,6 +27,7 @@
     "start": "tsc --build && node dist/src/index.js",
     "test": "tsc --build && jest ./dist",
     "scratch": "tsc --build && node dist/src/scratch.js",
-    "run-zst-decompressor": "tsc --build && node dist/src/zst_decompressor.js"
+    "run-zst-decompressor": "tsc --build && node dist/src/zst_decompressor.js",
+    "rq": "tsc --build && node dist/src/queue.js"
   }
 }

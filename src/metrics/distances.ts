@@ -1,13 +1,13 @@
-import { Piece, PrettyMove, UASymbol } from '../../cjsmin/src/chess';
+import { Piece, PrettyMove, UASymbol } from '../cjsmin/src/chess';
 import { UAPMap } from '../types';
 import { createUAPMap } from '../utils';
 import { Metric } from './metric';
 
 export class MoveDistanceMetric implements Metric {
-  distanceMap: UAPMap<{ 
+  distanceMap: UAPMap<{
     distance: number;
   }>;
-  avgDistanceMap: UAPMap<{ 
+  avgDistanceMap: UAPMap<{
     avgDistance: number;
   }>;
   pieceWithHighestAvg: UASymbol;
@@ -24,7 +24,7 @@ export class MoveDistanceMetric implements Metric {
   gameCollectiveDistance: {
     distance: number;
     linkArray: string[];
-  }
+  };
   gamesProcessed: number;
 
   constructor() {
@@ -84,11 +84,10 @@ export class MoveDistanceMetric implements Metric {
       gameMaxCollectiveDistance: this.gameCollectiveDistance,
       totalDistancesByPiece: this.distanceMap,
       avgDistancesByPiece: this.avgDistanceMap,
-    }
+    };
   }
 
   logResults(): void {
-
     // distance facts
     console.log('DISTANCE FACTS:');
     console.log(
@@ -99,7 +98,8 @@ export class MoveDistanceMetric implements Metric {
     );
 
     console.log(`Piece that moved the furthest: ${this.pieceMaxes.uasArray}`);
-    console.log(`Game in which that/those piece(s) (${this.pieceMaxes.uasArray}) moved the furthest: ${this.pieceMaxes.linkArray}`
+    console.log(
+      `Game in which that/those piece(s) (${this.pieceMaxes.uasArray}) moved the furthest: ${this.pieceMaxes.linkArray}`
     );
     console.log(
       `Distance that/those piece(s) moved in the game: ${this.pieceMaxes.distance}`
@@ -155,9 +155,10 @@ export class MoveDistanceMetric implements Metric {
       }
     }
 
-    const gameLink = metadata.find((item) => item.startsWith('[Site "'))
-    ?.replace('[Site "', '')
-    ?.replace('"]', '');
+    const gameLink = metadata
+      .find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', '');
     let singleGameCollective = 0;
 
     // add the single game aggregates to the state object
@@ -177,13 +178,10 @@ export class MoveDistanceMetric implements Metric {
     }
 
     // find the game in which the most collective distance was moved
-    if (
-      singleGameCollective > this.gameCollectiveDistance.distance
-    ) {
+    if (singleGameCollective > this.gameCollectiveDistance.distance) {
       this.gameCollectiveDistance.distance = singleGameCollective;
       this.gameCollectiveDistance.linkArray = [gameLink];
-    } else if (singleGameCollective === this.gameCollectiveDistance.distance
-    ) {
+    } else if (singleGameCollective === this.gameCollectiveDistance.distance) {
       this.gameCollectiveDistance.linkArray.push(gameLink);
     }
 

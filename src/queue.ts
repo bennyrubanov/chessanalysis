@@ -8,9 +8,24 @@ function launchQueueServer() {
   // Create a write to result.json queue with a concurrency of 1
   // Possibly the simplest fix would be to run this as a separate process, then we can enforce messages sent to this queue are processed in order
   const queue = asyncLib.queue<any>((task, callback) => {
-    console.log('received task', task.analysisKey);
-    // return new Promise<void>((resolve, reject) => {
-    const { results, analysisKey } = task;
+    const { analysisKey, results } = task;
+    console.log('received task', analysisKey);
+
+    // read the results from aggregate results.json
+    let existingResults = {};
+    if (fs.existsSync(RESULTS_PATH)) {
+      const fileContent = fs.readFileSync(RESULTS_PATH, 'utf8');
+      if (fileContent !== '') {
+        existingResults = JSON.parse(fileContent);
+      }
+    }
+
+    // TODO: Probably we need to read in the existing results in the queue server and merge them, as when there are multiple items in the queue
+    // this is going to be out of date
+    existingResults[analysisKey] = {
+      'Number of games analyzed': 0,
+    };
+
     try {
       fs.writeFileSync(RESULTS_PATH, JSON.stringify(results, null, 2));
       console.log(
@@ -19,7 +34,6 @@ function launchQueueServer() {
     } catch (err) {
       console.error('Error writing to results.json', err);
     }
-    // });
   }, 1);
 
   queue.drain(function () {
