@@ -40,8 +40,8 @@ export async function main(path: string) {
 
   // Send the task to the queue server
   client.write(JSON.stringify({ results: fileResults, analysisKey }));
-
   console.log('results sent');
+  client.end();
 }
 
 /**
@@ -89,5 +89,5 @@ async function gameIterator(path: string) {
 
 // for use with zst_decompresser.js
 if (require.main === module) {
-  main(process.argv[2]).then((results) => {});
+  main(process.argv[2]);
 }
