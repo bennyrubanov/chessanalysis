@@ -21,7 +21,7 @@ const rl = readline.createInterface({
 const promptForSizeLimit = () => {
   return new Promise<void>((resolve) => {
     rl.question('Enter the SIZE_LIMIT in MB (default is 10MB): ', (input) => {
-      const inputSizeMB = parseInt(input, 10);
+      const inputSizeMB = Number(input);
       if (!isNaN(inputSizeMB) && inputSizeMB > 0) {
         SIZE_LIMIT = inputSizeMB * 1024 * 1024; // Convert MB to bytes
         console.log(`Using SIZE_LIMIT of ${SIZE_LIMIT} bytes.`);
@@ -43,7 +43,7 @@ const promptForConcurrentFilesLimit = () => {
     rl.question(
       'Enter the number of files to analyze concurrently (default is 10): ',
       (input) => {
-        const inputLimit = parseInt(input, 10);
+        const inputLimit = Number(input);
         if (!isNaN(inputLimit) && inputLimit > 0) {
           concurrentFilesLimit = inputLimit;
           console.log(
@@ -164,8 +164,6 @@ const decompressAndAnalyze = async (file, start = 0) => {
         `Starting decompression of chunk number ${total_chunk_counter}.`
       );
 
-      let startTime = Date.now();
-
       // https://www.npmjs.com/package/node-zstandard#decompressionstreamfromfile-inputfile-callback
       zstd.decompressionStreamFromFile(
         `${compressedFilePath}/${file}`,
@@ -187,22 +185,20 @@ const decompressAndAnalyze = async (file, start = 0) => {
           result.on('data', async (data) => {
             decompressedStream.write(data);
 
-            const duration = Date.now() - startTime;
-            const durationFormatted = formatDuration(duration);
             fileLength += data.length;
             batch_files_total_decompressed_size += data.length;
             these_chunks_counter++;
 
             // Check if the file size exceeds the limit, if so we need to make a new file
             if (getFileSize(newFilePath) >= SIZE_LIMIT) {
-              console.log(
-                `Finished decompression of data starting from byte ${start} and ending on byte ${
-                  start + fileLength
-                } of ${file} in ${durationFormatted}`
-              );
-              console.log(
-                `Total number of chunks decompressed so far: ${total_chunk_counter}`
-              );
+              // console.log(
+              //   `Finished decompression of data starting from byte ${start} and ending on byte ${
+              //     start + fileLength
+              //   } of ${file} in ${durationFormatted}`
+              // );
+              // console.log(
+              //   `Total number of chunks decompressed so far: ${total_chunk_counter}`
+              // );
 
               // Increment the file counter
               file_counter++;
@@ -212,7 +208,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
               filesProduced.add(newFilePath);
 
               // Switch to a new file
-              console.log(`Creating file number ${file_counter}`);
+              // console.log(`Creating file number ${file_counter}`);
               decompressedStream = fs.createWriteStream(newFilePath, {
                 flags: 'a',
               });
@@ -222,11 +218,11 @@ const decompressAndAnalyze = async (file, start = 0) => {
               total_chunk_counter += these_chunks_counter;
               these_chunks_counter = 0;
 
-              console.log(
-                `${these_chunks_counter} chunks decompressed with decompressed size ${
-                  fileLength / 1024 / 1024
-                } MB`
-              );
+              // console.log(
+              //   `${these_chunks_counter} chunks decompressed with decompressed size ${
+              //     fileLength / 1024 / 1024
+              //   } MB`
+              // );
             }
 
             // Stop decompression if the size of the combined decompressed files exceeds the decompressed total combined files size limit
@@ -243,6 +239,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
           result.on('end', async () => {
             // When all data is decompressed, run the analysis on the produced files concurrently
             for (const file of Array.from(filesProduced).slice(0, 10)) {
+              // TODO: This is debug code, I believe
               // TODO: this won't work out of the box for a large number of files as there is no max concurrency. But the sample only produces 4 decompressed files
               // I'm slicing to test this with a smaller number of files
 
@@ -276,7 +273,9 @@ const decompressAndAnalyze = async (file, start = 0) => {
 
 // Function to process all files
 const processFiles = async (files: string[]) => {
-  console.log(`Initiating decompression and analysis of files: ${files}...`);
+  console.log(
+    `Initiating decompression and analysis of ${files.length} files: ${files}...`
+  );
   console.time('Final Total Compressed File Analysis Execution Time');
   for (const file of files) {
     try {
@@ -310,6 +309,7 @@ if (require.main === module) {
   promptForSizeLimit().then(() => {
     promptForConcurrentFilesLimit().then(() => {
       rl.close(); // Close the readline interface after all prompts
+      // const files = ['lichess_db_standard_rated_2013-01.pgn.zst' /*...*/];
       const files = ['lichess_db_standard_rated_2013-01.pgn.zst' /*...*/];
       processFiles(files);
     });
