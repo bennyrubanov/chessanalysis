@@ -51,7 +51,7 @@ export async function* gameChunks(
       // Empty line, do nothing
     } else {
       // Unknown line, ignore the current game
-      console.log(`Unknown line: ${line}, game will be ignored.`);
+      // console.log(`Unknown line: ${line}, game will be ignored.`);
       ignoreGame = true;
       // Clear the metadata for the current game so that the game is not yielded
       metadata = [];

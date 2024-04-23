@@ -1,6 +1,6 @@
-import * as fs from 'fs';
+import { randomUUID } from 'crypto';
 import * as net from 'net';
-import { Chess } from '../cjsmin/src/chess';
+import { Chess } from './cjsmin/chess';
 import { gameChunks } from './fileReader';
 import {
   KDRatioMetric,
@@ -15,7 +15,6 @@ import {
   PieceLevelMoveInfoMetric,
 } from './metrics/moves';
 import { PromotionMetric } from './metrics/promotions';
-import { RESULTS_PATH } from './queue';
 
 /**
  *
@@ -23,8 +22,9 @@ import { RESULTS_PATH } from './queue';
  * @returns
  */
 export async function main(path: string) {
+  // run analysis for the given path
   console.time('Total Execution Time');
-  await gameIterator(path, { 'Number of games analyzed': 0 });
+  const fileResults = await gameIterator(path);
   console.timeEnd('Total Execution Time');
 
   const now = new Date();
@@ -32,39 +32,23 @@ export async function main(path: string) {
 
   const analysisKey = `analysis_${now
     .toLocaleString()
-    .replace(/\/|,|:|\s/g, '_')}_${milliseconds}`;
-
-  let existingResults = {};
-  if (fs.existsSync(RESULTS_PATH)) {
-    const fileContent = fs.readFileSync(RESULTS_PATH, 'utf8');
-    if (fileContent !== '') {
-      existingResults = JSON.parse(fileContent);
-    }
-  }
-
-  console.log('sending results');
-
-  // TODO: Probably we need to read in the existing results in the queue server and merge them, as when there are multiple items in the queue
-  // this is going to be out of date
-  existingResults[analysisKey] = {
-    'Number of games analyzed': 0,
-  };
+    .replace(/\/|,|:|\s/g, '_')}_${milliseconds}_${randomUUID()}`;
 
   const client = net.createConnection({ port: 8000 });
 
-  console.log('connected to queue server');
+  console.log('connected to queue server, sending results');
 
   // Send the task to the queue server
-  client.write(JSON.stringify({ results: existingResults, analysisKey }));
-
+  client.write(JSON.stringify({ results: fileResults, analysisKey }));
   console.log('results sent');
+  client.end();
 }
 
 /**
  * Metric functions will ingest a single game at a time
  * @param metricFunctions
  */
-async function gameIterator(path, results) {
+async function gameIterator(path: string) {
   const cjsmin = new Chess();
 
   const gamesGenerator = gameChunks(path);
@@ -93,13 +77,17 @@ async function gameIterator(path, results) {
     }
   }
 
-  results['Number of games analyzed'] = gameCounter;
+  const existingResults = {};
+
+  existingResults['Number of games analyzed'] = gameCounter;
   for (const metric of metrics) {
-    results[metric.constructor.name] = metric.aggregate();
+    existingResults[metric.constructor.name] = metric.aggregate();
   }
+
+  return existingResults;
 }
 
 // for use with zst_decompresser.js
 if (require.main === module) {
-  main(process.argv[2]).then((results) => {});
+  main(process.argv[2]);
 }

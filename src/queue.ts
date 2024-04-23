@@ -5,25 +5,34 @@ import * as net from 'net';
 export const RESULTS_PATH = `${__dirname}/results.json`;
 
 function launchQueueServer() {
+  // ensure results.json exists
+  if (!fs.existsSync(RESULTS_PATH)) {
+    fs.writeFileSync(RESULTS_PATH, '{}');
+  }
+
   // Create a write to result.json queue with a concurrency of 1
   // Possibly the simplest fix would be to run this as a separate process, then we can enforce messages sent to this queue are processed in order
   const queue = asyncLib.queue<any>((task, callback) => {
-    console.log('received task', task.analysisKey);
-    // return new Promise<void>((resolve, reject) => {
-    const { results, analysisKey } = task;
+    const { analysisKey, results } = task;
+    console.log('received task', analysisKey);
+
+    // read the results from aggregate results.json
+    const fileContent = fs.readFileSync(RESULTS_PATH, 'utf8');
+    const existingResults = JSON.parse(fileContent);
+    existingResults[analysisKey] = results;
+
     try {
-      fs.writeFileSync(RESULTS_PATH, JSON.stringify(results, null, 2));
-      console.log(
-        `Analysis "${analysisKey}" has been written to ${RESULTS_PATH}`
-      );
+      fs.writeFileSync(RESULTS_PATH, JSON.stringify(existingResults, null, 2));
+      console.log(`"${analysisKey}" written to ${RESULTS_PATH}`);
+      callback();
     } catch (err) {
       console.error('Error writing to results.json', err);
+      callback(err);
     }
-    // });
   }, 1);
 
   queue.drain(function () {
-    console.log('all items have been processed');
+    console.log('no more tasks to process');
   });
 
   // this event listener receives tasks from the parallel processes

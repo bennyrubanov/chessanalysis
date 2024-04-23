@@ -1,4 +1,4 @@
-import { Piece, PrettyMove, UASymbol } from '../../cjsmin/src/chess';
+import { Piece, PrettyMove, UASymbol } from '../cjsmin/chess';
 import { UAPMap } from '../types';
 import { createUAPMap } from '../utils';
 import { Metric } from './metric';
@@ -22,21 +22,27 @@ export class GameWithMostMovesMetric implements Metric {
   ) {
     if (game.length > this.numMoves) {
       this.numMoves = game.length;
-      this.link = [metadata.find((item) => item.startsWith('[Site "'))
-      ?.replace('[Site "', '')
-      ?.replace('"]', '')];
+      this.link = [
+        metadata
+          .find((item) => item.startsWith('[Site "'))
+          ?.replace('[Site "', '')
+          ?.replace('"]', ''),
+      ];
     } else if (game.length === this.numMoves) {
-      this.link.push(metadata.find((item) => item.startsWith('[Site "'))
-      ?.replace('[Site "', '')
-      ?.replace('"]', ''));
-    } 
+      this.link.push(
+        metadata
+          .find((item) => item.startsWith('[Site "'))
+          ?.replace('[Site "', '')
+          ?.replace('"]', '')
+      );
+    }
   }
 
   aggregate() {
     return {
       gameWithMostMoves: this.link,
       gameWithMostMovesNumMoves: this.numMoves,
-    }
+    };
   }
 
   logResults(): void {
@@ -68,7 +74,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
     blackQueen: number;
     whiteKing: number;
     whiteQueen: number;
-  }
+  };
 
   constructor() {
     this.clear();
@@ -95,21 +101,29 @@ export class PieceLevelMoveInfoMetric implements Metric {
     console.log('PIECE LEVEL MOVE INFO FACTS:');
     console.log('The total number of moves by piece in the set of games:');
     console.table(this.totalMovesByPiece);
-    
+
     console.log('The average number of moves by piece in the set of games:');
     console.table(this.averagesMap);
-    
+
     console.log(`The piece(s) with the highest average number moves and the number of moves: 
       ${this.pieceHighestAverageMoves}, ${this.highestAverageMoves}`);
-    console.log(`The piece with the most moves in a single game: ${this.uasWithMostMoves}`);
-    console.log(`The number of most moves that piece made in a single game: ${this.uasSingleGameMaxMoves}`);
-    console.log(`The game that piece made that many moves in: ${this.gamesWithUasMostMoves}`);
+    console.log(
+      `The piece with the most moves in a single game: ${this.uasWithMostMoves}`
+    );
+    console.log(
+      `The number of most moves that piece made in a single game: ${this.uasSingleGameMaxMoves}`
+    );
+    console.log(
+      `The game that piece made that many moves in: ${this.gamesWithUasMostMoves}`
+    );
     console.log('\n');
 
-    console.log(`The number of games with no castling: ${this.gamesWithNoCastling}`);
+    console.log(
+      `The number of games with no castling: ${this.gamesWithNoCastling}`
+    );
     console.log('Number of queen and king side castlings:');
     console.table(this.castlingCounts);
-    
+
     console.log(
       '=============================================================='
     );
@@ -136,7 +150,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
         if (move.color === 'w') {
           movingRook = movingRook.toUpperCase();
         }
-        
+
         gameCastling++; // count that the game has castling
 
         // update castling counts depending on black/white queen/king side castling
@@ -158,9 +172,10 @@ export class PieceLevelMoveInfoMetric implements Metric {
       }
     }
 
-    const gameLink = metadata.find((item) => item.startsWith('[Site "'))
-    ?.replace('[Site "', '')
-    ?.replace('"]', '');
+    const gameLink = metadata
+      .find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', '');
 
     // Calculate single game maxes & add to global totals
     for (const uas of Object.keys(currentGameStats)) {
@@ -178,7 +193,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
       }
     }
 
-    if (gameCastling = 0) {
+    if ((gameCastling = 0)) {
       this.gamesWithNoCastling++;
     }
 
@@ -199,7 +214,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
         this.highestAverageMoves = averagesMap[uas].avgMoves;
         this.pieceHighestAverageMoves = [uas as UASymbol];
       } else if (averagesMap[uas].avgMoves === this.highestAverageMoves) {
-          this.pieceHighestAverageMoves.push(uas as UASymbol); // if multiple pieces with same highestAverageMoves
+        this.pieceHighestAverageMoves.push(uas as UASymbol); // if multiple pieces with same highestAverageMoves
       }
     }
 
@@ -216,7 +231,7 @@ export class PieceLevelMoveInfoMetric implements Metric {
       gamesWithNoCastling: this.gamesWithNoCastling,
       queenKingCastlingCounts: this.castlingCounts,
       averagesMap,
-    }
+    };
   }
 }
 
@@ -327,6 +342,8 @@ export class MiscMoveFactMetric implements Metric {
 
   logResults(): void {
     console.log(`Number of enPassant moves: ${this.enPassantMoves}`);
-    console.log(`Number of pieces knights hopped over: ${this.totalNumKnightHops}`)
+    console.log(
+      `Number of pieces knights hopped over: ${this.totalNumKnightHops}`
+    );
   }
 }

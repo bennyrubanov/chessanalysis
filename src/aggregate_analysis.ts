@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { UASymbol } from '../cjsmin/src/chess';
+import { UASymbol } from './cjsmin/chess';
 
 /**
  *

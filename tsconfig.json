@@ -1,5 +1,5 @@
 {
-  "include": ["src", "cjsmin", "cdv", "tests"],
+  "include": ["src", "src/cjsmin", "cdv", "tests"],
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,

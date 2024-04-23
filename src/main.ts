@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as lockfile from 'proper-lockfile';
-import { Chess } from '../cjsmin/src/chess';
+import { Chess } from './cjsmin/chess';
 import { gameChunks } from './fileReader';
 import {
   KDRatioMetric,

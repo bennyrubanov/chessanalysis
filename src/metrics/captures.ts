@@ -1,10 +1,4 @@
-import { max } from 'd3';
-import {
-  ALL_SQUARES,
-  Piece,
-  PrettyMove,
-  UASymbol,
-} from '../../cjsmin/src/chess';
+import { ALL_SQUARES, Piece, PrettyMove, UASymbol } from '../cjsmin/chess';
 import { BoardAndPieceMap, UAPMap } from '../types';
 import { createBoardAndPieceMap, createBoardMap, createUAPMap } from '../utils';
 import { Metric } from './metric';
@@ -15,7 +9,7 @@ export class KillStreakMetric implements Metric {
       killStreaks: number;
     };
   };
-  maxKillStreakGame: string[]
+  maxKillStreakGame: string[];
   maxKillStreak: number;
   maxKillStreakPiece: UASymbol[];
 
@@ -39,14 +33,14 @@ export class KillStreakMetric implements Metric {
       maxKillStreak: this.maxKillStreak,
       maxKillStreakPiece: this.maxKillStreakPiece,
       maxKillStreakGame: this.maxKillStreakGame,
-    }
+    };
   }
 
   logResults(): void {
     console.log('Kill streak map', this.killStreakMap);
     console.log(`Max Kill Streak: ${this.maxKillStreak}`);
     console.log(`Max Kill Streak Piece: ${this.maxKillStreakPiece}`);
-    console.log(`Game(s) with max kill streak(s): ${this.maxKillStreakGame}`)
+    console.log(`Game(s) with max kill streak(s): ${this.maxKillStreakGame}`);
   }
 
   getMaxKillStreak(
@@ -92,23 +86,17 @@ export class KillStreakMetric implements Metric {
         streakLength
       );
       this.checkMaxes(streakPiece, gameLink, streakLength);
-
     }
   }
-  
-  checkMaxes(
-    streakPiece: UASymbol,
-    gameLink: string,
-    streakLength: number,
-  ) {
+
+  checkMaxes(streakPiece: UASymbol, gameLink: string, streakLength: number) {
     // update maxes
     if (streakLength > this.maxKillStreak) {
       this.maxKillStreak = streakLength;
       this.maxKillStreakPiece = [streakPiece as UASymbol];
       this.maxKillStreakGame = [gameLink];
-    }
-    else if (streakLength === this.maxKillStreak) {
-      this.maxKillStreakPiece.push(streakPiece as UASymbol)
+    } else if (streakLength === this.maxKillStreak) {
+      this.maxKillStreakPiece.push(streakPiece as UASymbol);
       this.maxKillStreakGame.push(gameLink);
     }
   }
@@ -117,9 +105,10 @@ export class KillStreakMetric implements Metric {
     game: { move: PrettyMove; board: Piece[] }[],
     metadata?: string[]
   ) {
-    const gameLink = metadata.find((item) => item.startsWith('[Site "'))
-    ?.replace('[Site "', '')
-    ?.replace('"]', '');
+    const gameLink = metadata
+      .find((item) => item.startsWith('[Site "'))
+      ?.replace('[Site "', '')
+      ?.replace('"]', '');
 
     this.getMaxKillStreak(game, 0, gameLink);
     this.getMaxKillStreak(game, 1, gameLink);
@@ -155,18 +144,24 @@ export class KDRatioMetric implements Metric {
     console.log(
       `Piece with the highest KD ratio: ${this.pieceWithHighestKDRatio}`
     );
-    console.log('Kills, deaths, and revenge kills  for each unambiguous piece:'),
+    console.log(
+      'Kills, deaths, and revenge kills  for each unambiguous piece:'
+    ),
       console.table(this.KDMap);
     console.log(
       'Kill Death Ratios for each unambiguous piece: ' +
         JSON.stringify(this.kdRatios, null, 2)
     );
-    console.log('\n')
-    console.log("KDRs TAKING INTO ACCOUNT PIECE VALUES (Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points): ")
+    console.log('\n');
+    console.log(
+      'KDRs TAKING INTO ACCOUNT PIECE VALUES (Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points): '
+    );
     console.log(
       `Piece with the highest KD ratio (taking into account piece values): ${this.pieceWithHighestKDRatioValues}`
     );
-    console.log('Kills, Deaths, and for each unambiguous piece (taking into account piece values):'),
+    console.log(
+      'Kills, Deaths, and for each unambiguous piece (taking into account piece values):'
+    ),
       console.table(this.KDValuesMap);
     console.log(
       'Kill Death Ratios for each unambiguous piece (taking into account piece values): ' +
@@ -228,7 +223,6 @@ export class KDRatioMetric implements Metric {
     this.kdRatiosValues = KDRatiosValues;
     this.pieceWithHighestKDRatioValues = pieceWithHighestKDRatioValues;
 
-
     return {
       maxKDRatio,
       pieceWithHighestKDRatio,
@@ -280,7 +274,7 @@ export class KDRatioMetric implements Metric {
           this.KDValuesMap[move.uas].valueKills += 5;
         } else if (move.capture.type === 'q') {
           this.KDValuesMap[move.uas].valueKills += 9;
-        } 
+        }
 
         // identify a revenge kill if the previous move and the current move contained a capture, and the square moved to in the previous move is the same as the square moved to in this move
         if (previousMove.capture && move.to === previousMove.to) {
@@ -347,21 +341,18 @@ export class MateAndAssistMetric implements Metric {
   aggregate() {
     return {
       mateAndAssistMap: this.mateAndAssistMap,
-      matedCounts: this.matedCounts
+      matedCounts: this.matedCounts,
     };
   }
 
-  logResults() {
-    
-  }
+  logResults() {}
 
   // One edge case currently unaccounted for is when pieces "share" a mate, or check. This can be at most 2 due to discovery
   // checks (currently we disregard this by just saying the last piece to move is the "mating piece")
   processGame(
     game: { move: PrettyMove; board: Piece[] }[],
     metadata?: string[]
-    ) {
-
+  ) {
     // Take no action if the game didn't end in checkmate
     if (!game[game.length - 1].move.originalString.includes('#')) {
       return;
@@ -372,11 +363,14 @@ export class MateAndAssistMetric implements Metric {
     // increment the mate count of the mating piece
     this.mateAndAssistMap[lastMove.uas].mates++;
     if (lastMove.uas === 'k' || lastMove.uas === 'K') {
-      console.log(`code identified a king as having a mate (caused by discovered check). move: ${lastMove.originalString}`)
-      const gameLink = metadata.find((item) => item.startsWith('[Site "'))
-      ?.replace('[Site "', '')
-      ?.replace('"]', '');
-      console.log(`game: ${gameLink}`)
+      console.log(
+        `code identified a king as having a mate (caused by discovered check). move: ${lastMove.originalString}`
+      );
+      const gameLink = metadata
+        .find((item) => item.startsWith('[Site "'))
+        ?.replace('[Site "', '')
+        ?.replace('"]', '');
+      console.log(`game: ${gameLink}`);
     }
 
     // increment the mated (death) count of the mated king

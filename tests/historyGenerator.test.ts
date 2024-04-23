@@ -1,4 +1,4 @@
-import { Chess } from '../cjsmin/src/chess';
+import { Chess } from '../src/cjsmin/chess';
 
 /**
  * @beta - this test was generated partially with chatGPT so might be an invalid PGN
