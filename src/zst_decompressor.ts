@@ -255,7 +255,7 @@ const decompressAndAnalyze = async (file, start = 0) => {
               // When all analyses are done, delete the files from the set
               try {
                 console.log('Awaiting all analyses to complete...');
-                await Promise.all(analysisPromises);
+                await Promise.allSettled(analysisPromises);
                 console.log('All analyses completed');
                 for (const file of group) {
                   if (fs.existsSync(file)) {
