@@ -1,6 +1,5 @@
 import { readFileSync } from "fs";
 import { UASymbol } from "./cjsmin/chess";
-import { PieceLevelMoveInfoMetric } from "./metrics";
 
 /**
  *
