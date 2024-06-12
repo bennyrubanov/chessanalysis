@@ -1,7 +1,7 @@
-import { ALL_SQUARES, Piece, PrettyMove, UASymbol } from '../cjsmin/chess';
-import { BoardAndPieceMap, UAPMap } from '../types';
-import { createBoardAndPieceMap, createBoardMap, createUAPMap } from '../utils';
-import { Metric } from './metric';
+import { ALL_SQUARES, Piece, PrettyMove, UASymbol } from "../cjsmin/chess";
+import { BoardAndPieceMap, UAPMap } from "../types";
+import { createBoardAndPieceMap, createBoardMap, createUAPMap } from "../utils";
+import { Metric } from "./metric";
 
 export class KillStreakMetric implements Metric {
   killStreakMap: {
@@ -37,7 +37,7 @@ export class KillStreakMetric implements Metric {
   }
 
   logResults(): void {
-    console.log('Kill streak map', this.killStreakMap);
+    console.log("Kill streak map", this.killStreakMap);
     console.log(`Max Kill Streak: ${this.maxKillStreak}`);
     console.log(`Max Kill Streak Piece: ${this.maxKillStreakPiece}`);
     console.log(`Game(s) with max kill streak(s): ${this.maxKillStreakGame}`);
@@ -55,7 +55,7 @@ export class KillStreakMetric implements Metric {
     while (i < game.length) {
       const move = game[i].move;
       // if the move is a capture or a mate, it counts towards kill streaks
-      if (move.capture || move.originalString.includes('#')) {
+      if (move.capture || move.originalString.includes("#")) {
         // streak has been reset because new piece captures
         if (streakLength === 0) {
           streakPiece = move.uas;
@@ -107,8 +107,8 @@ export class KillStreakMetric implements Metric {
   ) {
     const gameLink = metadata
       .find((item) => item.startsWith('[Site "'))
-      ?.replace('[Site "', '')
-      ?.replace('"]', '');
+      ?.replace('[Site "', "")
+      ?.replace('"]', "");
 
     this.getMaxKillStreak(game, 0, gameLink);
     this.getMaxKillStreak(game, 1, gameLink);
@@ -140,31 +140,31 @@ export class KDRatioMetric implements Metric {
 
   logResults(): void {
     // KDR facts
-    console.log('KDR FACTS (INCLUDING CHECKMATES AS KILLS):');
+    console.log("KDR FACTS (INCLUDING CHECKMATES AS KILLS):");
     console.log(
       `Piece with the highest KD ratio: ${this.pieceWithHighestKDRatio}`
     );
     console.log(
-      'Kills, deaths, and revenge kills  for each unambiguous piece:'
+      "Kills, deaths, and revenge kills  for each unambiguous piece:"
     ),
       console.table(this.KDMap);
     console.log(
-      'Kill Death Ratios for each unambiguous piece: ' +
+      "Kill Death Ratios for each unambiguous piece: " +
         JSON.stringify(this.kdRatios, null, 2)
     );
-    console.log('\n');
+    console.log("\n");
     console.log(
-      'KDRs TAKING INTO ACCOUNT PIECE VALUES (Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points): '
+      "KDRs TAKING INTO ACCOUNT PIECE VALUES (Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points): "
     );
     console.log(
       `Piece with the highest KD ratio (taking into account piece values): ${this.pieceWithHighestKDRatioValues}`
     );
     console.log(
-      'Kills, Deaths, and for each unambiguous piece (taking into account piece values):'
+      "Kills, Deaths, and for each unambiguous piece (taking into account piece values):"
     ),
       console.table(this.KDValuesMap);
     console.log(
-      'Kill Death Ratios for each unambiguous piece (taking into account piece values): ' +
+      "Kill Death Ratios for each unambiguous piece (taking into account piece values): " +
         JSON.stringify(this.kdRatiosValues, null, 2)
     );
   }
@@ -193,7 +193,7 @@ export class KDRatioMetric implements Metric {
 
     // find the piece with the highest KD ratio
     let maxKDRatio = 0;
-    let pieceWithHighestKDRatio = null;
+    let pieceWithHighestKDRatio: UASymbol[] = [];
 
     for (const uas of Object.keys(KDRatios)) {
       if (KDRatios[uas] > maxKDRatio) {
@@ -209,7 +209,7 @@ export class KDRatioMetric implements Metric {
 
     // repeat for the KDRatios taking into account piece values
     let maxKDRatioValues = 0;
-    let pieceWithHighestKDRatioValues = null;
+    let pieceWithHighestKDRatioValues: UASymbol[] = [];
 
     for (const uas of Object.keys(KDRatiosValues)) {
       if (KDRatiosValues[uas] > maxKDRatioValues) {
@@ -264,15 +264,15 @@ export class KDRatioMetric implements Metric {
         this.KDValuesMap[move.capture.uas].deaths++;
 
         // identify kill values based on captured piece type
-        if (move.capture.type === 'p') {
+        if (move.capture.type === "p") {
           this.KDValuesMap[move.uas].valueKills++;
-        } else if (move.capture.type === 'n' || move.capture.type === 'b') {
+        } else if (move.capture.type === "n" || move.capture.type === "b") {
           this.KDValuesMap[move.uas].valueKills += 3;
-        } else if (move.capture.type === 'k') {
+        } else if (move.capture.type === "k") {
           this.KDValuesMap[move.uas].valueKills += 4; // king's fighting value valued around 4 points in https://en.wikipedia.org/wiki/Chess_piece_relative_value
-        } else if (move.capture.type === 'r') {
+        } else if (move.capture.type === "r") {
           this.KDValuesMap[move.uas].valueKills += 5;
-        } else if (move.capture.type === 'q') {
+        } else if (move.capture.type === "q") {
           this.KDValuesMap[move.uas].valueKills += 9;
         }
 
@@ -286,13 +286,13 @@ export class KDRatioMetric implements Metric {
 
     const lastMove = game[game.length - 1].move;
     // Check if the game is in checkmate after the last move
-    if (lastMove.originalString.includes('#')) {
+    if (lastMove.originalString.includes("#")) {
       const unambigMatingPiece = lastMove.uas;
       this.KDMap[unambigMatingPiece].kills++;
       this.KDValuesMap[unambigMatingPiece].valueKills++; // king kill counts as 1 point
 
       // only kings can get mated, and we know whose move it is
-      const matedKing = lastMove.color === 'w' ? 'k' : 'K';
+      const matedKing = lastMove.color === "w" ? "k" : "K";
       this.KDMap[matedKing].deaths++;
       this.KDValuesMap[matedKing].deaths++;
 
@@ -354,7 +354,7 @@ export class MateAndAssistMetric implements Metric {
     metadata?: string[]
   ) {
     // Take no action if the game didn't end in checkmate
-    if (!game[game.length - 1].move.originalString.includes('#')) {
+    if (!game[game.length - 1].move.originalString.includes("#")) {
       return;
     }
 
@@ -362,19 +362,19 @@ export class MateAndAssistMetric implements Metric {
 
     // increment the mate count of the mating piece
     this.mateAndAssistMap[lastMove.uas].mates++;
-    if (lastMove.uas === 'k' || lastMove.uas === 'K') {
+    if (lastMove.uas === "k" || lastMove.uas === "K") {
       console.log(
         `code identified a king as having a mate (caused by discovered check). move: ${lastMove.originalString}`
       );
       const gameLink = metadata
         .find((item) => item.startsWith('[Site "'))
-        ?.replace('[Site "', '')
-        ?.replace('"]', '');
+        ?.replace('[Site "', "")
+        ?.replace('"]', "");
       console.log(`game: ${gameLink}`);
     }
 
     // increment the mated (death) count of the mated king
-    this.matedCounts[lastMove.color === 'w' ? 'k' : 'K']++;
+    this.matedCounts[lastMove.color === "w" ? "k" : "K"]++;
 
     // The fastest possible checkmate is in 2 moves, so we do have to check for out of bounds
 
@@ -382,7 +382,7 @@ export class MateAndAssistMetric implements Metric {
     if (game.length > 2) {
       const assistMove = game[game.length - 3].move;
       if (
-        assistMove.originalString.includes('+') &&
+        assistMove.originalString.includes("+") &&
         assistMove.uas !== lastMove.uas
       ) {
         this.mateAndAssistMap[assistMove.uas].assists++;
@@ -392,7 +392,7 @@ export class MateAndAssistMetric implements Metric {
       if (game.length > 4) {
         const hockeyAssistMove = game[game.length - 5].move;
         if (
-          hockeyAssistMove.originalString.includes('+') &&
+          hockeyAssistMove.originalString.includes("+") &&
           assistMove.uas !== lastMove.uas
         ) {
           this.mateAndAssistMap[hockeyAssistMove.uas].hockeyAssists++;
@@ -479,7 +479,7 @@ export class MatingSquareMetric implements Metric {
   // checks (currently we disregard this by just saying the last piece to move is the "mating piece")
   processGame(game: { move: PrettyMove; board: Piece[] }[]) {
     // Take no action if the game didn't end in checkmate
-    if (!game[game.length - 1].move.originalString.includes('#')) {
+    if (!game[game.length - 1].move.originalString.includes("#")) {
       return;
     }
 
