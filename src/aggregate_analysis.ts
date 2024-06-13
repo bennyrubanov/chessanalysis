@@ -73,6 +73,10 @@ async function aggregateResults(filePath: string) {
   let totalDistByPiece = {};
   let avgDistByPiece = {};
 
+  // objects to ensure the averages for distances/piece level moves are calculated correctly (doesn't include games with analysis errors)
+  let numGamesAnalyzedPieceLevelMoveInfoMetric = { numGames: 0 };
+  let numGamesAnalyzedMoveDistanceMetric = { numGames: 0 };
+
   // moves metrics
   let gameMostMoves = [];
   let gameMostMovesNumMoves = 0;
@@ -102,6 +106,34 @@ async function aggregateResults(filePath: string) {
     analysisCounter++;
 
     const thisAnalysisGamesAnalyzed = analysis['Number of games analyzed'];
+    // Calculate the number of games not skipped for PieceLevelMoveInfoMetric
+    for (const key in analysis['PieceLevelMoveInfoMetric'][
+      'totalMovesByPiece'
+    ]) {
+      const totalMoves =
+        analysis['PieceLevelMoveInfoMetric']['totalMovesByPiece'][key].numMoves;
+      const avgMoves =
+        analysis['PieceLevelMoveInfoMetric']['averagesMap'][key].avgMoves;
+      if (totalMoves > 0 && avgMoves > 0) {
+        numGamesAnalyzedPieceLevelMoveInfoMetric.numGames += Math.round(
+          totalMoves / avgMoves
+        );
+        break; // Exit the loop once a valid key is found
+      }
+    }
+    // Calculate the number of games not skipped for numGamesAnalyzedMoveDistanceMetric
+    for (const key in analysis['MoveDistanceMetric']['totalDistancesByPiece']) {
+      const totalMoves =
+        analysis['MoveDistanceMetric']['totalDistancesByPiece'][key].numMoves;
+      const avgMoves =
+        analysis['MoveDistanceMetric']['avgDistancesByPiece'][key].avgMoves;
+      if (totalMoves > 0 && avgMoves > 0) {
+        numGamesAnalyzedMoveDistanceMetric.numGames += Math.round(
+          totalMoves / avgMoves
+        );
+        break; // Exit the loop once a valid key is found
+      }
+    }
 
     // METADATA METRICS
     // ratings weighted average calculations
@@ -205,7 +237,8 @@ async function aggregateResults(filePath: string) {
       totalCollectiveDistGames,
       gameMaxCollectiveDist,
       totalDistByPiece,
-      avgDistByPiece
+      avgDistByPiece,
+      numGamesAnalyzedMoveDistanceMetric
     ));
 
     // moves metrics
@@ -279,7 +312,8 @@ async function aggregateResults(filePath: string) {
     averageNumMovesByPiece,
     totalGamesAnalyzed,
     highestAverageMoves,
-    pieceHighestAverageMoves
+    pieceHighestAverageMoves,
+    numGamesAnalyzedPieceLevelMoveInfoMetric
   ));
 
   // LOGS FOR THE ENTIRE SET
@@ -586,17 +620,26 @@ function avgNumMoves(
   averageNumMovesByPiece: {},
   totalGamesAnalyzed: number,
   highestAverageMoves: number,
-  pieceHighestAverageMoves: any[]
+  pieceHighestAverageMoves: any[],
+  numGamesAnalyzedPieceLevelMoveInfoMetric: { numGames: number }
 ) {
   for (const uas in totalMovesByPiece) {
     if (!averageNumMovesByPiece[uas]) {
-      averageNumMovesByPiece[uas] = {
-        avgNumMoves: totalMovesByPiece[uas].numMoves / totalGamesAnalyzed,
-      };
+      if (numGamesAnalyzedPieceLevelMoveInfoMetric.numGames > 0) {
+        averageNumMovesByPiece[uas] = {
+          avgNumMoves:
+            totalMovesByPiece[uas].numMoves /
+            numGamesAnalyzedPieceLevelMoveInfoMetric.numGames,
+        };
+      } else {
+        averageNumMovesByPiece[uas] = {
+          avgNumMoves: 0,
+        };
+      }
     }
   }
 
-  for (const uas in averageNumMovesByPiece) {
+  for (const uas in totalMovesByPiece) {
     if (averageNumMovesByPiece[uas].avgNumMoves > highestAverageMoves) {
       highestAverageMoves = averageNumMovesByPiece[uas].avgNumMoves;
       pieceHighestAverageMoves = [uas as UASymbol];
@@ -743,7 +786,8 @@ function aggregateDistanceMetrics(
   totalCollectiveDistGames: number,
   gameMaxCollectiveDist: { distance: number; games: any[] },
   totalDistByPiece: {},
-  avgDistByPiece: {}
+  avgDistByPiece: {},
+  numGamesAnalyzedMoveDistanceMetric: { numGames: number }
 ) {
   const thisMaxAvgDistance = analysis['MoveDistanceMetric']['maxAvgDistance'];
   const thisPieceMaxAvgDistance =
@@ -808,16 +852,22 @@ function aggregateDistanceMetrics(
     totalDistByPiece[uas].distance += thisTotalDistByPiece[uas].distance;
   }
 
-  const thisAvgDistByPiece =
-    analysis['MoveDistanceMetric']['avgDistancesByPiece'];
-  for (const uas in thisAvgDistByPiece) {
+  for (const uas in totalDistByPiece) {
     if (!avgDistByPiece[uas]) {
-      avgDistByPiece[uas] = {
-        avgDistance: thisAvgDistByPiece[uas].avgDistance,
-      };
+      if (numGamesAnalyzedMoveDistanceMetric.numGames > 0) {
+        avgDistByPiece[uas] = {
+          avgDistance:
+            totalDistByPiece[uas].distance /
+            numGamesAnalyzedMoveDistanceMetric.numGames,
+        };
+      } else {
+        avgDistByPiece[uas] = {
+          avgDistance: 0,
+        };
+      }
     }
-    avgDistByPiece[uas].avgDistance += thisAvgDistByPiece[uas].avgDistance;
   }
+
   return {
     maxAvgDistance,
     pieceMaxAvgDist,
