@@ -9,22 +9,22 @@
     "d3": "^7.8.5",
     "node-zstandard": "^1.2.4",
     "proper-lockfile": "^4.1.2",
-    "ts-node": "10.9.2"
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.0",
+    "@types/async": "3.2.24",
     "@types/d3": "^7.4.1",
     "@types/jest": "^29.5.5",
     "@types/lodash": "^4.14.199",
     "@types/node": "18.11.18",
     "@types/proper-lockfile": "4.1.4",
-    "@types/async": "3.2.24",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1"
   },
   "scripts": {
     "build": "tsc --build",
-    "start": "tsc --build && node dist/src/index.js",
+    "start": "tsc --build && node dist/src/index.js && ts-node src/zst_decompressor.ts",
     "test": "tsc --build && jest ./dist",
     "scratch": "tsc --build && node dist/src/scratch.js",
     "run-zst-decompressor": "tsc --build && node dist/src/zst_decompressor.js",
