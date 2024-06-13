@@ -1,5 +1,5 @@
-import { readFileSync } from "fs";
-import { UASymbol } from "./cjsmin/chess";
+import { readFileSync } from 'fs';
+import { UASymbol } from './cjsmin/chess';
 
 /**
  *
@@ -7,7 +7,7 @@ import { UASymbol } from "./cjsmin/chess";
  * @returns final analysis results of all files created and deleted in zst_decompressor.ts
  */
 async function aggregateResults(filePath: string) {
-  const data = JSON.parse(readFileSync(filePath, "utf-8"));
+  const data = JSON.parse(readFileSync(filePath, 'utf-8'));
 
   // instantiate final variables
   let totalGamesAnalyzed = 0;
@@ -105,15 +105,15 @@ async function aggregateResults(filePath: string) {
   for (const analysis of Object.values(data)) {
     analysisCounter++;
 
-    const thisAnalysisGamesAnalyzed = analysis["Number of games analyzed"];
+    const thisAnalysisGamesAnalyzed = analysis['Number of games analyzed'];
     // Calculate the number of games not skipped for PieceLevelMoveInfoMetric
-    for (const key in analysis["PieceLevelMoveInfoMetric"][
-      "totalMovesByPiece"
+    for (const key in analysis['PieceLevelMoveInfoMetric'][
+      'totalMovesByPiece'
     ]) {
       const totalMoves =
-        analysis["PieceLevelMoveInfoMetric"]["totalMovesByPiece"][key].numMoves;
+        analysis['PieceLevelMoveInfoMetric']['totalMovesByPiece'][key].numMoves;
       const avgMoves =
-        analysis["PieceLevelMoveInfoMetric"]["averagesMap"][key].avgMoves;
+        analysis['PieceLevelMoveInfoMetric']['averagesMap'][key].avgMoves;
       if (totalMoves > 0 && avgMoves > 0) {
         numGamesAnalyzedPieceLevelMoveInfoMetric.numGames += Math.round(
           totalMoves / avgMoves
@@ -122,11 +122,11 @@ async function aggregateResults(filePath: string) {
       }
     }
     // Calculate the number of games not skipped for numGamesAnalyzedMoveDistanceMetric
-    for (const key in analysis["MoveDistanceMetric"]["totalDistancesByPiece"]) {
+    for (const key in analysis['MoveDistanceMetric']['totalDistancesByPiece']) {
       const totalMoves =
-        analysis["MoveDistanceMetric"]["totalDistancesByPiece"][key].numMoves;
+        analysis['MoveDistanceMetric']['totalDistancesByPiece'][key].numMoves;
       const avgMoves =
-        analysis["MoveDistanceMetric"]["avgDistancesByPiece"][key].avgMoves;
+        analysis['MoveDistanceMetric']['avgDistancesByPiece'][key].avgMoves;
       if (totalMoves > 0 && avgMoves > 0) {
         numGamesAnalyzedMoveDistanceMetric.numGames += Math.round(
           totalMoves / avgMoves
@@ -159,8 +159,8 @@ async function aggregateResults(filePath: string) {
     // currently this stat is inaccurately tracked across analyses
     // the player with the most games might have their games split across analyses
     // the fix is to return the playerGameStats from misc.ts and then parse that in the final aggregate analysis but that dataset could be very large
-    const thisMostGamesPlayed = analysis["MetadataMetric"]["mostGamesPlayed"];
-    const thisPlayerMostGames = analysis["MetadataMetric"]["playerMostGames"];
+    const thisMostGamesPlayed = analysis['MetadataMetric']['mostGamesPlayed'];
+    const thisPlayerMostGames = analysis['MetadataMetric']['playerMostGames'];
     if (thisMostGamesPlayed > mostGamesPlayedByPlayer) {
       mostGamesPlayedByPlayer = thisMostGamesPlayed;
       playerMostGames = thisPlayerMostGames;
@@ -243,9 +243,9 @@ async function aggregateResults(filePath: string) {
 
     // moves metrics
     const thisGameMostMoves =
-      analysis["GameWithMostMovesMetric"]["gameWithMostMoves"];
+      analysis['GameWithMostMovesMetric']['gameWithMostMoves'];
     const thisGameMostMovesNumMoves =
-      analysis["GameWithMostMovesMetric"]["gameWithMostMovesNumMoves"];
+      analysis['GameWithMostMovesMetric']['gameWithMostMovesNumMoves'];
     if (thisGameMostMovesNumMoves > gameMostMovesNumMoves) {
       gameMostMovesNumMoves = thisGameMostMovesNumMoves;
       gameMostMoves = [thisGameMostMoves];
@@ -271,11 +271,11 @@ async function aggregateResults(filePath: string) {
 
     // misc move fact metrics
     const thisEnPassantMovesCount =
-      analysis["MiscMoveFactMetric"]["enPassantMovesCount"];
+      analysis['MiscMoveFactMetric']['enPassantMovesCount'];
     enPassantMovesCount += thisEnPassantMovesCount;
 
     const thisTotalNumPiecesKnightHopped =
-      analysis["MiscMoveFactMetric"]["totalNumPiecesKnightHopped"];
+      analysis['MiscMoveFactMetric']['totalNumPiecesKnightHopped'];
     totalNumPiecesKnightHopped += thisTotalNumPiecesKnightHopped;
 
     // final increments
@@ -439,7 +439,7 @@ function logResults(
   totalNumPiecesKnightHopped: number,
   analysisCounter: number
 ) {
-  console.log("GAME SET STATS (METADATA) ----------------------------");
+  console.log('GAME SET STATS (METADATA) ----------------------------');
   console.log(`Average Player Rating: ${weightedAveragePlayerRating}`);
   console.log(`Average Rating Difference: ${weightedAverageRatingDiff}`);
   console.log(`Largest Rating Difference: ${largestRatingDiff}`);
@@ -450,7 +450,7 @@ function logResults(
   console.log(
     `Number of games played (CURRENTLY INACCURATELY TRACKED): ${mostGamesPlayedByPlayer}`
   );
-  console.log("\n");
+  console.log('\n');
   console.log(`Game Type Stats: `), console.table(gameTypeStats);
   console.log(
     `Time Control Stats: (filtered by appearing in at least 1% of games):`
@@ -469,7 +469,7 @@ function logResults(
   console.table(filteredGameTimeControlStats);
 
   console.log(
-    "Openings stats (filtered by appearing in at least 1% of games):"
+    'Openings stats (filtered by appearing in at least 1% of games):'
   );
 
   const sortedOpenings = Object.entries(openings).sort(
@@ -497,59 +497,59 @@ function logResults(
 
   console.log(`Number of bongcloud appearances: ${bongcloudAppearances}`);
   console.log(`Game Endings: `), console.table(gameEndings);
-  console.log("\n");
+  console.log('\n');
 
   // captures logs
-  console.log("CAPTURES STATS: ----------------------------");
-  console.log("Kills, deaths, and revenge kills for each unambiguous piece:"),
+  console.log('CAPTURES STATS: ----------------------------');
+  console.log('Kills, deaths, and revenge kills for each unambiguous piece:'),
     console.table(KDMap);
   console.log(
-    "Kill Death Ratios for each unambiguous piece: " +
+    'Kill Death Ratios for each unambiguous piece: ' +
       JSON.stringify(KDRatios, null, 2)
   );
   console.log(
     `Piece with the highest KD ratio was ${pieceWithHighestKDRatio} with a ratio of ${maxKDRatio}`
   );
 
-  console.log("\n");
+  console.log('\n');
   console.log(
-    "Piece values for kills: Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points. "
+    'Piece values for kills: Pawn 1 point, Knight 3 points, Bishop 3 points, Rook 5 points, Queen 9 points, King 4 points. '
   );
-  console.log("Value kills and deaths for each unambiguous piece:"),
+  console.log('Value kills and deaths for each unambiguous piece:'),
     console.table(KDValuesMap);
   console.log(
-    "Kill Death Ratios for each unambiguous piece: " +
+    'Kill Death Ratios for each unambiguous piece: ' +
       JSON.stringify(KDRatiosValues, null, 2)
   );
   console.log(
     `Piece with the highest KD ratio (taking into account piece values) was ${pieceWithHighestKDRatioValues} with a ratio of ${maxKDRatioValues}`
   );
 
-  console.log("\n");
-  console.log("Max Kill Streaks achieved for each piece: ");
+  console.log('\n');
+  console.log('Max Kill Streaks achieved for each piece: ');
   console.table(KillStreakMap);
   console.log(
     `Max Kill Streak achieved by any piece (the number of captures without any other piece on its team capturing. doesn't have to be consecutive move captures): ${maxKillStreak} by the piece(s) ${maxKillStreakPiece}. This was done in the game(s): `
   );
-  console.log(maxKillStreakGame.join("\n"));
+  console.log(maxKillStreakGame.join('\n'));
 
   // mates and assists logs
-  console.log("\n");
-  console.log("MATES AND ASSISTS STATS: ----------------------------");
-  console.log("Mates, assists, and hockey assists for each piece: ");
+  console.log('\n');
+  console.log('MATES AND ASSISTS STATS: ----------------------------');
+  console.log('Mates, assists, and hockey assists for each piece: ');
   console.table(mateAndAssistMap);
   console.log(
     'Note: any "mates" attributed to kings are a result of a king moving to reveal a discovered mate.'
   );
-  console.log("Number of times each king was mated: ");
+  console.log('Number of times each king was mated: ');
   console.table(matedCountsMap);
 
   // promotions logs
-  console.log("\n");
-  console.log("PROMOTIONS STATS: ----------------------------");
-  console.log("Pieces promoted to most often: ");
+  console.log('\n');
+  console.log('PROMOTIONS STATS: ----------------------------');
+  console.log('Pieces promoted to most often: ');
   console.table(promotedToTotals);
-  console.log("The pieces each unambiguous piece promotes to most often: ");
+  console.log('The pieces each unambiguous piece promotes to most often: ');
   console.table(uasPromotingPieces);
   console.log(
     `The maximum number of queens to appear in a given move in a game: ${maxNumQueens}`
@@ -557,11 +557,11 @@ function logResults(
   console.log(`The games(s) and first move(s) in that game in which that number of queens appeared: 
     ${movesAndGamesMaxQueens
       .map((move) => JSON.stringify(move, null, 2))
-      .join(", ")}`);
+      .join(', ')}`);
 
   // distance logs
-  console.log("\n");
-  console.log("DISTANCE STATS: ----------------------------");
+  console.log('\n');
+  console.log('DISTANCE STATS: ----------------------------');
   console.log(
     `Piece(s) with highest average distance: ${pieceMaxAvgDist}. That/those piece(s) average distance: ${maxAvgDistance}`
   );
@@ -584,15 +584,15 @@ function logResults(
   console.table(avgDistByPiece);
 
   //
-  console.log("\n");
-  console.log("MOVES STATS: ----------------------------");
+  console.log('\n');
+  console.log('MOVES STATS: ----------------------------');
   console.log(
     `Game(s) with most moves made (1 move = one white or one black move): ${gameMostMoves}`
   );
   console.log(`Number of moves made: ${gameMostMovesNumMoves}`);
-  console.log("Total number of moves made by each piece: ");
+  console.log('Total number of moves made by each piece: ');
   console.table(totalMovesByPiece);
-  console.log("Average number of moves made by each piece: ");
+  console.log('Average number of moves made by each piece: ');
   console.table(averageNumMovesByPiece);
   console.log(
     `Piece(s) with the highest average number of moves: ${pieceHighestAverageMoves}. The average number of moves that/those pieces made per game: ${highestAverageMoves}`
@@ -601,7 +601,7 @@ function logResults(
     `The piece with the most moves played in a single game: ${pieceSingleGameMaxMoves}. The number of moves played in that game: ${singleGameMaxMoves}. The game it played that number of moves in: ${gameSingleGameMaxMoves}`
   );
   console.log(`The number of games with no castling: ${gamesNoCastling}`);
-  console.log("The number of times each kind of castling happened: ");
+  console.log('The number of times each kind of castling happened: ');
   console.table(queenKingCastlingCounts);
   console.log(`The number of En passants that occured: ${enPassantMovesCount}`);
   console.log(
@@ -609,8 +609,8 @@ function logResults(
   );
 
   // final analysis logs
-  console.log("\n");
-  console.log("ANALYSIS STATS: ----------------------------");
+  console.log('\n');
+  console.log('ANALYSIS STATS: ----------------------------');
   console.log(`Total games analyzed: ${totalGamesAnalyzed}`);
   console.log(`Number of separate analyses: ${analysisCounter}`);
 }
@@ -639,7 +639,7 @@ function avgNumMoves(
     }
   }
 
-  for (const uas in averageNumMovesByPiece) {
+  for (const uas in totalMovesByPiece) {
     if (averageNumMovesByPiece[uas].avgNumMoves > highestAverageMoves) {
       highestAverageMoves = averageNumMovesByPiece[uas].avgNumMoves;
       pieceHighestAverageMoves = [uas as UASymbol];
@@ -715,7 +715,7 @@ function newFunction(
   }
 ) {
   const thisTotalMovesByPiece =
-    analysis["PieceLevelMoveInfoMetric"]["totalMovesByPiece"];
+    analysis['PieceLevelMoveInfoMetric']['totalMovesByPiece'];
   for (const uas in thisTotalMovesByPiece) {
     if (!totalMovesByPiece[uas]) {
       totalMovesByPiece[uas] = {
@@ -726,11 +726,11 @@ function newFunction(
   }
 
   const thisSingleGameMaxMoves =
-    analysis["PieceLevelMoveInfoMetric"]["uasSingleGameMaxMoves"];
+    analysis['PieceLevelMoveInfoMetric']['uasSingleGameMaxMoves'];
   const thisPieceSingleGameMaxMoves =
-    analysis["PieceLevelMoveInfoMetric"]["uasWithMostMovesSingleGame"];
+    analysis['PieceLevelMoveInfoMetric']['uasWithMostMovesSingleGame'];
   const thisGameSingleGameMaxMoves =
-    analysis["PieceLevelMoveInfoMetric"]["gamesWithUasMostMoves"];
+    analysis['PieceLevelMoveInfoMetric']['gamesWithUasMostMoves'];
   if (thisSingleGameMaxMoves > singleGameMaxMoves) {
     singleGameMaxMoves = thisSingleGameMaxMoves;
     pieceSingleGameMaxMoves = [thisPieceSingleGameMaxMoves as UASymbol];
@@ -741,11 +741,11 @@ function newFunction(
   }
 
   const thisGamesNoCastling =
-    analysis["PieceLevelMoveInfoMetric"]["gamesWithNoCastling"];
+    analysis['PieceLevelMoveInfoMetric']['gamesWithNoCastling'];
   gamesNoCastling += thisGamesNoCastling;
 
   const thisQueenKingCastlingCounts =
-    analysis["PieceLevelMoveInfoMetric"]["queenKingCastlingCounts"];
+    analysis['PieceLevelMoveInfoMetric']['queenKingCastlingCounts'];
   for (const count in thisQueenKingCastlingCounts) {
     queenKingCastlingCounts[count] += thisQueenKingCastlingCounts[count];
   }
@@ -762,9 +762,9 @@ function aggregateRatingDiff(
   largestRatingDiff: number,
   largestRatingDiffGame: any[]
 ) {
-  const thisLargestRatingDiff = analysis["MetadataMetric"]["largestRatingDiff"];
+  const thisLargestRatingDiff = analysis['MetadataMetric']['largestRatingDiff'];
   const thisLargestRatingDiffGame =
-    analysis["MetadataMetric"]["largestRatingDiffGame"];
+    analysis['MetadataMetric']['largestRatingDiffGame'];
   if (thisLargestRatingDiff > largestRatingDiff) {
     largestRatingDiff = thisLargestRatingDiff;
     largestRatingDiffGame = thisLargestRatingDiffGame;
@@ -789,9 +789,9 @@ function aggregateDistanceMetrics(
   avgDistByPiece: {},
   numGamesAnalyzedMoveDistanceMetric: { numGames: number }
 ) {
-  const thisMaxAvgDistance = analysis["MoveDistanceMetric"]["maxAvgDistance"];
+  const thisMaxAvgDistance = analysis['MoveDistanceMetric']['maxAvgDistance'];
   const thisPieceMaxAvgDistance =
-    analysis["MoveDistanceMetric"]["pieceWithHighestAvg"];
+    analysis['MoveDistanceMetric']['pieceWithHighestAvg'];
   if (thisMaxAvgDistance > maxAvgDistance) {
     maxAvgDistance = thisMaxAvgDistance;
     pieceMaxAvgDist = thisPieceMaxAvgDistance;
@@ -799,9 +799,9 @@ function aggregateDistanceMetrics(
     pieceMaxAvgDist.push(thisPieceMaxAvgDistance);
   }
 
-  const thisMinAvgDistance = analysis["MoveDistanceMetric"]["minAvgDistance"];
+  const thisMinAvgDistance = analysis['MoveDistanceMetric']['minAvgDistance'];
   const thisPieceMinAvgDistance =
-    analysis["MoveDistanceMetric"]["pieceWithLowestAvg"];
+    analysis['MoveDistanceMetric']['pieceWithLowestAvg'];
   if (thisMinAvgDistance < minAvgDistance) {
     minAvgDistance = thisMinAvgDistance;
     pieceMinAvgDist = thisPieceMinAvgDistance;
@@ -810,11 +810,11 @@ function aggregateDistanceMetrics(
   }
 
   const thisDistPieceMaxDist =
-    analysis["MoveDistanceMetric"]["distanceThatPieceMovedInTheGame"];
+    analysis['MoveDistanceMetric']['distanceThatPieceMovedInTheGame'];
   const thisPieceMaxDistSingleGame =
-    analysis["MoveDistanceMetric"]["pieceThatMovedTheFurthest"];
+    analysis['MoveDistanceMetric']['pieceThatMovedTheFurthest'];
   const thisGamePieceMaxDist =
-    analysis["MoveDistanceMetric"]["gameInWhichPieceMovedTheFurthest"];
+    analysis['MoveDistanceMetric']['gameInWhichPieceMovedTheFurthest'];
   if (thisDistPieceMaxDist > distPieceMaxDist) {
     distPieceMaxDist = thisDistPieceMaxDist;
     pieceMaxDistSingleGame = thisPieceMaxDistSingleGame;
@@ -825,11 +825,11 @@ function aggregateDistanceMetrics(
   }
 
   const thisTotalCollectiveDistance =
-    analysis["MoveDistanceMetric"]["totalCollectiveDistance"];
+    analysis['MoveDistanceMetric']['totalCollectiveDistance'];
   totalCollectiveDistGames += thisTotalCollectiveDistance;
 
   const thisGameMaxCollectiveDistance =
-    analysis["MoveDistanceMetric"]["gameMaxCollectiveDistance"];
+    analysis['MoveDistanceMetric']['gameMaxCollectiveDistance'];
   if (thisGameMaxCollectiveDistance.distance > gameMaxCollectiveDist.distance) {
     gameMaxCollectiveDist = {
       distance: thisGameMaxCollectiveDistance.distance,
@@ -842,7 +842,7 @@ function aggregateDistanceMetrics(
   }
 
   const thisTotalDistByPiece =
-    analysis["MoveDistanceMetric"]["totalDistancesByPiece"];
+    analysis['MoveDistanceMetric']['totalDistancesByPiece'];
   for (const uas in thisTotalDistByPiece) {
     if (!totalDistByPiece[uas]) {
       totalDistByPiece[uas] = {
@@ -852,13 +852,19 @@ function aggregateDistanceMetrics(
     totalDistByPiece[uas].distance += thisTotalDistByPiece[uas].distance;
   }
 
-  for (const uas in avgDistByPiece) {
-    if (numGamesAnalyzedMoveDistanceMetric.numGames > 0) {
-      avgDistByPiece[uas].avgDistance =
-        totalDistByPiece[uas].distance /
-        numGamesAnalyzedMoveDistanceMetric.numGames;
-    } else {
-      avgDistByPiece[uas].avgDistance = 0;
+  for (const uas in totalDistByPiece) {
+    if (!avgDistByPiece[uas]) {
+      if (numGamesAnalyzedMoveDistanceMetric.numGames > 0) {
+        avgDistByPiece[uas] = {
+          avgDistance:
+            totalDistByPiece[uas].distance /
+            numGamesAnalyzedMoveDistanceMetric.numGames,
+        };
+      } else {
+        avgDistByPiece[uas] = {
+          avgDistance: 0,
+        };
+      }
     }
   }
 
@@ -882,12 +888,12 @@ function aggregateKillStreaks(
   maxKillStreakPiece: any[],
   maxKillStreakGame: any[]
 ) {
-  const thisKillStreakMap = analysis["KillStreakMetric"]["killStreakMap"];
-  const thisMaxKillStreak = analysis["KillStreakMetric"]["maxKillStreak"];
+  const thisKillStreakMap = analysis['KillStreakMetric']['killStreakMap'];
+  const thisMaxKillStreak = analysis['KillStreakMetric']['maxKillStreak'];
   const thisMaxKillStreakPiece =
-    analysis["KillStreakMetric"]["maxKillStreakPiece"];
+    analysis['KillStreakMetric']['maxKillStreakPiece'];
   const thisMaxKillStreakGame =
-    analysis["KillStreakMetric"]["maxKillStreakGame"];
+    analysis['KillStreakMetric']['maxKillStreakGame'];
   for (const uas in thisKillStreakMap) {
     if (!KillStreakMap[uas]) {
       KillStreakMap[uas] = 0;
@@ -910,8 +916,8 @@ function aggregateKillStreaks(
 }
 
 function aggregateKDRatio(analysis: unknown, KDMap: {}, KDValuesMap: {}) {
-  const thisKDMap = analysis["KDRatioMetric"]["KDMap"];
-  const thisKDValuesMap = analysis["KDRatioMetric"]["KDValuesMap"];
+  const thisKDMap = analysis['KDRatioMetric']['KDMap'];
+  const thisKDValuesMap = analysis['KDRatioMetric']['KDValuesMap'];
 
   for (const uas in thisKDMap) {
     if (!KDMap[uas]) {
@@ -936,7 +942,7 @@ function aggregateKDRatio(analysis: unknown, KDMap: {}, KDValuesMap: {}) {
 }
 
 function aggregateEndingStats(analysis: unknown, gameEndings: {}) {
-  const thisGameEndingsStats = analysis["MetadataMetric"]["gameEndings"];
+  const thisGameEndingsStats = analysis['MetadataMetric']['gameEndings'];
   for (const ending in thisGameEndingsStats) {
     if (!gameEndings[ending]) {
       gameEndings[ending] = 0;
@@ -950,7 +956,7 @@ function aggregateOpeningStats(
   openings: {},
   bongcloudAppearances: number
 ) {
-  const thisOpenings = analysis["MetadataMetric"]["openings"];
+  const thisOpenings = analysis['MetadataMetric']['openings'];
   for (const opening in thisOpenings) {
     if (!openings[opening]) {
       openings[opening] = {
@@ -971,7 +977,7 @@ function aggregateOpeningStats(
       (openings[opening].blackWins + openings[opening].ties);
   }
 
-  bongcloudAppearances += analysis["MetadataMetric"]["bongcloudAppearances"];
+  bongcloudAppearances += analysis['MetadataMetric']['bongcloudAppearances'];
   return bongcloudAppearances;
 }
 
@@ -980,7 +986,7 @@ function aggregateGameTimeControlStats(
   gameTimeControlStats: {}
 ) {
   const thisGameTimeControlStats =
-    analysis["MetadataMetric"]["gameTimeControlStats"];
+    analysis['MetadataMetric']['gameTimeControlStats'];
   for (const timeControl in thisGameTimeControlStats) {
     if (!gameTimeControlStats[timeControl]) {
       gameTimeControlStats[timeControl] = 0;
@@ -996,13 +1002,13 @@ function aggregateMetadata(
   totalGamesAnalyzedForRatings: number
 ) {
   const thisGamesAnalyzedForRatings =
-    analysis["MetadataMetric"]["numberGamesAnalyzedForRatings"];
+    analysis['MetadataMetric']['numberGamesAnalyzedForRatings'];
 
-  const averagePlayerRating = analysis["MetadataMetric"]["averagePlayerRating"];
+  const averagePlayerRating = analysis['MetadataMetric']['averagePlayerRating'];
   weightedTotalPlayerRating +=
     averagePlayerRating * thisGamesAnalyzedForRatings;
 
-  const averageRatingDiff = analysis["MetadataMetric"]["averageRatingDiff"];
+  const averageRatingDiff = analysis['MetadataMetric']['averageRatingDiff'];
   weightedTotalRatingDiff += averageRatingDiff * thisGamesAnalyzedForRatings;
 
   totalGamesAnalyzedForRatings += thisGamesAnalyzedForRatings;
@@ -1018,14 +1024,14 @@ function aggregatePromotions(
   promotedToTotals: { q: number; r: number; b: number; n: number },
   uasPromotingPieces: {}
 ) {
-  const thisPromotedToTotals = analysis["PromotionMetric"]["promotedToTotals"];
+  const thisPromotedToTotals = analysis['PromotionMetric']['promotedToTotals'];
   promotedToTotals.q += thisPromotedToTotals.q;
   promotedToTotals.r += thisPromotedToTotals.r;
   promotedToTotals.b += thisPromotedToTotals.b;
   promotedToTotals.n += thisPromotedToTotals.n;
 
   const thisUASPromotiongPieces =
-    analysis["PromotionMetric"]["uasPromotingPieces"];
+    analysis['PromotionMetric']['uasPromotingPieces'];
   for (const uas in thisUASPromotiongPieces) {
     if (!uasPromotingPieces[uas]) {
       uasPromotingPieces[uas] = {
@@ -1040,9 +1046,9 @@ function aggregatePromotions(
     uasPromotingPieces[uas].b += thisUASPromotiongPieces[uas].b;
     uasPromotingPieces[uas].n += thisUASPromotiongPieces[uas].n;
   }
-  const thisMaxNumQueens = analysis["PromotionMetric"]["maxNumQueens"];
+  const thisMaxNumQueens = analysis['PromotionMetric']['maxNumQueens'];
   const thisMovesAndGamesMaxQueens =
-    analysis["PromotionMetric"]["movesAndGamesWithMaxQueenCount"];
+    analysis['PromotionMetric']['movesAndGamesWithMaxQueenCount'];
   return { thisMaxNumQueens, thisMovesAndGamesMaxQueens };
 }
 
@@ -1052,7 +1058,7 @@ function aggregateMatesAndAssists(
   matedCountsMap: { k: number; K: number }
 ) {
   const thisMateAndAssistMap =
-    analysis["MateAndAssistMetric"]["mateAndAssistMap"];
+    analysis['MateAndAssistMetric']['mateAndAssistMap'];
   for (const uas in thisMateAndAssistMap) {
     if (!mateAndAssistMap[uas]) {
       mateAndAssistMap[uas] = {
@@ -1067,13 +1073,13 @@ function aggregateMatesAndAssists(
       thisMateAndAssistMap[uas].hockeyAssists;
   }
 
-  const thisMatedCountsMap = analysis["MateAndAssistMetric"]["matedCounts"];
+  const thisMatedCountsMap = analysis['MateAndAssistMetric']['matedCounts'];
   matedCountsMap.k += thisMatedCountsMap.k;
   matedCountsMap.K += thisMatedCountsMap.K;
 }
 
 function aggregateGameTypeStats(analysis: unknown, gameTypeStats: {}) {
-  const thisGameTypeStats = analysis["MetadataMetric"]["gameTypeStats"];
+  const thisGameTypeStats = analysis['MetadataMetric']['gameTypeStats'];
   for (const gameType in thisGameTypeStats) {
     if (!gameTypeStats[gameType]) {
       gameTypeStats[gameType] = 0;
@@ -1092,7 +1098,7 @@ function aggregateGameTypeStats(analysis: unknown, gameTypeStats: {}) {
 // export default aggregateResults;
 
 if (require.main === module) {
-  console.time("Total Final Analysis Execution Time");
-  aggregateResults("src/results.json");
-  console.timeEnd("Total Final Analysis Execution Time");
+  console.time('Total Final Analysis Execution Time');
+  aggregateResults('src/results.json');
+  console.timeEnd('Total Final Analysis Execution Time');
 }
