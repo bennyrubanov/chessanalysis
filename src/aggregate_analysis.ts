@@ -13,10 +13,6 @@ async function aggregateResults(filePath: string) {
   let totalGamesAnalyzed = 0;
   let analysisCounter = 0;
 
-  //Objects to ensure the averages are calculated correctly (doesn't include games with analysis errors)
-  let numGamesAnalyzedPieceLevelMoveInfoMetric = { numGames: 0 };
-  let numGamesAnalyzedMoveDistanceMetric = { numGames: 0 };
-
   // metadata metrics
   let largestRatingDiff = 0;
   let largestRatingDiffGame = [];
@@ -76,6 +72,10 @@ async function aggregateResults(filePath: string) {
   };
   let totalDistByPiece = {};
   let avgDistByPiece = {};
+
+  // objects to ensure the averages for distances/piece level moves are calculated correctly (doesn't include games with analysis errors)
+  let numGamesAnalyzedPieceLevelMoveInfoMetric = { numGames: 0 };
+  let numGamesAnalyzedMoveDistanceMetric = { numGames: 0 };
 
   // moves metrics
   let gameMostMoves = [];
