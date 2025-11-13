@@ -16,7 +16,7 @@ Data is sourced from the public [Lichess games database](https://database.liches
 
 ## Credits
 
-We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little dev time.
+We have taken advantage of some of the helpful methods in [chess.js](https://github.com/jhlywa/chess.js/blob/master/README.md) to save ourselves a little dev time. However, we have made changes to the library to fit our use cases (namely around accommodating for Unambiguous Piece (UAP) definitions - see below for more details).
 
 ## Definitions
 
