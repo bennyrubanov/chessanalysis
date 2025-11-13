@@ -4,9 +4,11 @@ Welcome! We (@EllAchE and @bennyrubanov) are chess amateurs who also have intere
 
 ## Preliminary Results
 
-The project is under development, with the goal to one day look at the entirety of the Lichess games database. However, we have already analyzed a subset of the data. Here's a deep dive into those: [Analyzing 5 billion chess games](https://elehche.com/Analyzing-5-billion-chess-games-f10f3f6125144f6f9978a431f16b3e70)
+The project is under development, with the goal to one day look at the entirety of the Lichess games database. However, we have already analyzed a subset of the data. Here's a deep dive into those: [Analyzing 5 billion chess games](https://elehche.com/Analyzing-5-billion-chess-games-f10f3f6125144f6f9978a431f16b3e70) (currently not working - link to be updated)
 
-and if that's not enough, here is a result on 450k games from November 2013! [Results](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4)
+Here is an example analysis result on a collection of 450k games from November 2013! [Results](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4)
+
+And here is a slide deck presented by @bennyrubanov in Bali in January 2024 on the insights found from this research: [Slide Deck Jan 2024](https://www.canva.com/design/DAF7hNu3URU/uug74k8P2U1wkkH-6sbb9Q/view?utm_content=DAF7hNu3URU&utm_campaign=designshare&utm_medium=link&utm_source=viewer)
 
 # Methodology
 
