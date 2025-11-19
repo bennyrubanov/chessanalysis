@@ -4,7 +4,7 @@ Welcome! We (@EllAchE and @bennyrubanov) are chess amateurs who also have intere
 
 ## Preliminary Results
 
-The project is under development, with the goal to one day look at the entirety of the Lichess games database. However, we have already analyzed a subset of the data. Here's a deep dive into those: [Analyzing 5 billion chess games](https://elehche.com/Analyzing-5-billion-chess-games-f10f3f6125144f6f9978a431f16b3e70) (currently not working - link to be updated)
+The project is under development, with the goal to one day look at the entirety of the Lichess games database. However, we have already analyzed a subset of the data. Here's a deep dive into those: [Analyzing 5 billion chess games](https://bennyr.notion.site/Analyzing-5-billion-chess-games-Logan-s-Blog-2b03c77f93de81e7b2bfc37b6e6c88d1?source=copy_link)
 
 Here is an example analysis result on a collection of 450k games from November 2013! [Results](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4)
 
