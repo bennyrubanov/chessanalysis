@@ -1,3 +1,20 @@
+# chessanalysis
+
+Rigorous answers to silly chess questions, computed from the public Lichess games database: which piece has the best kill/death ratio, where checkmates happen, how far each piece travels in a game, how often knights hop over pieces, and dozens more.
+
+**At a glance**
+
+- **How it works:** decompresses Lichess's monthly `.pgn.zst` dumps into small chunks, replays every game move by move with a modified chess.js that tracks each individual piece (the pawn that started on a2, not just "a pawn"), and merges per-piece metrics from parallel workers through a single-writer results queue.
+- **Results:** the [Analyzing 5 billion chess games](https://bennyr.notion.site/Analyzing-5-billion-chess-games-Logan-s-Blog-2b03c77f93de81e7b2bfc37b6e6c88d1?source=copy_link) write-up, a [450k-game sample analysis](https://bennyr.notion.site/450k-games-analysis-external-facing-8aeb101453c64cfeaef1130ae10e68e3?pvs=4) and a [January 2024 talk](https://www.canva.com/design/DAF7hNu3URU/uug74k8P2U1wkkH-6sbb9Q/view?utm_content=DAF7hNu3URU&utm_campaign=designshare&utm_medium=link&utm_source=viewer).
+- **Tech:** TypeScript, Node.js, chess.js (modified), zstd streaming, Jest tests and GitHub Actions CI.
+- **Related:** [chessis.fun](https://chessis.fun), automated chess content by @bennyrubanov.
+
+```bash
+npm install
+npm test        # build and run the Jest suite
+npm start       # build, run the analysis and the decompressor
+```
+
 # Overview
 
 Welcome! We (@EllAchE and @bennyrubanov) are chess amateurs who also have interests in statistics, programming and sillyness. This repo brings those interests together. Here, we find and visualize some of the sillier (and perhaps less useful) chess statistics no one has bothered to calculate before. This project is open source (MIT License), so we encourage contributions and suggestions! 😊
